@@ -1,0 +1,159 @@
+{
+  "summary": {
+    "total": 29,
+    "passed": 28
+  },
+  "categories": {
+    "normal": [
+      {
+        "test_id": "test_validate_success",
+        "outcome": "passed",
+        "duration": 0.002273599966429174
+      },
+      {
+        "test_id": "test_validate_failure",
+        "outcome": "passed",
+        "duration": 0.0009895999683067203
+      },
+      {
+        "test_id": "test_validate_empty_policy",
+        "outcome": "passed",
+        "duration": 0.0008838999783620238
+      },
+      {
+        "test_id": "test_validate_json_response_structure",
+        "outcome": "passed",
+        "duration": 0.0007774000405333936
+      },
+      {
+        "test_id": "test_schema_success",
+        "outcome": "passed",
+        "duration": 0.0010347000206820667
+      },
+      {
+        "test_id": "test_schema_empty_target",
+        "outcome": "passed",
+        "duration": 0.000727199949324131
+      },
+      {
+        "test_id": "test_resources_success",
+        "outcome": "passed",
+        "duration": 0.00101200002245605
+      },
+      {
+        "test_id": "test_resources_invalid_cloud",
+        "outcome": "passed",
+        "duration": 0.0009800000116229057
+      },
+      {
+        "test_id": "test_reference_success",
+        "outcome": "passed",
+        "duration": 0.0011059999815188348
+      },
+      {
+        "test_id": "test_reference_no_results",
+        "outcome": "passed",
+        "duration": 0.0007913999725133181
+      }
+    ],
+    "error": [
+      {
+        "test_id": "test_validate_tool_unavailable",
+        "outcome": "passed",
+        "duration": 0.0006552999839186668
+      },
+      {
+        "test_id": "test_schema_tool_unavailable",
+        "outcome": "passed",
+        "duration": 0.001061099988874048
+      },
+      {
+        "test_id": "test_resources_tool_unavailable",
+        "outcome": "passed",
+        "duration": 0.0006641999934799969
+      },
+      {
+        "test_id": "test_reference_tool_unavailable",
+        "outcome": "passed",
+        "duration": 0.0006495999987237155
+      },
+      {
+        "test_id": "test_validate_exception",
+        "outcome": "passed",
+        "duration": 0.0008140999707393348
+      },
+      {
+        "test_id": "test_schema_exception",
+        "outcome": "passed",
+        "duration": 0.0011597999837249517
+      },
+      {
+        "test_id": "test_resources_exception",
+        "outcome": "passed",
+        "duration": 0.0008200000156648457
+      },
+      {
+        "test_id": "test_reference_exception",
+        "outcome": "passed",
+        "duration": 0.0014856000198051333
+      },
+      {
+        "test_id": "test_validate_missing_policy_content",
+        "outcome": "passed",
+        "duration": 0.0007369999657385051
+      },
+      {
+        "test_id": "test_schema_missing_target",
+        "outcome": "passed",
+        "duration": 0.005941899958997965
+      },
+      {
+        "test_id": "test_resources_missing_cloud",
+        "outcome": "passed",
+        "duration": 0.0015386000159196556
+      },
+      {
+        "test_id": "test_reference_missing_query",
+        "outcome": "passed",
+        "duration": 0.000819200009573251
+      }
+    ],
+    "security": [
+      {
+        "test_id": "test_validate_error_no_internal_details",
+        "outcome": "skipped",
+        "duration": 0.0038183999713510275
+      },
+      {
+        "test_id": "test_validate_xss_in_policy_content",
+        "outcome": "passed",
+        "duration": 0.001298599992878735
+      },
+      {
+        "test_id": "test_schema_command_injection",
+        "outcome": "passed",
+        "duration": 0.0008529999759048223
+      },
+      {
+        "test_id": "test_resources_sql_injection",
+        "outcome": "passed",
+        "duration": 0.0008771000429987907
+      },
+      {
+        "test_id": "test_reference_query_injection",
+        "outcome": "passed",
+        "duration": 0.0008452000329270959
+      },
+      {
+        "test_id": "test_validate_log_injection",
+        "outcome": "passed",
+        "duration": 0.0010737000266090035
+      },
+      {
+        "test_id": "test_schema_unicode_normalization",
+        "outcome": "passed",
+        "duration": 0.0010907999821938574
+      }
+    ]
+  }
+}

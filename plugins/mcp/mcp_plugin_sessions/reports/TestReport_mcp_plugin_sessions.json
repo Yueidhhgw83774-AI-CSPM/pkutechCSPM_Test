@@ -1,0 +1,349 @@
+{
+  "summary": {
+    "total": 67,
+    "passed": 67
+  },
+  "categories": {
+    "normal": [
+      {
+        "test_id": "test_update_session_summary_success",
+        "outcome": "passed",
+        "duration": 0.246016499993857
+      },
+      {
+        "test_id": "test_get_session_metadata_success",
+        "outcome": "passed",
+        "duration": 0.0023521999828517437
+      },
+      {
+        "test_id": "test_update_session_name_success",
+        "outcome": "passed",
+        "duration": 0.0008699999889358878
+      },
+      {
+        "test_id": "test_is_meaningful_ai_content_true",
+        "outcome": "passed",
+        "duration": 0.000146100006531924
+      },
+      {
+        "test_id": "test_is_meaningful_ai_content_false_empty",
+        "outcome": "passed",
+        "duration": 0.00013260002015158534
+      },
+      {
+        "test_id": "test_is_meaningful_ai_content_false_short",
+        "outcome": "passed",
+        "duration": 0.00012890005018562078
+      },
+      {
+        "test_id": "test_is_meaningful_ai_content_false_json",
+        "outcome": "passed",
+        "duration": 0.00013040000339969993
+      },
+      {
+        "test_id": "test_strip_thinking_tags_success",
+        "outcome": "passed",
+        "duration": 0.0001352000399492681
+      },
+      {
+        "test_id": "test_strip_thinking_tags_multiple",
+        "outcome": "passed",
+        "duration": 0.00013010000111535192
+      },
+      {
+        "test_id": "test_strip_thinking_tags_multiline",
+        "outcome": "passed",
+        "duration": 0.00013110000872984529
+      },
+      {
+        "test_id": "test_strip_thinking_tags_empty",
+        "outcome": "passed",
+        "duration": 0.00012620002962648869
+      },
+      {
+        "test_id": "test_get_messages_from_deepagents",
+        "outcome": "passed",
+        "duration": 0.004454499983694404
+      },
+      {
+        "test_id": "test_convert_langchain_messages",
+        "outcome": "passed",
+        "duration": 0.0002457000082358718
+      },
+      {
+        "test_id": "test_merge_consecutive_messages",
+        "outcome": "passed",
+        "duration": 0.00013480003690347075
+      },
+      {
+        "test_id": "test_extract_ai_content_string",
+        "outcome": "passed",
+        "duration": 0.0001327999634668231
+      },
+      {
+        "test_id": "test_extract_ai_content_list",
+        "outcome": "passed",
+        "duration": 0.00012849998893216252
+      },
+      {
+        "test_id": "test_save_thinking_logs_success",
+        "outcome": "passed",
+        "duration": 0.0009244999964721501
+      },
+      {
+        "test_id": "test_save_thinking_logs_empty",
+        "outcome": "passed",
+        "duration": 0.00022499996703118086
+      },
+      {
+        "test_id": "test_get_thinking_logs_success",
+        "outcome": "passed",
+        "duration": 0.0007314000395126641
+      },
+      {
+        "test_id": "test_save_deep_agents_progress_success",
+        "outcome": "passed",
+        "duration": 0.0007072000298649073
+      },
+      {
+        "test_id": "test_get_deep_agents_progress_success",
+        "outcome": "passed",
+        "duration": 0.0005330999847501516
+      },
+      {
+        "test_id": "test_parse_checkpoint_data_success",
+        "outcome": "passed",
+        "duration": 0.00019380002049729228
+      },
+      {
+        "test_id": "test_get_latest_checkpoint_success",
+        "outcome": "passed",
+        "duration": 0.00152160000288859
+      },
+      {
+        "test_id": "test_parse_metadata_dict",
+        "outcome": "passed",
+        "duration": 0.00012839998817071319
+      },
+      {
+        "test_id": "test_parse_metadata_json_string",
+        "outcome": "passed",
+        "duration": 0.00013430003309622407
+      },
+      {
+        "test_id": "test_build_request_response_map",
+        "outcome": "passed",
+        "duration": 0.00015590002294629812
+      },
+      {
+        "test_id": "test_build_messages_from_map",
+        "outcome": "passed",
+        "duration": 0.00013970001600682735
+      },
+      {
+        "test_id": "test_merge_agent_messages",
+        "outcome": "passed",
+        "duration": 0.00013429997488856316
+      },
+      {
+        "test_id": "test_merge_agent_messages_dedup",
+        "outcome": "passed",
+        "duration": 0.000132500019390136
+      },
+      {
+        "test_id": "test_build_session_info",
+        "outcome": "passed",
+        "duration": 0.0005562999867834151
+      },
+      {
+        "test_id": "test_extract_preview_from_checkpoint",
+        "outcome": "passed",
+        "duration": 0.00012989999959245324
+      },
+      {
+        "test_id": "test_extract_preview_truncate",
+        "outcome": "passed",
+        "duration": 0.000312299991492182
+      },
+      {
+        "test_id": "test_find_session_name_success",
+        "outcome": "passed",
+        "duration": 0.0011564999585971236
+      },
+      {
+        "test_id": "test_find_session_name_none",
+        "outcome": "passed",
+        "duration": 0.0014597999979741871
+      },
+      {
+        "test_id": "test_get_sessions_list",
+        "outcome": "passed",
+        "duration": 0.004435500013642013
+      },
+      {
+        "test_id": "test_get_session_history",
+        "outcome": "passed",
+        "duration": 0.003464199951849878
+      },
+      {
+        "test_id": "test_get_storage_status",
+        "outcome": "passed",
+        "duration": 0.0010026999516412616
+      },
+      {
+        "test_id": "test_update_session_success",
+        "outcome": "passed",
+        "duration": 0.003268799977377057
+      },
+      {
+        "test_id": "test_get_session_detail",
+        "outcome": "passed",
+        "duration": 0.004648700007237494
+      },
+      {
+        "test_id": "test_delete_session_success",
+        "outcome": "passed",
+        "duration": 0.0026718000299297273
+      },
+      {
+        "test_id": "test_pagination_boundary_values",
+        "outcome": "passed",
+        "duration": 0.0033993999822996557
+      }
+    ],
+    "error": [
+      {
+        "test_id": "test_get_session_metadata_not_found",
+        "outcome": "passed",
+        "duration": 0.0007677000248804688
+      },
+      {
+        "test_id": "test_update_session_name_db_error",
+        "outcome": "passed",
+        "duration": 0.0020437000202946365
+      },
+      {
+        "test_id": "test_save_thinking_logs_db_error",
+        "outcome": "passed",
+        "duration": 0.0010449000401422381
+      },
+      {
+        "test_id": "test_get_sessions_user_id_missing",
+        "outcome": "passed",
+        "duration": 0.0007755000260658562
+      },
+      {
+        "test_id": "test_update_session_invalid_data",
+        "outcome": "passed",
+        "duration": 0.0008212999673560262
+      },
+      {
+        "test_id": "test_strip_thinking_tags_malformed",
+        "outcome": "passed",
+        "duration": 0.00013599998783320189
+      },
+      {
+        "test_id": "test_parse_metadata_invalid_json",
+        "outcome": "passed",
+        "duration": 0.00014349998673424125
+      },
+      {
+        "test_id": "test_parse_checkpoint_data_invalid",
+        "outcome": "passed",
+        "duration": 0.0002539000124670565
+      },
+      {
+        "test_id": "test_get_messages_db_error",
+        "outcome": "passed",
+        "duration": 0.0005573999951593578
+      },
+      {
+        "test_id": "test_extract_ai_content_none",
+        "outcome": "passed",
+        "duration": 0.00012480001896619797
+      },
+      {
+        "test_id": "test_merge_consecutive_messages_empty",
+        "outcome": "passed",
+        "duration": 0.00012049998622387648
+      }
+    ],
+    "security": [
+      {
+        "test_id": "test_session_id_validation",
+        "outcome": "passed",
+        "duration": 0.00061779998941347
+      },
+      {
+        "test_id": "test_user_id_sql_injection",
+        "outcome": "passed",
+        "duration": 0.002960700017865747
+      },
+      {
+        "test_id": "test_session_name_xss_prevention",
+        "outcome": "passed",
+        "duration": 0.0028731999918818474
+      },
+      {
+        "test_id": "test_thinking_logs_data_leakage",
+        "outcome": "passed",
+        "duration": 0.0008602000307291746
+      },
+      {
+        "test_id": "test_session_isolation",
+        "outcome": "passed",
+        "duration": 0.0015656999894417822
+      },
+      {
+        "test_id": "test_strip_thinking_tags_nested_attack",
+        "outcome": "passed",
+        "duration": 0.00013890000991523266
+      },
+      {
+        "test_id": "test_metadata_json_injection",
+        "outcome": "passed",
+        "duration": 0.000847299990709871
+      },
+      {
+        "test_id": "test_checkpoint_data_size_limit",
+        "outcome": "passed",
+        "duration": 0.0010374999837949872
+      },
+      {
+        "test_id": "test_session_deletion_cleanup",
+        "outcome": "passed",
+        "duration": 0.005171900033019483
+      },
+      {
+        "test_id": "test_parse_metadata_unicode_normalization",
+        "outcome": "passed",
+        "duration": 0.00018020003335550427
+      },
+      {
+        "test_id": "test_deep_agents_progress_validation",
+        "outcome": "passed",
+        "duration": 0.0007531999726779759
+      },
+      {
+        "test_id": "test_history_pagination_limit",
+        "outcome": "passed",
+        "duration": 0.0027546999626792967
+      },
+      {
+        "test_id": "test_message_content_sanitization",
+        "outcome": "passed",
+        "duration": 0.00014750001719221473
+      },
+      {
+        "test_id": "test_session_name_length_limit",
+        "outcome": "passed",
+        "duration": 0.002856000035535544
+      },
+      {
+        "test_id": "test_thinking_tags_recursive_removal",
+        "outcome": "passed",
+        "duration": 0.0001344000338576734
+      }
+    ]
+  }
+}

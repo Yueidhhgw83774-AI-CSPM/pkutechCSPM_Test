@@ -1,0 +1,53 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.9, pytest-8.4.2, pluggy-1.5.0 -- C:\Anaconda3\python.exe
+cachedir: .pytest_cache
+rootdir: C:\pythonProject\python_ai_cspm\TestReport\plugins\report\report_plugin
+configfile: pytest.ini
+plugins: langsmith-0.7.16, asyncio-1.3.0, cov-7.0.0, timeout-2.4.0, anyio-4.10.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 36 items
+
+source/test_report_plugin.py::TestRouterAPI::test_rpt_001_audit_preview ERROR [  2%]
+source/test_report_plugin.py::TestRouterAPI::test_rpt_002_audit_pdf ERROR [  5%]
+source/test_report_plugin.py::TestRouterAPI::test_rpt_003_periodic_preview ERROR [  8%]
+source/test_report_plugin.py::TestRouterAPI::test_rpt_004_periodic_pdf ERROR [ 11%]
+source/test_report_plugin.py::TestHelperFunctions::test_rpt_005_merge_violation_statuses SKIPPED [ 13%]
+source/test_report_plugin.py::TestHelperFunctions::test_rpt_006_calculate_violation_summary FAILED [ 16%]
+source/test_report_plugin.py::TestHelperFunctions::test_rpt_007_calculate_period_info SKIPPED [ 19%]
+source/test_report_plugin.py::TestHelperFunctions::test_rpt_008_calculate_period_summary SKIPPED [ 22%]
+source/test_report_plugin.py::TestHelperFunctions::test_rpt_009_calculate_trend_data SKIPPED [ 25%]
+source/test_report_plugin.py::TestHelperFunctions::test_rpt_010_calculate_violation_analysis SKIPPED [ 27%]
+source/test_report_plugin.py::TestHelperFunctions::test_rpt_011_get_scan_info PASSED [ 30%]
+source/test_report_plugin.py::TestHelperFunctions::test_rpt_012_get_violations PASSED [ 33%]
+source/test_report_plugin.py::TestHelperFunctions::test_rpt_013_html_template_rendering PASSED [ 36%]
+source/test_report_plugin.py::TestHelperFunctions::test_rpt_014_pdf_generation PASSED [ 38%]
+source/test_report_plugin.py::TestHelperFunctions::test_rpt_015_chart_severity PASSED [ 41%]
+source/test_report_plugin.py::TestHelperFunctions::test_rpt_016_chart_trend PASSED [ 44%]
+source/test_report_plugin.py::TestHelperFunctions::test_rpt_017_content_disposition_ascii SKIPPED [ 47%]
+source/test_report_plugin.py::TestHelperFunctions::test_rpt_018_content_disposition_japanese SKIPPED [ 50%]
+source/test_report_plugin.py::TestCSPMProvider::test_rpt_019_provider_collect_audit PASSED [ 52%]
+source/test_report_plugin.py::TestCSPMProvider::test_rpt_020_provider_collect_periodic PASSED [ 55%]
+source/test_report_plugin.py::TestCSPMProvider::test_rpt_021_get_template_name_audit PASSED [ 58%]
+source/test_report_plugin.py::TestCSPMProvider::test_rpt_022_get_template_name_periodic PASSED [ 61%]
+source/test_report_plugin.py::TestCSPMProvider::test_rpt_023_get_report_filename PASSED [ 63%]
+source/test_report_plugin.py::TestCSPMProvider::test_rpt_024_validate_scan_ids SKIPPED [ 66%]
+source/test_report_plugin.py::TestServices::test_rpt_025_html_renderer_init SKIPPED [ 69%]
+source/test_report_plugin.py::TestServices::test_rpt_026_html_renderer_render PASSED [ 72%]
+source/test_report_plugin.py::TestServices::test_rpt_027_pdf_generator_init SKIPPED [ 75%]
+source/test_report_plugin.py::TestServices::test_rpt_028_pdf_generator_generate PASSED [ 77%]
+source/test_report_plugin.py::TestServices::test_rpt_029_chart_generator_init SKIPPED [ 80%]
+source/test_report_plugin.py::TestServices::test_rpt_030_chart_severity_generation PASSED [ 83%]
+source/test_report_plugin.py::TestServices::test_rpt_031_chart_trend_generation PASSED [ 86%]
+source/test_report_plugin.py::TestServices::test_rpt_032_data_fetcher_get_scan PASSED [ 88%]
+source/test_report_plugin.py::TestErrorCases::test_rpt_e01_empty_scan_ids SKIPPED [ 91%]
+source/test_report_plugin.py::TestErrorCases::test_rpt_e02_periodic_insufficient_scans SKIPPED [ 94%]
+source/test_report_plugin.py::TestErrorCases::test_rpt_e03_invalid_report_type SKIPPED [ 97%]
+source/test_report_plugin.py::TestErrorCases::test_rpt_e04_provider_error SKIPPED [100%]
+
+=========================== short test summary info ===========================
+FAILED source/test_report_plugin.py::TestHelperFunctions::test_rpt_006_calculate_violation_summary - OSError: cannot load library 'libpango-1.0-0': error 0x7e.  Additionally, ctypes.util.find_library() did not manage to locate a library called 'libpango-1.0-0'
+ERROR source/test_report_plugin.py::TestRouterAPI::test_rpt_001_audit_preview - AttributeError: module 'app' has no attribute 'report_plugin'
+ERROR source/test_report_plugin.py::TestRouterAPI::test_rpt_002_audit_pdf - AttributeError: module 'app' has no attribute 'report_plugin'
+ERROR source/test_report_plugin.py::TestRouterAPI::test_rpt_003_periodic_preview - AttributeError: module 'app' has no attribute 'report_plugin'
+ERROR source/test_report_plugin.py::TestRouterAPI::test_rpt_004_periodic_pdf - AttributeError: module 'app' has no attribute 'report_plugin'
+============= 1 failed, 16 passed, 15 skipped, 4 errors in 9.15s ==============

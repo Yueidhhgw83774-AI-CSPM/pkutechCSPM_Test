@@ -1,0 +1,33 @@
+{
+  "summary": {
+    "total": 3,
+    "passed": 0,
+    "failed": 3,
+    "skipped": 0,
+    "error": 0
+  },
+  "results": [
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestJobsStatusEndpoints::test_get_job_result_completed",
+      "outcome": "failed",
+      "duration": 0.001750199997331947,
+      "error_message": "assert 404 == 200\n +  where 404 = <Response [404 Not Found]>.status_code",
+      "timestamp": "2026-03-11T16:17:20.596948"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestScanFilesEndpoint::test_get_scan_files_success",
+      "outcome": "failed",
+      "duration": 0.001042200019583106,
+      "error_message": "assert 404 == 200\n +  where 404 = <Response [404 Not Found]>.status_code",
+      "timestamp": "2026-03-11T16:17:20.968838"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestMiscErrors::test_status_pydantic_cast_error",
+      "outcome": "failed",
+      "duration": 0.0007684000302106142,
+      "error_message": "assert 404 == 500\n +  where 404 = <Response [404 Not Found]>.status_code",
+      "timestamp": "2026-03-11T16:17:20.989377"
+    }
+  ],
+  "generated_at": "2026-03-11T16:17:21.000442"
+}

@@ -1,0 +1,264 @@
+{
+  "summary": {
+    "total": 36,
+    "passed": 14,
+    "failed": 22,
+    "skipped": 0,
+    "error": 0
+  },
+  "results": [
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestJobsStartEndpoints::test_start_policy_batch",
+      "outcome": "failed",
+      "duration": 0.00038919999497011304,
+      "error_message": "'StatusManager' object has no attribute 'try_initialize_job_exclusive'",
+      "timestamp": "2026-03-11T16:10:24.959202"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestJobsStartEndpoints::test_start_file_processing",
+      "outcome": "failed",
+      "duration": 0.0003736000508069992,
+      "error_message": "'StatusManager' object has no attribute 'try_initialize_job_exclusive'",
+      "timestamp": "2026-03-11T16:10:24.975784"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestJobsStatusEndpoints::test_get_job_status",
+      "outcome": "failed",
+      "duration": 0.003300099982880056,
+      "error_message": "assert 404 == 200\n +  where 404 = <Response [404 Not Found]>.status_code",
+      "timestamp": "2026-03-11T16:10:24.999204"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestJobsStatusEndpoints::test_get_job_result_completed",
+      "outcome": "failed",
+      "duration": 0.0017537000239826739,
+      "error_message": "assert 404 == 200\n +  where 404 = <Response [404 Not Found]>.status_code",
+      "timestamp": "2026-03-11T16:10:25.016867"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestScanFilesEndpoint::test_get_scan_files_success",
+      "outcome": "failed",
+      "duration": 0.0009596999734640121,
+      "error_message": "assert 404 == 200\n +  where 404 = <Response [404 Not Found]>.status_code",
+      "timestamp": "2026-03-11T16:10:25.041328"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestCustodianScanEndpoints::test_custodian_scan_encrypted_success",
+      "outcome": "failed",
+      "duration": 0.0003649999853223562,
+      "error_message": "'StatusManager' object has no attribute 'check_job_exclusion'",
+      "timestamp": "2026-03-11T16:10:25.055232"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestCustodianScanEndpoints::test_custodian_scan_plain_success",
+      "outcome": "failed",
+      "duration": 0.00037080002948641777,
+      "error_message": "'StatusManager' object has no attribute 'check_job_exclusion'",
+      "timestamp": "2026-03-11T16:10:25.068507"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestNewCustodianScanEndpoints::test_new_custodian_scan_encrypted_success",
+      "outcome": "failed",
+      "duration": 0.00041019998025149107,
+      "error_message": "'StatusManager' object has no attribute 'check_job_exclusion'",
+      "timestamp": "2026-03-11T16:10:25.087435"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestNewCustodianScanEndpoints::test_new_custodian_scan_plain_success",
+      "outcome": "failed",
+      "duration": 0.0002951000351458788,
+      "error_message": "'StatusManager' object has no attribute 'check_job_exclusion'",
+      "timestamp": "2026-03-11T16:10:25.099775"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestNewCustodianScanEndpoints::test_new_custodian_scan_with_preset",
+      "outcome": "failed",
+      "duration": 0.0003512999974191189,
+      "error_message": "'StatusManager' object has no attribute 'check_job_exclusion'",
+      "timestamp": "2026-03-11T16:10:25.112585"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestJobsErrors::test_job_status_not_found",
+      "outcome": "passed",
+      "duration": 0.0008569999481551349,
+      "error_message": null,
+      "timestamp": "2026-03-11T16:10:25.127210"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestJobsErrors::test_job_exclusion_conflict",
+      "outcome": "failed",
+      "duration": 0.000347200024407357,
+      "error_message": "'StatusManager' object has no attribute 'try_initialize_job_exclusive'",
+      "timestamp": "2026-03-11T16:10:25.139398"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestJobsErrors::test_invalid_request_data",
+      "outcome": "passed",
+      "duration": 0.002329499984625727,
+      "error_message": null,
+      "timestamp": "2026-03-11T16:10:25.156308"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestJobsErrors::test_job_result_not_found",
+      "outcome": "failed",
+      "duration": 0.0005500999977812171,
+      "error_message": "'StatusManager' object has no attribute 'get_job_result_sync'",
+      "timestamp": "2026-03-11T16:10:25.170906"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestEncryptedRequestErrors::test_auth_hash_verification_failure",
+      "outcome": "passed",
+      "duration": 0.0037199999787844718,
+      "error_message": null,
+      "timestamp": "2026-03-11T16:10:25.197739"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestEncryptedRequestErrors::test_decryption_failure",
+      "outcome": "passed",
+      "duration": 0.0027791999746114016,
+      "error_message": null,
+      "timestamp": "2026-03-11T16:10:25.220053"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestEncryptedRequestErrors::test_request_body_parse_failure",
+      "outcome": "passed",
+      "duration": 0.0027967000496573746,
+      "error_message": null,
+      "timestamp": "2026-03-11T16:10:25.240484"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestScanFilesErrors::test_scan_files_job_not_found",
+      "outcome": "passed",
+      "duration": 0.0012434999807737768,
+      "error_message": null,
+      "timestamp": "2026-03-11T16:10:25.270845"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestScanFilesErrors::test_scan_files_non_custodian_job",
+      "outcome": "passed",
+      "duration": 0.001445600006263703,
+      "error_message": null,
+      "timestamp": "2026-03-11T16:10:25.289897"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestScanFilesErrors::test_scan_files_incomplete_job",
+      "outcome": "passed",
+      "duration": 0.0011676999856717885,
+      "error_message": null,
+      "timestamp": "2026-03-11T16:10:25.312553"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestScanFilesErrors::test_scan_files_no_result",
+      "outcome": "passed",
+      "duration": 0.0012304999982006848,
+      "error_message": null,
+      "timestamp": "2026-03-11T16:10:25.332978"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestNewCustodianScanErrors::test_new_custodian_auth_failure",
+      "outcome": "passed",
+      "duration": 0.003682799986563623,
+      "error_message": null,
+      "timestamp": "2026-03-11T16:10:25.351650"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestNewCustodianScanErrors::test_new_custodian_exclusion_conflict",
+      "outcome": "failed",
+      "duration": 0.0006560999900102615,
+      "error_message": "'StatusManager' object has no attribute 'check_job_exclusion'",
+      "timestamp": "2026-03-11T16:10:25.373752"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestNewCustodianScanErrors::test_new_custodian_validation_failure",
+      "outcome": "passed",
+      "duration": 0.0034856999991461635,
+      "error_message": null,
+      "timestamp": "2026-03-11T16:10:25.399506"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestMiscErrors::test_status_pydantic_cast_error",
+      "outcome": "failed",
+      "duration": 0.0006201000069268048,
+      "error_message": "'StatusManager' object has no attribute 'get_job_status_sync'",
+      "timestamp": "2026-03-11T16:10:25.419238"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestMiscErrors::test_old_custodian_exclusion_conflict",
+      "outcome": "failed",
+      "duration": 0.0006259999936446548,
+      "error_message": "'StatusManager' object has no attribute 'check_job_exclusion'",
+      "timestamp": "2026-03-11T16:10:25.443764"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestJobsSecurityEndpoints::test_unauthorized_access_prevention",
+      "outcome": "passed",
+      "duration": 0.00409230001969263,
+      "error_message": null,
+      "timestamp": "2026-03-11T16:10:25.455663"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestJobsSecurityEndpoints::test_job_id_injection_resistance",
+      "outcome": "failed",
+      "duration": 0.0005449000163935125,
+      "error_message": "'StatusManager' object has no attribute 'get_job_status_sync'",
+      "timestamp": "2026-03-11T16:10:25.474880"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestJobsSecurityEndpoints::test_shared_secret_not_in_response",
+      "outcome": "passed",
+      "duration": 0.0036202999763190746,
+      "error_message": null,
+      "timestamp": "2026-03-11T16:10:25.501579"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestJobsSecurityEndpoints::test_credentials_not_in_logs",
+      "outcome": "failed",
+      "duration": 0.0005670000100508332,
+      "error_message": "'StatusManager' object has no attribute 'check_job_exclusion'",
+      "timestamp": "2026-03-11T16:10:25.521622"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestJobsSecurityEndpoints::test_payload_size_limit",
+      "outcome": "passed",
+      "duration": 21.013952400011476,
+      "error_message": null,
+      "timestamp": "2026-03-11T16:10:46.558913"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestJobsSecurityEndpoints::test_concurrent_job_exclusion",
+      "outcome": "failed",
+      "duration": 0.00037100003100931644,
+      "error_message": "'StatusManager' object has no attribute 'try_initialize_job_exclusive'",
+      "timestamp": "2026-03-11T16:10:46.572915"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestJobsSecurityEndpoints::test_error_message_info_leakage_prevention",
+      "outcome": "failed",
+      "duration": 0.0003119000466540456,
+      "error_message": "'StatusManager' object has no attribute 'get_job_status_sync'",
+      "timestamp": "2026-03-11T16:10:46.590412"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestJobsSecurityEndpoints::test_session_id_format_validation",
+      "outcome": "failed",
+      "duration": 0.00032649998320266604,
+      "error_message": "'StatusManager' object has no attribute 'check_job_exclusion'",
+      "timestamp": "2026-03-11T16:10:46.604063"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestJobsSecurityEndpoints::test_job_result_access_control",
+      "outcome": "failed",
+      "duration": 0.0008431000169366598,
+      "error_message": "assert 404 == 200\n +  where 404 = <Response [404 Not Found]>.status_code",
+      "timestamp": "2026-03-11T16:10:46.617475"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestJobsSecurityEndpoints::test_replay_attack_prevention",
+      "outcome": "failed",
+      "duration": 0.0005575999966822565,
+      "error_message": "'StatusManager' object has no attribute 'check_job_exclusion'",
+      "timestamp": "2026-03-11T16:10:46.633284"
+    }
+  ],
+  "generated_at": "2026-03-11T16:10:46.639456"
+}

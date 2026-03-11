@@ -1,0 +1,147 @@
+{
+  "summary": {
+    "total": 26,
+    "passed": 24,
+    "failed": 2,
+    "pass_rate": "92.3%"
+  },
+  "categories": {
+    "normal": [
+      {
+        "test_id": "test_refine_policy_success",
+        "outcome": "passed",
+        "duration": 0.0024918000563047826
+      },
+      {
+        "test_id": "test_refine_without_policy",
+        "outcome": "passed",
+        "duration": 0.0016878999886102974
+      },
+      {
+        "test_id": "test_refine_explanation_request",
+        "outcome": "passed",
+        "duration": 0.0011097000096924603
+      },
+      {
+        "test_id": "test_refine_empty_string_policy",
+        "outcome": "passed",
+        "duration": 0.0011483000125735998
+      },
+      {
+        "test_id": "test_agent_aws_policy_generation",
+        "outcome": "passed",
+        "duration": 0.0019998999778181314
+      },
+      {
+        "test_id": "test_agent_azure_policy_generation",
+        "outcome": "passed",
+        "duration": 0.0011721000191755593
+      },
+      {
+        "test_id": "test_agent_gcp_policy_generation",
+        "outcome": "passed",
+        "duration": 0.0012718000216409564
+      },
+      {
+        "test_id": "test_agent_minimal_recommendation",
+        "outcome": "passed",
+        "duration": 0.0011656999704428017
+      },
+      {
+        "test_id": "test_validate_valid_json",
+        "outcome": "passed",
+        "duration": 0.001291199994739145
+      },
+      {
+        "test_id": "test_validate_valid_yaml",
+        "outcome": "passed",
+        "duration": 0.0008490000036545098
+      },
+      {
+        "test_id": "test_validate_failure_response",
+        "outcome": "passed",
+        "duration": 0.0009101000032387674
+      }
+    ],
+    "error": [
+      {
+        "test_id": "test_refine_empty_prompt",
+        "outcome": "passed",
+        "duration": 0.0012413000222295523
+      },
+      {
+        "test_id": "test_refine_missing_session_id",
+        "outcome": "passed",
+        "duration": 0.0010979999788105488
+      },
+      {
+        "test_id": "test_refine_unexpected_exception",
+        "outcome": "passed",
+        "duration": 0.004775299981702119
+      },
+      {
+        "test_id": "test_refine_http_exception_propagation",
+        "outcome": "passed",
+        "duration": 0.0009195000166073442
+      },
+      {
+        "test_id": "test_agent_missing_uid",
+        "outcome": "passed",
+        "duration": 0.0010066000395454466
+      },
+      {
+        "test_id": "test_agent_invalid_cloud",
+        "outcome": "passed",
+        "duration": 0.001005799975246191
+      },
+      {
+        "test_id": "test_agent_execution_error",
+        "outcome": "passed",
+        "duration": 0.0019229999743402004
+      },
+      {
+        "test_id": "test_agent_http_exception_propagation",
+        "outcome": "passed",
+        "duration": 0.0013226000010035932
+      },
+      {
+        "test_id": "test_validate_empty_policy",
+        "outcome": "passed",
+        "duration": 0.0007510999566875398
+      },
+      {
+        "test_id": "test_validate_whitespace_only_policy",
+        "outcome": "passed",
+        "duration": 0.0008310999837704003
+      },
+      {
+        "test_id": "test_validate_tool_exception",
+        "outcome": "failed",
+        "duration": 0.0006622000364586711
+      }
+    ],
+    "security": [
+      {
+        "test_id": "test_refine_error_no_stacktrace",
+        "outcome": "passed",
+        "duration": 0.0018934999825432897
+      },
+      {
+        "test_id": "test_agent_error_no_internal_details",
+        "outcome": "skipped",
+        "duration": 0.0023720000172033906
+      },
+      {
+        "test_id": "test_policy_content_injection",
+        "outcome": "passed",
+        "duration": 0.0009669999708421528
+      },
+      {
+        "test_id": "test_large_policy_context_handling",
+        "outcome": "passed",
+        "duration": 0.005840400001034141
+      }
+    ]
+  },
+  "execution_time": "2026-03-11T11:31:10.090220"
+}

@@ -1,0 +1,232 @@
+{
+  "summary": {
+    "total": 43,
+    "passed": 43,
+    "failed": 0,
+    "pass_rate": "100.0%"
+  },
+  "categories": {
+    "normal": [
+      {
+        "test_id": "test_chat_hierarchical_mode",
+        "outcome": "passed",
+        "duration": 0.002066300017759204
+      },
+      {
+        "test_id": "test_chat_deep_agents_mode",
+        "outcome": "passed",
+        "duration": 0.0008957000100053847
+      },
+      {
+        "test_id": "test_add_server_success",
+        "outcome": "passed",
+        "duration": 0.0021578000159934163
+      },
+      {
+        "test_id": "test_list_servers",
+        "outcome": "passed",
+        "duration": 0.001032400003168732
+      },
+      {
+        "test_id": "test_list_tools",
+        "outcome": "passed",
+        "duration": 0.0013640999677591026
+      },
+      {
+        "test_id": "test_get_status",
+        "outcome": "passed",
+        "duration": 0.001802499988116324
+      },
+      {
+        "test_id": "test_connect_server",
+        "outcome": "passed",
+        "duration": 0.0013015000149607658
+      },
+      {
+        "test_id": "test_disconnect_server",
+        "outcome": "passed",
+        "duration": 0.0015565999783575535
+      },
+      {
+        "test_id": "test_remove_server",
+        "outcome": "passed",
+        "duration": 0.001431400014553219
+      },
+      {
+        "test_id": "test_health_check",
+        "outcome": "passed",
+        "duration": 0.0010300999856553972
+      },
+      {
+        "test_id": "test_sse_streaming_debug_mode",
+        "outcome": "passed",
+        "duration": 0.03957070002797991
+      },
+      {
+        "test_id": "test_sse_streaming_with_auth",
+        "outcome": "passed",
+        "duration": 0.0014815999893471599
+      },
+      {
+        "test_id": "test_sse_streaming_token_filter",
+        "outcome": "passed",
+        "duration": 0.0015495000407099724
+      }
+    ],
+    "error": [
+      {
+        "test_id": "test_chat_missing_session_id",
+        "outcome": "passed",
+        "duration": 0.0007857999880798161
+      },
+      {
+        "test_id": "test_chat_missing_message",
+        "outcome": "passed",
+        "duration": 0.000744100019801408
+      },
+      {
+        "test_id": "test_chat_invalid_session_id",
+        "outcome": "passed",
+        "duration": 0.0007169999880716205
+      },
+      {
+        "test_id": "test_chat_empty_message",
+        "outcome": "passed",
+        "duration": 0.0011548000038601458
+      },
+      {
+        "test_id": "test_chat_nonexistent_server",
+        "outcome": "passed",
+        "duration": 0.0009128000237978995
+      },
+      {
+        "test_id": "test_chat_client_error",
+        "outcome": "passed",
+        "duration": 0.0012020999565720558
+      },
+      {
+        "test_id": "test_chat_timeout",
+        "outcome": "passed",
+        "duration": 0.0008496000082232058
+      },
+      {
+        "test_id": "test_chat_internal_error",
+        "outcome": "passed",
+        "duration": 0.0011133999796584249
+      },
+      {
+        "test_id": "test_add_server_duplicate",
+        "outcome": "passed",
+        "duration": 0.0009462999878451228
+      },
+      {
+        "test_id": "test_add_server_invalid_config",
+        "outcome": "passed",
+        "duration": 0.0033936999971047044
+      },
+      {
+        "test_id": "test_list_tools_nonexistent_server",
+        "outcome": "passed",
+        "duration": 0.0006461999728344381
+      },
+      {
+        "test_id": "test_connect_nonexistent_server",
+        "outcome": "passed",
+        "duration": 0.0007069000275805593
+      },
+      {
+        "test_id": "test_connect_already_connected",
+        "outcome": "passed",
+        "duration": 0.0007892000139690936
+      },
+      {
+        "test_id": "test_disconnect_nonexistent_server",
+        "outcome": "passed",
+        "duration": 0.0008097999962046742
+      },
+      {
+        "test_id": "test_disconnect_not_connected",
+        "outcome": "passed",
+        "duration": 0.0007687999750487506
+      },
+      {
+        "test_id": "test_remove_nonexistent_server",
+        "outcome": "passed",
+        "duration": 0.0012069999938830733
+      },
+      {
+        "test_id": "test_remove_connected_server",
+        "outcome": "passed",
+        "duration": 0.0009714000043459237
+      },
+      {
+        "test_id": "test_server_connection_failure",
+        "outcome": "passed",
+        "duration": 0.0010023000068031251
+      },
+      {
+        "test_id": "test_sse_auth_failure",
+        "outcome": "passed",
+        "duration": 0.001845100021455437
+      },
+      {
+        "test_id": "test_sse_invalid_auth_hash",
+        "outcome": "passed",
+        "duration": 0.001074400031939149
+      },
+      {
+        "test_id": "test_sse_missing_user_id",
+        "outcome": "passed",
+        "duration": 0.0011971999774686992
+      },
+      {
+        "test_id": "test_sse_streaming_error",
+        "outcome": "passed",
+        "duration": 0.0022515999735333025
+      }
+    ],
+    "security": [
+      {
+        "test_id": "test_sec_jwt_validation",
+        "outcome": "passed",
+        "duration": 0.8827159000211395
+      },
+      {
+        "test_id": "test_sec_hmac_validation",
+        "outcome": "passed",
+        "duration": 0.0020936999935656786
+      },
+      {
+        "test_id": "test_sec_injection_prevention",
+        "outcome": "passed",
+        "duration": 0.0011673999833874404
+      },
+      {
+        "test_id": "test_sec_path_traversal_prevention",
+        "outcome": "passed",
+        "duration": 0.0006921000313013792
+      },
+      {
+        "test_id": "test_sec_rate_limiting",
+        "outcome": "passed",
+        "duration": 0.001352099992800504
+      },
+      {
+        "test_id": "test_sec_sensitive_data_protection",
+        "outcome": "passed",
+        "duration": 0.0008455999777652323
+      },
+      {
+        "test_id": "test_sec_cors_validation",
+        "outcome": "passed",
+        "duration": 0.0010705000022426248
+      },
+      {
+        "test_id": "test_sec_error_message_safety",
+        "outcome": "passed",
+        "duration": 0.000910000002477318
+      }
+    ]
+  },
+  "execution_time": "2026-03-10T18:51:46.370556"
+}

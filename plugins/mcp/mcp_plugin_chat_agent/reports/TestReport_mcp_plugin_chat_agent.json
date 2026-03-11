@@ -1,0 +1,107 @@
+{
+  "summary": {
+    "total": 18,
+    "passed": 16,
+    "failed": 2,
+    "pass_rate": "88.9%"
+  },
+  "categories": {
+    "normal": [
+      {
+        "test_id": "test_hierarchical_mode",
+        "outcome": "passed",
+        "duration": 0.0005304000223986804
+      },
+      {
+        "test_id": "test_deep_agents_mode",
+        "outcome": "passed",
+        "duration": 0.0003974999999627471
+      },
+      {
+        "test_id": "test_no_server_name",
+        "outcome": "passed",
+        "duration": 0.0004545999690890312
+      },
+      {
+        "test_id": "test_specific_server",
+        "outcome": "passed",
+        "duration": 0.00033299997448921204
+      },
+      {
+        "test_id": "test_progress_building",
+        "outcome": "passed",
+        "duration": 0.000311399984639138
+      },
+      {
+        "test_id": "test_args_propagation_hierarchical",
+        "outcome": "passed",
+        "duration": 0.00032430002465844154
+      },
+      {
+        "test_id": "test_args_propagation_deep_agents",
+        "outcome": "passed",
+        "duration": 0.00027680001221597195
+      },
+      {
+        "test_id": "test_module_exports",
+        "outcome": "passed",
+        "duration": 0.00013280002167448401
+      }
+    ],
+    "error": [
+      {
+        "test_id": "test_error_in_state",
+        "outcome": "passed",
+        "duration": 0.0009492000099271536
+      },
+      {
+        "test_id": "test_hierarchical_exception",
+        "outcome": "passed",
+        "duration": 0.00043079996248707175
+      },
+      {
+        "test_id": "test_deep_agents_exception",
+        "outcome": "passed",
+        "duration": 0.0003551000263541937
+      },
+      {
+        "test_id": "test_empty_response",
+        "outcome": "passed",
+        "duration": 0.00035069999285042286
+      }
+    ],
+    "security": [
+      {
+        "test_id": "test_error_id_uniqueness",
+        "outcome": "passed",
+        "duration": 0.0011198999709449708
+      },
+      {
+        "test_id": "test_internal_error_not_exposed",
+        "outcome": "passed",
+        "duration": 0.00035370001569390297
+      },
+      {
+        "test_id": "test_session_id_logged",
+        "outcome": "passed",
+        "duration": 0.0004922999651171267
+      },
+      {
+        "test_id": "test_state_error_credential_exposure",
+        "outcome": "skipped",
+        "duration": 0.0017681000172160566
+      },
+      {
+        "test_id": "test_session_id_log_injection",
+        "outcome": "skipped",
+        "duration": 0.0008412000024691224
+      },
+      {
+        "test_id": "test_server_name_path_traversal",
+        "outcome": "passed",
+        "duration": 0.000424400030169636
+      }
+    ]
+  },
+  "execution_time": "2026-03-11T10:20:10.225841"
+}

@@ -1,0 +1,44 @@
+=== \pythonProject\python_ai_cspm\TestReport\plugins\auth\ === 
+test_auth.py
+=== \pythonProject\python_ai_cspm\TestReport\plugins\aws\aws_plugin\ === 
+test_aws_plugin.py
+=== \pythonProject\python_ai_cspm\TestReport\plugins\chat_dashboard\ === 
+test_chat_dashboard.py
+=== \pythonProject\python_ai_cspm\TestReport\plugins\cspm\cspm_plugin\ === 
+test_cspm_plugin_router.py
+=== \pythonProject\python_ai_cspm\TestReport\plugins\cspm\cspm_tools\ === 
+test_cspm_tools.py
+=== \pythonProject\python_ai_cspm\TestReport\plugins\cspm\cspm_tools_router\ === 
+test_cspm_tools_router.py
+=== \pythonProject\python_ai_cspm\TestReport\plugins\custodian_scan\custodian_scan\ === 
+test_custodian_scan.py
+=== \pythonProject\python_ai_cspm\TestReport\plugins\doc_reader\doc_reader_ai_pretreatment\ === 
+test_doc_reader_ai_pretreatment.py
+=== \pythonProject\python_ai_cspm\TestReport\plugins\doc_reader\doc_reader_chat_logic\ === 
+test_doc_reader_chat_logic.py
+=== \pythonProject\python_ai_cspm\TestReport\plugins\doc_reader\doc_reader_output_models\ === 
+test_doc_reader_output_models.py
+=== \pythonProject\python_ai_cspm\TestReport\plugins\doc_reader\doc_reader_pdf_utils\ === 
+test_doc_reader_pdf_utils.py
+=== \pythonProject\python_ai_cspm\TestReport\plugins\doc_reader\doc_reader_post_gemini\ === 
+test_doc_reader_post_gemini.py
+=== \pythonProject\python_ai_cspm\TestReport\plugins\doc_reader\doc_reader_router\ === 
+test_doc_reader_router.py
+=== \pythonProject\python_ai_cspm\TestReport\plugins\doc_reader\doc_reader_structuring\ === 
+test_doc_reader_structuring.py
+=== \pythonProject\python_ai_cspm\TestReport\plugins\jobs\jobs_router\ === 
+test_jobs_router.py
+=== \pythonProject\python_ai_cspm\TestReport\plugins\mcp\mcp_plugin_chat_agent\ === 
+test_mcp_plugin_chat_agent.py
+=== \pythonProject\python_ai_cspm\TestReport\plugins\mcp\mcp_plugin_client\ === 
+test_mcp_plugin_client.py
+=== \pythonProject\python_ai_cspm\TestReport\plugins\mcp\mcp_plugin_deep_agents\ === 
+test_deep_agents.py
+=== \pythonProject\python_ai_cspm\TestReport\plugins\mcp\mcp_plugin_router\ === 
+test_mcp_plugin_router.py
+=== \pythonProject\python_ai_cspm\TestReport\plugins\mcp\mcp_plugin_sessions\ === 
+test_mcp_plugin_sessions.py
+=== \pythonProject\python_ai_cspm\TestReport\plugins\rag\rag_plugin\ === 
+test_rag_plugin.py
+=== \pythonProject\python_ai_cspm\TestReport\plugins\report\report_plugin\ === 
+test_report_plugin.py

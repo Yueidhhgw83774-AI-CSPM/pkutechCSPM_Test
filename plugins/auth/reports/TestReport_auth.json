@@ -1,0 +1,417 @@
+{
+  "summary": {
+    "total": 38,
+    "passed": 37,
+    "failed": 0,
+    "xfailed": 0,
+    "skipped": 1,
+    "pass_rate": "97.4%",
+    "effective_pass_rate": "100.0%"
+  },
+  "categories": {
+    "normal": {
+      "count": 12,
+      "results": [
+        {
+          "nodeid": "test_auth.py::TestAuthEndpoints::test_login_success",
+          "test_name": "test_login_success",
+          "readable_name": "AUTH-001: 有效认证信息获取Token",
+          "test_id": "AUTH-001",
+          "class_name": "TestAuthEndpoints",
+          "outcome": "passed",
+          "duration": 0.07086410000920296,
+          "duration_ms": 70.86
+        },
+        {
+          "nodeid": "test_auth.py::TestAuthEndpoints::test_get_current_user",
+          "test_name": "test_get_current_user",
+          "readable_name": "AUTH-002: 认证后获取用户信息",
+          "test_id": "AUTH-002",
+          "class_name": "TestAuthEndpoints",
+          "outcome": "passed",
+          "duration": 0.0013337999698705971,
+          "duration_ms": 1.33
+        },
+        {
+          "nodeid": "test_auth.py::TestAuthEndpoints::test_protected_route",
+          "test_name": "test_protected_route",
+          "readable_name": "AUTH-003: 访问受保护路由",
+          "test_id": "AUTH-003",
+          "class_name": "TestAuthEndpoints",
+          "outcome": "passed",
+          "duration": 0.0009947000071406364,
+          "duration_ms": 0.99
+        },
+        {
+          "nodeid": "test_auth.py::TestAuthCoreLogic::test_verify_password_success",
+          "test_name": "test_verify_password_success",
+          "readable_name": "AUTH-004: 密码验证成功",
+          "test_id": "AUTH-004",
+          "class_name": "TestAuthCoreLogic",
+          "outcome": "passed",
+          "duration": 0.00017479999223724008,
+          "duration_ms": 0.17
+        },
+        {
+          "nodeid": "test_auth.py::TestAuthCoreLogic::test_get_password_hash",
+          "test_name": "test_get_password_hash",
+          "readable_name": "AUTH-005: 密码哈希化",
+          "test_id": "AUTH-005",
+          "class_name": "TestAuthCoreLogic",
+          "outcome": "passed",
+          "duration": 0.00018510001245886087,
+          "duration_ms": 0.19
+        },
+        {
+          "nodeid": "test_auth.py::TestAuthCoreLogic::test_get_user_found",
+          "test_name": "test_get_user_found",
+          "readable_name": "AUTH-006: 用户查询成功",
+          "test_id": "AUTH-006",
+          "class_name": "TestAuthCoreLogic",
+          "outcome": "passed",
+          "duration": 0.00017640000442042947,
+          "duration_ms": 0.18
+        },
+        {
+          "nodeid": "test_auth.py::TestAuthCoreLogic::test_get_user_with_roles_found",
+          "test_name": "test_get_user_with_roles_found",
+          "readable_name": "AUTH-007: 带角色用户查询成功",
+          "test_id": "AUTH-007",
+          "class_name": "TestAuthCoreLogic",
+          "outcome": "passed",
+          "duration": 0.00018540001474320889,
+          "duration_ms": 0.19
+        },
+        {
+          "nodeid": "test_auth.py::TestAuthCoreLogic::test_authenticate_user_with_roles_success",
+          "test_name": "test_authenticate_user_with_roles_success",
+          "readable_name": "AUTH-008: 带角色认证成功",
+          "test_id": "AUTH-008",
+          "class_name": "TestAuthCoreLogic",
+          "outcome": "passed",
+          "duration": 0.00017830001888796687,
+          "duration_ms": 0.18
+        },
+        {
+          "nodeid": "test_auth.py::TestTokenCreation::test_create_access_token_with_expiry",
+          "test_name": "test_create_access_token_with_expiry",
+          "readable_name": "AUTH-009: 指定有效期Token生成",
+          "test_id": "AUTH-009",
+          "class_name": "TestTokenCreation",
+          "outcome": "passed",
+          "duration": 0.0003524000057950616,
+          "duration_ms": 0.35
+        },
+        {
+          "nodeid": "test_auth.py::TestTokenCreation::test_create_access_token_default_expiry",
+          "test_name": "test_create_access_token_default_expiry",
+          "readable_name": "AUTH-010: 默认有效期Token生成",
+          "test_id": "AUTH-010",
+          "class_name": "TestTokenCreation",
+          "outcome": "passed",
+          "duration": 0.0003244999679736793,
+          "duration_ms": 0.32
+        },
+        {
+          "nodeid": "test_auth.py::TestTokenCreation::test_create_access_token_with_roles_and_expiry",
+          "test_name": "test_create_access_token_with_roles_and_expiry",
+          "readable_name": "AUTH-011: 带角色Token生成(指定期限)",
+          "test_id": "AUTH-011",
+          "class_name": "TestTokenCreation",
+          "outcome": "passed",
+          "duration": 0.0003782999701797962,
+          "duration_ms": 0.38
+        },
+        {
+          "nodeid": "test_auth.py::TestTokenCreation::test_create_access_token_with_roles_default_expiry",
+          "test_name": "test_create_access_token_with_roles_default_expiry",
+          "readable_name": "AUTH-012: 带角色Token生成(默认期限)",
+          "test_id": "AUTH-012",
+          "class_name": "TestTokenCreation",
+          "outcome": "passed",
+          "duration": 0.0002668999950401485,
+          "duration_ms": 0.27
+        }
+      ]
+    },
+    "error": {
+      "count": 18,
+      "results": [
+        {
+          "nodeid": "test_auth.py::TestAuthEndpointErrors::test_login_invalid_password",
+          "test_name": "test_login_invalid_password",
+          "readable_name": "AUTH-E01: 无效密码返回401",
+          "test_id": "AUTH-E01",
+          "class_name": "TestAuthEndpointErrors",
+          "outcome": "passed",
+          "duration": 0.0018638999899849296,
+          "duration_ms": 1.86
+        },
+        {
+          "nodeid": "test_auth.py::TestAuthEndpointErrors::test_login_unknown_user",
+          "test_name": "test_login_unknown_user",
+          "readable_name": "AUTH-E02: 不存在用户返回401",
+          "test_id": "AUTH-E02",
+          "class_name": "TestAuthEndpointErrors",
+          "outcome": "passed",
+          "duration": 0.0014287999947555363,
+          "duration_ms": 1.43
+        },
+        {
+          "nodeid": "test_auth.py::TestAuthEndpointErrors::test_expired_token",
+          "test_name": "test_expired_token",
+          "readable_name": "AUTH-E03: 过期Token返回401",
+          "test_id": "AUTH-E03",
+          "class_name": "TestAuthEndpointErrors",
+          "outcome": "passed",
+          "duration": 0.000699099968187511,
+          "duration_ms": 0.7
+        },
+        {
+          "nodeid": "test_auth.py::TestAuthEndpointErrors::test_malformed_token",
+          "test_name": "test_malformed_token",
+          "readable_name": "AUTH-E04: 无效Token格式返回401",
+          "test_id": "AUTH-E04",
+          "class_name": "TestAuthEndpointErrors",
+          "outcome": "passed",
+          "duration": 0.0006647999980486929,
+          "duration_ms": 0.66
+        },
+        {
+          "nodeid": "test_auth.py::TestAuthEndpointErrors::test_no_auth_header",
+          "test_name": "test_no_auth_header",
+          "readable_name": "AUTH-E05: 无认证头返回401",
+          "test_id": "AUTH-E05",
+          "class_name": "TestAuthEndpointErrors",
+          "outcome": "passed",
+          "duration": 0.0005734000005759299,
+          "duration_ms": 0.57
+        },
+        {
+          "nodeid": "test_auth.py::TestAuthEndpointErrors::test_disabled_user",
+          "test_name": "test_disabled_user",
+          "readable_name": "AUTH-E06: 禁用用户返回400",
+          "test_id": "AUTH-E06",
+          "class_name": "TestAuthEndpointErrors",
+          "outcome": "passed",
+          "duration": 0.0008367000264115632,
+          "duration_ms": 0.84
+        },
+        {
+          "nodeid": "test_auth.py::TestAuthEndpointErrors::test_insufficient_roles",
+          "test_name": "test_insufficient_roles",
+          "readable_name": "AUTH-E07: 权限不足返回403",
+          "test_id": "AUTH-E07",
+          "class_name": "TestAuthEndpointErrors",
+          "outcome": "passed",
+          "duration": 0.0011628000065684319,
+          "duration_ms": 1.16
+        },
+        {
+          "nodeid": "test_auth.py::TestAuthCoreLogicErrors::test_verify_password_failure",
+          "test_name": "test_verify_password_failure",
+          "readable_name": "AUTH-E08: 密码验证失败",
+          "test_id": "AUTH-E08",
+          "class_name": "TestAuthCoreLogicErrors",
+          "outcome": "passed",
+          "duration": 0.00017740001203492284,
+          "duration_ms": 0.18
+        },
+        {
+          "nodeid": "test_auth.py::TestAuthCoreLogicErrors::test_get_user_not_found",
+          "test_name": "test_get_user_not_found",
+          "readable_name": "AUTH-E09: 不存在用户返回None",
+          "test_id": "AUTH-E09",
+          "class_name": "TestAuthCoreLogicErrors",
+          "outcome": "passed",
+          "duration": 0.00013020000187680125,
+          "duration_ms": 0.13
+        },
+        {
+          "nodeid": "test_auth.py::TestAuthCoreLogicErrors::test_authenticate_user_with_roles_unknown",
+          "test_name": "test_authenticate_user_with_roles_unknown",
+          "readable_name": "AUTH-E10: 带角色认证-用户不存在",
+          "test_id": "AUTH-E10",
+          "class_name": "TestAuthCoreLogicErrors",
+          "outcome": "passed",
+          "duration": 0.00013160001253709197,
+          "duration_ms": 0.13
+        },
+        {
+          "nodeid": "test_auth.py::TestAuthCoreLogicErrors::test_authenticate_user_with_roles_wrong_password",
+          "test_name": "test_authenticate_user_with_roles_wrong_password",
+          "readable_name": "AUTH-E11: 带角色认证-密码错误",
+          "test_id": "AUTH-E11",
+          "class_name": "TestAuthCoreLogicErrors",
+          "outcome": "passed",
+          "duration": 0.0001762000028975308,
+          "duration_ms": 0.18
+        },
+        {
+          "nodeid": "test_auth.py::TestAuthCoreLogicErrors::test_get_current_user_no_sub",
+          "test_name": "test_get_current_user_no_sub",
+          "readable_name": "AUTH-E12: 无sub字段Token返回401",
+          "test_id": "AUTH-E12",
+          "class_name": "TestAuthCoreLogicErrors",
+          "outcome": "passed",
+          "duration": 0.000526099989656359,
+          "duration_ms": 0.53
+        },
+        {
+          "nodeid": "test_auth.py::TestAuthCoreLogicErrors::test_get_current_user_unknown_sub",
+          "test_name": "test_get_current_user_unknown_sub",
+          "readable_name": "AUTH-E13: sub不存在于DB返回401",
+          "test_id": "AUTH-E13",
+          "class_name": "TestAuthCoreLogicErrors",
+          "outcome": "passed",
+          "duration": 0.0003991000121459365,
+          "duration_ms": 0.4
+        },
+        {
+          "nodeid": "test_auth.py::TestGetCurrentUserWithRolesErrors::test_get_current_user_with_roles_no_sub",
+          "test_name": "test_get_current_user_with_roles_no_sub",
+          "readable_name": "AUTH-E15: 带角色获取用户-无sub返回401",
+          "test_id": "AUTH-E15",
+          "class_name": "TestGetCurrentUserWithRolesErrors",
+          "outcome": "passed",
+          "duration": 0.00035470002330839634,
+          "duration_ms": 0.35
+        },
+        {
+          "nodeid": "test_auth.py::TestGetCurrentUserWithRolesErrors::test_get_current_user_with_roles_jwt_error",
+          "test_name": "test_get_current_user_with_roles_jwt_error",
+          "readable_name": "AUTH-E16: 带角色获取用户-无效Token",
+          "test_id": "AUTH-E16",
+          "class_name": "TestGetCurrentUserWithRolesErrors",
+          "outcome": "passed",
+          "duration": 0.0002637000288814306,
+          "duration_ms": 0.26
+        },
+        {
+          "nodeid": "test_auth.py::TestGetCurrentUserWithRolesErrors::test_get_current_user_with_roles_unknown_user",
+          "test_name": "test_get_current_user_with_roles_unknown_user",
+          "readable_name": "AUTH-E17: 带角色获取用户-用户不存在",
+          "test_id": "AUTH-E17",
+          "class_name": "TestGetCurrentUserWithRolesErrors",
+          "outcome": "passed",
+          "duration": 0.00038949999725446105,
+          "duration_ms": 0.39
+        },
+        {
+          "nodeid": "test_auth.py::TestGetCurrentUserWithRolesErrors::test_disabled_user_with_roles",
+          "test_name": "test_disabled_user_with_roles",
+          "readable_name": "AUTH-E18: 带角色禁用用户返回400",
+          "test_id": "AUTH-E18",
+          "class_name": "TestGetCurrentUserWithRolesErrors",
+          "outcome": "passed",
+          "duration": 0.000271500030066818,
+          "duration_ms": 0.27
+        },
+        {
+          "nodeid": "test_auth.py::TestRBACErrors::test_require_all_roles_partial_match",
+          "test_name": "test_require_all_roles_partial_match",
+          "readable_name": "AUTH-E14: require_all_roles部分匹配返回403",
+          "test_id": "AUTH-E14",
+          "class_name": "TestRBACErrors",
+          "outcome": "passed",
+          "duration": 0.0002950999769382179,
+          "duration_ms": 0.3
+        }
+      ]
+    },
+    "security": {
+      "count": 8,
+      "results": [
+        {
+          "nodeid": "test_auth.py::TestAuthSecurity::test_password_is_hashed",
+          "test_name": "test_password_is_hashed",
+          "readable_name": "AUTH-SEC-01: 密码bcrypt哈希验证",
+          "test_id": "AUTH-SEC-01",
+          "class_name": "TestAuthSecurity",
+          "outcome": "passed",
+          "duration": 0.00012989999959245324,
+          "duration_ms": 0.13
+        },
+        {
+          "nodeid": "test_auth.py::TestAuthSecurity::test_token_modified_rejected",
+          "test_name": "test_token_modified_rejected",
+          "readable_name": "AUTH-SEC-02: 篡改Token被拒绝",
+          "test_id": "AUTH-SEC-02",
+          "class_name": "TestAuthSecurity",
+          "outcome": "passed",
+          "duration": 0.0007749000214971602,
+          "duration_ms": 0.77
+        },
+        {
+          "nodeid": "test_auth.py::TestAuthSecurity::test_password_not_in_response",
+          "test_name": "test_password_not_in_response",
+          "readable_name": "AUTH-SEC-03: 响应不包含密码信息",
+          "test_id": "AUTH-SEC-03",
+          "class_name": "TestAuthSecurity",
+          "outcome": "passed",
+          "duration": 0.0008216999704018235,
+          "duration_ms": 0.82
+        },
+        {
+          "nodeid": "test_auth.py::TestAuthSecurity::test_token_expiry_enforced",
+          "test_name": "test_token_expiry_enforced",
+          "readable_name": "AUTH-SEC-04: Token有效期强制执行",
+          "test_id": "AUTH-SEC-04",
+          "class_name": "TestAuthSecurity",
+          "outcome": "passed",
+          "duration": 0.0006295000202953815,
+          "duration_ms": 0.63
+        },
+        {
+          "nodeid": "test_auth.py::TestAuthSecurity::test_default_secret_key_warning",
+          "test_name": "test_default_secret_key_warning",
+          "readable_name": "AUTH-SEC-05: 默认SECRET_KEY警告",
+          "test_id": "AUTH-SEC-05",
+          "class_name": "TestAuthSecurity",
+          "outcome": "passed",
+          "duration": 0.00026020000223070383,
+          "duration_ms": 0.26
+        },
+        {
+          "nodeid": "test_auth.py::TestAuthSecurity::test_jwt_alg_none_attack_rejected",
+          "test_name": "test_jwt_alg_none_attack_rejected",
+          "readable_name": "AUTH-SEC-06: JWT alg=none攻击防御",
+          "test_id": "AUTH-SEC-06",
+          "class_name": "TestAuthSecurity",
+          "outcome": "passed",
+          "duration": 0.0002882999833673239,
+          "duration_ms": 0.29
+        },
+        {
+          "nodeid": "test_auth.py::TestAuthSecurity::test_jwt_role_tampering_rejected",
+          "test_name": "test_jwt_role_tampering_rejected",
+          "readable_name": "AUTH-SEC-07: JWT角色篡改检测",
+          "test_id": "AUTH-SEC-07",
+          "class_name": "TestAuthSecurity",
+          "outcome": "passed",
+          "duration": 0.0003472999669611454,
+          "duration_ms": 0.35
+        },
+        {
+          "nodeid": "test_auth.py::TestAuthSecurity::test_role_escalation_prevented",
+          "test_name": "test_role_escalation_prevented",
+          "readable_name": "AUTH-SEC-08: 角色提权防止",
+          "test_id": "AUTH-SEC-08",
+          "class_name": "TestAuthSecurity",
+          "outcome": "skipped",
+          "duration": 0.0009305000421591103,
+          "duration_ms": 0.93
+        }
+      ]
+    }
+  },
+  "execution_time": "2026-03-10 19:24:24",
+  "test_target": {
+    "files": [
+      "app/core/auth.py",
+      "app/auth/router.py",
+      "app/models/auth.py"
+    ],
+    "spec": "docs/testing/plugins/auth_tests.md"
+  }
+}

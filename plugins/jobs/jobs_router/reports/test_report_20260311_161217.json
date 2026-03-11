@@ -1,0 +1,19 @@
+{
+  "summary": {
+    "total": 1,
+    "passed": 0,
+    "failed": 1,
+    "skipped": 0,
+    "error": 0
+  },
+  "results": [
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestJobsStartEndpoints::test_start_policy_batch",
+      "outcome": "failed",
+      "duration": 0.00025460001779720187,
+      "error_message": "'StatusManager' object has no attribute 'try_initialize_job_exclusive'",
+      "timestamp": "2026-03-11T16:12:17.060087"
+    }
+  ],
+  "generated_at": "2026-03-11T16:12:17.065573"
+}

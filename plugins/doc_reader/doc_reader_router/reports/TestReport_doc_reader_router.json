@@ -1,0 +1,241 @@
+{
+  "summary": {
+    "total": 32,
+    "passed": 30,
+    "failed": 2,
+    "pass_rate": "93.8%"
+  },
+  "categories": {
+    "normal": [
+      {
+        "test_id": "N/A",
+        "test_name": "test_structure_success",
+        "outcome": "passed",
+        "duration_ms": 66.89,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "test_structure_failure_returns_message",
+        "outcome": "passed",
+        "duration_ms": 6.3,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "test_structure_japanese_text",
+        "outcome": "passed",
+        "duration_ms": 4.76,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "test_structure_whitespace_preserved",
+        "outcome": "passed",
+        "duration_ms": 4.83,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "test_chat_success",
+        "outcome": "passed",
+        "duration_ms": 2.65,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "test_chat_with_source_document",
+        "outcome": "passed",
+        "duration_ms": 1.61,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "test_chat_with_target_clouds_context",
+        "outcome": "passed",
+        "duration_ms": 1.83,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "test_chat_long_prompt",
+        "outcome": "passed",
+        "duration_ms": 2.05,
+        "status": "✅"
+      }
+    ],
+    "error": [
+      {
+        "test_id": "N/A",
+        "test_name": "test_empty_prompt_returns_400",
+        "outcome": "passed",
+        "duration_ms": 4.51,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "test_whitespace_only_prompt_returns_400",
+        "outcome": "passed",
+        "duration_ms": 3.2,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "test_missing_prompt_returns_422",
+        "outcome": "passed",
+        "duration_ms": 3.82,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "test_structure_llm_exception",
+        "outcome": "passed",
+        "duration_ms": 6.62,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "test_structure_http_exception_reraised",
+        "outcome": "passed",
+        "duration_ms": 4.85,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "test_chat_invoke_graph_exception",
+        "outcome": "passed",
+        "duration_ms": 1.11,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "test_chat_http_exception_reraised",
+        "outcome": "passed",
+        "duration_ms": 0.81,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "test_chat_missing_session_id",
+        "outcome": "passed",
+        "duration_ms": 2.01,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "test_chat_empty_prompt",
+        "outcome": "passed",
+        "duration_ms": 2.47,
+        "status": "✅"
+      }
+    ],
+    "security": [
+      {
+        "test_id": "N/A",
+        "test_name": "test_error_id_traceability",
+        "outcome": "passed",
+        "duration_ms": 6.27,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "test_no_stack_trace_in_response",
+        "outcome": "passed",
+        "duration_ms": 7.57,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "test_xss_payload_handled",
+        "outcome": "passed",
+        "duration_ms": 5.11,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "test_sql_injection_input",
+        "outcome": "passed",
+        "duration_ms": 5.23,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "test_path_traversal_input",
+        "outcome": "passed",
+        "duration_ms": 4.87,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "test_dos_large_input",
+        "outcome": "passed",
+        "duration_ms": 185.4,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "test_session_id_guessing_prevention",
+        "outcome": "passed",
+        "duration_ms": 1.42,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "test_json_injection_chat_request",
+        "outcome": "passed",
+        "duration_ms": 4.79,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "test_json_injection_docreader_chat_request",
+        "outcome": "passed",
+        "duration_ms": 2.04,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "test_no_internal_exception_info",
+        "outcome": "skipped",
+        "duration_ms": 6.76,
+        "status": "⚠️"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "test_unicode_control_characters",
+        "outcome": "passed",
+        "duration_ms": 5.52,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "test_no_sensitive_info_leakage",
+        "outcome": "skipped",
+        "duration_ms": 6.04,
+        "status": "⚠️"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "test_ssrf_prevention",
+        "outcome": "passed",
+        "duration_ms": 2.17,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "test_command_injection_prevention",
+        "outcome": "passed",
+        "duration_ms": 4.36,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "test_deep_nested_json",
+        "outcome": "passed",
+        "duration_ms": 2.07,
+        "status": "✅"
+      }
+    ]
+  },
+  "execution_time": "2026-03-11 15:49:26"
+}

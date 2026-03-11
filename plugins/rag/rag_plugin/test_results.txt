@@ -1,0 +1,38 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.9, pytest-8.4.2, pluggy-1.5.0
+rootdir: C:\pythonProject\python_ai_cspm\TestReport\plugins\rag\rag_plugin
+configfile: pytest.ini
+plugins: langsmith-0.7.16, asyncio-1.3.0, cov-7.0.0, timeout-2.4.0, anyio-4.10.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collected 88 items
+
+source\test_rag_plugin.py .............FFFFFFFF..F.F.F.FFFFF.F.FFF...... [ 52%]
+ss..s..F.s.s...s...s.F.....F.....F.....F..                               [100%]
+
+=========================== short test summary info ===========================
+FAILED source/test_rag_plugin.py::TestEnhancedRAGSearch::test_rag_014_initialization
+FAILED source/test_rag_plugin.py::TestEnhancedRAGSearch::test_rag_015_build_filter_cloud
+FAILED source/test_rag_plugin.py::TestEnhancedRAGSearch::test_rag_016_build_filter_multiple
+FAILED source/test_rag_plugin.py::TestEnhancedRAGSearch::test_rag_017_build_filter_none
+FAILED source/test_rag_plugin.py::TestEnhancedRAGSearch::test_rag_046_build_filter_empty
+FAILED source/test_rag_plugin.py::TestEnhancedRAGSearch::test_rag_018_convert_documents
+FAILED source/test_rag_plugin.py::TestEnhancedRAGSearch::test_rag_019_convert_documents_with_scores
+FAILED source/test_rag_plugin.py::TestEnhancedRAGSearch::test_rag_020_basic_search
+FAILED source/test_rag_plugin.py::TestEnhancedRAGSearch::test_rag_023_code_example_search
+FAILED source/test_rag_plugin.py::TestEnhancedRAGSearch::test_rag_025_qa_search_without_sources
+FAILED source/test_rag_plugin.py::TestEnhancedRAGSearch::test_rag_027_health_check_degraded
+FAILED source/test_rag_plugin.py::TestRAGManager::test_rag_029_get_instance_first_call
+FAILED source/test_rag_plugin.py::TestRAGManager::test_rag_030_get_instance_second_call
+FAILED source/test_rag_plugin.py::TestRAGManager::test_rag_031_manager_initialize
+FAILED source/test_rag_plugin.py::TestRAGManager::test_rag_032_is_initialized
+FAILED source/test_rag_plugin.py::TestRAGManager::test_rag_033_manager_health_check
+FAILED source/test_rag_plugin.py::TestRAGManager::test_rag_035_initialize_global_rag_system
+FAILED source/test_rag_plugin.py::TestRAGRouter::test_rag_037_filter_search_endpoint
+FAILED source/test_rag_plugin.py::TestRAGRouter::test_rag_038_action_search_endpoint
+FAILED source/test_rag_plugin.py::TestRAGRouter::test_rag_039_code_example_endpoint
+FAILED source/test_rag_plugin.py::TestRAGErrors::test_rag_e08_invalid_filter_values
+FAILED source/test_rag_plugin.py::TestRAGSecurity::test_rag_sec_002_filter_injection_prevention
+FAILED source/test_rag_plugin.py::TestRAGSecurity::test_rag_sec_008_input_size_limit
+FAILED source/test_rag_plugin.py::TestRAGPerformance::test_rag_perf_004_large_result_set
+FAILED source/test_rag_plugin.py::TestRAGIntegration::test_rag_int_003_filter_action_code_search
+============ 25 failed, 56 passed, 7 skipped, 4 warnings in 2.89s =============

@@ -1,0 +1,19 @@
+{
+  "summary": {
+    "total": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "error": 0
+  },
+  "results": [
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_debug.py::test_debug_mock",
+      "outcome": "passed",
+      "duration": 0.0025487999664619565,
+      "error_message": null,
+      "timestamp": "2026-03-11T16:22:15.115122"
+    }
+  ],
+  "generated_at": "2026-03-11T16:22:15.120376"
+}

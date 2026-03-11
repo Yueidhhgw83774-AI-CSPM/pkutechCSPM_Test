@@ -1,0 +1,19 @@
+{
+  "summary": {
+    "total": 1,
+    "passed": 0,
+    "failed": 1,
+    "skipped": 0,
+    "error": 0
+  },
+  "results": [
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestJobsSecurityEndpoints::test_unauthorized_access_prevention",
+      "outcome": "failed",
+      "duration": 0.043404199997894466,
+      "error_message": "cannot load library 'libpango-1.0-0': error 0x7e.  Additionally, ctypes.util.find_library() did not manage to locate a library called 'libpango-1.0-0'",
+      "timestamp": "2026-03-11T15:58:36.305745"
+    }
+  ],
+  "generated_at": "2026-03-11T15:58:38.238425"
+}

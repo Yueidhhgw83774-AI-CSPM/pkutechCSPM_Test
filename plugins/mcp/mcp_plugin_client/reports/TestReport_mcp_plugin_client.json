@@ -1,0 +1,187 @@
+{
+  "summary": {
+    "total": 34,
+    "passed": 34,
+    "failed": 0,
+    "pass_rate": "100.0%"
+  },
+  "categories": {
+    "normal": [
+      {
+        "test_id": "test_add_server_success",
+        "outcome": "passed",
+        "duration": 0.0004401999758556485
+      },
+      {
+        "test_id": "test_expand_env_vars_success",
+        "outcome": "passed",
+        "duration": 0.00015569996321573853
+      },
+      {
+        "test_id": "test_register_internal_tools",
+        "outcome": "passed",
+        "duration": 0.0003580999909900129
+      },
+      {
+        "test_id": "test_call_internal_tool_sync",
+        "outcome": "passed",
+        "duration": 0.00036780000664293766
+      },
+      {
+        "test_id": "test_call_internal_tool_async",
+        "outcome": "passed",
+        "duration": 0.0003473000251688063
+      },
+      {
+        "test_id": "test_get_pool_status",
+        "outcome": "passed",
+        "duration": 0.00013909995323047042
+      },
+      {
+        "test_id": "test_get_server_status_single",
+        "outcome": "passed",
+        "duration": 0.00014130002819001675
+      },
+      {
+        "test_id": "test_get_server_status_all",
+        "outcome": "passed",
+        "duration": 0.00014700001338496804
+      },
+      {
+        "test_id": "test_get_available_tools_single",
+        "outcome": "passed",
+        "duration": 0.00023939996026456356
+      },
+      {
+        "test_id": "test_get_available_tools_all",
+        "outcome": "passed",
+        "duration": 0.00022819999139755964
+      },
+      {
+        "test_id": "test_cleanup_success",
+        "outcome": "passed",
+        "duration": 0.00044919998617842793
+      }
+    ],
+    "error": [
+      {
+        "test_id": "test_connect_server_success",
+        "outcome": "passed",
+        "duration": 0.0009848999907262623
+      },
+      {
+        "test_id": "test_disconnect_server_success",
+        "outcome": "passed",
+        "duration": 0.00028520001797005534
+      },
+      {
+        "test_id": "test_call_tool_success",
+        "outcome": "passed",
+        "duration": 0.0008598999702371657
+      },
+      {
+        "test_id": "test_fetch_tools_from_cache",
+        "outcome": "passed",
+        "duration": 0.00023499998496845365
+      },
+      {
+        "test_id": "test_load_config_file_success",
+        "outcome": "passed",
+        "duration": 0.0026809999835677445
+      },
+      {
+        "test_id": "test_connect_retry_success",
+        "outcome": "passed",
+        "duration": 0.001209600013680756
+      },
+      {
+        "test_id": "test_connect_nonexistent_server",
+        "outcome": "passed",
+        "duration": 0.00033929996425285935
+      },
+      {
+        "test_id": "test_connect_initialization_failure",
+        "outcome": "passed",
+        "duration": 0.007490099989809096
+      },
+      {
+        "test_id": "test_call_tool_not_connected",
+        "outcome": "passed",
+        "duration": 0.000325599976349622
+      },
+      {
+        "test_id": "test_call_tool_timeout",
+        "outcome": "passed",
+        "duration": 0.0004827000084333122
+      },
+      {
+        "test_id": "test_call_tool_jsonrpc_error",
+        "outcome": "passed",
+        "duration": 0.0009614999871701002
+      },
+      {
+        "test_id": "test_fetch_tools_network_error",
+        "outcome": "passed",
+        "duration": 0.0005467000300996006
+      },
+      {
+        "test_id": "test_load_config_not_found",
+        "outcome": "passed",
+        "duration": 0.00038059998769313097
+      },
+      {
+        "test_id": "test_load_config_invalid_json",
+        "outcome": "passed",
+        "duration": 0.0017695000278763473
+      },
+      {
+        "test_id": "test_disconnect_nonexistent",
+        "outcome": "passed",
+        "duration": 0.00036230002297088504
+      },
+      {
+        "test_id": "test_call_internal_tool_not_found",
+        "outcome": "passed",
+        "duration": 0.0002525000018067658
+      },
+      {
+        "test_id": "test_call_internal_tool_handler_error",
+        "outcome": "passed",
+        "duration": 0.0003978000022470951
+      },
+      {
+        "test_id": "test_add_server_duplicate",
+        "outcome": "passed",
+        "duration": 0.003409600001759827
+      }
+    ],
+    "security": [
+      {
+        "test_id": "test_sec_env_var_isolation",
+        "outcome": "passed",
+        "duration": 0.00013840000610798597
+      },
+      {
+        "test_id": "test_sec_command_injection_prevention",
+        "outcome": "passed",
+        "duration": 0.0002479000249877572
+      },
+      {
+        "test_id": "test_sec_tool_parameter_sanitization",
+        "outcome": "passed",
+        "duration": 0.0002552999649196863
+      },
+      {
+        "test_id": "test_sec_config_path_traversal",
+        "outcome": "passed",
+        "duration": 0.0003864000318571925
+      },
+      {
+        "test_id": "test_sec_error_no_sensitive_info",
+        "outcome": "passed",
+        "duration": 0.003514899988658726
+      }
+    ]
+  },
+  "execution_time": "2026-03-10T19:01:23.007787"
+}

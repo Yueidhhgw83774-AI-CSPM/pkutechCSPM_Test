@@ -1,0 +1,202 @@
+"""
+MCP Plugin Chat Agent 测试配置
+
+测试规格: docs/testing/plugins/mcp/mcp_plugin_chat_agent_tests.md
+覆盖率目标: 90%+
+
+测试类别:
+  - 正常系: 9 个测试
+  - 异常系: 3 个测试
+  - 安全测试: 6 个测试
+"""
+
+import pytest
+import json
+import sys
+from pathlib import Path
+from datetime import datetime
+from unittest.mock import AsyncMock, MagicMock
+
+# 项目根目录
+project_root = Path(__file__).resolve().parent.parent.parent.parent.parent.parent / "platform_python_backend-testing"
+if not project_root.exists():
+    raise RuntimeError(f"项目根目录不存在: {project_root}")
+sys.path.insert(0, str(project_root))
+
+
+# ============================================
+# Fixtures
+# ============================================
+
+@pytest.fixture
+def mock_run_hierarchical():
+    """Mock run_hierarchical_mcp_agent"""
+    from unittest.mock import patch
+    with patch('app.mcp_plugin.chat_agent.run_hierarchical_mcp_agent', new_callable=AsyncMock) as mock:
+        yield mock
+
+
+@pytest.fixture
+def mock_invoke_deep_agents():
+    """Mock invoke_deep_agents_mcp_chat"""
+    from unittest.mock import patch
+    with patch('app.mcp_plugin.chat_agent.invoke_deep_agents_mcp_chat', new_callable=AsyncMock) as mock:
+        yield mock
+
+
+@pytest.fixture
+def mock_build_progress():
+    """Mock build_progress_from_state"""
+    from unittest.mock import patch
+    with patch('app.mcp_plugin.chat_agent.build_progress_from_state') as mock:
+        from app.models.mcp import MCPProgress
+        mock.return_value = MCPProgress(
+            task_analysis="分析完了",
+            sub_tasks=[],
+            llm_calls=1
+        )
+        yield mock
+
+
+# ============================================
+# 测试结果收集器
+# ============================================
+
+class TestResultCollector:
+    """收集测试结果用于生成报告"""
+
+    def __init__(self):
+        self.results = {
+            "normal": [],
+            "error": [],
+            "security": []
+        }
+        self.start_time = datetime.now()
+
+    def add_result(self, nodeid: str, outcome: str, duration: float):
+        """添加测试结果"""
+        test_name = nodeid.split("::")[-1]
+
+        if "Security" in nodeid or "_sec_" in test_name.lower():
+            category = "security"
+        elif "Exception" in nodeid or "Error" in nodeid or "_error_" in test_name.lower() or "_exception_" in test_name.lower():
+            category = "error"
+        else:
+            category = "normal"
+
+        self.results[category].append({
+            "test_id": test_name,
+            "outcome": outcome,
+            "duration": duration
+        })
+
+    def generate_markdown_report(self, output_path: Path):
+        """生成 Markdown 测试报告"""
+        total = sum(len(v) for v in self.results.values())
+        passed = sum(1 for cat in self.results.values() for r in cat if r["outcome"] == "passed")
+        failed = sum(1 for cat in self.results.values() for r in cat if r["outcome"] == "failed")
+
+        if total > 0:
+            pass_rate_str = f"{passed / total * 100:.1f}% ({passed}/{total})"
+        else:
+            pass_rate_str = "N/A (0/0)"
+
+        report = f"""# MCP Plugin Chat Agent 测试报告
+
+## 测试概要
+
+| 项目 | 值 |
+|------|-----|
+| 测试对象 | `app/mcp_plugin/chat_agent.py` |
+| 测试规格 | `docs/testing/plugins/mcp/mcp_plugin_chat_agent_tests.md` |
+| 执行时间 | {datetime.now().strftime("%Y-%m-%d %H:%M:%S")} |
+| 覆盖率目标 | 90% |
+
+## 测试结果统计
+
+| 类别 | 总数 | 通过 | 失败 |
+|------|------|------|------|
+| 正常系 | {len(self.results['normal'])} | {sum(1 for r in self.results['normal'] if r['outcome'] == 'passed')} | {sum(1 for r in self.results['normal'] if r['outcome'] == 'failed')} |
+| 异常系 | {len(self.results['error'])} | {sum(1 for r in self.results['error'] if r['outcome'] == 'passed')} | {sum(1 for r in self.results['error'] if r['outcome'] == 'failed')} |
+| 安全测试 | {len(self.results['security'])} | {sum(1 for r in self.results['security'] if r['outcome'] == 'passed')} | {sum(1 for r in self.results['security'] if r['outcome'] == 'failed')} |
+| **合计** | **{total}** | **{passed}** | **{failed}** |
+
+## 测试通过率
+
+- **通过率**: {pass_rate_str}
+
+---
+
+## 正常系测试详情
+
+| 测试名称 | 结果 | 执行时间 |
+|---------|------|----------|
+"""
+        for r in self.results["normal"]:
+            status = "✅" if r["outcome"] == "passed" else "❌"
+            report += f"| {r['test_id']} | {status} | {r['duration']:.3f}s |\n"
+
+        report += "\n## 异常系测试详情\n\n| 测试名称 | 结果 | 执行时间 |\n|---------|------|----------|\n"
+        for r in self.results["error"]:
+            status = "✅" if r["outcome"] == "passed" else "❌"
+            report += f"| {r['test_id']} | {status} | {r['duration']:.3f}s |\n"
+
+        report += "\n## 安全测试详情\n\n| 测试名称 | 结果 | 执行时间 |\n|---------|------|----------|\n"
+        for r in self.results["security"]:
+            status = "✅" if r["outcome"] == "passed" else "❌"
+            report += f"| {r['test_id']} | {status} | {r['duration']:.3f}s |\n"
+
+        report += f"\n---\n\n*报告生成时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}*\n"
+
+        output_path.write_text(report, encoding="utf-8")
+
+    def generate_json_report(self, output_path: Path):
+        """生成 JSON 测试报告"""
+        total = sum(len(v) for v in self.results.values())
+        passed = sum(1 for cat in self.results.values() for r in cat if r["outcome"] == "passed")
+        pass_rate = f"{passed / total * 100:.1f}%" if total > 0 else "N/A"
+
+        report = {
+            "summary": {
+                "total": total,
+                "passed": passed,
+                "failed": total - passed,
+                "pass_rate": pass_rate
+            },
+            "categories": self.results,
+            "execution_time": datetime.now().isoformat()
+        }
+
+        output_path.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+
+
+@pytest.hookimpl(tryfirst=True, hookwrapper=True)
+def pytest_runtest_makereport(item, call):
+    """捕获每个测试的结果"""
+    outcome = yield
+    rep = outcome.get_result()
+
+    if rep.when == "call":
+        collector = item.session.config._test_collector
+        collector.add_result(
+            nodeid=item.nodeid,
+            outcome=rep.outcome,
+            duration=rep.duration
+        )
+
+
+def pytest_sessionstart(session):
+    """测试会话开始"""
+    session.config._test_collector = TestResultCollector()
+
+
+def pytest_sessionfinish(session, exitstatus):
+    """测试会话结束，生成报告"""
+    collector = session.config._test_collector
+
+    reports_dir = Path(__file__).parent.parent / "reports"
+    reports_dir.mkdir(parents=True, exist_ok=True)
+
+    collector.generate_markdown_report(reports_dir / "TestReport_mcp_plugin_chat_agent.md")
+    collector.generate_json_report(reports_dir / "TestReport_mcp_plugin_chat_agent.json")
+

@@ -1,0 +1,243 @@
+{
+  "summary": {
+    "total": 33,
+    "passed": 28,
+    "failed": 5,
+    "skipped": 0,
+    "error": 0
+  },
+  "results": [
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestJobsStartEndpoints::test_start_policy_batch",
+      "outcome": "passed",
+      "duration": 0.002810999983921647,
+      "error_message": null,
+      "timestamp": "2026-03-11T16:15:14.009245"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestJobsStartEndpoints::test_start_file_processing",
+      "outcome": "passed",
+      "duration": 0.0017862000386230648,
+      "error_message": null,
+      "timestamp": "2026-03-11T16:15:14.018728"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestJobsStatusEndpoints::test_get_job_result_completed",
+      "outcome": "failed",
+      "duration": 0.001006999984383583,
+      "error_message": "assert 404 == 200\n +  where 404 = <Response [404 Not Found]>.status_code",
+      "timestamp": "2026-03-11T16:15:14.029775"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestScanFilesEndpoint::test_get_scan_files_success",
+      "outcome": "failed",
+      "duration": 0.0008659000159241259,
+      "error_message": "assert 404 == 200\n +  where 404 = <Response [404 Not Found]>.status_code",
+      "timestamp": "2026-03-11T16:15:14.376451"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestCustodianScanEndpoints::test_custodian_scan_encrypted_success",
+      "outcome": "passed",
+      "duration": 0.0021616999874822795,
+      "error_message": null,
+      "timestamp": "2026-03-11T16:15:14.394788"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestCustodianScanEndpoints::test_custodian_scan_plain_success",
+      "outcome": "passed",
+      "duration": 0.0013420999748632312,
+      "error_message": null,
+      "timestamp": "2026-03-11T16:15:14.410709"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestNewCustodianScanEndpoints::test_new_custodian_scan_encrypted_success",
+      "outcome": "passed",
+      "duration": 0.003640200011432171,
+      "error_message": null,
+      "timestamp": "2026-03-11T16:15:14.421451"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestNewCustodianScanEndpoints::test_new_custodian_scan_plain_success",
+      "outcome": "passed",
+      "duration": 0.001673599996138364,
+      "error_message": null,
+      "timestamp": "2026-03-11T16:15:14.431943"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestNewCustodianScanEndpoints::test_new_custodian_scan_with_preset",
+      "outcome": "passed",
+      "duration": 0.001574199995957315,
+      "error_message": null,
+      "timestamp": "2026-03-11T16:15:14.446211"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestJobsErrors::test_job_status_not_found",
+      "outcome": "passed",
+      "duration": 0.0007363999611698091,
+      "error_message": null,
+      "timestamp": "2026-03-11T16:15:14.455219"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestJobsErrors::test_job_exclusion_conflict",
+      "outcome": "passed",
+      "duration": 0.0011474999482743442,
+      "error_message": null,
+      "timestamp": "2026-03-11T16:15:14.464346"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestJobsErrors::test_invalid_request_data",
+      "outcome": "passed",
+      "duration": 0.0009483000030741096,
+      "error_message": null,
+      "timestamp": "2026-03-11T16:15:14.472950"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestJobsErrors::test_job_result_not_found",
+      "outcome": "failed",
+      "duration": 0.00029689999064430594,
+      "error_message": "'StatusManager' object has no attribute 'get_job_result_sync'",
+      "timestamp": "2026-03-11T16:15:14.480630"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestEncryptedRequestErrors::test_auth_hash_verification_failure",
+      "outcome": "passed",
+      "duration": 0.0010652000200934708,
+      "error_message": null,
+      "timestamp": "2026-03-11T16:15:14.496713"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestEncryptedRequestErrors::test_decryption_failure",
+      "outcome": "passed",
+      "duration": 0.00118240003939718,
+      "error_message": null,
+      "timestamp": "2026-03-11T16:15:14.505056"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestEncryptedRequestErrors::test_request_body_parse_failure",
+      "outcome": "passed",
+      "duration": 0.000700599979609251,
+      "error_message": null,
+      "timestamp": "2026-03-11T16:15:14.512447"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestScanFilesErrors::test_scan_files_job_not_found",
+      "outcome": "passed",
+      "duration": 0.0005633999826386571,
+      "error_message": null,
+      "timestamp": "2026-03-11T16:15:14.519470"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestScanFilesErrors::test_scan_files_non_custodian_job",
+      "outcome": "passed",
+      "duration": 0.0006730000022798777,
+      "error_message": null,
+      "timestamp": "2026-03-11T16:15:14.526972"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestScanFilesErrors::test_scan_files_incomplete_job",
+      "outcome": "passed",
+      "duration": 0.0006011000368744135,
+      "error_message": null,
+      "timestamp": "2026-03-11T16:15:14.534988"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestScanFilesErrors::test_scan_files_no_result",
+      "outcome": "passed",
+      "duration": 0.0006428000051528215,
+      "error_message": null,
+      "timestamp": "2026-03-11T16:15:14.542723"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestNewCustodianScanErrors::test_new_custodian_auth_failure",
+      "outcome": "passed",
+      "duration": 0.0009741999674588442,
+      "error_message": null,
+      "timestamp": "2026-03-11T16:15:14.550631"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestNewCustodianScanErrors::test_new_custodian_exclusion_conflict",
+      "outcome": "passed",
+      "duration": 0.0012408000184223056,
+      "error_message": null,
+      "timestamp": "2026-03-11T16:15:14.560465"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestNewCustodianScanErrors::test_new_custodian_validation_failure",
+      "outcome": "passed",
+      "duration": 0.0011902999831363559,
+      "error_message": null,
+      "timestamp": "2026-03-11T16:15:14.569588"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestMiscErrors::test_status_pydantic_cast_error",
+      "outcome": "failed",
+      "duration": 0.00027789996238425374,
+      "error_message": "'StatusManager' object has no attribute 'get_job_status_sync'",
+      "timestamp": "2026-03-11T16:15:14.576597"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestMiscErrors::test_old_custodian_exclusion_conflict",
+      "outcome": "passed",
+      "duration": 0.0011858000070787966,
+      "error_message": null,
+      "timestamp": "2026-03-11T16:15:14.594363"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestJobsSecurityEndpoints::test_unauthorized_access_prevention",
+      "outcome": "passed",
+      "duration": 0.0021229000412859023,
+      "error_message": null,
+      "timestamp": "2026-03-11T16:15:14.598913"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestJobsSecurityEndpoints::test_job_id_injection_resistance",
+      "outcome": "failed",
+      "duration": 0.00025919999461621046,
+      "error_message": "'StatusManager' object has no attribute 'get_job_status_sync'",
+      "timestamp": "2026-03-11T16:15:14.607176"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestJobsSecurityEndpoints::test_shared_secret_not_in_response",
+      "outcome": "passed",
+      "duration": 0.0011050000321120024,
+      "error_message": null,
+      "timestamp": "2026-03-11T16:15:14.621853"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestJobsSecurityEndpoints::test_credentials_not_in_logs",
+      "outcome": "passed",
+      "duration": 0.001198899990413338,
+      "error_message": null,
+      "timestamp": "2026-03-11T16:15:14.630801"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestJobsSecurityEndpoints::test_payload_size_limit",
+      "outcome": "passed",
+      "duration": 0.053763499949127436,
+      "error_message": null,
+      "timestamp": "2026-03-11T16:15:14.692250"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestJobsSecurityEndpoints::test_concurrent_job_exclusion",
+      "outcome": "passed",
+      "duration": 0.0017095999792218208,
+      "error_message": null,
+      "timestamp": "2026-03-11T16:15:14.701946"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestJobsSecurityEndpoints::test_session_id_format_validation",
+      "outcome": "passed",
+      "duration": 0.0016299000126309693,
+      "error_message": null,
+      "timestamp": "2026-03-11T16:15:14.713035"
+    },
+    {
+      "test_name": "plugins/jobs/jobs_router/source/test_jobs_router.py::TestJobsSecurityEndpoints::test_replay_attack_prevention",
+      "outcome": "passed",
+      "duration": 0.0024043999728746712,
+      "error_message": null,
+      "timestamp": "2026-03-11T16:15:14.724203"
+    }
+  ],
+  "generated_at": "2026-03-11T16:15:14.728406"
+}
