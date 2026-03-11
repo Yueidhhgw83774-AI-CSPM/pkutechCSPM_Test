@@ -1,0 +1,137 @@
+{
+  "metadata": {
+    "test_target": "app/core/checkpointer.py",
+    "test_spec": "checkpointer_tests.md",
+    "execution_time": "2026-02-02T14:58:11.999346",
+    "coverage_target": "75%"
+  },
+  "summary": {
+    "total": 21,
+    "passed": 19,
+    "failed": 0,
+    "xfailed": 0,
+    "pass_rate": 90.47619047619048
+  },
+  "results": {
+    "normal": [
+      {
+        "id": "CKP-INIT",
+        "name": "模块导入",
+        "status": "passed",
+        "duration": 0.032311499991919845
+      },
+      {
+        "id": "CKP-001",
+        "name": "初始存储模式",
+        "status": "passed",
+        "duration": 0.0005672000115737319
+      },
+      {
+        "id": "CKP-002",
+        "name": "MemorySaver初始化(memory)",
+        "status": "passed",
+        "duration": 0.16359839995857328
+      },
+      {
+        "id": "CKP-004",
+        "name": "缓存Checkpointer返回",
+        "status": "passed",
+        "duration": 0.0010585999698378146
+      },
+      {
+        "id": "CKP-005",
+        "name": "PostgreSQL初始化",
+        "status": "passed",
+        "duration": 0.002335999975912273
+      },
+      {
+        "id": "CKP-010",
+        "name": "OpenSearch回退",
+        "status": "passed",
+        "duration": 0.0012124000350013375
+      },
+      {
+        "id": "CKP-011",
+        "name": "未知存储回退",
+        "status": "passed",
+        "duration": 0.0011488000163808465
+      },
+      {
+        "id": "CKP-007",
+        "name": "同步Checkpointer(postgres警告)",
+        "status": "passed",
+        "duration": 0.0008874000050127506
+      },
+      {
+        "id": "CKP-008",
+        "name": "关闭Checkpointer(memory)",
+        "status": "passed",
+        "duration": 0.0007289000204764307
+      },
+      {
+        "id": "CKP-012",
+        "name": "关闭PostgreSQL连接池",
+        "status": "passed",
+        "duration": 0.0010433999705128372
+      },
+      {
+        "id": "CKP-009",
+        "name": "重置缓存",
+        "status": "passed",
+        "duration": 0.0005756000173278153
+      }
+    ],
+    "error": [
+      {
+        "id": "CKP-E01",
+        "name": "PostgreSQL URL未设置",
+        "status": "passed",
+        "duration": 0.000986900005955249
+      },
+      {
+        "id": "CKP-E02",
+        "name": "psycopg未安装",
+        "status": "passed",
+        "duration": 0.0012291999883018434
+      },
+      {
+        "id": "CKP-E03",
+        "name": "PostgreSQL连接错误",
+        "status": "passed",
+        "duration": 0.0011680000461637974
+      },
+      {
+        "id": "CKP-E05",
+        "name": "setup失败",
+        "status": "passed",
+        "duration": 0.0023437999770976603
+      },
+      {
+        "id": "CKP-E04",
+        "name": "连接池关闭错误",
+        "status": "passed",
+        "duration": 0.0012356999795883894
+      }
+    ],
+    "security": [
+      {
+        "id": "CKP-SEC-01",
+        "name": "PostgreSQL URL不输出日志",
+        "status": "passed",
+        "duration": 0.0023949999595060945
+      },
+      {
+        "id": "CKP-SEC-02",
+        "name": "认证信息不泄露",
+        "status": "passed",
+        "duration": 0.0018860999844036996
+      },
+      {
+        "id": "CKP-SEC-03",
+        "name": "连接池大小限制",
+        "status": "passed",
+        "duration": 0.0020904000266455114
+      }
+    ]
+  }
+}

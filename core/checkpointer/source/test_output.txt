@@ -1,0 +1,73 @@
+================================================================================
+checkpointer 测试执行
+================================================================================
+✓ Mock 模块已创建
+
+============================= test session starts =============================
+platform win32 -- Python 3.13.9, pytest-8.3.4, pluggy-1.5.0 -- C:\ProgramData\anaconda3\python.exe
+cachedir: .pytest_cache
+metadata: {'Python': '3.13.9', 'Platform': 'Windows-11-10.0.26200-SP0', 'Packages': {'pytest': '8.3.4', 'pluggy': '1.5.0'}, 'Plugins': {'allure-pytest': '2.13.5', 'Faker': '40.1.2', 'langsmith': '0.6.4', 'asyncio': '0.24.0', 'cov': '6.0.0', 'html': '4.1.1', 'metadata': '3.1.1', 'mock': '3.14.0', 'timeout': '2.3.1', 'xdist': '3.6.1', 'anyio': '4.10.0'}}
+rootdir: C:\pythonProject\python_ai_cspm\TestReport
+configfile: pytest.ini
+plugins: allure-pytest-2.13.5, Faker-40.1.2, langsmith-0.6.4, asyncio-0.24.0, cov-6.0.0, html-4.1.1, metadata-3.1.1, mock-3.14.0, timeout-2.3.1, xdist-3.6.1, anyio-4.10.0
+asyncio: mode=Mode.AUTO, default_loop_scope=function
+collecting ... collected 21 items
+
+test_checkpointer.py::TestCheckpointerImport::test_import_checkpointer_module PASSED [  4%]
+test_checkpointer.py::TestGetCurrentStorageMode::test_initial_storage_mode_is_unknown PASSED [  9%]
+test_checkpointer.py::TestGetAsyncCheckpointer::test_memory_saver_init_with_memory_type PASSED [ 14%]
+test_checkpointer.py::TestGetAsyncCheckpointer::test_memory_saver_fallback_when_unset 
+-------------------------------- live log call --------------------------------
+14:58:11 [WARNING] app.core.checkpointer: 未知のストレージタイプ ''。MemorySaverを使用します。
+PASSED                                                                   [ 19%]
+test_checkpointer.py::TestGetAsyncCheckpointer::test_cached_checkpointer_returned PASSED [ 23%]
+test_checkpointer.py::TestGetAsyncCheckpointer::test_postgres_checkpointer_init_success PASSED [ 28%]
+test_checkpointer.py::TestGetAsyncCheckpointer::test_opensearch_fallback_to_memory 
+-------------------------------- live log call --------------------------------
+14:58:11 [WARNING] app.core.checkpointer: OpenSearch Checkpointerは未実装です。MemorySaverにフォールバックします。
+PASSED                                                                   [ 33%]
+test_checkpointer.py::TestGetAsyncCheckpointer::test_unknown_storage_fallback_with_warning 
+-------------------------------- live log call --------------------------------
+14:58:11 [WARNING] app.core.checkpointer: 未知のストレージタイプ 'unknown_storage_type'。MemorySaverを使用します。
+PASSED                                                                   [ 38%]
+test_checkpointer.py::TestGetSyncCheckpointer::test_sync_checkpointer_returns_memory PASSED [ 42%]
+test_checkpointer.py::TestGetSyncCheckpointer::test_sync_checkpointer_postgres_warning 
+-------------------------------- live log call --------------------------------
+14:58:11 [WARNING] app.core.checkpointer: 同期環境ではPostgreSQL Checkpointerは使用できません。MemorySaverを使用します。
+PASSED                                                                   [ 47%]
+test_checkpointer.py::TestCloseCheckpointer::test_close_checkpointer_memory PASSED [ 52%]
+test_checkpointer.py::TestCloseCheckpointer::test_close_with_postgres_pool PASSED [ 57%]
+test_checkpointer.py::TestResetCheckpointer::test_reset_checkpointer_clears_cache PASSED [ 61%]
+test_checkpointer.py::TestInitPostgresCheckpointerErrors::test_postgres_url_not_set_raises_value_error 
+-------------------------------- live log call --------------------------------
+14:58:11 [ERROR] app.core.checkpointer: Checkpointer初期化エラー: LANGGRAPH_POSTGRES_URLが設定されていません。PostgreSQLストレージを使用するには環境変数を設定してください。
+14:58:11 [WARNING] app.core.checkpointer: MemorySaverにフォールバックします
+PASSED                                                                   [ 66%]
+test_checkpointer.py::TestInitPostgresCheckpointerErrors::test_psycopg_not_installed_import_error 
+-------------------------------- live log call --------------------------------
+14:58:11 [ERROR] app.core.checkpointer: Checkpointer初期化エラー: langgraph-checkpoint-postgres または psycopg_pool パッケージがインストールされていません。pip install langgraph-checkpoint-postgres psycopg[binary,pool] を実行してください。
+PASSED                                                                   [ 71%]
+test_checkpointer.py::TestInitPostgresCheckpointerErrors::test_postgres_connection_error_fallback 
+-------------------------------- live log call --------------------------------
+14:58:11 [ERROR] app.core.checkpointer: Checkpointer初期化エラー: Connection timeout
+PASSED                                                                   [ 76%]
+test_checkpointer.py::TestInitPostgresCheckpointerErrors::test_setup_fails_fallback 
+-------------------------------- live log call --------------------------------
+14:58:11 [ERROR] app.core.checkpointer: Checkpointer初期化エラー: Table creation failed
+PASSED                                                                   [ 80%]
+test_checkpointer.py::TestCloseCheckpointerErrors::test_close_pool_error_warning 
+-------------------------------- live log call --------------------------------
+14:58:11 [WARNING] app.core.checkpointer: 接続プールクローズエラー: Close failed
+PASSED                                                                   [ 85%]
+test_checkpointer.py::TestCheckpointerSecurity::test_postgres_url_not_logged PASSED [ 90%]
+test_checkpointer.py::TestCheckpointerSecurity::test_credentials_not_exposed_on_error 
+-------------------------------- live log call --------------------------------
+14:58:11 [ERROR] app.core.checkpointer: Checkpointer初期化エラー: Authentication failed
+PASSED                                                                   [ 95%]
+test_checkpointer.py::TestCheckpointerSecurity::test_connection_pool_max_size_limit PASSED [100%]
+✅ 测试报告已生成:
+  - C:\pythonProject\python_ai_cspm\TestReport\checkpointer\reports\TestReport_checkpointer.md
+  - C:\pythonProject\python_ai_cspm\TestReport\checkpointer\reports\TestReport_checkpointer.json
+
+
+============================= 21 passed in 0.37s ==============================

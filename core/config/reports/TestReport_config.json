@@ -1,0 +1,102 @@
+{
+  "summary": {
+    "total": 14,
+    "passed": 12,
+    "failed": 2,
+    "xfailed": 0,
+    "pass_rate": "85.7%",
+    "effective_pass_rate": "85.7%"
+  },
+  "categories": {
+    "normal": [
+      {
+        "id": "test_import_config_module",
+        "name": "Test Import Config Module",
+        "outcome": "passed",
+        "duration": "0.000s"
+      },
+      {
+        "id": "test_load_from_env",
+        "name": "环境变量から設定読み込み",
+        "outcome": "passed",
+        "duration": "0.000s"
+      },
+      {
+        "id": "test_default_values",
+        "name": "デフォルト値の適用",
+        "outcome": "passed",
+        "duration": "0.000s"
+      },
+      {
+        "id": "test_opensearch_url_generation",
+        "name": "OpenSearch URL生成",
+        "outcome": "passed",
+        "duration": "0.000s"
+      },
+      {
+        "id": "test_min_interval_calculation",
+        "name": "MIN_INTERVAL_SECONDS計算",
+        "outcome": "passed",
+        "duration": "0.000s"
+      },
+      {
+        "id": "test_settings_instance_exists",
+        "name": "設定インスタンス存在確認",
+        "outcome": "passed",
+        "duration": "0.000s"
+      },
+      {
+        "id": "test_is_aws_opensearch_service",
+        "name": "AWS OpenSearch Service判定",
+        "outcome": "passed",
+        "duration": "0.000s"
+      },
+      {
+        "id": "test_settings_and_helper_function_work_together",
+        "name": "Test Settings And Helper Function Work Together",
+        "outcome": "passed",
+        "duration": "0.000s"
+      },
+      {
+        "id": "test_min_interval_updates_with_rpm_limit",
+        "name": "Test Min Interval Updates With Rpm Limit",
+        "outcome": "passed",
+        "duration": "0.000s"
+      }
+    ],
+    "error": [
+      {
+        "id": "test_missing_required_fields",
+        "name": "必須設定の欠落",
+        "outcome": "passed",
+        "duration": "0.004s"
+      },
+      {
+        "id": "test_invalid_rpm_limit_type",
+        "name": "Test Invalid Rpm Limit Type",
+        "outcome": "passed",
+        "duration": "0.002s"
+      },
+      {
+        "id": "test_invalid_opensearch_url_format",
+        "name": "Test Invalid Opensearch Url Format",
+        "outcome": "passed",
+        "duration": "0.002s"
+      },
+      {
+        "id": "test_invalid_url_format",
+        "name": "Test Invalid Url Format",
+        "outcome": "failed",
+        "duration": "0.000s"
+      },
+      {
+        "id": "test_none_url",
+        "name": "Test None Url",
+        "outcome": "failed",
+        "duration": "0.000s"
+      }
+    ],
+    "security": []
+  },
+  "execution_time": "2026-03-11 19:33:40"
+}

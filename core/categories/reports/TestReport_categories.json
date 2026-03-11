@@ -1,0 +1,113 @@
+{
+  "metadata": {
+    "test_target": "app/core/categories.py",
+    "test_spec": "categories_tests.md",
+    "execution_time": "2026-02-02T15:58:16.101548",
+    "coverage_target": "60%"
+  },
+  "summary": {
+    "total": 15,
+    "passed": 15,
+    "failed": 0,
+    "xfailed": 0,
+    "pass_rate": 100.0
+  },
+  "results": {
+    "normal": [
+      {
+        "id": "CAT-001",
+        "name": "模块导入",
+        "status": "passed",
+        "duration": 0.0016215000068768859
+      },
+      {
+        "id": "CAT-002",
+        "name": "有效JSON读取",
+        "status": "passed",
+        "duration": 0.0026716000284068286
+      },
+      {
+        "id": "CAT-003",
+        "name": "提示字符串格式",
+        "status": "passed",
+        "duration": 0.0015534000121988356
+      },
+      {
+        "id": "CAT-006",
+        "name": "空列表回退",
+        "status": "passed",
+        "duration": 0.0011104000150226057
+      },
+      {
+        "id": "CAT-007",
+        "name": "无描述处理",
+        "status": "passed",
+        "duration": 0.0018420999986119568
+      },
+      {
+        "id": "CAT-008",
+        "name": "无名称跳过",
+        "status": "passed",
+        "duration": 0.002217700006440282
+      },
+      {
+        "id": "CAT-004",
+        "name": "未加载时自动加载",
+        "status": "passed",
+        "duration": 0.001125300012063235
+      },
+      {
+        "id": "CAT-005",
+        "name": "缓存数据返回",
+        "status": "passed",
+        "duration": 0.002061599981971085
+      }
+    ],
+    "error": [
+      {
+        "id": "CAT-E01",
+        "name": "文件不存在处理",
+        "status": "passed",
+        "duration": 0.0008271000115200877
+      },
+      {
+        "id": "CAT-E02",
+        "name": "无效JSON处理",
+        "status": "passed",
+        "duration": 0.002039099985267967
+      },
+      {
+        "id": "CAT-E03",
+        "name": "预期外异常处理",
+        "status": "passed",
+        "duration": 0.00239129998954013
+      },
+      {
+        "id": "CAT-E04",
+        "name": "权限错误处理",
+        "status": "passed",
+        "duration": 0.000833099998999387
+      }
+    ],
+    "security": [
+      {
+        "id": "CAT-SEC-01",
+        "name": "路径遍历攻击防护",
+        "status": "passed",
+        "duration": 0.0009179000044241548
+      },
+      {
+        "id": "CAT-SEC-02",
+        "name": "大量数据DoS防护",
+        "status": "passed",
+        "duration": 0.03243650001240894
+      },
+      {
+        "id": "CAT-SEC-03",
+        "name": "恶意JSON内容处理",
+        "status": "passed",
+        "duration": 0.016874599969014525
+      }
+    ]
+  }
+}

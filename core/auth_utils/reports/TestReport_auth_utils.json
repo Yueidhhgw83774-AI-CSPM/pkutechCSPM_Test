@@ -1,0 +1,179 @@
+{
+  "metadata": {
+    "test_target": "app/core/auth_utils.py",
+    "test_spec": "auth_utils_tests.md",
+    "execution_time": "2026-02-02T13:15:03.209800",
+    "coverage_target": "90%"
+  },
+  "summary": {
+    "total": 26,
+    "passed": 26,
+    "failed": 0,
+    "xfailed": 0,
+    "pass_rate": 100.0
+  },
+  "results": {
+    "normal": [
+      {
+        "id": "AUTIL-INIT",
+        "name": "模块导入",
+        "status": "passed",
+        "duration": 0.00018420000560581684
+      },
+      {
+        "id": "AUTIL-001",
+        "name": "Basic令牌提取（有空格）",
+        "status": "passed",
+        "duration": 0.00015469995560124516
+      },
+      {
+        "id": "AUTIL-002",
+        "name": "Basic令牌提取（无空格）",
+        "status": "passed",
+        "duration": 0.0001351999817416072
+      },
+      {
+        "id": "AUTIL-003",
+        "name": "SHARED-HMAC头接受",
+        "status": "passed",
+        "duration": 0.00021129997912794352
+      },
+      {
+        "id": "AUTIL-004",
+        "name": "从Request获取（小写）",
+        "status": "passed",
+        "duration": 0.0005255999858491123
+      },
+      {
+        "id": "AUTIL-005",
+        "name": "从Request获取（大写）",
+        "status": "passed",
+        "duration": 0.0006927999784238636
+      },
+      {
+        "id": "AUTIL-006",
+        "name": "验证（有OpenSearch）",
+        "status": "passed",
+        "duration": 0.0002193999825976789
+      },
+      {
+        "id": "AUTIL-007",
+        "name": "验证（无OpenSearch）",
+        "status": "passed",
+        "duration": 0.00012390001211315393
+      },
+      {
+        "id": "AUTIL-007-B",
+        "name": "opensearch_auth默认None",
+        "status": "passed",
+        "duration": 0.0002482000272721052
+      },
+      {
+        "id": "AUTIL-008",
+        "name": "日志（两种认证）",
+        "status": "passed",
+        "duration": 0.00038539996603503823
+      },
+      {
+        "id": "AUTIL-009",
+        "name": "日志（头过滤）",
+        "status": "passed",
+        "duration": 0.0003065000055357814
+      },
+      {
+        "id": "AUTIL-010",
+        "name": "日志（无认证）",
+        "status": "passed",
+        "duration": 0.0002706999657675624
+      },
+      {
+        "id": "AUTIL-010-B",
+        "name": "日志（无请求头）",
+        "status": "passed",
+        "duration": 0.0003036000416614115
+      },
+      {
+        "id": "AUTIL-011",
+        "name": "日志（DEBUG禁用）",
+        "status": "passed",
+        "duration": 0.00030129996594041586
+      }
+    ],
+    "error": [
+      {
+        "id": "AUTIL-E01",
+        "name": "无认证头抛出HTTPException",
+        "status": "passed",
+        "duration": 0.0007968999561853707
+      },
+      {
+        "id": "AUTIL-E02",
+        "name": "无效认证格式抛出HTTPException",
+        "status": "passed",
+        "duration": 0.0007612999761477113
+      },
+      {
+        "id": "AUTIL-E03",
+        "name": "空认证头抛出HTTPException",
+        "status": "passed",
+        "duration": 0.0004915999597869813
+      },
+      {
+        "id": "AUTIL-E06",
+        "name": "Request获取失败抛出HTTPException",
+        "status": "passed",
+        "duration": 0.0009935999987646937
+      },
+      {
+        "id": "AUTIL-E07",
+        "name": "小写basic前缀抛出HTTPException",
+        "status": "passed",
+        "duration": 0.0007276000105775893
+      },
+      {
+        "id": "AUTIL-E04",
+        "name": "无endpoint认证抛出HTTPException",
+        "status": "passed",
+        "duration": 0.0005691999685950577
+      },
+      {
+        "id": "AUTIL-E05",
+        "name": "空endpoint认证抛出HTTPException",
+        "status": "passed",
+        "duration": 0.000382099999114871
+      }
+    ],
+    "security": [
+      {
+        "id": "AUTIL-SEC-01",
+        "name": "认证头不完全输出到日志",
+        "status": "passed",
+        "duration": 0.00029340002220124006
+      },
+      {
+        "id": "AUTIL-SEC-02",
+        "name": "错误消息不包含认证信息",
+        "status": "passed",
+        "duration": 0.0010655999649316072
+      },
+      {
+        "id": "AUTIL-SEC-03",
+        "name": "x-auth-hash头被掩码",
+        "status": "passed",
+        "duration": 0.00036669999826699495
+      },
+      {
+        "id": "AUTIL-SEC-04",
+        "name": "空头值过滤安全性",
+        "status": "passed",
+        "duration": 0.00031459995079785585
+      },
+      {
+        "id": "AUTIL-SEC-05",
+        "name": "短认证头值过滤",
+        "status": "passed",
+        "duration": 0.0002726000384427607
+      }
+    ]
+  }
+}

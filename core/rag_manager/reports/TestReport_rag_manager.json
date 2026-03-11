@@ -1,0 +1,196 @@
+{
+  "summary": {
+    "total": 24,
+    "passed": 23,
+    "failed": 0,
+    "xfailed": 1,
+    "pass_rate": "95.8%",
+    "effective_pass_rate": "100.0%"
+  },
+  "categories": {
+    "normal": {
+      "total": 14,
+      "results": [
+        {
+          "id": "RAG-001",
+          "name": "モジュールインポート成功",
+          "status": "✅ 通过",
+          "outcome": "passed",
+          "duration": "3.59ms"
+        },
+        {
+          "id": "RAG-002",
+          "name": "シングルトンインスタンス取得",
+          "status": "✅ 通过",
+          "outcome": "passed",
+          "duration": "1.13ms"
+        },
+        {
+          "id": "RAG-003",
+          "name": "シングルトン一貫性",
+          "status": "✅ 通过",
+          "outcome": "passed",
+          "duration": "0.91ms"
+        },
+        {
+          "id": "RAG-004",
+          "name": "初期化成功",
+          "status": "✅ 通过",
+          "outcome": "passed",
+          "duration": "1912.07ms"
+        },
+        {
+          "id": "RAG-005",
+          "name": "初期化済みで再度initialize",
+          "status": "✅ 通过",
+          "outcome": "passed",
+          "duration": "0.87ms"
+        },
+        {
+          "id": "RAG-006",
+          "name": "double-checked locking動作確認",
+          "status": "✅ 通过",
+          "outcome": "passed",
+          "duration": "123.90ms"
+        },
+        {
+          "id": "RAG-007",
+          "name": "get_enhanced_rag_search成功",
+          "status": "✅ 通过",
+          "outcome": "passed",
+          "duration": "0.91ms"
+        },
+        {
+          "id": "RAG-008",
+          "name": "get_enhanced_rag_search自動初期化",
+          "status": "✅ 通过",
+          "outcome": "passed",
+          "duration": "10.40ms"
+        },
+        {
+          "id": "RAG-009",
+          "name": "is_initialized確認（未初期化）",
+          "status": "✅ 通过",
+          "outcome": "passed",
+          "duration": "0.71ms"
+        },
+        {
+          "id": "RAG-010",
+          "name": "is_initialized確認（初期化済み）",
+          "status": "✅ 通过",
+          "outcome": "passed",
+          "duration": "0.58ms"
+        },
+        {
+          "id": "RAG-011",
+          "name": "ヘルスチェック成功",
+          "status": "✅ 通过",
+          "outcome": "passed",
+          "duration": "1.55ms"
+        },
+        {
+          "id": "RAG-012",
+          "name": "グローバルマネージャー取得",
+          "status": "✅ 通过",
+          "outcome": "passed",
+          "duration": "0.77ms"
+        },
+        {
+          "id": "RAG-013",
+          "name": "グローバルシステム初期化成功",
+          "status": "✅ 通过",
+          "outcome": "passed",
+          "duration": "8.05ms"
+        },
+        {
+          "id": "RAG-014",
+          "name": "DI用get_enhanced_rag_search成功",
+          "status": "✅ 通过",
+          "outcome": "passed",
+          "duration": "9.04ms"
+        }
+      ]
+    },
+    "error": {
+      "total": 7,
+      "results": [
+        {
+          "id": "RAG-E01",
+          "name": "EnhancedRAGSearch初期化失敗",
+          "status": "✅ 通过",
+          "outcome": "passed",
+          "duration": "11.26ms"
+        },
+        {
+          "id": "RAG-E02",
+          "name": "初期化中の例外",
+          "status": "✅ 通过",
+          "outcome": "passed",
+          "duration": "9.29ms"
+        },
+        {
+          "id": "RAG-E03",
+          "name": "get_enhanced_rag_search初期化失敗",
+          "status": "✅ 通过",
+          "outcome": "passed",
+          "duration": "8.70ms"
+        },
+        {
+          "id": "RAG-E04",
+          "name": "ヘルスチェック未初期化",
+          "status": "✅ 通过",
+          "outcome": "passed",
+          "duration": "0.79ms"
+        },
+        {
+          "id": "RAG-E05",
+          "name": "ヘルスチェックRAG無し",
+          "status": "✅ 通过",
+          "outcome": "passed",
+          "duration": "0.70ms"
+        },
+        {
+          "id": "RAG-E06",
+          "name": "ヘルスチェック例外",
+          "status": "✅ 通过",
+          "outcome": "passed",
+          "duration": "1.77ms"
+        },
+        {
+          "id": "RAG-E07",
+          "name": "グローバル初期化例外",
+          "status": "✅ 通过",
+          "outcome": "passed",
+          "duration": "1.66ms"
+        }
+      ]
+    },
+    "security": {
+      "total": 3,
+      "results": [
+        {
+          "id": "RAG-SEC-01",
+          "name": "エラーログに機密情報が含まれない",
+          "status": "⚠️ 预期失败",
+          "outcome": "xfailed",
+          "duration": "12.03ms"
+        },
+        {
+          "id": "RAG-SEC-02",
+          "name": "ヘルスチェックに内部エラー詳細が漏洩しない",
+          "status": "✅ 通过",
+          "outcome": "passed",
+          "duration": "1.80ms"
+        },
+        {
+          "id": "RAG-SEC-03",
+          "name": "シングルトンのスレッドセーフ性",
+          "status": "✅ 通过",
+          "outcome": "passed",
+          "duration": "1.09ms"
+        }
+      ]
+    }
+  },
+  "execution_time": "2026-02-03 17:26:06"
+}

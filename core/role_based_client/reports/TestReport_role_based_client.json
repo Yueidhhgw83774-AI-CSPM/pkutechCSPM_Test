@@ -1,0 +1,246 @@
+{
+  "metadata": {
+    "test_target": "app/core/role_based_client.py",
+    "test_spec": "docs/testing/core/role_based_client_tests.md",
+    "execution_time": "2026-02-03T17:58:55.555435",
+    "coverage_target": "75%"
+  },
+  "summary": {
+    "total": 37,
+    "passed": 26,
+    "failed": 10,
+    "xfailed": 1,
+    "pass_rate": 70.27027027027027,
+    "effective_pass_rate": 72.22222222222221
+  },
+  "results": {
+    "normal": [
+      {
+        "id": "RBC-001",
+        "name": "ロール定数が正しく定義されている",
+        "status": "passed",
+        "duration": 0.5055698999203742
+      },
+      {
+        "id": "RBC-002",
+        "name": "ROLE_ENV_MAPPINGが全ロールを含む",
+        "status": "passed",
+        "duration": 0.007409899961203337
+      },
+      {
+        "id": "RBC-003",
+        "name": "有効なロールでクライアント取得成功",
+        "status": "passed",
+        "duration": 0.0005393000319600105
+      },
+      {
+        "id": "RBC-004",
+        "name": "初期化済みロールはキャッシュ返却",
+        "status": "passed",
+        "duration": 0.00041640002746134996
+      },
+      {
+        "id": "RBC-005",
+        "name": "AWS OpenSearch→ポート443",
+        "status": "failed",
+        "duration": 4.99177189997863
+      },
+      {
+        "id": "RBC-006",
+        "name": "標準OpenSearch→ポート9200",
+        "status": "passed",
+        "duration": 0.0003915999550372362
+      },
+      {
+        "id": "RBC-007",
+        "name": "URL指定ポート→そのポート使用",
+        "status": "failed",
+        "duration": 31.990189900039695
+      },
+      {
+        "id": "RBC-008",
+        "name": "AWS OpenSearch→ca_certs=None",
+        "status": "failed",
+        "duration": 4.958690400002524
+      },
+      {
+        "id": "RBC-009",
+        "name": "CA_CERTS_PATH設定あり→指定パス使用",
+        "status": "failed",
+        "duration": 4.4813466999912634
+      },
+      {
+        "id": "RBC-010",
+        "name": "CA_CERTS_PATH未設定→SSL検証無効",
+        "status": "passed",
+        "duration": 0.0004360999446362257
+      },
+      {
+        "id": "RBC-011",
+        "name": "リトライ成功（1回目失敗、2回目成功）",
+        "status": "passed",
+        "duration": 0.002045899978838861
+      },
+      {
+        "id": "RBC-012",
+        "name": "使用可能ロール一覧取得",
+        "status": "passed",
+        "duration": 0.0069682999746873975
+      },
+      {
+        "id": "RBC-013",
+        "name": "ヘルスチェック成功",
+        "status": "passed",
+        "duration": 0.0003968999953940511
+      },
+      {
+        "id": "RBC-016",
+        "name": "localhostでホスト名検証無効",
+        "status": "failed",
+        "duration": 0.0004517000634223223
+      },
+      {
+        "id": "RBC-017",
+        "name": "non-localhostでホスト名検証有効",
+        "status": "failed",
+        "duration": 4.521105600055307
+      },
+      {
+        "id": "RBC-018",
+        "name": "CA_CERTS_PATH設定あるがファイル不存在→SSL検証無効化",
+        "status": "failed",
+        "duration": 0.003052000072784722
+      },
+      {
+        "id": "RBC-014",
+        "name": "シングルトンインスタンス取得",
+        "status": "passed",
+        "duration": 0.007689099991694093
+      },
+      {
+        "id": "RBC-015",
+        "name": "便利関数でクライアント取得",
+        "status": "passed",
+        "duration": 0.0004680999554693699
+      }
+    ],
+    "error": [
+      {
+        "id": "RBC-E01",
+        "name": "未知のロール名→None",
+        "status": "passed",
+        "duration": 0.007800000021234155
+      },
+      {
+        "id": "RBC-E02",
+        "name": "認証情報未設定（USERNAME）",
+        "status": "passed",
+        "duration": 0.008093299926258624
+      },
+      {
+        "id": "RBC-E03",
+        "name": "認証情報未設定（PASSWORD）",
+        "status": "passed",
+        "duration": 0.009022000012919307
+      },
+      {
+        "id": "RBC-E04",
+        "name": "OPENSEARCH_URL未設定",
+        "status": "passed",
+        "duration": 0.011250199982896447
+      },
+      {
+        "id": "RBC-E05",
+        "name": "OPENSEARCH_URL不正形式",
+        "status": "passed",
+        "duration": 0.009378000046126544
+      },
+      {
+        "id": "RBC-E06",
+        "name": "ping全失敗（max_retries回）",
+        "status": "passed",
+        "duration": 0.007679100031964481
+      },
+      {
+        "id": "RBC-E07",
+        "name": "接続例外（max_retries回）",
+        "status": "passed",
+        "duration": 0.004778399947099388
+      },
+      {
+        "id": "RBC-E08",
+        "name": "過去の初期化エラー→スキップ",
+        "status": "passed",
+        "duration": 0.0007842000341042876
+      },
+      {
+        "id": "RBC-E09",
+        "name": "ヘルスチェック: 未知のロール",
+        "status": "passed",
+        "duration": 0.007558900048024952
+      },
+      {
+        "id": "RBC-E10",
+        "name": "ヘルスチェック: 初期化エラー状態",
+        "status": "passed",
+        "duration": 0.00778290000744164
+      },
+      {
+        "id": "RBC-E11",
+        "name": "ヘルスチェック: ping全失敗後の初期化エラー状態",
+        "status": "failed",
+        "duration": 0.0022144000977277756
+      },
+      {
+        "id": "RBC-E12",
+        "name": "ヘルスチェック: ping失敗",
+        "status": "passed",
+        "duration": 0.0005734000587835908
+      },
+      {
+        "id": "RBC-E13",
+        "name": "ヘルスチェック: 例外発生",
+        "status": "passed",
+        "duration": 0.0010781999444589019
+      }
+    ],
+    "security": [
+      {
+        "id": "RBC-SEC-01",
+        "name": "パスワードがログに出力されない",
+        "status": "failed",
+        "duration": 0.000914999982342124
+      },
+      {
+        "id": "RBC-SEC-02",
+        "name": "SSL常時有効",
+        "status": "passed",
+        "duration": 0.0004901998909190297
+      },
+      {
+        "id": "RBC-SEC-03",
+        "name": "認証情報エラーメッセージに環境変数名のみ含む",
+        "status": "passed",
+        "duration": 0.009072700049728155
+      },
+      {
+        "id": "RBC-SEC-04",
+        "name": "ヘルスチェックエラーにパスワードが含まれない",
+        "status": "xfailed",
+        "duration": 0.0010983999818563461
+      },
+      {
+        "id": "RBC-SEC-05",
+        "name": "traceback出力に認証情報が含まれない",
+        "status": "passed",
+        "duration": 0.00328619999345392
+      },
+      {
+        "id": "RBC-SEC-06",
+        "name": "各ロールの認証情報が分離されている",
+        "status": "failed",
+        "duration": 5.210089199943468
+      }
+    ]
+  }
+}

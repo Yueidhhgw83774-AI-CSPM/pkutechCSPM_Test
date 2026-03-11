@@ -1,0 +1,197 @@
+{
+  "metadata": {
+    "test_target": "app/core/crypto.py",
+    "test_spec": "crypto_tests.md",
+    "execution_time": "2026-02-02T12:19:38.270163",
+    "coverage_target": "90%"
+  },
+  "summary": {
+    "total": 30,
+    "passed": 27,
+    "failed": 0,
+    "xfailed": 3,
+    "pass_rate": 90.0
+  },
+  "results": {
+    "normal": [
+      {
+        "id": "CRYPTO-001",
+        "name": "环境变量获取共享密钥",
+        "status": "passed",
+        "duration": 0.0007528999703936279
+      },
+      {
+        "id": "CRYPTO-002",
+        "name": "文件获取共享密钥",
+        "status": "passed",
+        "duration": 0.0024415000225417316
+      },
+      {
+        "id": "CRYPTO-003",
+        "name": "默认密钥回退",
+        "status": "passed",
+        "duration": 0.0014282999909482896
+      },
+      {
+        "id": "CRYPTO-004",
+        "name": "保留空白字符",
+        "status": "passed",
+        "duration": 0.0022805999615229666
+      },
+      {
+        "id": "CRYPTO-005",
+        "name": "有效HMAC认证哈希验证",
+        "status": "passed",
+        "duration": 0.00044650002382695675
+      },
+      {
+        "id": "CRYPTO-010",
+        "name": "时间漂移容忍验证",
+        "status": "passed",
+        "duration": 0.00028440001187846065
+      },
+      {
+        "id": "CRYPTO-006",
+        "name": "有效载荷AES-CBC解密",
+        "status": "passed",
+        "duration": 0.00020219996804371476
+      },
+      {
+        "id": "CRYPTO-007",
+        "name": "解密后JSON解析",
+        "status": "passed",
+        "duration": 0.00017289997776970267
+      },
+      {
+        "id": "CRYPTO-008",
+        "name": "Base64解密认证信息",
+        "status": "passed",
+        "duration": 0.0003573999856598675
+      },
+      {
+        "id": "CRYPTO-009",
+        "name": "已知数据解密测试",
+        "status": "passed",
+        "duration": 0.00043320003896951675
+      }
+    ],
+    "error": [
+      {
+        "id": "CRYPTO-E01",
+        "name": "空密钥文件错误",
+        "status": "passed",
+        "duration": 0.0014019000227563083
+      },
+      {
+        "id": "CRYPTO-E02",
+        "name": "无效HMAC格式",
+        "status": "passed",
+        "duration": 0.0003139000036753714
+      },
+      {
+        "id": "CRYPTO-E03",
+        "name": "时间戳过期",
+        "status": "passed",
+        "duration": 0.00039160001324489713
+      },
+      {
+        "id": "CRYPTO-E04",
+        "name": "篡改的哈希值",
+        "status": "passed",
+        "duration": 0.0005918999668210745
+      },
+      {
+        "id": "CRYPTO-E11",
+        "name": "None认证头",
+        "status": "passed",
+        "duration": 0.00043070001993328333
+      },
+      {
+        "id": "CRYPTO-E05",
+        "name": "无效IV大小",
+        "status": "passed",
+        "duration": 0.00017710000975057483
+      },
+      {
+        "id": "CRYPTO-E06",
+        "name": "无效PKCS7填充",
+        "status": "passed",
+        "duration": 0.0002416999777778983
+      },
+      {
+        "id": "CRYPTO-E07",
+        "name": "空加密输入",
+        "status": "passed",
+        "duration": 0.00014900002861395478
+      },
+      {
+        "id": "CRYPTO-E08",
+        "name": "非UTF-8数据",
+        "status": "passed",
+        "duration": 0.0002351000439375639
+      },
+      {
+        "id": "CRYPTO-E09",
+        "name": "无效JSON",
+        "status": "passed",
+        "duration": 0.0002422000397928059
+      },
+      {
+        "id": "CRYPTO-E12",
+        "name": "数据短于填充长度",
+        "status": "passed",
+        "duration": 0.00021879997802898288
+      },
+      {
+        "id": "CRYPTO-E13",
+        "name": "填充字节不一致",
+        "status": "passed",
+        "duration": 0.00020840001525357366
+      },
+      {
+        "id": "CRYPTO-E10",
+        "name": "无效Base64数据",
+        "status": "passed",
+        "duration": 0.00031999999191612005
+      }
+    ],
+    "security": [
+      {
+        "id": "CRYPTO-SEC-01",
+        "name": "HMAC时序攻击防护",
+        "status": "xfailed",
+        "duration": 0.0008845999836921692
+      },
+      {
+        "id": "CRYPTO-SEC-02",
+        "name": "时间戳篡改检测",
+        "status": "passed",
+        "duration": 0.0003999000182375312
+      },
+      {
+        "id": "CRYPTO-SEC-03",
+        "name": "填充预言攻击防护",
+        "status": "xfailed",
+        "duration": 0.0008849999867379665
+      },
+      {
+        "id": "CRYPTO-SEC-04",
+        "name": "默认密钥警告输出",
+        "status": "passed",
+        "duration": 0.001476899953559041
+      },
+      {
+        "id": "CRYPTO-SEC-05",
+        "name": "HMAC单比特差异检测",
+        "status": "passed",
+        "duration": 0.0004697000258602202
+      },
+      {
+        "id": "CRYPTO-SEC-06",
+        "name": "错误消息不泄露内部详情",
+        "status": "xfailed",
+        "duration": 0.00048420001985505223
+      }
+    ]
+  }
+}
