@@ -196,23 +196,23 @@ def pytest_sessionfinish(session, exitstatus):
             # 正常系テスト
             else:
                 if "test_import_module" in nodeid:
-                    test_id, test_name = "AUTIL-INIT", "模块导入"
+                    test_id, test_name = "AUTIL-INIT", "モジュールインポート"
                 elif "test_extract_basic_token_with_space" in nodeid:
-                    test_id, test_name = "AUTIL-001", "Basic令牌提取（有空格）"
+                    test_id, test_name = "AUTIL-001", "Basicトークン取得（スペースあり）"
                 elif "test_extract_basic_token_without_space" in nodeid:
-                    test_id, test_name = "AUTIL-002", "Basic令牌提取（无空格）"
+                    test_id, test_name = "AUTIL-002", "Basicトークン取得（スペースなし）"
                 elif "test_extract_shared_hmac_token" in nodeid:
-                    test_id, test_name = "AUTIL-003", "SHARED-HMAC头接受"
+                    test_id, test_name = "AUTIL-003", "SHARED-HMACヘッダー受理"
                 elif "test_extract_from_request_lowercase" in nodeid:
-                    test_id, test_name = "AUTIL-004", "从Request获取（小写）"
+                    test_id, test_name = "AUTIL-004", "Requestから取得（小文字）"
                 elif "test_extract_from_request_uppercase" in nodeid:
-                    test_id, test_name = "AUTIL-005", "从Request获取（大写）"
+                    test_id, test_name = "AUTIL-005", "Requestから取得（大文字）"
                 elif "test_validate_with_opensearch_auth" in nodeid:
-                    test_id, test_name = "AUTIL-006", "验证（有OpenSearch）"
+                    test_id, test_name = "AUTIL-006", "検証（OpenSearchあり）"
                 elif "test_validate_without_opensearch_auth" in nodeid:
-                    test_id, test_name = "AUTIL-007", "验证（无OpenSearch）"
+                    test_id, test_name = "AUTIL-007", "検証（OpenSearchなし）"
                 elif "test_validate_opensearch_auth_default_none" in nodeid:
-                    test_id, test_name = "AUTIL-007-B", "opensearch_auth默认None"
+                    test_id, test_name = "AUTIL-007-B", "opensearch_authデフォルトNone"
                 elif "test_log_with_both_auth" in nodeid:
                     test_id, test_name = "AUTIL-008", "デバッグログ出力（両認証あり）"
                 elif "test_log_with_header_filtering" in nodeid:

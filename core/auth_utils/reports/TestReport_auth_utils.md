@@ -6,7 +6,7 @@
 |------|-----|
 | テスト対象 | `app/core/auth_utils.py` |
 | テスト仕様 | `auth_utils_tests.md` |
-| 実行日時 | 2026-03-13 16:39:10 |
+| 実行日時 | 2026-03-13 17:19:54 |
 | カバレッジ目標 | 90% |
 
 ## テスト結果集計
@@ -29,20 +29,20 @@
 
 | ID | テスト名 | 結果 | 実行時間 |
 |----|---------|------|---------|
-| AUTIL-001 | Basic令牌提取（有空格） | ✅ 成功 | 0.18ms |
-| AUTIL-002 | Basic令牌提取（无空格） | ✅ 成功 | 0.18ms |
-| AUTIL-003 | SHARED-HMAC头接受 | ✅ 成功 | 0.18ms |
-| AUTIL-004 | 从Request获取（小写） | ✅ 成功 | 0.50ms |
-| AUTIL-005 | 从Request获取（大写） | ✅ 成功 | 0.44ms |
-| AUTIL-006 | 验证（有OpenSearch） | ✅ 成功 | 0.15ms |
-| AUTIL-007 | 验证（无OpenSearch） | ✅ 成功 | 0.15ms |
-| AUTIL-007-B | opensearch_auth默认None | ✅ 成功 | 0.16ms |
-| AUTIL-008 | デバッグログ出力（両認証あり） | ✅ 成功 | 0.37ms |
-| AUTIL-009 | デバッグログ出力（ヘッダーフィルタリング） | ✅ 成功 | 0.40ms |
-| AUTIL-010 | デバッグログ出力（認証なし） | ✅ 成功 | 0.27ms |
-| AUTIL-010-B | デバッグログ出力（リクエストヘッダーなし） | ✅ 成功 | 0.26ms |
-| AUTIL-011 | デバッグログ出力（DEBUG無効） | ✅ 成功 | 0.21ms |
-| AUTIL-INIT | 模块导入 | ✅ 成功 | 0.21ms |
+| AUTIL-001 | Basicトークン取得（スペースあり） | ✅ 成功 | 0.17ms |
+| AUTIL-002 | Basicトークン取得（スペースなし） | ✅ 成功 | 0.16ms |
+| AUTIL-003 | SHARED-HMACヘッダー受理 | ✅ 成功 | 0.15ms |
+| AUTIL-004 | Requestから取得（小文字） | ✅ 成功 | 0.48ms |
+| AUTIL-005 | Requestから取得（大文字） | ✅ 成功 | 0.40ms |
+| AUTIL-006 | 検証（OpenSearchあり） | ✅ 成功 | 0.14ms |
+| AUTIL-007 | 検証（OpenSearchなし） | ✅ 成功 | 0.14ms |
+| AUTIL-007-B | opensearch_authデフォルトNone | ✅ 成功 | 0.14ms |
+| AUTIL-008 | デバッグログ出力（両認証あり） | ✅ 成功 | 0.36ms |
+| AUTIL-009 | デバッグログ出力（ヘッダーフィルタリング） | ✅ 成功 | 0.28ms |
+| AUTIL-010 | デバッグログ出力（認証なし） | ✅ 成功 | 0.32ms |
+| AUTIL-010-B | デバッグログ出力（リクエストヘッダーなし） | ✅ 成功 | 0.22ms |
+| AUTIL-011 | デバッグログ出力（DEBUG無効） | ✅ 成功 | 0.18ms |
+| AUTIL-INIT | モジュールインポート | ✅ 成功 | 0.22ms |
 
 ---
 
@@ -50,13 +50,13 @@
 
 | ID | テスト名 | 結果 | 実行時間 |
 |----|---------|------|---------|
-| AUTIL-E01 | 認証ヘッダーなしでHTTPException | ✅ 成功 | 0.66ms |
-| AUTIL-E02 | 無効な認証形式でHTTPException | ✅ 成功 | 1.74ms |
-| AUTIL-E03 | 空の認証ヘッダーでHTTPException | ✅ 成功 | 0.97ms |
-| AUTIL-E04 | エンドポイント認証なしでHTTPException | ✅ 成功 | 0.94ms |
-| AUTIL-E05 | 空のエンドポイント認証でHTTPException | ✅ 成功 | 1.01ms |
-| AUTIL-E06 | Requestからの取得失敗でHTTPException | ✅ 成功 | 1.54ms |
-| AUTIL-E07 | 小文字basicプレフィックスでHTTPException | ✅ 成功 | 0.70ms |
+| AUTIL-E01 | 認証ヘッダーなしでHTTPException | ✅ 成功 | 0.46ms |
+| AUTIL-E02 | 無効な認証形式でHTTPException | ✅ 成功 | 0.99ms |
+| AUTIL-E03 | 空の認証ヘッダーでHTTPException | ✅ 成功 | 0.77ms |
+| AUTIL-E04 | エンドポイント認証なしでHTTPException | ✅ 成功 | 0.44ms |
+| AUTIL-E05 | 空のエンドポイント認証でHTTPException | ✅ 成功 | 0.45ms |
+| AUTIL-E06 | Requestからの取得失敗でHTTPException | ✅ 成功 | 0.70ms |
+| AUTIL-E07 | 小文字basicプレフィックスでHTTPException | ✅ 成功 | 0.87ms |
 
 ---
 
@@ -64,11 +64,11 @@
 
 | ID | テスト名 | 結果 | 実行時間 |
 |----|---------|------|---------|
-| AUTIL-SEC-01 | 認証ヘッダーがログに完全出力されない | ✅ 成功 | 0.27ms |
-| AUTIL-SEC-02 | エラーメッセージに認証情報が含まれない | ✅ 成功 | 0.64ms |
-| AUTIL-SEC-03 | x-auth-hashヘッダーがマスクされる | ✅ 成功 | 0.25ms |
-| AUTIL-SEC-04 | 空ヘッダー値のフィルタリングが安全 | ✅ 成功 | 0.26ms |
-| AUTIL-SEC-05 | 短い認証ヘッダー値のフィルタリング | ✅ 成功 | 0.26ms |
+| AUTIL-SEC-01 | 認証ヘッダーがログに完全出力されない | ✅ 成功 | 0.24ms |
+| AUTIL-SEC-02 | エラーメッセージに認証情報が含まれない | ✅ 成功 | 0.69ms |
+| AUTIL-SEC-03 | x-auth-hashヘッダーがマスクされる | ✅ 成功 | 0.30ms |
+| AUTIL-SEC-04 | 空ヘッダー値のフィルタリングが安全 | ✅ 成功 | 0.27ms |
+| AUTIL-SEC-05 | 短い認証ヘッダー値のフィルタリング | ✅ 成功 | 0.30ms |
 
 ---
 
@@ -79,4 +79,4 @@
 
 ---
 
-*レポート生成日時: 2026-03-13 16:39:10*
+*レポート生成日時: 2026-03-13 17:19:54*

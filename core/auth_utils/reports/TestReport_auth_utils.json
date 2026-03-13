@@ -2,7 +2,7 @@
   "metadata": {
     "test_target": "app/core/auth_utils.py",
     "test_spec": "auth_utils_tests.md",
-    "execution_time": "2026-03-13T16:39:10.403520",
+    "execution_time": "2026-03-13T17:19:54.338150",
     "coverage_target": "90%"
   },
   "summary": {
@@ -16,87 +16,87 @@
     "normal": [
       {
         "id": "AUTIL-INIT",
-        "name": "模块导入",
+        "name": "モジュールインポート",
         "status": "passed",
-        "duration": 0.00021389999892562628
+        "duration": 0.000222100003156811
       },
       {
         "id": "AUTIL-001",
-        "name": "Basic令牌提取（有空格）",
+        "name": "Basicトークン取得（スペースあり）",
         "status": "passed",
-        "duration": 0.00018170001567341387
+        "duration": 0.000169299979461357
       },
       {
         "id": "AUTIL-002",
-        "name": "Basic令牌提取（无空格）",
+        "name": "Basicトークン取得（スペースなし）",
         "status": "passed",
-        "duration": 0.00018000000272877514
+        "duration": 0.0001598999951966107
       },
       {
         "id": "AUTIL-003",
-        "name": "SHARED-HMAC头接受",
+        "name": "SHARED-HMACヘッダー受理",
         "status": "passed",
-        "duration": 0.00017529999604448676
+        "duration": 0.0001542000100016594
       },
       {
         "id": "AUTIL-004",
-        "name": "从Request获取（小写）",
+        "name": "Requestから取得（小文字）",
         "status": "passed",
-        "duration": 0.0004952000163029879
+        "duration": 0.00048309998237527907
       },
       {
         "id": "AUTIL-005",
-        "name": "从Request获取（大写）",
+        "name": "Requestから取得（大文字）",
         "status": "passed",
-        "duration": 0.0004412999842315912
+        "duration": 0.00039930001366883516
       },
       {
         "id": "AUTIL-006",
-        "name": "验证（有OpenSearch）",
+        "name": "検証（OpenSearchあり）",
         "status": "passed",
-        "duration": 0.00015390000771731138
+        "duration": 0.00014000001829117537
       },
       {
         "id": "AUTIL-007",
-        "name": "验证（无OpenSearch）",
+        "name": "検証（OpenSearchなし）",
         "status": "passed",
-        "duration": 0.00015259999781847
+        "duration": 0.00013830000534653664
       },
       {
         "id": "AUTIL-007-B",
-        "name": "opensearch_auth默认None",
+        "name": "opensearch_authデフォルトNone",
         "status": "passed",
-        "duration": 0.0001553000183776021
+        "duration": 0.00013770000077784061
       },
       {
         "id": "AUTIL-008",
         "name": "デバッグログ出力（両認証あり）",
         "status": "passed",
-        "duration": 0.000367900007404387
+        "duration": 0.00036050000926479697
       },
       {
         "id": "AUTIL-009",
         "name": "デバッグログ出力（ヘッダーフィルタリング）",
         "status": "passed",
-        "duration": 0.000402199977543205
+        "duration": 0.00028149998979642987
       },
       {
         "id": "AUTIL-010",
         "name": "デバッグログ出力（認証なし）",
         "status": "passed",
-        "duration": 0.0002696000155992806
+        "duration": 0.00031949998810887337
       },
       {
         "id": "AUTIL-010-B",
         "name": "デバッグログ出力（リクエストヘッダーなし）",
         "status": "passed",
-        "duration": 0.00025949999690055847
+        "duration": 0.00022390001686289907
       },
       {
         "id": "AUTIL-011",
         "name": "デバッグログ出力（DEBUG無効）",
         "status": "passed",
-        "duration": 0.00021130000823177397
+        "duration": 0.00017790001584216952
       }
     ],
     "error": [
@@ -104,43 +104,43 @@
         "id": "AUTIL-E01",
         "name": "認証ヘッダーなしでHTTPException",
         "status": "passed",
-        "duration": 0.0006561999907717109
+        "duration": 0.0004602000117301941
       },
       {
         "id": "AUTIL-E02",
         "name": "無効な認証形式でHTTPException",
         "status": "passed",
-        "duration": 0.001744399982271716
+        "duration": 0.000990900007309392
       },
       {
         "id": "AUTIL-E03",
         "name": "空の認証ヘッダーでHTTPException",
         "status": "passed",
-        "duration": 0.00096750000375323
+        "duration": 0.000770699989516288
       },
       {
         "id": "AUTIL-E06",
         "name": "Requestからの取得失敗でHTTPException",
         "status": "passed",
-        "duration": 0.0015407000028062612
+        "duration": 0.0007015000155661255
       },
       {
         "id": "AUTIL-E07",
         "name": "小文字basicプレフィックスでHTTPException",
         "status": "passed",
-        "duration": 0.0006953999982215464
+        "duration": 0.0008710999973118305
       },
       {
         "id": "AUTIL-E04",
         "name": "エンドポイント認証なしでHTTPException",
         "status": "passed",
-        "duration": 0.0009367000020574778
+        "duration": 0.00044380000326782465
       },
       {
         "id": "AUTIL-E05",
         "name": "空のエンドポイント認証でHTTPException",
         "status": "passed",
-        "duration": 0.0010148999863304198
+        "duration": 0.0004538999928627163
       }
     ],
     "security": [
@@ -148,31 +148,31 @@
         "id": "AUTIL-SEC-01",
         "name": "認証ヘッダーがログに完全出力されない",
         "status": "passed",
-        "duration": 0.00026619998971000314
+        "duration": 0.00023790000705048442
       },
       {
         "id": "AUTIL-SEC-02",
         "name": "エラーメッセージに認証情報が含まれない",
         "status": "passed",
-        "duration": 0.0006382999999914318
+        "duration": 0.000694099988322705
       },
       {
         "id": "AUTIL-SEC-03",
         "name": "x-auth-hashヘッダーがマスクされる",
         "status": "passed",
-        "duration": 0.0002486000012140721
+        "duration": 0.0002961000136565417
       },
       {
         "id": "AUTIL-SEC-04",
         "name": "空ヘッダー値のフィルタリングが安全",
         "status": "passed",
-        "duration": 0.0002612000098451972
+        "duration": 0.00026870000874623656
       },
       {
         "id": "AUTIL-SEC-05",
         "name": "短い認証ヘッダー値のフィルタリング",
         "status": "passed",
-        "duration": 0.00025809998624026775
+        "duration": 0.0003029000072274357
       }
     ]
   }
