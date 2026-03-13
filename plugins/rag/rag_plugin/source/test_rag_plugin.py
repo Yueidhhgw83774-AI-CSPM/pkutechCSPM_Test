@@ -141,7 +141,7 @@ class TestRAGClientInitialization:
                     assert ssl_config["use_ssl"] is True
 
     def test_rag_007_local_opensearch_auth(self):
-        """RAG-007: 自前OpenSearch認証設定"""
+        """RAG-007: 既存のOpenSearch認証設定について"""
         from app.rag.rag_client import RAGClient
         
         with patch("app.rag.rag_client.is_aws_opensearch_service") as mock_is_aws:
@@ -308,7 +308,7 @@ class TestEnhancedRAGSearch:
         from app.rag.enhanced_rag_search import EnhancedRAGSearch
         
         search = EnhancedRAGSearch()
-        # 分离文档和分数
+        # ドキュメントと分数を分離する
         scores = [0.9 - i * 0.1 for i in range(len(sample_documents))]
         
         results = search._documents_to_results(sample_documents, scores=scores)
@@ -319,11 +319,11 @@ class TestEnhancedRAGSearch:
 
     @pytest.mark.asyncio
     async def test_rag_020_basic_search(self, mock_enhanced_rag_search, sample_search_request):
-        """RAG-020: 基本検索成功"""
+        """RAG_020: 基本検索成功"""
         response = await mock_enhanced_rag_search.search(sample_search_request)
         
         assert response is not None
-        assert response.query == sample_search_request.query  # 使用实际的request query
+        assert response.query == sample_search_request.query  # 実際のリクエストクエリを使用する
         assert len(response.results) > 0
 
     @pytest.mark.asyncio
@@ -361,12 +361,12 @@ class TestEnhancedRAGSearch:
         """RAG-025: QA検索（ソースなし）"""
         from app.rag.models import RAGQARequest, RAGQAResponse
         
-        # Mock返回不包含sources的响应
+        # Mockでsourcesを含まない响应を返す
         mock_enhanced_rag_search.qa_search = AsyncMock(return_value=RAGQAResponse(
             question="test",
             answer="This is a test answer.",
             source_count=0,
-            sources=None  # 无源
+            sources=None  # 受動態
         ))
         
         request = RAGQARequest(question="test", include_sources=False)
@@ -408,7 +408,7 @@ class TestRAGManager:
 
     @pytest.mark.asyncio
     async def test_rag_029_get_instance_first_call(self):
-        """RAG-029: RAGManager.get_instance成功（初回）"""
+        """RAG-029: RAGManager.get_instanceが成功しました（初回）"""
         from app.core.rag_manager import RAGManager
         
         instance = await RAGManager.get_instance()
@@ -429,7 +429,7 @@ class TestRAGManager:
     @pytest.mark.asyncio
     @pytest.mark.skip(reason="RAGClient mock需要复杂设置")
     async def test_rag_031_manager_initialize(self, mock_rag_client):
-        """RAG-031: RAGManager.initialize成功"""
+        """RAG-031: RAGManager.initialize成功したことにより"""
         pass
 
     @pytest.mark.asyncio
@@ -470,7 +470,7 @@ class TestRAGManager:
             result = await rag_manager.initialize_global_rag_system()
             
             # 初期化が呼ばれることを確認
-            assert result is True or result is None  # 実装依存
+            assert result is True or result is None  # 実装に依存する
 
 
 # ============================================================================
@@ -1035,7 +1035,7 @@ class TestRAGPerformance:
         elapsed2 = time.time() - start2
         
         # 2回目が速いか同等（キャッシュ実装依存）
-        assert elapsed2 <= elapsed1 * 1.5  # 1.5倍以内
+        assert elapsed2 <= elapsed1 * 1.5  # 1.5倍以内にすること。
 
 
 # ============================================================================

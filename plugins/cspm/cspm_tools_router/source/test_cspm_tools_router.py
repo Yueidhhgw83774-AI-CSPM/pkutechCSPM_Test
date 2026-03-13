@@ -105,28 +105,28 @@ class TestToolsReferenceEndpoint:
 class TestToolsUnavailable:
     @pytest.mark.asyncio
     async def test_validate_tool_unavailable(self, async_client):
-        """CSPM-TR-E01: validate_policy 利用不可"""
+        """CSPM-TR-E01: validate_policy の利用不可"""
         with patch("app.cspm_plugin.tools_router.TOOLS_AVAILABLE", False):
             r = await async_client.post("/cspm-tools/validate", json={"policy_content": "[]"})
             assert r.status_code == 503
 
     @pytest.mark.asyncio
     async def test_schema_tool_unavailable(self, async_client):
-        """CSPM-TR-E02: get_custodian_schema 利用不可"""
+        """CSPM-TR-E02: get_custodian_schema の利用は不可です"""
         with patch("app.cspm_plugin.tools_router.TOOLS_AVAILABLE", False):
             r = await async_client.post("/cspm-tools/schema", json={"target": "aws"})
             assert r.status_code == 503
 
     @pytest.mark.asyncio
     async def test_resources_tool_unavailable(self, async_client):
-        """CSPM-TR-E03: list_available_resources 利用不可"""
+        """CSPM-TR-E03: list_available_resources の利用不可"""
         with patch("app.cspm_plugin.tools_router.TOOLS_AVAILABLE", False):
             r = await async_client.post("/cspm-tools/resources", json={"cloud": "aws"})
             assert r.status_code == 503
 
     @pytest.mark.asyncio
     async def test_reference_tool_unavailable(self, async_client):
-        """CSPM-TR-E04: retrieve_reference 利用不可"""
+        """CSPM-TR-E04: retrieve_reference の利用は不可です"""
         with patch("app.cspm_plugin.tools_router.TOOLS_AVAILABLE", False):
             r = await async_client.post("/cspm-tools/reference", json={"query": "test", "cloud": "aws"})
             assert r.status_code == 503
@@ -165,7 +165,7 @@ class TestToolsEndpointExceptions:
 class TestToolsValidationErrors:
     @pytest.mark.asyncio
     async def test_validate_missing_policy_content(self, async_client):
-        """CSPM-TR-E09: policy_content 欠落"""
+        """CSPM-TR-E09: policy_content 謎落"""
         r = await async_client.post("/cspm-tools/validate", json={})
         assert r.status_code == 422
 
@@ -178,7 +178,7 @@ class TestToolsValidationErrors:
 
     @pytest.mark.asyncio
     async def test_resources_missing_cloud(self, async_client):
-        """CSPM-TR-E11: cloud 欠落"""
+        """CSPM-TR-E11: cloud 脱落"""
         r = await async_client.post("/cspm-tools/resources", json={})
         assert r.status_code == 422
 

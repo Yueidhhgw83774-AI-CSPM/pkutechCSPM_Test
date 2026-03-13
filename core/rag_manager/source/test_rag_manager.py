@@ -21,7 +21,7 @@ from pathlib import Path
 from unittest.mock import patch, MagicMock, AsyncMock
 
 # プロジェクトルートを Python パスに追加
-# 将项目根目录添加到 Python 路径
+# プロジェクトのルートディレクトリを Python パスに追加する
 project_root = Path(__file__).parent.parent.parent.parent / "platform_python_backend-testing"
 sys.path.insert(0, str(project_root))
 

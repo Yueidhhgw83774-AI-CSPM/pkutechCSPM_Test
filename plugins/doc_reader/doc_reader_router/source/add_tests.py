@@ -1,9 +1,9 @@
-# 追加缺失的安全测试
+# 欠落しているセキュリティテストを追加する
 
 with open('test_doc_reader_router.py', 'r', encoding='utf-8') as f:
     content = f.read()
 
-# 在最后的类方法后追加新方法
+# 最後のクラスメソッドの後に新しいメソッドを追加する
 additional_tests = '''    
     def test_error_id_traceability(self, client):
         """DOCR-SEC-01: エラーIDによるトレーサビリティ"""
@@ -134,7 +134,7 @@ additional_tests = '''
             assert response.status_code in [200, 400, 422, 500]
 '''
 
-# 在文件末尾的类的最后一个方法后添加
+# ファイルの末尾のクラスの最後のメソッドの後に追加する
 content = content.replace(
     '            assert "secret123" not in response.json()["detail"]',
     '            assert "secret123" not in response.json()["detail"]\n' + additional_tests

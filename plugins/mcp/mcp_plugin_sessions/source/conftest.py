@@ -41,7 +41,7 @@ def create_pg_mock(fetchall_return=None, fetchone_return=None):
 
     RecursionError を防ぐため、spec を使用して属性を制限
     """
-    # 创建 cursor mock
+    # カーソル Mockを作成する
     mock_cursor = MagicMock(spec=['execute', 'fetchone', 'fetchall', '__aenter__', '__aexit__'])
     mock_cursor.execute = AsyncMock()
     if fetchall_return is not None:
@@ -55,15 +55,15 @@ def create_pg_mock(fetchall_return=None, fetchone_return=None):
     mock_cursor.__aenter__ = AsyncMock(return_value=mock_cursor)
     mock_cursor.__aexit__ = AsyncMock(return_value=None)
 
-    # 创建 connection mock
+    # connection mockを作成する
     mock_conn = MagicMock(spec=['cursor', '__aenter__', '__aexit__'])
     mock_conn.cursor = MagicMock(return_value=mock_cursor)
     mock_conn.__aenter__ = AsyncMock(return_value=mock_conn)
     mock_conn.__aexit__ = AsyncMock(return_value=None)
 
-    # 创建 pool mock - 关键：使用 spec 限制属性防止递归
+    # プールのモックを作成 - キーポイント：spec を使用して属性を制限し、再帰を防止する
     mock_pool = MagicMock(spec=['connection'])
-    # 使用 side_effect 而不是 return_value 避免递归
+    # side_effectを使用してreturn_valueを使用せずに再帰を避ける
     mock_pool.connection = MagicMock(return_value=mock_conn, spec=['return_value'])
 
     return mock_pool
@@ -109,7 +109,7 @@ async def async_client(app):
 
 
 # ============================================
-# 测试结果收集器
+# テスト結果コレktor
 # ============================================
 
 class TestResultCollector:

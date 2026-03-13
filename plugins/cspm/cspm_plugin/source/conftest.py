@@ -32,7 +32,7 @@ if not project_root.exists():
     raise RuntimeError(f"プロジェクトルートディレクトリが存在しません: {project_root}")
 sys.path.insert(0, str(project_root))
 
-# Mock weasyprint（避免 libpango 依赖）
+# Mock weasyprint（libpango 依赖を回避）
 from unittest.mock import MagicMock as _MagicMock
 for _mod in ["weasyprint", "weasyprint.CSS", "weasyprint.HTML", "weasyprint.css",
              "weasyprint.text", "weasyprint.text.fonts", "weasyprint.text.ffi", "weasyprint.text.constants"]:
@@ -152,7 +152,7 @@ def sample_recommendation():
 
 
 # ============================================
-# 测试结果收集器
+# テスト結果コレktor
 # ============================================
 
 class TestResultCollector:

@@ -18,7 +18,7 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-# 读取 .env 配置
+# .envファイルの設定を読み込む
 _env_path = Path(__file__).resolve().parent.parent.parent.parent.parent / ".env"
 if _env_path.exists():
     load_dotenv(_env_path)

@@ -1,13 +1,13 @@
 """
-models/api.py 单元测试
+models/api.py のユニットテスト
 
-测试规格: docs/testing/models/api_tests.md
-覆盖率目标: 90%+
+テスト仕様: docs/testing/models/api_tests.md
+カバレッジ目標: 90%+
 
-测试类别:
-  - 正常系: 15 个测试
-  - 异常系: 5 个测试
-  - 安全测试: 3 个测试
+テストカテゴリ:
+  - 正常系: 15 個のテスト
+  - 異常系: 5 個のテスト
+  - セキュリティテスト: 3 個のテスト
 """
 
 import pytest
@@ -17,7 +17,7 @@ from typing import List
 import sys
 from pathlib import Path
 
-# 导入被测试模块
+# テスト対象のモジュールをインポートする
 project_root = Path(__file__).parent.parent.parent.parent.parent / "platform_python_backend-testing"
 sys.path.insert(0, str(project_root))
 
@@ -27,31 +27,31 @@ from app.models.compliance import ComplianceItem, SourceDocumentInfoModel, Relat
 
 class TestProcessTextFileResponseNormal:
     """
-    ProcessTextFileResponse 正常系测试
+    ProcessTextFileResponse 正常系テスト
 
-    测试ID: API-001 ~ API-006
+        テストID: API-001 ~ API-006
     """
 
     def test_process_text_file_response_minimal(self):
         """
         API-001: ProcessTextFileResponse 最小構成
-        覆盖代码行: app/models/api.py:5-8
+        カバレッジコード行: app/models/api.py:5-8
 
-        测试目的:
-          - 验证空列表 + 必须字段可以正常创建
-          - 确认 Pydantic v2 模型正常工作
+        テスト目的:
+        - 空のリスト + 必須フィールドで正常に作成されることを確認する
+        - Pydantic v2 モデルが正常に動作することを確認する
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         data = {
             "structured_items": [],
             "message": "処理完了",
             "source_filename": "test.pdf"
         }
 
-        # Act - 执行测试
+        # アクション - テストを実行する
         response = ProcessTextFileResponse(**data)
 
-        # Assert - 验证结果
+        # Assert - 結果の検証
         assert response.structured_items == []
         assert response.message == "処理完了"
         assert response.source_filename == "test.pdf"
@@ -59,10 +59,10 @@ class TestProcessTextFileResponseNormal:
     def test_process_text_file_response_single_item(self):
         """
         API-002: ProcessTextFileResponse 単一ComplianceItem
-        覆盖代码行: app/models/api.py:5-8
+                覆盖コード行: app/models/api.py:5-8
 
-        测试目的:
-          - 验证包含单个 ComplianceItem 的响应
+                テスト目的:
+                  - 単一の ComplianceItem を含む応答を検証する
         """
         # Arrange
         compliance_item = ComplianceItem(
@@ -87,11 +87,11 @@ class TestProcessTextFileResponseNormal:
 
     def test_process_text_file_response_multiple_items(self):
         """
-        API-003: ProcessTextFileResponse 複数ComplianceItem
-        覆盖代码行: app/models/api.py:5-8
+        API-003: ProcessTextFileResponse 複数のComplianceItemを含む応答を検証
+                覆盖コード行: app/models/api.py:5-8
 
-        测试目的:
-          - 验证包含多个 ComplianceItem 的响应
+                テスト目的:
+                  - 複数のComplianceItemを含む応答があることを確認する
         """
         # Arrange
         items = [
@@ -119,10 +119,10 @@ class TestProcessTextFileResponseNormal:
     def test_process_text_file_response_full_compliance_item(self):
         """
         API-004: ProcessTextFileResponse 完全構成ComplianceItem
-        覆盖代码行: app/models/api.py:5-8
+                覆盖コード行: app/models/api.py:5-8
 
-        测试目的:
-          - 验证完整的 ComplianceItem（包含所有可选字段）
+                テスト目的:
+                  - 完全な ComplianceItem（すべてのオプションフィールドを含む）の検証を行うこと。
         """
         # Arrange
         full_item = ComplianceItem(
@@ -210,19 +210,19 @@ class TestProcessTextFileResponseNormal:
 
 class TestBase64TextRequestNormal:
     """
-    Base64TextRequest 正常系测试
+    Base64TextRequest 正常系テスト
 
-    测试ID: API-005 ~ API-013
+        テストID: API-005 ~ API-013
     """
 
     def test_base64_text_request_minimal(self):
         """
         API-005: Base64TextRequest 最小構成
-        覆盖代码行: app/models/api.py:10-13
+                覆盖コード行: app/models/api.py:10-13
 
-        测试目的:
-          - 验证最小配置（无 session_id）
-          - 确认 session_id 默认为 None
+                テスト目的:
+                  - 最小構成（session_idなし）の検証
+                  - session_idのデフォルトがNoneであることを確認する
         """
         # Arrange
         test_content = "テストコンテンツ"
@@ -265,11 +265,11 @@ class TestBase64TextRequestNormal:
 
     def test_base64_text_request_empty_session_id(self):
         """
-        API-007: Base64TextRequest 空session_id
-        覆盖代码行: app/models/api.py:10-13
+        API-007: Base64TextRequest 空の session_id
+                被覆コード行: app/models/api.py:10-13
 
-        测试目的:
-          - 验证空字符串 session_id 的处理
+                テスト目的:
+                  - 空文字列の session_id の処理を確認する
         """
         # Arrange
         base64_content = base64.b64encode(b"content").decode('utf-8')
@@ -292,7 +292,7 @@ class TestBase64TextRequestNormal:
         测试目的:
           - 验证大文件（1MB）的处理
         """
-        # Arrange - 生成 1MB 的内容
+        # Arrange - 1MBのコンテンツを生成
         large_content = "A" * (1024 * 1024)  # 1MB
         base64_content = base64.b64encode(large_content.encode('utf-8')).decode('utf-8')
 
@@ -342,11 +342,11 @@ class TestModelOperations:
 
     def test_model_dump_dict_conversion(self):
         """
-        API-008: model_dump 辞書変換検証
-        覆盖代码行: app/models/api.py:5-13
+        API-008: model_dump ドィクショナリー変換検証
+                覆盖コード行: app/models/api.py:5-13
 
-        测试目的:
-          - 验证 Pydantic v2 的 model_dump() 方法
+                テスト目的:
+                  - Pydantic v2 の model_dump() メソッドの検証
         """
         # Arrange
         response = ProcessTextFileResponse(
@@ -471,7 +471,7 @@ class TestProcessTextFileResponseErrors:
         # Arrange & Act & Assert
         from pydantic import ValidationError
 
-        # structured_items 欠落
+        # structured_items が欠落しています
         with pytest.raises(ValidationError) as exc_info:
             ProcessTextFileResponse(
                 message="テスト",
@@ -479,7 +479,7 @@ class TestProcessTextFileResponseErrors:
             )
         assert "structured_items" in str(exc_info.value)
 
-        # message 欠落
+        # メッセージ缺失
         with pytest.raises(ValidationError) as exc_info:
             ProcessTextFileResponse(
                 structured_items=[],
@@ -487,7 +487,7 @@ class TestProcessTextFileResponseErrors:
             )
         assert "message" in str(exc_info.value)
 
-        # source_filename 欠落
+        # source_filename が欠落しています
         with pytest.raises(ValidationError) as exc_info:
             ProcessTextFileResponse(
                 structured_items=[],
@@ -532,11 +532,11 @@ class TestBase64TextRequestErrors:
 
     def test_base64_text_request_missing_filename(self):
         """
-        API-E03: Base64TextRequest filename欠落
-        覆盖代码行: app/models/api.py:10-13
+        API-E03: Base64TextRequest で filename が欠落している場合
+                覆盖コード行: app/models/api.py:10-13
 
-        测试目的:
-          - 验证缺少 filename 时抛出 ValidationError
+                テスト目的:
+                  - filename が欠落している場合に ValidationError が送出されることを確認する
         """
         # Arrange & Act & Assert
         from pydantic import ValidationError
@@ -549,11 +549,11 @@ class TestBase64TextRequestErrors:
 
     def test_base64_text_request_missing_content(self):
         """
-        API-E04: Base64TextRequest file_content欠落
-        覆盖代码行: app/models/api.py:10-13
+        API-E04: Base64TextRequest file_contentが欠落
+        被覆コード行: app/models/api.py:10-13
 
-        测试目的:
-          - 验证缺少 file_content_base64 时抛出 ValidationError
+        テスト目的:
+          - file_content_base64が欠落している場合に ValidationError が投げられるか確認する
         """
         # Arrange & Act & Assert
         from pydantic import ValidationError
@@ -602,7 +602,7 @@ class TestBase64TextRequestErrors:
         with pytest.raises(ValidationError) as exc_info:
             ProcessTextFileResponse()
 
-        # 验证错误信息包含所有 3 个必填字段
+        # 検証エラーのメッセージが3つの必須フィールドすべてを含むことを確認します。
         errors = exc_info.value.errors()
         assert len(errors) == 3  # structured_items, message, source_filename
 
@@ -624,7 +624,7 @@ class TestBase64TextRequestErrors:
         with pytest.raises(ValidationError) as exc_info:
             Base64TextRequest()
 
-        # 验证错误信息包含所有 2 个必填字段
+        # 検証エラーのメッセージが2つの必須フィールドを含むことを確認します
         errors = exc_info.value.errors()
         assert len(errors) == 2  # filename, file_content_base64
 
@@ -634,10 +634,10 @@ class TestBase64TextRequestErrors:
 
     def test_response_message_wrong_type(self):
         """
-        API-E10: ProcessTextFileResponse message型不正
+        API-E10: ProcessTextFileResponse メッセージ型が正しくない
 
-        测试目的:
-          - 单独验证 message 字段的类型错误
+        テスト目的:
+          - message フィールドの型の誤りを個別に検証する
         """
         # Arrange & Act & Assert
         from pydantic import ValidationError
@@ -663,10 +663,10 @@ class TestBase64TextRequestErrors:
 
     def test_response_source_filename_wrong_type(self):
         """
-        API-E11: ProcessTextFileResponse source_filename型不正
+        API-E11: ProcessTextFileResponse source_filename型が正しくない
 
-        测试目的:
-          - 单独验证 source_filename 字段的类型错误
+        テスト目的:
+          - source_filename フィールドの型の誤りを個別に検証する
         """
         # Arrange & Act & Assert
         from pydantic import ValidationError
@@ -692,10 +692,10 @@ class TestBase64TextRequestErrors:
 
     def test_request_file_content_base64_wrong_type(self):
         """
-        API-E12: Base64TextRequest file_content_base64型不正
+        API-E12: Base64TextRequest file_content_base64型が正しくない
 
-        测试目的:
-          - 单独验证 file_content_base64 字段的类型错误
+        テスト目的:
+          - file_content_base64 フィールドのタイプエラーを個別に検証する
         """
         # Arrange & Act & Assert
         from pydantic import ValidationError
@@ -719,10 +719,10 @@ class TestBase64TextRequestErrors:
 
     def test_request_session_id_wrong_type(self):
         """
-        API-E13: Base64TextRequest session_id型不正
+        API-E13: Base64TextRequest session_id型が正しくない
 
-        测试目的:
-          - 单独验证 session_id 字段的类型错误
+                テスト目的:
+                  - session_id フィールドの型の誤りを個別に検証する
         """
         # Arrange & Act & Assert
         from pydantic import ValidationError
@@ -762,9 +762,9 @@ class TestBase64TextRequestSecurity:
         """
         API-SEC-01: Path Traversal 警告
 
-        测试目的:
-          - 确认模型接受包含路径遍历字符的文件名
-          - 警告：使用时必须在上层验证
+                テスト目的:
+                  - モデルがパス traversal 文字を含むファイル名を受け入れることを確認する
+                  - 警告：使用時に上位で検証する必要がある
         """
         # Arrange
         dangerous_filenames = [
@@ -858,9 +858,9 @@ class TestBase64TextRequestSecurity:
             file_content_base64=base64_content
         )
 
-        # Assert - Pydantic 接受包含 NULL 字节的字符串
+        # Assert - Pydantic は NULL バイトを含む文字列を受け入れる
         assert "\x00" in request.filename
-        # 警告: 文件保存前必须移除 NULL 字节
+        # 警告: ファイルを保存する前に NULL バイトを削除する必要があります
         # safe_filename = request.filename.replace('\x00', '')
 
     def test_xss_payload_in_message(self):
@@ -890,7 +890,7 @@ class TestBase64TextRequestSecurity:
             source_filename="test.pdf"
         )
 
-        # Assert - Pydantic 接受原始 HTML/JS 代码
+        # Assert - Pydantic が原始の HTML/JS コードを受理する
         assert response.message == xss_payload
         assert response.structured_items[0].title == xss_in_title
         assert response.structured_items[0].description == xss_payload
@@ -910,9 +910,9 @@ class TestBase64TextRequestSecurity:
         # Arrange
         invalid_base64_strings = [
             "Not!Valid@Base64#Content$",
-            "こんにちは",  # 日文字符
-            "+++===***",   # 无效字符
-            "A"            # 长度不正确
+            "こんにちは",  # 日本語文字
+            "+++===***",   # 無効な文字
+            "A"            # 長さが正しくありません
         ]
 
         # Act & Assert
@@ -922,10 +922,10 @@ class TestBase64TextRequestSecurity:
                 file_content_base64=invalid_base64
             )
 
-            # 模型接受任何字符串
+            # モデルは任意の文字列を受け付けます
             assert request.file_content_base64 == invalid_base64
 
-            # 验证实际解码会失败
+            # 実際のデコードが失敗することを確認する
             with pytest.raises(Exception):
                 base64.b64decode(request.file_content_base64, validate=True)
 
@@ -958,7 +958,7 @@ class TestBase64TextRequestSecurity:
                 session_id=sql_injection
             )
 
-            # 模型接受任何字符串
+            # モデルは任意の文字列を受け付けます
             assert request.session_id == sql_injection
 
         # 警告: DB 操作時にパラメータ化クエリを使用すること
@@ -975,7 +975,7 @@ class TestBase64TextRequestSecurity:
           - 确认模型接受大字符串（可能导致 DoS）
           - 警告：应在中间件层设置请求大小限制
         """
-        # Arrange - 生成 10MB 的字符串
+        # Arrange - 10MBの文字列を生成
         large_content = "A" * (10 * 1024 * 1024)  # 10MB
 
         # Act
@@ -984,7 +984,7 @@ class TestBase64TextRequestSecurity:
             file_content_base64=large_content
         )
 
-        # Assert - 模型接受大字符串
+        # Assert - モデルが大文字の文字列を接受する
         assert len(request.file_content_base64) == 10 * 1024 * 1024
 
         # 警告: 本番環境では以下の対策が必要:
@@ -1003,7 +1003,7 @@ class TestBase64TextRequestSecurity:
           - 警告：认证中间件必须验证 JWT 签名
         """
         # Arrange
-        # 警告: 这个 JWT 的签名已被篡改
+        # 警告: この JWT の署名が改ざんされています
         tampered_jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYWRtaW4iLCJpYXQiOjE1MTYyMzkwMjJ9.TAMPERED_SIGNATURE"
         base64_content = base64.b64encode(b"content").decode('utf-8')
 
@@ -1014,7 +1014,7 @@ class TestBase64TextRequestSecurity:
             session_id=tampered_jwt
         )
 
-        # Assert - 模型接受任何字符串
+        # Assert - モデルは任意の文字列を受け付けます
         assert request.session_id == tampered_jwt
         # 警告: 認証ミドルウェアで jwt.decode() 時に署名検証エラーが発生すべき
         # import jwt
@@ -1047,7 +1047,7 @@ class TestBase64TextRequestSecurity:
                 file_content_base64=base64_content
             )
 
-            # 模型接受任何字符串
+            # モデルは任意の文字列を受け付けます
             assert request.filename == payload
 
         # 警告: OpenSearch クエリに filename を使用する前にエスケープ処理が必須
@@ -1056,19 +1056,19 @@ class TestBase64TextRequestSecurity:
 
     def test_ssrf_url_in_filename(self):
         """
-        API-SEC-09: SSRF URL in filename
+        API-SEC-09: ファイル名内のSSRF URL
 
-        OWASP A10: Server-Side Request Forgery
+                OWASP A10: サーバーサイドリクエストフorgery
 
-        测试目的:
-          - 确认 filename 可能包含内部 URL
-          - 警告：不能直接用于 HTTP 请求
+                テスト目的:
+                  - ファイル名が内部URLを含む可能性があることを確認する
+                  - 警告: HTTPリクエストに直接使用しないこと
         """
         # Arrange
         ssrf_urls = [
             "http://169.254.169.254/latest/meta-data/",  # AWS metadata
             "http://metadata.google.internal/",  # GCP metadata
-            "http://localhost:8080/admin",  # 内部管理端口
+            "http://localhost:8080/admin",  # 内部管理ポート
             "http://127.0.0.1:6379/",  # Redis
             "file:///etc/passwd",  # File protocol
             "http://[::1]:8080/secret"  # IPv6 localhost
@@ -1082,7 +1082,7 @@ class TestBase64TextRequestSecurity:
                 file_content_base64=base64_content
             )
 
-            # 模型接受任何字符串
+            # モデルは任意の文字列を受け付けます
             assert request.filename == url
 
         # 警告: filename を URL として使用する前に以下を確認:
@@ -1095,14 +1095,14 @@ class TestBase64TextRequestSecurity:
         """
         API-SEC-12: JWT alg=none攻撃
 
-        OWASP A07: Identification and Authentication Failures
+                OWASP A07: 認証失敗
 
-        测试目的:
-          - 确认模型接受 alg=none 的 JWT
-          - 警告：JWT 验证时必须明确指定算法
+                テスト目的:
+                  - モデルが alg=none の JWT を受け入れることを確認する
+                  - 警告：JWT 認証時にアルゴリズムを明示的に指定すること
         """
         # Arrange
-        # 警告: 这个 JWT 使用 alg=none，没有签名
+        # 警告: この JWT は alg=none を使用しており、署名がありません
         alg_none_jwt = "eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJ1c2VyIjoiYWRtaW4iLCJyb2xlIjoiYWRtaW4ifQ."
         base64_content = base64.b64encode(b"content").decode('utf-8')
 
@@ -1113,7 +1113,7 @@ class TestBase64TextRequestSecurity:
             session_id=alg_none_jwt
         )
 
-        # Assert - 模型接受任何字符串
+        # Assert - モデルは任意の文字列を受け付けます
         assert request.session_id == alg_none_jwt
 
         # 警告: JWT デコード時に algorithms パラメータを明示的に指定すること
@@ -1124,20 +1124,20 @@ class TestBase64TextRequestSecurity:
         """
         API-SEC-13: Unicode正規化攻撃
 
-        OWASP A03: Injection
+                OWASP A03: Injection
 
-        测试目的:
-          - 确认模型接受外观相似的 Unicode 字符
-          - 警告：可能导致 homograph 攻击
+                テスト目的:
+                  - モデルが外見が似ているUnicode文字を受け入れることを確認する
+                  - 警告：Homograph攻撃を引き起こす可能性がある
         """
         # Arrange
-        # 使用外观相似的字符（Homograph attack）
+        # 類似文字を使用した攻撃（Homograph attack）
         confusable_filenames = [
-            "аdmin.txt",  # 'a' 是西里尔字母（Cyrillic）
-            "ｐａｙｐａｌ.txt",  # 全角字符
-            "micro\u00adsoft.txt",  # 包含软连字符（U+00AD）
-            "gооgle.txt",  # 'o' 是西里尔字母
-            "аррӏе.txt"  # 多个西里尔字母
+            "аdmin.txt",  # 'a' はキリル文字（キリル字母）です
+            "ｐａｙｐａｌ.txt",  # 全角文字
+            "micro\u00adsoft.txt",  # ソフトハイフン（U+00AD）を含む
+            "gооgle.txt",  # 'o' はキリル文字です
+            "аррӏе.txt"  # 複数のキリル文字
         ]
         base64_content = base64.b64encode(b"content").decode('utf-8')
 
@@ -1148,7 +1148,7 @@ class TestBase64TextRequestSecurity:
                 file_content_base64=base64_content
             )
 
-            # 模型接受任何 Unicode 字符串
+            # モデルは任意の Unicode 文字列を受け付けます
             assert request.filename == filename
 
         # 警告: ファイル名の表示・比較前に Unicode 正規化を実施:
@@ -1175,7 +1175,7 @@ class TestBase64TextRequestSecurity:
             "filename": "test.txt",
             "file_content_base64": "dGVzdA==",
             "malicious_field": "this_should_be_ignored",
-            "is_admin": True,  # 尝试权限提升
+            "is_admin": True,  # 権限を上げて試す
             "bypass_validation": True
         }
 
@@ -1183,22 +1183,22 @@ class TestBase64TextRequestSecurity:
         try:
             request = Base64TextRequest.model_validate(data_with_extra_fields)
 
-            # Assert - 额外字段应该被忽略或拒绝
+            # Assert - 追加のフィールドは無視または拒否されるべきです
             assert request.filename == "test.txt"
             assert request.file_content_base64 == "dGVzdA=="
 
-            # 验证额外字段没有被设置
+            # 追加フィールドが設定されていないことを確認する
             assert not hasattr(request, 'malicious_field')
             assert not hasattr(request, 'is_admin')
             assert not hasattr(request, 'bypass_validation')
 
         except ValidationError:
-            # 如果模型配置为 extra="forbid"，会抛出 ValidationError
-            # 这也是可接受的行为
+            # モデルが(extra="forbid")に設定されている場合、ValidationErrorが投げられます。
+            # 这也是受け入れ可能な行為です
             pass
 
-        # 注意: Pydantic v2 默认 extra="ignore"
-        # 如果需要拒绝额外字段，在模型中设置:
+        # 注意: Pydantic v2 のデフォルトは extra="ignore" です
+        # 追加フィールドを拒否する必要がある場合は、モデルで以下のように設定します:
         # model_config = ConfigDict(extra="forbid")
 
     def test_business_logic_inconsistency(self):
@@ -1212,18 +1212,18 @@ class TestBase64TextRequestSecurity:
           - 警告：需要在应用层验证
         """
         # Arrange & Act
-        # 场景 1: 空列表但成功消息说有 100 个项目
+        # シーン 1: リストが空だが、成功メッセージに100件のプロジェクトがあると表示される場合
         inconsistent_response_1 = ProcessTextFileResponse(
             structured_items=[],
             message="Successfully processed 100 items",
             source_filename="test.pdf"
         )
 
-        # Assert - Pydantic 不验证业务逻辑
+        # Assert - Pydanticはビジネスロジックを検証しない
         assert len(inconsistent_response_1.structured_items) == 0
         assert "100 items" in inconsistent_response_1.message
 
-        # 场景 2: 有项目但消息说没有找到
+        # シーン2: プロジェクトはあるが、メッセージに「見つかりません」が表示される
         item = ComplianceItem(
             recommendationId="REC-001",
             title="Test"
@@ -1234,7 +1234,7 @@ class TestBase64TextRequestSecurity:
             source_filename="test.pdf"
         )
 
-        # Assert - Pydantic 不验证业务逻辑
+        # Assert - Pydanticはビジネスロジックを検証しない
         assert len(inconsistent_response_2.structured_items) == 1
         assert "No compliance items found" in inconsistent_response_2.message
 

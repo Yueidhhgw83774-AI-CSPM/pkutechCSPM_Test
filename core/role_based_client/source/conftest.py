@@ -56,7 +56,7 @@ if ENV_FILE.exists():
 
 # テスト用環境変数（.envファイルから読み込み）
 MOCK_SETTINGS_ENV = {
-    # LLM API Keys - 从 .env 加载
+    # LLM APIキー - .envから読み込み
     "GPT5_1_CHAT_API_KEY": os.getenv("GPT5_1_CHAT_API_KEY", "test-key"),
     "GPT5_1_CODEX_API_KEY": os.getenv("GPT5_1_CODEX_API_KEY", "test-key"),
     "GPT5_2_API_KEY": os.getenv("GPT5_2_API_KEY", "test-key"),
@@ -68,12 +68,12 @@ MOCK_SETTINGS_ENV = {
     "DOCKER_BASE_URL": os.getenv("DOCKER_BASE_URL", "http://localhost:11434"),
     "EMBEDDING_3_LARGE_API_KEY": os.getenv("EMBEDDING_3_LARGE_API_KEY", "test-embedding-key"),
     "MODEL_NAME": os.getenv("MODEL_NAME", "gpt-5.1-chat"),
-    # OpenSearch Admin Credentials - 从 .env 加载
+    # OpenSearch Admin 認証情報 - .env から読み込み
     "OPENSEARCH_URL": os.getenv("OPENSEARCH_URL", "https://localhost:9200"),
     "OPENSEARCH_USER": os.getenv("OPENSEARCH_USER", "admin"),
     "OPENSEARCH_PASSWORD": os.getenv("OPENSEARCH_PASSWORD", "admin"),
     "OPENSEARCH_CA_CERTS_PATH": os.getenv("OPENSEARCH_CA_CERTS_PATH", ""),
-    # Role-Based Credentials - 测试用固定值（.env中未定义）
+    # Role-Based Credentials - テスト用固定値（.envファイルで未定義）
     "CSPM_DASHBOARD_READ_USER": os.getenv("CSPM_DASHBOARD_READ_USER", "cspm-read-user"),
     "CSPM_DASHBOARD_READ_PASSWORD": os.getenv("CSPM_DASHBOARD_READ_PASSWORD", "cspm-read-pass"),
     "RAG_SEARCH_READ_USER": os.getenv("RAG_SEARCH_READ_USER", "rag-read-user"),
@@ -241,14 +241,14 @@ def pytest_sessionfinish(session, exitstatus):
         duration = result["duration"]
         is_xfail = result.get("is_xfail", False)
 
-        # Override outcome for xfail tests | 预期失败测试的结果覆盖
+        # 予期された失敗テストの結果の上書き | Override outcome for xfail tests
         if is_xfail:
             outcome = "xfailed"
 
-        # Extract test function name from nodeid | 从 nodeid 提取测试函数名
+        # ノードIDからテスト関数名を抽出する | nodeidからテスト関数名を抽出する
         test_func_name = nodeid.split("::")[-1] if "::" in nodeid else ""
         
-        # Determine test category and get ID/name | 确定测试类别并获取ID/名称
+        # テストカテゴリを決定し、ID/名称を取得する | 確定テストカテゴリおよびID/名称を取得する
         if test_func_name in test_name_map:
             test_id, test_name = test_name_map[test_func_name]
             
@@ -259,7 +259,7 @@ def pytest_sessionfinish(session, exitstatus):
                 "duration": duration
             }
             
-            # Categorize test | 分类测试
+            # テストを分类する | 分类测试
             if test_id.startswith("RBC-SEC"):
                 security_tests.append(test_entry)
             elif test_id.startswith("RBC-E"):
@@ -267,7 +267,7 @@ def pytest_sessionfinish(session, exitstatus):
             else:
                 normal_tests.append(test_entry)
 
-        # Count outcomes | 统计结果
+        # アウトカムの統計 | 統計結果
         if outcome == "passed":
             passed += 1
         elif outcome == "failed":
@@ -277,7 +277,7 @@ def pytest_sessionfinish(session, exitstatus):
 
     total = len(_test_results)
 
-    # Generate detailed Markdown report | 生成详细的Markdown报告
+    # 詳細なMarkdownレポートを生成する | 詳細なMarkdownレポートを生成する
     report_md = f"""# role_based_client.py 测试报告
 
 ## 测试概要
@@ -346,7 +346,7 @@ def pytest_sessionfinish(session, exitstatus):
             status_icon = "❌ 失败"
         report_md += f"| {t['id']} | {t['name']} | {status_icon} | {t['duration']*1000:.2f}ms |\n"
 
-    # Add expected failure explanation if any | 如果有预期失败则添加说明
+    # 予期される失敗がある場合は説明を追加する |
     if xfailed > 0:
         report_md += """
 ---

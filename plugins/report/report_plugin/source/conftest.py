@@ -188,7 +188,7 @@ async def test_app(mock_jwt_auth, mock_cspm_provider, mock_html_renderer, mock_p
         if mod in sys.modules:
             del sys.modules[mod]
     
-    # Mock外部依赖库
+    # Mock外部依存ライブラリ
     mock_weasyprint = MagicMock()
     mock_matplotlib = MagicMock()
     mock_pyplot = MagicMock()
@@ -215,7 +215,7 @@ async def test_app(mock_jwt_auth, mock_cspm_provider, mock_html_renderer, mock_p
                 # Mount router
                 app.include_router(report_router)
             except Exception as e:
-                # 如果导入失败，创建一个基本的路由器
+                # インポートに失敗した場合は、基本的なルーターを作成します。
                 from fastapi import APIRouter
                 report_router = APIRouter(prefix="/report", tags=["Report Plugin"])
                 app.include_router(report_router)

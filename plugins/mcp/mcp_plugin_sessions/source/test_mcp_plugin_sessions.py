@@ -36,7 +36,7 @@ class TestSessionMetadata:
             with patch("app.mcp_plugin.sessions.metadata.checkpointer_module") as cm:
                 cm._connection_pool = create_pg_mock(fetchall_return=[('{"session_name": "test"}',)])
                 result = await get_session_metadata("test-session")
-                # get_session_metadata 可能返回 None 或 dict
+                # get_session_metadata は None や dict を返す可能性があります
                 assert result is None or isinstance(result, dict)
 
     @pytest.mark.asyncio
@@ -136,7 +136,7 @@ class TestMessageConverter:
         assert "A" in _extract_ai_content([{"text": "A"}, {"text": "B"}])
 
 
-# ==================== 正常系: Repository (MCPS-012~015, 031~032) ====================
+# ==================== 正常系: リポジトリ (MCPS-012~015, 031~032) ====================
 class TestRepository:
     @pytest.mark.asyncio
     async def test_save_thinking_logs_success(self, mock_postgres_pool):
@@ -176,7 +176,7 @@ class TestRepository:
 
     @pytest.mark.asyncio
     async def test_get_deep_agents_progress_success(self, mock_postgres_pool):
-        """MCPS-015: DeepAgents進捗取得成功"""
+        """MCPS-015: DeepAgents進行状況取得成功"""
         from app.mcp_plugin.sessions.repository import get_deep_agents_progress
         with patch("app.mcp_plugin.sessions.repository.get_db_pool", new_callable=AsyncMock, return_value=mock_postgres_pool):
             with patch("app.mcp_plugin.sessions.repository.get_latest_checkpoint", new_callable=AsyncMock, return_value=("ckpt", "", {"deep_agents_progress": {"progress": 50}}, {})):
@@ -187,7 +187,7 @@ class TestRepository:
         """MCPS-031: チェックポイントデータパース成功"""
         from app.mcp_plugin.sessions.repository import parse_checkpoint_data
         import json
-        # parse_checkpoint_data 使用 json.loads 而不是 pickle.loads
+        # parse_checkpoint_data では json.loads を使用し、pickle.loads を使用しないこと
         test_data = {"key": "value"}
         result = parse_checkpoint_data(json.dumps(test_data))
         assert isinstance(result, dict)
@@ -282,7 +282,7 @@ class TestSessionBuilders:
         import json
         metadata_dict = {"session_name": "test"}
         checkpoint_dict = {"ts": "2026-01-01", "channel_values": {"messages": []}}
-        # checkpoint 是 JSON 字符串
+        # checkpoint は JSON 文字列です
         row = ("s1", "ckpt1", metadata_dict, json.dumps(checkpoint_dict), 5)
         mock_conn = AsyncMock()
         with patch("app.mcp_plugin.sessions.session_builders._find_session_name_from_checkpoints", new_callable=AsyncMock, return_value=None):
@@ -337,7 +337,7 @@ class TestSessionBuilders:
         assert result is None
 
 
-# ==================== 正常系: Router (MCPS-006~007, 009~011, 030) ====================
+# ==================== 正常系: ルーター (MCPS-006~007, 009~011, 030) ====================
 class TestSessionsRouter:
     @pytest.mark.asyncio
     async def test_get_sessions_list(self, async_client):
@@ -415,7 +415,7 @@ class TestSessionsRouter:
         with patch("app.mcp_plugin.sessions.routes.get_db_pool", new_callable=AsyncMock, return_value=mock_pool):
             with patch("app.mcp_plugin.sessions.repository.get_latest_checkpoint", new_callable=AsyncMock, return_value=("ckpt", "", {"session_name": "test"}, {})):
                 r = await async_client.get("/sessions/test-session")
-                # 可能返回 500 如果某些依赖未完全 mock
+                # 500が返される可能性があります如果某些依存関係が完全にmockされていない場合
                 assert r.status_code in [200, 404, 500]
 
     @pytest.mark.asyncio
@@ -584,7 +584,7 @@ class TestSessionsSecurity:
             with patch("app.mcp_plugin.sessions.message_converter.get_async_checkpointer", new_callable=AsyncMock, return_value=None):
                 r1 = await async_client.get("/sessions/session-1/history")
                 r2 = await async_client.get("/sessions/session-2/history")
-                # 可能返回 404 (session not found) 或 500 (dependencies)
+                # 404 (session not found) または 500 (dependencies) が返される可能性があります
                 assert r1.status_code in [200, 404, 500]
 
     def test_strip_thinking_tags_nested_attack(self):
@@ -716,6 +716,6 @@ class TestSessionsSecurityFuture:
 
     @pytest.mark.asyncio
     async def test_ssl_enforcement(self, async_client):
-        """MCPS-SEC-21: SSL強制（環境依存）"""
+        """MCPS-SEC-21: SSL強制（環境に依存）"""
         pass
 

@@ -445,7 +445,7 @@ class TestChainConstruction:
             mock_get_llm.return_value = mock_llm
             mock_cats.return_value = ["Security"]
 
-            mock_response = {}  # 空dict
+            mock_response = {}  # 空のdict
 
             with patch("app.doc_reader_plugin.structuring.ChatPromptTemplate") as mock_prompt, \
                  patch("app.doc_reader_plugin.structuring.JsonOutputParser") as mock_parser:
@@ -614,7 +614,7 @@ class TestStructuringErrors:
 
     @pytest.mark.xfail(reason="LangChain Mock复杂")
     def test_str_output_parser_failure(self):
-        """STRU-E07: 生出力取得失敗"""
+        """STRU-E07: 生産出力取得失敗"""
         with patch("app.core.llm_factory.get_extraction_llm") as mock_get_llm, \
              patch("app.doc_reader_plugin.structuring.get_available_categories_for_prompt") as mock_cats:
             from app.doc_reader_plugin.structuring import structure_item_with_llm

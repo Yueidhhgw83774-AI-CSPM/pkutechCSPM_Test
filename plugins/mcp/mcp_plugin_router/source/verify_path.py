@@ -1,4 +1,4 @@
-"""测试路径验证脚本"""
+"""テストパス検証スクリプト"""
 import sys
 from pathlib import Path
 
@@ -6,11 +6,11 @@ print("=" * 60)
 print("路径验证")
 print("=" * 60)
 
-# 当前文件位置
+# 現在のファイル位置
 current = Path(__file__).resolve()
 print(f"\n当前文件: {current}")
 
-# 计算项目根目录
+# プロジェクトルートディレクトリを計算する
 # source -> mcp_plugin_router -> mcp -> plugins -> TestReport -> python_ai_cspm -> platform_python_backend-testing
 project_root = current.parent.parent.parent.parent.parent.parent / "platform_python_backend-testing"
 print(f"\n项目根目录: {project_root}")
@@ -30,7 +30,7 @@ if project_root.exists():
         print(f"\nrouter.py: {router_py}")
         print(f"存在: {router_py.exists()}")
 
-# 尝试添加到sys.path并导入
+# 試してsys.pathに追加してインポートする
 sys.path.insert(0, str(project_root))
 print(f"\nsys.path已添加: {project_root}")
 

@@ -1,12 +1,12 @@
 """
-models/mcp.py 单元测试
+models/mcp.py のユニットテスト
 
-测试规格: docs/testing/models/mcp_models_tests.md
-覆盖率目标: 90%+
+テスト仕様: docs/testing/models/mcp_models_tests.md
+カバレッジ目標: 90%+
 
-测试类别:
-  - 正常系: 18 个测试
-  - 异常系: 5 个测试
+テストカテゴリ:
+  - 正常系: 18 個のテスト
+  - 異常系: 5 個のテスト
 """
 
 import pytest
@@ -17,7 +17,7 @@ from pathlib import Path
 from datetime import datetime
 import os
 
-# 导入被测试模块
+# テスト対象のモジュールをインポートする
 project_root = Path(__file__).parent.parent.parent.parent.parent / "platform_python_backend-testing"
 sys.path.insert(0, str(project_root))
 
@@ -51,18 +51,18 @@ from app.models.mcp import (
 
 class TestCloudCredentialsContextNormal:
     """
-    CloudCredentialsContext 正常系测试
+    CloudCredentialsContext 通常系テスト
 
-    测试ID: MCP-001 ~ MCP-004
+    テストID: MCP-001 ~ MCP-004
     """
 
     def test_cloud_credentials_context_aws(self):
         """
         MCP-001: CloudCredentialsContext AWS構成
-        覆盖代码行: app/models/mcp.py:9-50
+        被覆行番号: app/models/mcp.py:9-50
 
-        测试目的:
-          - 验证 AWS 认证信息的完整配置
+        テスト目的:
+          - AWS認証情報の完全な設定を確認する
         """
         # Arrange
         credentials = CloudCredentialsContext(
@@ -82,10 +82,10 @@ class TestCloudCredentialsContextNormal:
     def test_cloud_credentials_context_azure(self):
         """
         MCP-002: CloudCredentialsContext Azure構成
-        覆盖代码行: app/models/mcp.py:9-50
+                オーバーライドコード行: app/models/mcp.py:9-50
 
-        测试目的:
-          - 验证 Azure 认证信息配置
+                テスト目的:
+                  - Azure 認証情報の設定を確認する
         """
         # Arrange
         credentials = CloudCredentialsContext(
@@ -104,10 +104,10 @@ class TestCloudCredentialsContextNormal:
     def test_cloud_credentials_context_gcp(self):
         """
         MCP-003: CloudCredentialsContext GCP構成
-        覆盖代码行: app/models/mcp.py:9-50
+                オーバーライドコード行: app/models/mcp.py:9-50
 
-        测试目的:
-          - 验证 GCP 认证信息配置
+                テスト目的:
+                  - GCP 認証情報の設定を確認する
         """
         # Arrange
         credentials = CloudCredentialsContext(
@@ -122,10 +122,10 @@ class TestCloudCredentialsContextNormal:
     def test_cloud_credentials_context_minimal(self):
         """
         MCP-004: CloudCredentialsContext 最小構成
-        覆盖代码行: app/models/mcp.py:9-50
+        コード行の置き換え: app/models/mcp.py:9-50
 
-        测试目的:
-          - 验证只有 cloud_provider 的最小配置
+        テスト目的:
+          - `cloud_provider`のみの最小構成を検証する
         """
         # Arrange
         credentials = CloudCredentialsContext(
@@ -141,18 +141,18 @@ class TestCloudCredentialsContextNormal:
 
 class TestEnumsNormal:
     """
-    Enum 类型测试
+    Enum型テスト
 
-    测试ID: MCP-005 ~ MCP-006
+        テストID: MCP-005 ~ MCP-006
     """
 
     def test_mcp_tool_type_enum(self):
         """
-        MCP-005: MCPToolType Enum
-        覆盖代码行: app/models/mcp.py:53-56
+        MCP-005: MCPToolType 列挙型
+                コード行の置き換え: app/models/mcp.py:53-56
 
-        测试目的:
-          - 验证 MCPToolType 枚举值
+                テスト目的:
+                  - MCPToolType 列挙型の値を確認する
         """
         # Assert
         assert MCPToolType.FUNCTION == "function"
@@ -161,11 +161,11 @@ class TestEnumsNormal:
 
     def test_sse_event_type_enum(self):
         """
-        MCP-006: SSEEventType Enum
-        覆盖代码行: app/models/mcp.py:59-76
+        MCP-006: SSEEventType 列挙型
+                コード行の置き換え: app/models/mcp.py:59-76
 
-        测试目的:
-          - 验证 SSEEventType 枚举值（包含新增的事件类型）
+                テスト目的:
+                  - SSEEventType 列挙型の値（追加のイベントタイプを含む）を確認する
         """
         # Assert - 既存イベント
         assert SSEEventType.ORCHESTRATOR == "orchestrator"
@@ -185,18 +185,18 @@ class TestEnumsNormal:
 
 class TestMCPToolNormal:
     """
-    MCPTool 和相关模型测试
+    MCPToolおよび関連モデルテスト
 
-    测试ID: MCP-007 ~ MCP-009
+        テストID: MCP-007 ~ MCP-009
     """
 
     def test_mcp_tool_parameter(self):
         """
         MCP-007: MCPToolParameter
-        覆盖代码行: app/models/mcp.py:79-84
+                コード行の上書き: app/models/mcp.py:79-84
 
-        测试目的:
-          - 验证工具参数定义
+                テスト目的:
+                  - ツールパラメータ定義の検証
         """
         # Arrange
         param = MCPToolParameter(
@@ -216,10 +216,10 @@ class TestMCPToolNormal:
     def test_mcp_tool_basic(self):
         """
         MCP-008: MCPTool 基本構成
-        覆盖代码行: app/models/mcp.py:87-93
+                覆盖コード行: app/models/mcp.py:87-93
 
-        测试目的:
-          - 验证基本的 MCPTool 定义
+                テスト目的:
+                  - 基本の MCPTool 定義の検証を行うこと
         """
         # Arrange
         tool = MCPTool(
@@ -263,18 +263,18 @@ class TestMCPToolNormal:
 
 class TestMCPServerNormal:
     """
-    MCPServer 测试
+    MCPServer テスト
 
-    测试ID: MCP-010 ~ MCP-011
+        テストID: MCP-010 ~ MCP-011
     """
 
     def test_mcp_server_basic(self):
         """
         MCP-010: MCPServer 基本構成
-        覆盖代码行: app/models/mcp.py:96-103
+                覆盖コード行: app/models/mcp.py:96-103
 
-        测试目的:
-          - 验证基本的 MCPServer 配置
+                テスト目的:
+                  - 基本の MCPServer 設定を確認する
         """
         # Arrange
         server = MCPServer(
@@ -293,10 +293,10 @@ class TestMCPServerNormal:
     def test_mcp_server_full(self):
         """
         MCP-011: MCPServer 完全構成
-        覆盖代码行: app/models/mcp.py:96-103
+                覆盖コード行: app/models/mcp.py:96-103
 
-        测试目的:
-          - 验证完整配置的 MCPServer
+                テスト目的:
+                  - 完全な設定の MCPServer の検証
         """
         # Arrange
         server = MCPServer(
@@ -316,18 +316,18 @@ class TestMCPServerNormal:
 
 class TestMCPChatModelsNormal:
     """
-    MCPChat 相关模型测试
+    MCPChat 関連モデルテスト
 
-    测试ID: MCP-012 ~ MCP-014
+        テストID: MCP-012 ~ MCP-014
     """
 
     def test_mcp_chat_message_basic(self):
         """
         MCP-012: MCPChatMessage 基本
-        覆盖代码行: app/models/mcp.py:118-125
+                覆盖コード行: app/models/mcp.py:118-125
 
-        测试目的:
-          - 验证基本的聊天消息
+                テスト目的:
+                  - 基本のチャットメッセージの検証
         """
         # Arrange
         message = MCPChatMessage(
@@ -376,10 +376,10 @@ class TestMCPChatModelsNormal:
     def test_sub_task_result_completed(self):
         """
         MCP-014: SubTaskResult 完了
-        覆盖代码行: app/models/mcp.py:128-134
+                コード行のカバレッジ: app/models/mcp.py:128-134
 
-        测试目的:
-          - 验证完成的子任务结果
+                テスト目的:
+                  - 完了したサブタスク結果の検証
         """
         # Arrange
         sub_task = SubTaskResult(
@@ -407,10 +407,10 @@ class TestTaskManagementModelsNormal:
     def test_todo_item_pending(self):
         """
         MCP-015: TodoItem pending
-        覆盖代码行: app/models/mcp.py:144-155
+                コード行の上書き: app/models/mcp.py:144-155
 
-        测试目的:
-          - 验证 pending 状态的 TodoItem
+                テスト目的:
+                  - pending状態のTodoItemを確認する
         """
         # Arrange
         todo = TodoItem(
@@ -429,10 +429,10 @@ class TestTaskManagementModelsNormal:
     def test_todo_item_completed(self):
         """
         MCP-016: TodoItem completed
-        覆盖代码行: app/models/mcp.py:144-155
+                コード行の置き換え: app/models/mcp.py:144-155
 
-        测试目的:
-          - 验证 completed 状态的 TodoItem
+                テスト目的:
+                  - 完了状態の TodoItem を確認する
         """
         # Arrange
         todo = TodoItem(
@@ -450,10 +450,10 @@ class TestTaskManagementModelsNormal:
     def test_thinking_log(self):
         """
         MCP-017: ThinkingLog
-        覆盖代码行: app/models/mcp.py:158-168
+                ソースコード行のカバレッジ: app/models/mcp.py:158-168
 
-        测试目的:
-          - 验证思考过程日志
+                テスト目的:
+                  - 思考プロセスログの検証を行うこと
         """
         # Arrange
         log = ThinkingLog(
@@ -478,10 +478,10 @@ class TestMCPRequestResponseNormal:
     def test_mcp_chat_request(self):
         """
         MCP-018: MCPChatRequest
-        覆盖代码行: app/models/mcp.py:208-219
+                関連コード行: app/models/mcp.py:208-219
 
-        测试目的:
-          - 验证 MCPChatRequest 基本配置
+                テスト目的:
+                  - MCPChatRequest の基本設定を確認する
         """
         # Arrange
         request = MCPChatRequest(
@@ -500,10 +500,10 @@ class TestMCPRequestResponseNormal:
     def test_mcp_chat_stream_request(self):
         """
         MCP-019: MCPChatStreamRequest
-        覆盖代码行: app/models/mcp.py:222-254
+                関連コード行: app/models/mcp.py:222-254
 
-        测试目的:
-          - 验证 SSE 流式请求配置（包含认证信息）
+                テスト目的:
+                  - 認証情報を含む SSE ストリーム要求の設定を検証する
         """
         # Arrange
         credentials = CloudCredentialsContext(
@@ -529,10 +529,10 @@ class TestMCPRequestResponseNormal:
     def test_mcp_chat_response_full(self):
         """
         MCP-020: MCPChatResponse 完全構成
-        覆盖代码行: app/models/mcp.py:257-289
+                覆盖コード行: app/models/mcp.py:257-289
 
-        测试目的:
-          - 验证完整的 MCPChatResponse（包含新增字段）
+                テスト目的:
+                  - 完全なMCPChatResponse（追加フィールドを含む）の検証を行うこと
         """
         # Arrange
         todo = TodoItem(
@@ -579,10 +579,10 @@ class TestSessionModelsNormal:
     def test_session_info(self):
         """
         MCP-021: SessionInfo
-        覆盖代码行: app/models/mcp.py:320-327
+                カバレッジコード行: app/models/mcp.py:320-327
 
-        测试目的:
-          - 验证会话信息模型
+                テスト目的:
+                  - セッション情報モデルの検証
         """
         # Arrange
         session = SessionInfo(
@@ -601,10 +601,10 @@ class TestSessionModelsNormal:
     def test_session_list_response(self):
         """
         MCP-022: SessionListResponse
-        覆盖代码行: app/models/mcp.py:330-342
+                コード行の上書き: app/models/mcp.py:330-342
 
-        测试目的:
-          - 验证会话列表响应
+                テスト目的:
+                  - セッションリストの応答を確認する
         """
         # Arrange
         sessions = [
@@ -674,14 +674,14 @@ class TestMCPChatRequestErrors:
         # Arrange & Act & Assert
         from pydantic import ValidationError
 
-        # session_id 欠落
+        # session_id の欠落
         with pytest.raises(ValidationError) as exc_info:
             MCPChatRequest(
                 message="テスト"
             )
         assert "session_id" in str(exc_info.value)
 
-        # message 欠落
+        # メッセージ缺失
         with pytest.raises(ValidationError) as exc_info:
             MCPChatRequest(
                 session_id="session-001"
@@ -704,10 +704,10 @@ class TestMCPChatRequestErrors:
         request = MCPChatStreamRequest(
             session_id="session-001",
             message="テスト",
-            include_token_stream="true"  # Pydantic v2 会转换为 True
+            include_token_stream="true"  # Pydantic v2 は True に変換される
         )
 
-        # Assert - 验证转换成功
+        # Assert - 変換成功を確認する
         assert request.include_token_stream is True
 
 
@@ -789,11 +789,11 @@ class TestModelOperations:
 
 
 # ============================================
-# 补充缺失的正常系测试 (25个)
+# 欠落の正常系テストを補充する (25個)
 # ============================================
 
 class TestMCPToolModels:
-    """MCP 工具相关模型测试 (补充)"""
+    """MCPツール関連モデルテスト（補足）"""
 
     def test_mcp_tool_call_defaults(self):
         """
@@ -848,7 +848,7 @@ class TestMCPToolModels:
 
 
 class TestMCPValidationProgress:
-    """MCP 验证和进度模型测试 (补充)"""
+    """MCP 誌および進行モデルテスト（補足）"""
 
     def test_validation_result_defaults(self):
         """
@@ -881,7 +881,7 @@ class TestMCPValidationProgress:
         assert progress.sub_tasks == []
         assert progress.llm_calls == 0
         assert progress.task_analysis is None
-        assert progress.completed_tools is None  # 使用实际存在的字段
+        assert progress.completed_tools is None  # 実在するフィールドを使用する
 
     def test_validation_result_failure_case(self):
         """
@@ -921,7 +921,7 @@ class TestMCPValidationProgress:
         # Act
         progress = MCPProgress(
             task_analysis="Analyzing AWS policies",
-            completed_tools=["search_files", "list_resources"],  # 使用实际存在的字段
+            completed_tools=["search_files", "list_resources"],  # 実在するフィールドを使用する
             sub_tasks=sub_tasks,
             llm_calls=10
         )
@@ -934,7 +934,7 @@ class TestMCPValidationProgress:
 
 
 class TestMCPServerModels:
-    """MCP 服务器相关模型测试 (补充)"""
+    """MCP サーバー関連モデルテスト（補足）"""
 
     def test_mcp_server_list_response_empty(self):
         """
@@ -977,8 +977,8 @@ class TestMCPServerModels:
         """
         MCPMOD-026: MCPToolListResponse
 
-        测试目的:
-          - 验证工具列表响应
+                テスト目的:
+                  - ツールリスト応答の検証
         """
         # Arrange
         tools = [
@@ -1020,8 +1020,8 @@ class TestMCPServerModels:
         """
         MCPMOD-028: MCPStatusResponse
 
-        测试目的:
-          - 验证完整的状态响应
+                テスト目的:
+                  - 完全な状態応答の検証
         """
         # Arrange
         servers = [
@@ -1043,14 +1043,14 @@ class TestMCPServerModels:
 
 
 class TestMCPChatModels:
-    """MCP 聊天模型测试 (补充)"""
+    """MCPチャットモデルテスト（補足）"""
 
     def test_mcp_chat_response_minimal(self):
         """
-        MCPMOD-022: MCPChatResponse 最小構成
+        MCPMOD-022: MCPChatResponse 最小構成テスト
 
-        测试目的:
-          - 验证最小配置的聊天响应
+                テスト目的:
+                  - 最小構成のチャット応答を確認する
         """
         # Arrange & Act
         response = MCPChatResponse(
@@ -1101,7 +1101,7 @@ class TestMCPChatModels:
 
 
 class TestMCPTaskModels:
-    """MCP 任务模型测试 (补充)"""
+    """MCP タスクモデルテスト（補足）"""
 
     def test_sub_task_result_with_tool_result(self):
         """
@@ -1111,7 +1111,7 @@ class TestMCPTaskModels:
           - 验证带工具执行结果的子任务
           - result 字段是字符串类型，存储执行结果摘要
         """
-        # Arrange - result 是字符串，而不是 MCPToolResult 对象
+        # Arrange - result は文字列であり、MCPToolResult オブジェクトではありません
         result_summary = "File found: config.yaml"
 
         # Act
@@ -1120,7 +1120,7 @@ class TestMCPTaskModels:
             description="Search configuration file",
             status="completed",
             tool="search_files",
-            result=result_summary  # 字符串类型
+            result=result_summary  # 文字列型
         )
 
         # Assert
@@ -1132,14 +1132,14 @@ class TestMCPTaskModels:
 
 
 class TestMCPSessionModels:
-    """MCP 会话模型测试 (补充)"""
+    """MCP セッションモデルテスト（補足）"""
 
     def test_session_update_request_boundary(self):
         """
         MCPMOD-031: SessionUpdateRequest 境界値 (100文字)
 
-        测试目的:
-          - 验证名称长度边界值 (max_length=100)
+                テスト目的:
+                  - 名称の長さの境界値を検証する (max_length=100)
         """
         # Arrange
         name_100_chars = "A" * 100
@@ -1155,14 +1155,14 @@ class TestMCPSessionModels:
         """
         MCPMOD-040: SessionInfo 完全構成
 
-        测试目的:
-          - 验证完整配置的会话信息
+                テスト目的:
+                  - 完全構成のセッション情報の検証
         """
         # Arrange & Act
         session = SessionInfo(
             session_id="session-full-001",
             name="Complete Session",
-            last_updated="2026-03-10T15:30:00Z",  # 使用实际存在的字段
+            last_updated="2026-03-10T15:30:00Z",  # 実在するフィールドを使用する
             checkpoint_count=15,
             preview="Last message preview..."
         )
@@ -1205,7 +1205,7 @@ class TestMCPSessionModels:
 
 
 class TestMCPModelOperations:
-    """MCP 模型操作测试 (补充)"""
+    """MCPモデル操作テスト（補足）"""
 
     def test_json_round_trip(self):
         """
@@ -1224,13 +1224,13 @@ class TestMCPModelOperations:
             )
         )
 
-        # Act - JSON 序列化
+        # アクション - JSON シリアライゼーション
         json_str = original.model_dump_json()
 
-        # JSON 反序列化
+        # JSON デシリアライゼーション
         restored = MCPChatResponse.model_validate_json(json_str)
 
-        # Assert - 验证数据一致
+        # Assert - データの一貫性を確認する
         assert restored.response == original.response
         assert restored.session_id == original.session_id
         assert restored.progress is not None
@@ -1245,11 +1245,11 @@ class TestMCPModelOperations:
           - 验证可变默认值不会在实例间共享
           - 确保每个实例有独立的列表/字典
         """
-        # Arrange & Act - 创建两个实例
+        # Arrange & Act - 2つのインスタンスを作成する
         progress1 = MCPProgress()
         progress2 = MCPProgress()
 
-        # 修改第一个实例
+        # 最初のインスタンスを修正する
         progress1.sub_tasks.append(
             SubTaskResult(
                 id="task-1",
@@ -1258,12 +1258,12 @@ class TestMCPModelOperations:
             )
         )
 
-        # Assert - 第二个实例不应受影响
+        # アサート - 2番目のインスタンスは影響を受けないはずである
         assert len(progress1.sub_tasks) == 1
         assert len(progress2.sub_tasks) == 0
         assert progress1.sub_tasks is not progress2.sub_tasks
 
-        # 测试 MCPServer 的可变默认值
+        # MCPServer の変数デフォルト値のテスト
         server1 = MCPServer(name="s1", command="cmd1")
         server2 = MCPServer(name="s2", command="cmd2")
 
@@ -1277,18 +1277,18 @@ class TestMCPModelOperations:
 
 
 # ============================================
-# 补充缺失的异常系测试 (12个)
+# 欠落している异常系テストを追加する (12件)
 # ============================================
 
 class TestMCPValidationErrorsExtended:
-    """MCP 模型验证错误测试 (补充)"""
+    """MCPモデル検証エラー試験（補充）"""
 
     def test_cloud_credentials_missing_provider(self):
         """
-        MCPMOD-E02: CloudCredentialsContext cloud_provider欠落
+        MCPMOD-E02: CloudCredentialsContext cloud_providerが欠如している
 
-        测试目的:
-          - 验证缺少必填字段 cloud_provider 时抛出错误
+                テスト目的:
+                  - 必須フィールドのcloud_providerが欠如している場合にエラーが投げられるかどうかを確認する
         """
         # Arrange & Act & Assert
         from pydantic import ValidationError
@@ -1309,7 +1309,7 @@ class TestMCPValidationErrorsExtended:
         # Arrange & Act & Assert
         from pydantic import ValidationError
 
-        # 缺少 session_id 和 message
+        # セッションIDとメッセージが欠けています
         with pytest.raises(ValidationError) as exc_info:
             MCPChatStreamRequest()
 
@@ -1323,8 +1323,8 @@ class TestMCPValidationErrorsExtended:
         """
         MCPMOD-E06: MCPChatResponse response欠落
 
-        测试目的:
-          - 验证缺少 response 字段时抛出错误
+                テスト目的:
+                  - response フィールドが欠落している場合にエラーが投げられるかどうかを確認する
         """
         # Arrange & Act & Assert
         from pydantic import ValidationError
@@ -1337,10 +1337,10 @@ class TestMCPValidationErrorsExtended:
 
     def test_mcp_chat_response_missing_session_id(self):
         """
-        MCPMOD-E07: MCPChatResponse session_id欠落
+        MCPMOD-E07: MCPChatResponse session_idの欠如
 
-        测试目的:
-          - 验证缺少 session_id 字段时抛出错误
+                テスト目的:
+                  - session_id フィールドが欠落している場合にエラーが送出されることを確認する
         """
         # Arrange & Act & Assert
         from pydantic import ValidationError
@@ -1361,7 +1361,7 @@ class TestMCPValidationErrorsExtended:
         # Arrange & Act & Assert
         from pydantic import ValidationError
 
-        # 只提供 id, 缺少 description 和 status
+        # idのみが提供されており、descriptionとstatusが欠けています。
         with pytest.raises(ValidationError) as exc_info:
             SubTaskResult(id="task-1")
 
@@ -1378,7 +1378,7 @@ class TestMCPValidationErrorsExtended:
         # Arrange & Act & Assert
         from pydantic import ValidationError
 
-        # 只提供 id
+        # IDのみ提供してください
         with pytest.raises(ValidationError) as exc_info:
             TodoItem(id="todo-1")
 
@@ -1395,7 +1395,7 @@ class TestMCPValidationErrorsExtended:
         # Arrange & Act & Assert
         from pydantic import ValidationError
 
-        # 只提供 timestamp
+        # タイムスタンプだけ提供します
         with pytest.raises(ValidationError) as exc_info:
             ThinkingLog(timestamp="2026-03-10T10:00:00Z")
 
@@ -1412,7 +1412,7 @@ class TestMCPValidationErrorsExtended:
         # Arrange & Act & Assert
         from pydantic import ValidationError
 
-        # 只提供 name, 缺少 description
+        # nameのみを提供し、descriptionが欠けています
         with pytest.raises(ValidationError) as exc_info:
             MCPTool(name="tool1")
 
@@ -1429,7 +1429,7 @@ class TestMCPValidationErrorsExtended:
         # Arrange & Act & Assert
         from pydantic import ValidationError
 
-        # 只提供 name, 缺少 type
+        # "name"のみを提供し、"type"が欠缺しています。
         with pytest.raises(ValidationError) as exc_info:
             MCPToolParameter(name="param1")
 
@@ -1446,7 +1446,7 @@ class TestMCPValidationErrorsExtended:
         # Arrange & Act & Assert
         from pydantic import ValidationError
 
-        # 只提供 name, 缺少 status
+        # nameのみを提供し、statusが欠けています
         with pytest.raises(ValidationError) as exc_info:
             MCPServerStatus(name="server1")
 
@@ -1463,24 +1463,24 @@ class TestMCPValidationErrorsExtended:
         # Arrange & Act & Assert
         from pydantic import ValidationError
 
-        # 只提供 servers
+        # サーバのみ提供します
         with pytest.raises(ValidationError) as exc_info:
             MCPStatusResponse(servers=[])
 
         errors = exc_info.value.errors()
-        assert len(errors) >= 2  # total_tools 和 active_sessions
+        assert len(errors) >= 2  # total_tools と active_sessions
 
     def test_session_list_response_missing_total(self):
         """
         MCPMOD-E17: SessionListResponse total欠落
 
-        测试目的:
-          - 验证缺少必填字段 total 时抛出错误
+                テスト目的:
+                  - 必須フィールド total が欠落している場合にエラーが送出されることを確認する
         """
         # Arrange & Act & Assert
         from pydantic import ValidationError
 
-        # 只提供 sessions
+        # セッションのみ提供します
         with pytest.raises(ValidationError) as exc_info:
             SessionListResponse(sessions=[])
 

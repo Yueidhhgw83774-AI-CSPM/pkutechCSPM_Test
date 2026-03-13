@@ -62,7 +62,7 @@ class TestHandleChatRoute:
 
     @pytest.mark.asyncio
     async def test_chat_with_source_document(self, async_client):
-        """DOCR-004: currentSourceDocument指定"""
+        """DOCR-004: currentSourceDocumentの指定"""
         mock_resp = {"llmTextResponse": "ドキュメント応答", "parsedChatItems": [], "savedItems": 0, "message": "success"}
         with patch("app.doc_reader_plugin.router.invoke_chat_graph", new_callable=AsyncMock) as m:
             m.return_value = mock_resp
@@ -71,7 +71,7 @@ class TestHandleChatRoute:
 
     @pytest.mark.asyncio
     async def test_chat_with_target_clouds_context(self, async_client):
-        """DOCR-005: targetCloudsContext指定"""
+        """DOCR-005: targetCloudsContextの指定"""
         mock_resp = {"llmTextResponse": "クラウド応答", "parsedChatItems": [], "savedItems": 0, "message": "success"}
         with patch("app.doc_reader_plugin.router.invoke_chat_graph", new_callable=AsyncMock) as m:
             m.return_value = mock_resp
@@ -237,7 +237,7 @@ class TestDocReaderRouterSecurity:
 
     @pytest.mark.xfail(reason="実装依存")
     def test_no_internal_exception_info(self, client):
-        """DOCR-SEC-09: 内部例外情報非露出"""
+        """DOCR-SEC-09: 内部例外情報の非露出"""
         with patch("app.doc_reader_plugin.router.structure_item_with_llm") as m:
             m.side_effect = Exception("/app/internal/module.py error")
             response = client.post("/docreader/chat/structure", json={"session_id": "test-session", "prompt": "test"})

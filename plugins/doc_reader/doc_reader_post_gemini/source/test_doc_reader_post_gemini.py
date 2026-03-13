@@ -14,7 +14,7 @@ class TestParseComplianceAtPdf:
 
     @pytest.mark.asyncio
     async def test_parse_compliance_normal(self):
-        """GEMINI-001: parse_compliance_at_pdf 正常実行"""
+        """GEMINI-001: parse_compliance_at_pdf 正常実行されました"""
         with patch("app.doc_reader_plugin.post_gemini.generate_contents", new_callable=AsyncMock) as mock_gen:
             from app.doc_reader_plugin.post_gemini import parse_compliance_at_pdf
 
@@ -381,7 +381,7 @@ class TestDelayClientErrorErrors:
 
 
 class TestExtractErrorMessageErrors:
-    """_extract_error_message 異常系 (1 test)"""
+    """_error_messageの抽出テスト (1テスト)"""
 
     def test_extract_error_message_exception(self):
         """GEMINI-E07: _extract_error_message 例外発生"""

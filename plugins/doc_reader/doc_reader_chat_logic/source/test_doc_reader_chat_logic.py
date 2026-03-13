@@ -16,7 +16,7 @@ class TestExtractTextFromContent:
     """extract_text_from_content 正常系 (7 tests)"""
 
     def test_string_input(self):
-        """CHATL-001: 文字列入力"""
+        """CHATL-001: 文字入力"""
         result = extract_text_from_content("テスト文字列")
         assert result == "テスト文字列"
 

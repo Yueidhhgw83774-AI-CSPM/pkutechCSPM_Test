@@ -20,7 +20,7 @@ class TestSetSleeper:
         with patch("app.doc_reader_plugin.ai_pretreatment.asyncio.sleep", new_callable=AsyncMock):
             from app.doc_reader_plugin.ai_pretreatment import set_sleeper
             import time
-            start_time = time.time() - 2.0  # 2秒前開始
+            start_time = time.time() - 2.0  # 2秒前から開始します
             await set_sleeper(start_time, 6.0)  # min_time=6秒、Mockされるので即時完了
             assert True  # 完了すればOK
 
@@ -99,7 +99,7 @@ class TestGetElements:
 
 
 class TestAIPretreatment:
-    """ai_pretreatment 正常系 (11 tests)"""
+    """AI_事前処理 正常系 (11テスト)"""
 
     @pytest.mark.asyncio
     async def test_ai_pretreatment_random_mode(self):
@@ -337,7 +337,7 @@ class TestAIPretreatment:
 
             result = await ai_pretreatment(mock_pdf, platform=["aws", "gcp"], categories="[]", job_id="test-job", output_lang="ja")
             if result:
-                assert "targetClouds" in result[0] or True  # 実装依存
+                assert "targetClouds" in result[0] or True  # 実装に依存する
 
     @pytest.mark.asyncio
     async def test_ai_pretreatment_related_controls_init(self):
@@ -376,7 +376,7 @@ class TestAIPretreatment:
 
             result = await ai_pretreatment(mock_pdf, platform=["aws"], categories="[]", job_id="test-job", output_lang="ja")
             if result:
-                assert "relatedControls" in result[0] or True  # 実装依存
+                assert "relatedControls" in result[0] or True  # 実装に依存する
 
     @pytest.mark.asyncio
     async def test_ai_pretreatment_implemented_policies_init(self):
@@ -415,7 +415,7 @@ class TestAIPretreatment:
 
             result = await ai_pretreatment(mock_pdf, platform=["aws"], categories="[]", job_id="test-job", output_lang="ja")
             if result:
-                assert "implementedPolicies" in result[0] or True  # 実装依存
+                assert "implementedPolicies" in result[0] or True  # 実装に依存する
 
     @pytest.mark.asyncio
     async def test_ai_pretreatment_max_output_zero(self):
@@ -535,7 +535,7 @@ class TestAIPretreatment:
 
 # ==================== 異常系 (AIPT-E001~E012) ====================
 class TestAIPretreatmentErrors:
-    """ai_pretreatment 異常系 (12 tests)"""
+    """AI_前処理 異常系 (12 tests)"""
 
     @pytest.mark.asyncio
     async def test_ai_pretreatment_phase1_gemini_error(self):
@@ -757,7 +757,7 @@ class TestPDFLibraryErrors:
 
             with pytest.raises(Exception) as exc_info:
                 await ai_pretreatment(mock_pdf, platform=["aws"], categories="[]", job_id="test-job", output_lang="ja")
-            assert True  # 任何异常都可以接受
+            assert True  # 任何の例外を受け入れる
 
     @pytest.mark.asyncio
     async def test_ai_pretreatment_pdfplumber_corrupted_error(self):
@@ -771,7 +771,7 @@ class TestPDFLibraryErrors:
 
             with pytest.raises(Exception) as exc_info:
                 await ai_pretreatment(mock_pdf, platform=["aws"], categories="[]", job_id="test-job", output_lang="ja")
-            assert True  # 任何异常都可以接受
+            assert True  # 任何の例外を受け入れる
 
 
 class TestMiscErrors:

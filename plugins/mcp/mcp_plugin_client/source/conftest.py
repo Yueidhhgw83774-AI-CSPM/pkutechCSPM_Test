@@ -62,7 +62,7 @@ class TestResultCollector:
         })
 
     def generate_markdown_report(self, output_path: Path):
-        """生成 Markdown 测试报告"""
+        """Markdownテストレポートを生成する"""
         total = sum(len(v) for v in self.results.values())
         passed = sum(1 for cat in self.results.values() for r in cat if r["outcome"] == "passed")
         failed = sum(1 for cat in self.results.values() for r in cat if r["outcome"] == "failed")
@@ -122,7 +122,7 @@ class TestResultCollector:
         output_path.write_text(report, encoding="utf-8")
 
     def generate_json_report(self, output_path: Path):
-        """生成 JSON 测试报告"""
+        """JSONテストレポートを生成する"""
         total = sum(len(v) for v in self.results.values())
         passed = sum(1 for cat in self.results.values() for r in cat if r["outcome"] == "passed")
         pass_rate = f"{passed / total * 100:.1f}%" if total > 0 else "N/A"
@@ -143,7 +143,7 @@ class TestResultCollector:
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
 def pytest_runtest_makereport(item, call):
-    """捕获每个测试的结果"""
+    """各テストの結果をキャプチャする"""
     outcome = yield
     rep = outcome.get_result()
 
@@ -158,12 +158,12 @@ def pytest_runtest_makereport(item, call):
 
 
 def pytest_sessionstart(session):
-    """测试会话开始"""
+    """テストセッション開始"""
     session.config._test_collector = TestResultCollector()
 
 
 def pytest_sessionfinish(session, exitstatus):
-    """测试会话结束，生成报告"""
+    """テストセッション終了、レポート生成"""
     collector = getattr(session.config, '_test_collector', None)
     if not collector:
         return

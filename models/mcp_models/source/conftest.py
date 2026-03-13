@@ -66,7 +66,7 @@ class TestResultCollector:
             "duration": f"{duration:.3f}s"
         }
 
-        # 分類
+        # 分类
         if "Security" in class_name:
             self.results["security"].append(result)
         elif "Error" in class_name or "_e0" in test_name:

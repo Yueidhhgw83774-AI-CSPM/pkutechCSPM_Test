@@ -1,15 +1,15 @@
 """
-MCP Plugin Chat Agent 单元测试
+MCP Plugin Chat Agent ユニットテスト
 
-测试规格: docs/testing/plugins/mcp/mcp_plugin_chat_agent_tests.md
-覆盖率目标: 90%+
+テスト仕様: docs/testing/plugins/mcp/mcp_plugin_chat_agent_tests.md
+カバレッジ目標: 90%+
 
-测试类别:
-  - 正常系: 9 个测试
-  - 异常系: 3 个测试
-  - 安全测试: 6 个测试
+テストカテゴリ:
+  - 正常系: 9 個のテスト
+  - 異常系: 3 個のテスト
+  - セキュリティテスト: 6 個のテスト
 
-总计: 18 个测试
+合計: 18 個のテスト
 """
 
 import pytest
@@ -19,7 +19,7 @@ from pathlib import Path
 import re
 import uuid
 
-# 导入被测试模块
+# テスト対象モジュールをインポートする
 project_root = Path(__file__).resolve().parent.parent.parent.parent.parent.parent / "platform_python_backend-testing"
 if not project_root.exists():
     raise RuntimeError(f"项目根目录不存在: {project_root}")
@@ -27,11 +27,11 @@ sys.path.insert(0, str(project_root))
 
 
 # ============================================
-# 正常系测试 (9个)
+# 正常系テスト（9件）
 # ============================================
 
 class TestInvokeMCPChat:
-    """invoke_mcp_chat 正常系测试"""
+    """invoke_mcp_chat 正常系テスト"""
 
     @pytest.mark.asyncio
     async def test_hierarchical_mode(self, mock_run_hierarchical):
@@ -231,7 +231,7 @@ class TestInvokeMCPChat:
 
 
 # ============================================
-# 异常系测试 (3个)
+# 異常系テスト (3つ)
 # ============================================
 
 class TestChatAgentExceptions:
@@ -296,7 +296,7 @@ class TestChatAgentExceptions:
 
 
 # ============================================
-# 安全测试 (6个)
+# セキュリティテスト (6)
 # ============================================
 
 @pytest.mark.security

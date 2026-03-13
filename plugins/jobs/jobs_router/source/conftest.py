@@ -70,14 +70,14 @@ def test_result_collector():
 @pytest.fixture(scope="function")
 def mock_status_manager():
     """status_manager モジュールのモック - 每个测试自动使用"""
-    # 导入真实的status_manager
+    # 真实的status_managerをインポートする
     from app.jobs import status_manager
     
-    # 清空job_statuses以确保测试隔离
+    # job_statusesをクリアしてテストの隔离を确保します
     original_statuses = status_manager.job_statuses.copy()
     status_manager.job_statuses.clear()
     
-    # 创建一个简单的对象来访问job_statuses和mock函数
+    # シンプルなオブジェクトを作成してjob_statusesにアクセスし、mock関数を用意します
     class StatusManager:
         job_statuses = status_manager.job_statuses
         check_job_exclusion = MagicMock(return_value=None)
@@ -88,7 +88,7 @@ def mock_status_manager():
     manager = StatusManager()
     yield manager
     
-    # 测试后恢复
+    # テスト後の復旧
     status_manager.job_statuses.clear()
     status_manager.job_statuses.update(original_statuses)
 

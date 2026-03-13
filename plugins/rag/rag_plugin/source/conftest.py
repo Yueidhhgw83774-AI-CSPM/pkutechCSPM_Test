@@ -186,7 +186,7 @@ def mock_enhanced_rag_search(mock_rag_client):
     # searchメソッドのモック - 动态返回query
     async def mock_search(request):
         return RAGSearchResponse(
-            query=request.query,  # 使用请求的query
+            query=request.query,  # リクエストのクエリを使用する
             results=[
                 DocumentResult(
                     content="Test document 1",

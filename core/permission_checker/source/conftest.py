@@ -45,7 +45,7 @@ if PROJECT_ROOT not in sys.path:
 
 
 # =============================================================================
-# Module Reset Fixture | 模块重置 Fixture
+# Module Reset Fixture | モジュールリセットfixture
 # =============================================================================
 
 @pytest.fixture(autouse=True)
@@ -61,7 +61,7 @@ def reset_permission_checker_module():
 
 
 # =============================================================================
-# Mock Fixtures | 模拟 Fixtures
+# Mock Fixtures | モックfixture
 # =============================================================================
 
 @pytest.fixture
@@ -269,10 +269,10 @@ def pytest_sessionfinish(session, exitstatus):
             }
 
             # Categorize by test class
-            # 按测试类分类
+            # テストクラス別に分类する
             if "Security" in nodeid:
                 # Assign security test IDs
-                # 分配安全测试 ID
+                # セキュリティテストIDを割り当てる
                 security_id_map = {
                     "test_no_permission_user_denied": "PERM-SEC-01",
                     "test_wildcard_pattern_safety": "PERM-SEC-02",
@@ -285,7 +285,7 @@ def pytest_sessionfinish(session, exitstatus):
                 security_tests.append(test_entry)
             elif "Error" in nodeid:
                 # Assign error test IDs
-                # 分配异常系测试 ID
+                # アロケーション異常系テストID
                 error_id_map = {
                     "test_get_user_info_not_found": "PERM-E01",
                     "test_get_user_info_api_error": "PERM-E02",
@@ -304,7 +304,7 @@ def pytest_sessionfinish(session, exitstatus):
                 error_tests.append(test_entry)
             else:
                 # Assign normal test IDs
-                # 分配正常系测试 ID
+                # 正常系テストIDを割当たる
                 normal_id_map = {
                     "test_init_with_admin_client": "PERM-INIT",
                     "test_get_user_info_success": "PERM-001",
@@ -333,7 +333,7 @@ def pytest_sessionfinish(session, exitstatus):
                 normal_tests.append(test_entry)
 
     # Calculate totals
-    # 计算总数
+    # 総数を計算する
     total = passed + failed + xfailed
     pass_rate = (passed / total * 100) if total > 0 else 0
     effective_pass_rate = (passed / (passed + failed) * 100) if (passed + failed) > 0 else 0

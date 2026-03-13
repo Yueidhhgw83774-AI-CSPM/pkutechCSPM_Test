@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 """
-role_based_client.py 单元测试
+role_based_client.py 単位テスト
 
-测试规格: docs/testing/core/role_based_client_tests.md
-覆盖率目标: 75%
+テスト仕様: docs/testing/core/role_based_client_tests.md
+カバレッジ目標: 75%
 
-测试类别:
-  - 正常系: 18 个测试
-  - 异常系: 13 个测试
-  - 安全测试: 6 个测试
+テストカテゴリ:
+  - 正常系: 18 個のテスト
+  - 異常系: 13 個のテスト
+  - セキュリティテスト: 6 個のテスト
 
-总计: 37 个测试
+合計: 37 個のテスト
 """
 
 import os
@@ -19,13 +19,13 @@ import pytest
 from unittest.mock import patch, AsyncMock, MagicMock
 from pathlib import Path
 
-# 导入被测试模块 | Import module under test
+# テスト対象モジュールのインポート | Import module under test
 project_root = Path(__file__).parent.parent.parent.parent / "platform_python_backend-testing"
 sys.path.insert(0, str(project_root))
 
 
 # =============================================================================
-# 正常系测试 | Normal Case Tests
+# 正常系テスト | Normal Case Tests
 # =============================================================================
 
 class TestOpenSearchRoles:
@@ -43,13 +43,13 @@ class TestOpenSearchRoles:
           - 确认5个角色常量的值正确
           - 验证角色名称符合预期格式
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         # （定数確認のため、事前準備なし | 检查常量无需准备）
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         from app.core.role_based_client import OpenSearchRoles
 
-        # Assert - 验证结果
+        # Assert - 結果の検証
         assert OpenSearchRoles.CSPM_DASHBOARD_READ == "cspm_dashboard_read_role"
         assert OpenSearchRoles.RAG_SEARCH_READ == "rag_search_read_role"
         assert OpenSearchRoles.DOCUMENT_WRITE == "document_write_role"
@@ -65,13 +65,13 @@ class TestOpenSearchRoles:
           - 确认5个角色都在映射表中
           - 验证每个角色都有 user 和 password 字段
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         # （マッピング確認のため、事前準備なし | 检查映射无需准备）
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         from app.core.role_based_client import ROLE_ENV_MAPPING, OpenSearchRoles
 
-        # Assert - 验证结果
+        # Assert - 結果の検証
         expected_roles = [
             OpenSearchRoles.CSPM_DASHBOARD_READ,
             OpenSearchRoles.RAG_SEARCH_READ,
@@ -103,17 +103,17 @@ class TestRoleBasedOpenSearchClient:
           - 验证使用有效角色名可以获取客户端
           - 确认返回的是 AsyncOpenSearch 实例
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         mock_cls, mock_instance = mock_async_opensearch
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         from app.core.role_based_client import RoleBasedOpenSearchClient, OpenSearchRoles
         client_manager = RoleBasedOpenSearchClient()
         result = await client_manager.get_client_for_role(OpenSearchRoles.ADMIN)
 
-        # Assert - 验证结果
-        assert result is not None  # 验证客户端不为空
-        assert result is mock_instance  # 验证返回的是模拟实例
+        # Assert - 結果の検証
+        assert result is not None  # クライアントが空でないことを確認する
+        assert result is mock_instance  # 返却されるのはシミュレーションインスタンスであることを確認する
 
     @pytest.mark.asyncio
     async def test_cached_client_returned(self, mock_settings_env, mock_async_opensearch):
@@ -127,19 +127,19 @@ class TestRoleBasedOpenSearchClient:
           - 验证第二次获取同一角色时返回缓存的实例
           - 确认 AsyncOpenSearch 只被调用一次
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         mock_cls, mock_instance = mock_async_opensearch
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         from app.core.role_based_client import RoleBasedOpenSearchClient, OpenSearchRoles
         client_manager = RoleBasedOpenSearchClient()
         result1 = await client_manager.get_client_for_role(OpenSearchRoles.ADMIN)
         result2 = await client_manager.get_client_for_role(OpenSearchRoles.ADMIN)
 
-        # Assert - 验证结果
-        assert result1 is result2  # 验证返回的是同一实例
+        # アサート - 結果の検証
+        assert result1 is result2  # 返却されるのは同一のインスタンスであることを確認する
         # AsyncOpenSearchは1回のみ呼ばれる（キャッシュ使用）
-        # AsyncOpenSearch 只被调用一次（使用缓存）
+        # AsyncOpenSearch は一度だけ呼び出されます（キャッシュを使用）
         assert mock_cls.call_count == 1
 
     @pytest.mark.asyncio
@@ -153,20 +153,20 @@ class TestRoleBasedOpenSearchClient:
         测试目的:
           - 验证 AWS OpenSearch URL 自动使用端口 443
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         mock_cls, mock_instance = mock_async_opensearch
         
         # Patch OPENSEARCH_URL to AWS URL
         with patch("app.core.config.settings.OPENSEARCH_URL", "https://search-domain.us-east-1.es.amazonaws.com"):
-            # Act - 执行被测试函数
+            # Act - テスト対象の関数を実行する
             from app.core.role_based_client import RoleBasedOpenSearchClient, OpenSearchRoles
             client_manager = RoleBasedOpenSearchClient()
             await client_manager.get_client_for_role(OpenSearchRoles.ADMIN)
 
-            # Assert - 验证结果
+            # Assert - 結果の検証
             assert mock_cls.called, "AsyncOpenSearch should be called"
             call_kwargs = mock_cls.call_args.kwargs if hasattr(mock_cls.call_args, 'kwargs') else mock_cls.call_args[1]
-            assert call_kwargs["hosts"][0]["port"] == 443  # 验证端口为443
+            assert call_kwargs["hosts"][0]["port"] == 443  # 検証ポートは443です
 
     @pytest.mark.asyncio
     async def test_standard_opensearch_port_9200(self, mock_settings_env, mock_async_opensearch):
@@ -179,17 +179,17 @@ class TestRoleBasedOpenSearchClient:
         测试目的:
           - 验证非 AWS 的 OpenSearch URL 默认使用端口 9200
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         mock_cls, mock_instance = mock_async_opensearch
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         from app.core.role_based_client import RoleBasedOpenSearchClient, OpenSearchRoles
         client_manager = RoleBasedOpenSearchClient()
         await client_manager.get_client_for_role(OpenSearchRoles.ADMIN)
 
-        # Assert - 验证结果
+        # アサート - 結果の検証
         call_kwargs = mock_cls.call_args.kwargs if hasattr(mock_cls.call_args, 'kwargs') else mock_cls.call_args[1]
-        assert call_kwargs["hosts"][0]["port"] == 9200  # 验证端口为9200
+        assert call_kwargs["hosts"][0]["port"] == 9200  # ポート9200を検証する
 
     @pytest.mark.asyncio
     async def test_url_specified_port(self, mock_settings_env, mock_async_opensearch):
@@ -202,42 +202,42 @@ class TestRoleBasedOpenSearchClient:
         测试目的:
           - 验证 URL 中指定的端口优先使用
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         mock_cls, mock_instance = mock_async_opensearch
 
         with patch("app.core.config.settings.OPENSEARCH_URL", "https://localhost:9300"):
-            # Act - 执行被测试函数
+            # Act - テスト対象の関数を実行する
             from app.core.role_based_client import RoleBasedOpenSearchClient, OpenSearchRoles
             client_manager = RoleBasedOpenSearchClient()
             await client_manager.get_client_for_role(OpenSearchRoles.ADMIN)
 
-            # Assert - 验证结果
+            # Assert - 結果の検証
             call_kwargs = mock_cls.call_args.kwargs if hasattr(mock_cls.call_args, 'kwargs') else mock_cls.call_args[1]
-            assert call_kwargs["hosts"][0]["port"] == 9300  # 验证使用URL指定的端口
+            assert call_kwargs["hosts"][0]["port"] == 9300  # URLで指定されたポートの検証を行う
 
     @pytest.mark.asyncio
     async def test_aws_opensearch_ca_certs_none(self, mock_settings_env, mock_async_opensearch):
         """
         RBC-008: AWS OpenSearch→ca_certs=None
-        AWS OpenSearch 的 ca_certs 设为 None
+                AWS OpenSearch の ca_certs を None に設定する
 
-        覆盖代码行: role_based_client.py:165-167
+                覆盖コード行: role_based_client.py:165-167
 
-        测试目的:
-          - 验证 AWS OpenSearch 不使用自定义 CA 证书
+                テスト目的:
+                  - AWS OpenSearch がカスタム CA 証明書を使用しないことを確認する
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         mock_cls, mock_instance = mock_async_opensearch
 
         with patch("app.core.config.settings.OPENSEARCH_URL", "https://search-domain.us-east-1.es.amazonaws.com"):
-            # Act - 执行被测试函数
+            # Act - テスト対象の関数を実行する
             from app.core.role_based_client import RoleBasedOpenSearchClient, OpenSearchRoles
             client_manager = RoleBasedOpenSearchClient()
             await client_manager.get_client_for_role(OpenSearchRoles.ADMIN)
 
-            # Assert - 验证结果
+            # Assert - 結果の検証
             call_kwargs = mock_cls.call_args.kwargs if hasattr(mock_cls.call_args, 'kwargs') else mock_cls.call_args[1]
-            assert call_kwargs["ca_certs"] is None  # 验证ca_certs为None
+            assert call_kwargs["ca_certs"] is None  # ca_certsがNoneであることを確認する
 
     @pytest.mark.asyncio
     async def test_ca_certs_path_configured(self, mock_settings_env, mock_async_opensearch):
@@ -250,47 +250,47 @@ class TestRoleBasedOpenSearchClient:
         测试目的:
           - 验证当设置了 CA 证书路径且文件存在时使用该路径
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         mock_cls, mock_instance = mock_async_opensearch
 
         # os.path.existsをモックしてパスが存在するようにする
-        # 模拟 os.path.exists 使路径存在
+        # os.path.exists を模倣してパスを存在するようにする
         with patch("app.core.config.settings.OPENSEARCH_CA_CERTS_PATH", "/path/to/ca-cert.pem"), \
              patch("os.path.exists", return_value=True):
-            # Act - 执行被测试函数
+            # Act - テスト対象の関数を実行する
             from app.core.role_based_client import RoleBasedOpenSearchClient, OpenSearchRoles
             client_manager = RoleBasedOpenSearchClient()
             await client_manager.get_client_for_role(OpenSearchRoles.ADMIN)
 
-            # Assert - 验证结果
+            # Assert - 結果の検証
             call_kwargs = mock_cls.call_args.kwargs if hasattr(mock_cls.call_args, 'kwargs') else mock_cls.call_args[1]
-            assert call_kwargs["ca_certs"] == "/path/to/ca-cert.pem"  # 验证使用指定的CA证书路径
+            assert call_kwargs["ca_certs"] == "/path/to/ca-cert.pem"  # 指定されたCA証明書パスを使用して検証します
 
     @pytest.mark.asyncio
     async def test_no_ca_certs_path_ssl_verification_disabled(self, mock_settings_env, mock_async_opensearch):
         """
         RBC-010: CA_CERTS_PATH未設定→SSL検証無効（開発環境）
-        未设置 CA_CERTS_PATH 则禁用 SSL 验证（开发环境）
+        未設定のCA_CERTS_PATHの場合、開発環境でSSL検証を無効にする
 
-        覆盖代码行: role_based_client.py:172-175
+        コード行の置き換え: role_based_client.py:172-175
 
-        测试目的:
-          - 验证开发环境下未设置 CA 证书时禁用 SSL 验证
+        テスト目的:
+          - 開発環境でCA証明書が設定されていない場合にSSL検証が無効になることを確認する
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         mock_cls, mock_instance = mock_async_opensearch
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         # （MOCK_SETTINGS_ENVにはOPENSEARCH_CA_CERTS_PATHが設定されていない）
-        # （MOCK_SETTINGS_ENV 中没有设置 OPENSEARCH_CA_CERTS_PATH）
+        # （MOCK_SETTINGS_ENV に OPENSEARCH_CA_CERTS_PATH が設定されていない）
         from app.core.role_based_client import RoleBasedOpenSearchClient, OpenSearchRoles
         client_manager = RoleBasedOpenSearchClient()
         await client_manager.get_client_for_role(OpenSearchRoles.ADMIN)
 
-        # Assert - 验证结果
+        # Assert - 結果の検証
         call_kwargs = mock_cls.call_args.kwargs if hasattr(mock_cls.call_args, 'kwargs') else mock_cls.call_args[1]
-        assert call_kwargs["verify_certs"] is False  # 验证SSL验证被禁用
-        assert call_kwargs["ssl_show_warn"] is False  # 验证SSL警告被禁用
+        assert call_kwargs["verify_certs"] is False  # SSL検証が無効になっていることを確認する
+        assert call_kwargs["ssl_show_warn"] is False  # SSL警告が無効になっていることを確認する
 
     @pytest.mark.asyncio
     async def test_retry_success_on_second_attempt(self, mock_settings_env, mock_async_opensearch):
@@ -304,19 +304,19 @@ class TestRoleBasedOpenSearchClient:
           - 验证重试机制正常工作
           - 确认第2次重试成功时返回客户端
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         mock_cls, mock_instance = mock_async_opensearch
-        mock_instance.ping = AsyncMock(side_effect=[False, True])  # 第1次失败，第2次成功
+        mock_instance.ping = AsyncMock(side_effect=[False, True])  # 第一次失敗、第二次成功
 
-        # Act - 执行被测试函数
-        with patch("asyncio.sleep", new_callable=AsyncMock):  # 模拟sleep以加快测试
+        # Act - テスト対象の関数を実行する
+        with patch("asyncio.sleep", new_callable=AsyncMock):  # sleepを模擬してテストを高速化する
             from app.core.role_based_client import RoleBasedOpenSearchClient, OpenSearchRoles
             client_manager = RoleBasedOpenSearchClient()
             result = await client_manager.get_client_for_role(OpenSearchRoles.ADMIN)
 
-        # Assert - 验证结果
-        assert result is not None  # 验证最终获取到客户端
-        assert mock_instance.ping.call_count == 2  # 验证ping被调用2次
+        # Assert - 結果の検証
+        assert result is not None  # 最終的にクライアントを取得することを確認する
+        assert mock_instance.ping.call_count == 2  # pingの呼び出しを2回確認する
 
     @pytest.mark.asyncio
     async def test_get_available_roles(self, mock_settings_env):
@@ -330,15 +330,15 @@ class TestRoleBasedOpenSearchClient:
           - 验证可以获取所有可用角色列表
           - 确认返回5个角色
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.role_based_client import RoleBasedOpenSearchClient, OpenSearchRoles
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         client_manager = RoleBasedOpenSearchClient()
         roles = await client_manager.get_available_roles()
 
-        # Assert - 验证结果
-        assert len(roles) == 5  # 验证返回5个角色
+        # Assert - 結果の検証
+        assert len(roles) == 5  # 検証結果が5文字返却される
         assert OpenSearchRoles.ADMIN in roles
         assert OpenSearchRoles.CSPM_DASHBOARD_READ in roles
         assert OpenSearchRoles.RAG_SEARCH_READ in roles
@@ -357,10 +357,10 @@ class TestRoleBasedOpenSearchClient:
           - 验证健康检查返回正确状态
           - 确认所有健康检查字段正确
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         mock_cls, mock_instance = mock_async_opensearch
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         from app.core.role_based_client import RoleBasedOpenSearchClient, OpenSearchRoles
         client_manager = RoleBasedOpenSearchClient()
         # まずクライアントを初期化 | 首先初始化客户端
@@ -368,11 +368,11 @@ class TestRoleBasedOpenSearchClient:
         # ヘルスチェック | 健康检查
         health = await client_manager.check_role_health(OpenSearchRoles.ADMIN)
 
-        # Assert - 验证结果
-        assert health["status"] == "healthy"  # 验证状态为健康
-        assert health["initialized"] is True  # 验证已初始化
-        assert health["ping_success"] is True  # 验证ping成功
-        assert health["error"] is None  # 验证无错误
+        # Assert - 結果の検証
+        assert health["status"] == "healthy"  # 検証状態が健康である
+        assert health["initialized"] is True  # 検証が初期化されました
+        assert health["ping_success"] is True  # Pingの検証に成功しました
+        assert health["error"] is None  # エラーがないことを確認する
 
     @pytest.mark.asyncio
     async def test_localhost_hostname_verification_disabled(self, mock_settings_env, mock_async_opensearch):
@@ -385,19 +385,19 @@ class TestRoleBasedOpenSearchClient:
         测试目的:
           - 验证 localhost 时禁用主机名验证
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         mock_cls, mock_instance = mock_async_opensearch
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         # （MOCK_SETTINGS_ENVのOPENSEARCH_URLはhttps://localhost:9200）
-        # （MOCK_SETTINGS_ENV 的 OPENSEARCH_URL 是 https://localhost:9200）
+        # （MOCK_SETTINGS_ENV の OPENSEARCH_URL は https://localhost:9200 です）
         from app.core.role_based_client import RoleBasedOpenSearchClient, OpenSearchRoles
         client_manager = RoleBasedOpenSearchClient()
         await client_manager.get_client_for_role(OpenSearchRoles.ADMIN)
 
-        # Assert - 验证结果
+        # Assert - 結果の検証
         call_kwargs = mock_cls.call_args.kwargs if hasattr(mock_cls.call_args, 'kwargs') else mock_cls.call_args[1]
-        assert call_kwargs["ssl_assert_hostname"] is False  # 验证主机名验证被禁用
+        assert call_kwargs["ssl_assert_hostname"] is False  # ホスト名検証が無効化されています
 
     @pytest.mark.asyncio
     async def test_non_localhost_hostname_verification_enabled(self, mock_settings_env, mock_async_opensearch):
@@ -410,18 +410,18 @@ class TestRoleBasedOpenSearchClient:
         测试目的:
           - 验证非 localhost 时启用主机名验证
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         mock_cls, mock_instance = mock_async_opensearch
 
         with patch("app.core.config.settings.OPENSEARCH_URL", "https://opensearch.example.com:9200"):
-            # Act - 执行被测试函数
+            # Act - テスト対象の関数を実行する
             from app.core.role_based_client import RoleBasedOpenSearchClient, OpenSearchRoles
             client_manager = RoleBasedOpenSearchClient()
             await client_manager.get_client_for_role(OpenSearchRoles.ADMIN)
 
-            # Assert - 验证结果
+            # Assert - 結果の検証
             call_kwargs = mock_cls.call_args.kwargs if hasattr(mock_cls.call_args, 'kwargs') else mock_cls.call_args[1]
-            assert call_kwargs["ssl_assert_hostname"] is True  # 验证主机名验证被启用
+            assert call_kwargs["ssl_assert_hostname"] is True  # ホスト名検証が有効化されています
 
     @pytest.mark.asyncio
     async def test_ca_certs_path_file_not_exists(self, mock_settings_env, mock_async_opensearch):
@@ -435,23 +435,23 @@ class TestRoleBasedOpenSearchClient:
           - 验证 CA 证书路径设置但文件不存在时的回退行为
           - 确认开发环境下禁用 SSL 验证
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         mock_cls, mock_instance = mock_async_opensearch
 
         # os.path.existsをモックしてファイルが存在しないようにする
-        # 模拟 os.path.exists 使文件不存在
+        # os.path.exists を模拟してファイルが存在しない状態にする
         with patch("app.core.config.settings.OPENSEARCH_CA_CERTS_PATH", "/path/to/nonexistent.pem"), \
              patch("os.path.exists", return_value=False):
-            # Act - 执行被测试函数
+            # Act - テスト対象の関数を実行する
             from app.core.role_based_client import RoleBasedOpenSearchClient, OpenSearchRoles
             client_manager = RoleBasedOpenSearchClient()
             await client_manager.get_client_for_role(OpenSearchRoles.ADMIN)
 
-            # Assert - 验证结果
+            # アサート - 結果の検証
             # ファイルが存在しない場合はSSL検証無効化 | 文件不存在时禁用SSL验证
             call_kwargs = mock_cls.call_args.kwargs if hasattr(mock_cls.call_args, 'kwargs') else mock_cls.call_args[1]
-            assert call_kwargs["verify_certs"] is False  # 验证SSL验证被禁用
-            assert call_kwargs["ssl_show_warn"] is False  # 验证SSL警告被禁用
+            assert call_kwargs["verify_certs"] is False  # SSL検証が無効になっていることを確認する
+            assert call_kwargs["ssl_show_warn"] is False  # SSL警告が無効になっていることを確認する
 
 
 class TestGlobalFunctions:
@@ -471,16 +471,16 @@ class TestGlobalFunctions:
           - 验证单例模式正确实现
           - 确认多次调用返回同一实例
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         # （シングルトン確認のため、事前準備なし | 检查单例无需准备）
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         from app.core.role_based_client import get_role_based_client
         instance1 = get_role_based_client()
         instance2 = get_role_based_client()
 
-        # Assert - 验证结果
-        assert instance1 is instance2  # 验证返回同一实例
+        # Assert - 結果の検証
+        assert instance1 is instance2  # 検証が同一インスタンスを返すことを確認する
 
     @pytest.mark.asyncio
     async def test_convenience_function(self, mock_settings_env, mock_async_opensearch):
@@ -494,16 +494,16 @@ class TestGlobalFunctions:
           - 验证便利函数正常工作
           - 确认通过全局函数获取客户端
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         mock_cls, mock_instance = mock_async_opensearch
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         from app.core.role_based_client import get_client_for_role, OpenSearchRoles
         result = await get_client_for_role(OpenSearchRoles.ADMIN)
 
-        # Assert - 验证结果
-        assert result is not None  # 验证获取到客户端
-        assert result is mock_instance  # 验证返回的是模拟实例
+        # Assert - 結果の検証
+        assert result is not None  # クライアントから取得した情報を検証する
+        assert result is mock_instance  # 返却されるのはシミュレーションインスタンスであることを確認する
 
 
 # =============================================================================
@@ -528,29 +528,29 @@ class TestRoleBasedClientErrors:
           - 验证未知角色名返回 None
           - 确认记录错误日志
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.role_based_client import RoleBasedOpenSearchClient
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         client_manager = RoleBasedOpenSearchClient()
         result = await client_manager.get_client_for_role("unknown_role")
 
-        # Assert - 验证结果
-        assert result is None  # 验证返回None
+        # Assert - 結果の検証
+        assert result is None  # 検証がNoneを返す
 
     @pytest.mark.asyncio
     async def test_missing_username(self, mock_async_opensearch):
         """
         RBC-E02: 認証情報未設定（USERNAME）
-        认证信息未设置（用户名）
+        認証情報が設定されていない（ユーザー名）
 
-        覆盖代码行: role_based_client.py:110-118
+        コード行の置き換え: role_based_client.py:110-118
 
-        测试目的:
-          - 验证用户名未设置时的错误处理
-          - 确认错误被记录
+        テスト目的:
+          - ユーザー名が設定されていない場合のエラー処理を確認する
+          - エラーが記録されることを確認する
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from conftest import MOCK_SETTINGS_ENV
         env_no_user = MOCK_SETTINGS_ENV.copy()
         env_no_user["OPENSEARCH_USER"] = ""  # ADMINロールのユーザー名を空に | 将ADMIN角色的用户名设为空
@@ -560,28 +560,28 @@ class TestRoleBasedClientErrors:
             for mod in modules_to_remove:
                 del sys.modules[mod]
 
-            # Act - 执行被测试函数
+            # Act - テスト対象の関数を実行する
             from app.core.role_based_client import RoleBasedOpenSearchClient, OpenSearchRoles
             client_manager = RoleBasedOpenSearchClient()
             result = await client_manager.get_client_for_role(OpenSearchRoles.ADMIN)
 
-            # Assert - 验证结果
-            assert result is None  # 验证返回None
-            assert client_manager._initialization_errors.get(OpenSearchRoles.ADMIN) is not None  # 验证错误被记录
+            # アサート - 結果の検証
+            assert result is None  # 検証がNoneを返す
+            assert client_manager._initialization_errors.get(OpenSearchRoles.ADMIN) is not None  # 検証エラーが記録されました
 
     @pytest.mark.asyncio
     async def test_missing_password(self, mock_async_opensearch):
         """
         RBC-E03: 認証情報未設定（PASSWORD）
-        认证信息未设置（密码）
+                認証情報（パスワード）が設定されていない状況を確認する
 
-        覆盖代码行: role_based_client.py:110-118
+                被覆コード行: role_based_client.py:110-118
 
-        测试目的:
-          - 验证密码未设置时的错误处理
-          - 确认错误被记录
+                テスト目的:
+                  - パスワードが設定されていない場合のエラー処理を確認する
+                  - エラーが記録されることを確認する
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from conftest import MOCK_SETTINGS_ENV
         env_no_pass = MOCK_SETTINGS_ENV.copy()
         env_no_pass["OPENSEARCH_PASSWORD"] = ""  # ADMINロールのパスワードを空に | 将ADMIN角色的密码设为空
@@ -591,28 +591,28 @@ class TestRoleBasedClientErrors:
             for mod in modules_to_remove:
                 del sys.modules[mod]
 
-            # Act - 执行被测试函数
+            # Act - テスト対象の関数を実行する
             from app.core.role_based_client import RoleBasedOpenSearchClient, OpenSearchRoles
             client_manager = RoleBasedOpenSearchClient()
             result = await client_manager.get_client_for_role(OpenSearchRoles.ADMIN)
 
-            # Assert - 验证结果
-            assert result is None  # 验证返回None
-            assert client_manager._initialization_errors.get(OpenSearchRoles.ADMIN) is not None  # 验证错误被记录
+            # Assert - 結果の検証
+            assert result is None  # 検証がNoneを返す
+            assert client_manager._initialization_errors.get(OpenSearchRoles.ADMIN) is not None  # 検証エラーが記録されました
 
     @pytest.mark.asyncio
     async def test_opensearch_url_empty(self, mock_async_opensearch):
         """
         RBC-E04: OPENSEARCH_URL未設定
-        OPENSEARCH_URL 未设置
+                OPENSEARCH_URL が設定されていません
 
-        覆盖代码行: role_based_client.py:120-126
+                カバレッジ行: role_based_client.py:120-126
 
-        测试目的:
-          - 验证 URL 未设置时的错误处理
-          - 确认配置错误导致 SystemExit
+                テスト目的:
+                  - 設定がされていない場合のエラー処理を確認する
+                  - 設定ミスにより SystemExit が発生することを確認する
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from conftest import MOCK_SETTINGS_ENV
         env_no_url = MOCK_SETTINGS_ENV.copy()
         env_no_url["OPENSEARCH_URL"] = ""
@@ -622,7 +622,7 @@ class TestRoleBasedClientErrors:
             for mod in modules_to_remove:
                 del sys.modules[mod]
 
-            # Act & Assert - 执行被测试函数并期望SystemExit
+            # アクション & アサート - テスト対象の関数を実行し、SystemExitを期待する
             with pytest.raises(SystemExit):
                 from app.core.role_based_client import RoleBasedOpenSearchClient, OpenSearchRoles
                 client_manager = RoleBasedOpenSearchClient()
@@ -631,16 +631,16 @@ class TestRoleBasedClientErrors:
     @pytest.mark.asyncio
     async def test_opensearch_url_invalid_format(self, mock_async_opensearch):
         """
-        RBC-E05: OPENSEARCH_URL不正形式
-        OPENSEARCH_URL 格式不正确
+        RBC-E05: OPENSEARCH_URL形式が正しくない
+                OPENSEARCH_URL の形式が正しくありません
 
-        覆盖代码行: role_based_client.py:128-134
+                カバレッジコード行: role_based_client.py:128-134
 
-        测试目的:
-          - 验证 URL 格式不正确时的错误处理
-          - 确认抛出 ValueError
+                テスト目的:
+                  - URL の形式が正しくない場合のエラー処理を確認する
+                  - ValueError が送出されることを確認する
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from conftest import MOCK_SETTINGS_ENV
         env_bad_url = MOCK_SETTINGS_ENV.copy()
         env_bad_url["OPENSEARCH_URL"] = "not-a-url"
@@ -650,71 +650,71 @@ class TestRoleBasedClientErrors:
             for mod in modules_to_remove:
                 del sys.modules[mod]
 
-            # Act - 执行被测试函数
+            # Act - テスト対象の関数を実行する
             from app.core.role_based_client import RoleBasedOpenSearchClient, OpenSearchRoles
             client_manager = RoleBasedOpenSearchClient()
             result = await client_manager.get_client_for_role(OpenSearchRoles.ADMIN)
 
-            # Assert - 验证结果
-            assert result is None  # 验证返回None
+            # Assert - 結果の検証
+            assert result is None  # 検証がNoneを返す
             error = client_manager._initialization_errors.get(OpenSearchRoles.ADMIN)
-            assert error is not None  # 验证错误被记录
-            assert isinstance(error, ValueError)  # 验证错误类型为ValueError
+            assert error is not None  # 検証エラーが記録されました
+            assert isinstance(error, ValueError)  # バリデーションエラーのタイプがValueErrorです
 
     @pytest.mark.asyncio
     async def test_ping_all_failures(self, mock_settings_env, mock_async_opensearch):
         """
         RBC-E06: ping全失敗（max_retries回）
-        ping 全部失败（max_retries 次）
+        ping 全部失敗（max_retries 回）
 
-        覆盖代码行: role_based_client.py:182-202
+        コードカバレッジ: role_based_client.py:182-202
 
-        测试目的:
-          - 验证所有重试都失败时的处理
-          - 确认重试次数正确
+        テスト目的:
+          - すべての再試行が失敗した場合の処理を確認する
+          - 再試行回数が正しいことを確認する
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         mock_cls, mock_instance = mock_async_opensearch
-        mock_instance.ping = AsyncMock(return_value=False)  # 所有ping都返回False
+        mock_instance.ping = AsyncMock(return_value=False)  # すべてのpingがFalseを返す
 
-        # Act - 执行被测试函数
-        with patch("asyncio.sleep", new_callable=AsyncMock):  # 模拟sleep以加快测试
+        # Act - テスト対象の関数を実行する
+        with patch("asyncio.sleep", new_callable=AsyncMock):  # sleepを模擬してテストを高速化する
             from app.core.role_based_client import RoleBasedOpenSearchClient, OpenSearchRoles
             client_manager = RoleBasedOpenSearchClient()
             result = await client_manager.get_client_for_role(OpenSearchRoles.ADMIN)
 
-        # Assert - 验证结果
-        assert result is None  # 验证返回None
-        assert mock_instance.ping.call_count == 3  # 验证重试了3次（默认max_retries=3）
+        # アサート - 結果の検証
+        assert result is None  # 検証がNoneを返す
+        assert mock_instance.ping.call_count == 3  # 検証が3回リトライされました（デフォルトのmax_retries=3）
         error = client_manager._initialization_errors.get(OpenSearchRoles.ADMIN)
-        assert error is not None  # 验证错误被记录
+        assert error is not None  # 検証エラーが記録されました
 
     @pytest.mark.asyncio
     async def test_connection_exception_all_retries(self, mock_settings_env, mock_async_opensearch):
         """
         RBC-E07: 接続例外（max_retries回）
-        连接异常（max_retries 次）
+        連接異常（max_retries 次）
 
         覆盖代码行: role_based_client.py:192-198
 
-        测试目的:
-          - 验证连接异常时的重试机制
-          - 确认最终记录错误
+        テスト目的:
+          - 接続例外時のリトライメカニズムの検証
+          - 最終的にエラーが記録されることの確認
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         mock_cls, mock_instance = mock_async_opensearch
-        mock_instance.ping = AsyncMock(side_effect=Exception("Connection refused"))  # 抛出异常
+        mock_instance.ping = AsyncMock(side_effect=Exception("Connection refused"))  # 例外を投げる
 
-        # Act - 执行被测试函数
-        with patch("asyncio.sleep", new_callable=AsyncMock):  # 模拟sleep以加快测试
+        # Act - テスト対象の関数を実行する
+        with patch("asyncio.sleep", new_callable=AsyncMock):  # スリープの模擬実行でテストを高速化する
             from app.core.role_based_client import RoleBasedOpenSearchClient, OpenSearchRoles
             client_manager = RoleBasedOpenSearchClient()
             result = await client_manager.get_client_for_role(OpenSearchRoles.ADMIN)
 
-        # Assert - 验证结果
-        assert result is None  # 验证返回None
+        # Assert - 結果の検証
+        assert result is None  # 検証がNoneを返す
         error = client_manager._initialization_errors.get(OpenSearchRoles.ADMIN)
-        assert error is not None  # 验证错误被记录
+        assert error is not None  # 検証エラーが記録されました
 
     @pytest.mark.asyncio
     async def test_skip_on_previous_error(self, mock_settings_env, mock_async_opensearch):
@@ -728,7 +728,7 @@ class TestRoleBasedClientErrors:
           - 验证已记录错误的角色不会重新初始化
           - 确认 AsyncOpenSearch 不被调用
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         mock_cls, mock_instance = mock_async_opensearch
 
         from app.core.role_based_client import RoleBasedOpenSearchClient, OpenSearchRoles
@@ -736,13 +736,13 @@ class TestRoleBasedClientErrors:
         # 事前にエラーを設定 | 预先设置错误
         client_manager._initialization_errors[OpenSearchRoles.ADMIN] = ValueError("previous error")
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         result = await client_manager.get_client_for_role(OpenSearchRoles.ADMIN)
 
-        # Assert - 验证结果
-        assert result is None  # 验证返回None
+        # Assert - 結果の検証
+        assert result is None  # 検証がNoneを返す
         # AsyncOpenSearchが呼ばれないことを確認（スキップ）
-        # 确认 AsyncOpenSearch 不被调用（跳过）
+        # AsyncOpenSearch が呼び出されない（スキップ）されることを確認する
         mock_cls.assert_not_called()
 
     @pytest.mark.asyncio
@@ -757,16 +757,16 @@ class TestRoleBasedClientErrors:
           - 验证未知角色的健康检查返回错误
           - 确认状态为 invalid_role
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.role_based_client import RoleBasedOpenSearchClient
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         client_manager = RoleBasedOpenSearchClient()
         health = await client_manager.check_role_health("unknown_role")
 
-        # Assert - 验证结果
-        assert health["status"] == "invalid_role"  # 验证状态为invalid_role
-        assert health["error"] == "未知のロール名: unknown_role"  # 验证错误消息
+        # Assert - 結果の検証
+        assert health["status"] == "invalid_role"  # 検証状態がinvalid_roleです
+        assert health["error"] == "未知のロール名: unknown_role"  # 検証エラーメッセージ
 
     @pytest.mark.asyncio
     async def test_health_check_initialization_error(self, mock_settings_env):
@@ -780,19 +780,19 @@ class TestRoleBasedClientErrors:
           - 验证初始化错误状态的健康检查
           - 确认返回正确的错误信息
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.role_based_client import RoleBasedOpenSearchClient, OpenSearchRoles
 
         client_manager = RoleBasedOpenSearchClient()
         # 事前にエラーを設定 | 预先设置错误
         client_manager._initialization_errors[OpenSearchRoles.ADMIN] = ValueError("init error")
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         health = await client_manager.check_role_health(OpenSearchRoles.ADMIN)
 
-        # Assert - 验证结果
-        assert health["status"] == "initialization_error"  # 验证状态为initialization_error
-        assert "init error" in health["error"]  # 验证错误消息中包含init error
+        # Assert - 結果の検証
+        assert health["status"] == "initialization_error"  # 検証状態がinitialization_errorです
+        assert "init error" in health["error"]  # 検証エラーメッセージにinit errorが含まれています
 
     @pytest.mark.asyncio
     async def test_health_check_initialization_error_after_ping_failures(self, mock_settings_env, mock_async_opensearch):
@@ -806,28 +806,28 @@ class TestRoleBasedClientErrors:
           - 验证 ping 全部失败后健康检查返回 initialization_error
           - 确认错误被正确记录
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         mock_cls, mock_instance = mock_async_opensearch
-        mock_instance.ping = AsyncMock(return_value=False)  # ping全部失败
+        mock_instance.ping = AsyncMock(return_value=False)  # pingがすべて失敗しました
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         with patch("asyncio.sleep", new_callable=AsyncMock):
             from app.core.role_based_client import RoleBasedOpenSearchClient, OpenSearchRoles
             client_manager = RoleBasedOpenSearchClient()
             # クライアント取得失敗（ping全失敗→_initialization_errorsに記録）
-            # 客户端获取失败（ping全失败→记录到_initialization_errors）
+            # クライアント取得失敗（ping全部失敗→_initialization_errorsに記録）
             await client_manager.get_client_for_role(OpenSearchRoles.ADMIN)
             
             # ヘルスチェック実行前に_initialization_errorsを確認
-            # 健康检查执行前确认_initialization_errors
+            # 健康チェック実行前確認_initialization_errors
             assert OpenSearchRoles.ADMIN in client_manager._initialization_errors
             
             # ヘルスチェック | 健康检查
             health = await client_manager.check_role_health(OpenSearchRoles.ADMIN)
 
-        # Assert - 验证结果
+        # Assert - 結果の検証
         # ping全失敗後は_initialization_errorsに記録されるため"initialization_error"
-        # ping全部失败后记录到_initialization_errors因此为"initialization_error"
+        # pingがすべて失敗した場合、_initialization_errorsに記録されるため、状態は"initialization_error"となる。
         assert health["status"] in ["initialization_error", "client_unavailable", "error"]
 
     @pytest.mark.asyncio
@@ -842,21 +842,21 @@ class TestRoleBasedClientErrors:
           - 验证健康检查时 ping 失败的处理
           - 确认状态为 ping_failed
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         mock_cls, mock_instance = mock_async_opensearch
         # 初期化時は成功、ヘルスチェック時は失敗
-        # 初始化时成功，健康检查时失败
+        # 初期化時に成功し、ヘルスチェック時に失敗します
         mock_instance.ping = AsyncMock(side_effect=[True, False])
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         from app.core.role_based_client import RoleBasedOpenSearchClient, OpenSearchRoles
         client_manager = RoleBasedOpenSearchClient()
         await client_manager.get_client_for_role(OpenSearchRoles.ADMIN)
         health = await client_manager.check_role_health(OpenSearchRoles.ADMIN)
 
-        # Assert - 验证结果
-        assert health["status"] == "ping_failed"  # 验证状态为ping_failed
-        assert health["ping_success"] is False  # 验证ping失败
+        # Assert - 結果の検証
+        assert health["status"] == "ping_failed"  # 検証状態がping_failedです
+        assert health["ping_success"] is False  # Pingの検証に失敗しました
 
     @pytest.mark.asyncio
     async def test_health_check_exception(self, mock_settings_env, mock_async_opensearch):
@@ -870,21 +870,21 @@ class TestRoleBasedClientErrors:
           - 验证健康检查时异常的处理
           - 确认错误被正确记录
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         mock_cls, mock_instance = mock_async_opensearch
         # 初期化時は成功、ヘルスチェック時は例外
-        # 初始化时成功，健康检查时异常
+        # 初期化時に成功し、ヘルスチェック時に異常を発生させる
         mock_instance.ping = AsyncMock(side_effect=[True, Exception("Connection timeout")])
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         from app.core.role_based_client import RoleBasedOpenSearchClient, OpenSearchRoles
         client_manager = RoleBasedOpenSearchClient()
         await client_manager.get_client_for_role(OpenSearchRoles.ADMIN)
         health = await client_manager.check_role_health(OpenSearchRoles.ADMIN)
 
-        # Assert - 验证结果
-        assert health["status"] == "error"  # 验证状态为error
-        assert "Connection timeout" in health["error"]  # 验证错误消息中包含Connection timeout
+        # Assert - 結果の検証
+        assert health["status"] == "error"  # 検証状態がerrorです
+        assert "Connection timeout" in health["error"]  # 接続タイムアウトが含まれる検証エラーメッセージを確認します
 
 
 # =============================================================================
@@ -910,29 +910,29 @@ class TestRoleBasedClientSecurity:
           - 验证日志中不包含密码
           - 确保敏感信息安全
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         import logging
         mock_cls, mock_instance = mock_async_opensearch
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         with caplog.at_level(logging.DEBUG):
             from app.core.role_based_client import RoleBasedOpenSearchClient, OpenSearchRoles
             client_manager = RoleBasedOpenSearchClient()
             await client_manager.get_client_for_role(OpenSearchRoles.ADMIN)
 
-        # Assert - 验证结果
+        # Assert - 結果の検証
         # ログにパスワードが含まれないことを確認 | 确认日志中不包含密码
         from conftest import MOCK_SETTINGS_ENV
         password = MOCK_SETTINGS_ENV["OPENSEARCH_PASSWORD"]
         
-        # 密码长度足够长时才检查（避免误报）| 仅当密码非常短时（如"admin"）可能出现误报
+        # パスワードの長さが十分長い場合にのみチェックを行う（誤検知を避ける）| パスワードが非常に短い場合（例えば"admin"）に誤検知が発生することがある
         if len(password) > 6:
             for record in caplog.records:
                 msg = record.getMessage()
                 assert password not in msg, (
                     f"ログメッセージにパスワードが含まれています: {msg}"
                 )
-        # 对于短密码，检查特定模式（如 "password=xxx" 或 "pwd:xxx"）
+        # 短いパスワードの場合、特定のパターン（例如 "password=xxx" または "pwd:xxx"）をチェックします。
         else:
             import re
             password_patterns = [
@@ -951,25 +951,25 @@ class TestRoleBasedClientSecurity:
     async def test_ssl_always_enabled(self, mock_settings_env, mock_async_opensearch):
         """
         RBC-SEC-02: SSL常時有効
-        SSL 始终启用
+                SSL 始终启用
 
-        覆盖代码行: role_based_client.py:153
+                覆盖コード行: role_based_client.py:153
 
-        测试目的:
-          - 验证 SSL 始终启用
-          - 确保通信安全
+                テスト目的:
+                  - SSL が常に有効であることを確認する
+                  - 通信の安全性を確保する
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         mock_cls, mock_instance = mock_async_opensearch
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         from app.core.role_based_client import RoleBasedOpenSearchClient, OpenSearchRoles
         client_manager = RoleBasedOpenSearchClient()
         await client_manager.get_client_for_role(OpenSearchRoles.ADMIN)
 
-        # Assert - 验证结果
+        # Assert - 結果の検証
         call_kwargs = mock_cls.call_args.kwargs if hasattr(mock_cls.call_args, 'kwargs') else mock_cls.call_args[1]
-        assert call_kwargs["use_ssl"] is True  # 验证SSL始终启用
+        assert call_kwargs["use_ssl"] is True  # SSLの検証が常に有効であることを確認する
 
     @pytest.mark.asyncio
     async def test_credential_error_message_only_contains_env_var_names(
@@ -985,7 +985,7 @@ class TestRoleBasedClientSecurity:
           - 验证错误消息中只包含环境变量名
           - 确认不泄露密码值
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         import logging
         from conftest import MOCK_SETTINGS_ENV
         env_no_pass = MOCK_SETTINGS_ENV.copy()
@@ -996,15 +996,15 @@ class TestRoleBasedClientSecurity:
             for mod in modules_to_remove:
                 del sys.modules[mod]
 
-            # Act - 执行被测试函数
+            # Act - テスト対象の関数を実行する
             with caplog.at_level(logging.DEBUG):
                 from app.core.role_based_client import RoleBasedOpenSearchClient, OpenSearchRoles
                 client_manager = RoleBasedOpenSearchClient()
                 await client_manager.get_client_for_role(OpenSearchRoles.ADMIN)
 
-            # Assert - 验证结果
+            # Assert - 結果の検証
             # エラーメッセージに環境変数名は含まれるがパスワード値は含まれない
-            # 错误消息中包含环境变量名但不包含密码值
+            # エラーメッセージには環境変数名が含まれますが、パスワード値は含まれません
             error = client_manager._initialization_errors.get(OpenSearchRoles.ADMIN)
             assert error is not None
             error_str = str(error)
@@ -1026,27 +1026,27 @@ class TestRoleBasedClientSecurity:
           - 验证健康检查错误不泄露密码
           - 【预期失败】当前实现使用 str(e) 可能泄露密码
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         mock_cls, mock_instance = mock_async_opensearch
         from conftest import MOCK_SETTINGS_ENV
         password = MOCK_SETTINGS_ENV["OPENSEARCH_PASSWORD"]
         # ヘルスチェック時にパスワードを含む例外を発生させる
-        # 健康检查时生成包含密码的异常
+        # 健康チェック時にパスワードを含む例外が生成される
         mock_instance.ping = AsyncMock(
             side_effect=[True, Exception(f"Auth failed for password: {password}")]
         )
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         from app.core.role_based_client import RoleBasedOpenSearchClient, OpenSearchRoles
         client_manager = RoleBasedOpenSearchClient()
         await client_manager.get_client_for_role(OpenSearchRoles.ADMIN)
         health = await client_manager.check_role_health(OpenSearchRoles.ADMIN)
 
-        # Assert - 验证结果
+        # Assert - 結果の検証
         # str(e)がそのままエラーに含まれるため、漏洩する可能性がある
-        # 由于直接使用 str(e)，可能会泄露密码
+        # 直接str(e)を使用すると、パスワードが漏洩する可能性があります
         # 現在の実装（role_based_client.py:268）ではstr(e)をそのまま格納
-        # 当前实现（role_based_client.py:268）直接存储 str(e)
+        # 現在の実装（role_based_client.py:268）では、直接 str(e) を保存しています
         if password in health.get("error", ""):
             pytest.fail(
                 "ヘルスチェックエラーにパスワードが含まれています。"
@@ -1067,17 +1067,17 @@ class TestRoleBasedClientSecurity:
           - 验证 traceback 输出不泄露密码
           - 确保错误堆栈安全
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         mock_cls, mock_instance = mock_async_opensearch
         mock_instance.ping = AsyncMock(side_effect=Exception("Connection refused"))
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         with patch("asyncio.sleep", new_callable=AsyncMock):
             from app.core.role_based_client import RoleBasedOpenSearchClient, OpenSearchRoles
             client_manager = RoleBasedOpenSearchClient()
             await client_manager.get_client_for_role(OpenSearchRoles.ADMIN)
 
-        # Assert - 验证结果
+        # Assert - 結果の検証
         # stderrのtraceback出力を検証 | 验证stderr的traceback输出
         captured = capsys.readouterr()
         from conftest import MOCK_SETTINGS_ENV
@@ -1099,7 +1099,7 @@ class TestRoleBasedClientSecurity:
           - 验证每个角色使用独立的认证信息
           - 确认角色间认证信息隔离
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from conftest import MOCK_SETTINGS_ENV
         
         mock_cls, mock_instance = mock_async_opensearch
@@ -1111,17 +1111,17 @@ class TestRoleBasedClientSecurity:
 
         mock_cls.side_effect = capture_http_auth
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         # 複数ロールを初期化 | 初始化多个角色
         from app.core.role_based_client import RoleBasedOpenSearchClient, OpenSearchRoles
         client_manager = RoleBasedOpenSearchClient()
         await client_manager.get_client_for_role(OpenSearchRoles.ADMIN)
         await client_manager.get_client_for_role(OpenSearchRoles.CSPM_DASHBOARD_READ)
 
-        # Assert - 验证结果
+        # Assert - 結果の検証
         # 各ロールが異なる認証情報を使用 | 各角色使用不同的认证信息
         assert len(http_auth_calls) == 2
-        assert http_auth_calls[0] != http_auth_calls[1]  # 验证认证信息不同
+        assert http_auth_calls[0] != http_auth_calls[1]  # 認証情報が異なっています
         # ADMINロール | ADMIN角色
         assert http_auth_calls[0] == (
             MOCK_SETTINGS_ENV["OPENSEARCH_USER"], 

@@ -56,11 +56,11 @@ class TestGetRegionsWithAssumeRole:
                 }
             )
 
-            # Assert - 検証
+            # アサート - 検証
             assert response.status_code in [200, 404, 500]
             if response.status_code == 200:
                 data = response.json()
-                # 路由可能返回不同格式，容错处理
+                # ルーティングは異なる形式で返す可能性があるため、エラー処理に注意する必要があります。
                 if "success" in data:
                     assert data["success"] is True
                 if "totalRegions" in data:
@@ -405,7 +405,7 @@ class TestInternalTools:
         assert AWS_INTERNAL_SERVER_NAME == "aws-internal"
 
 
-# ==================== 異常系: AssumeRole Errors (AWS-E01~E19) ====================
+# ==================== 異常系: AssumeRole エラー (AWS-E01~E19) ====================
 class TestGetRegionsWithAssumeRoleErrors:
     """AssumeRoleエラーハンドリング"""
 
@@ -769,9 +769,9 @@ class TestAWSExecutorErrors:
             mock_meta = MagicMock()
             mock_meta.service_model = mock_service_model
             mock_ec2.meta = mock_meta
-            # 重要: invalid_action 属性不存在，返回 None
+            # 重要: invalid_action 属性は存在しません。None を返します。
             mock_ec2.invalid_action = None
-            # 或者使用 spec 限制只允许特定属性
+            # または、spec を使用して特定の属性のみを許可します
             type(mock_ec2).invalid_action = property(lambda self: None)
             mock_boto3.return_value = mock_ec2
 
@@ -809,7 +809,7 @@ class TestAWSExecutorErrors:
             )
 
             assert result["success"] is False
-            assert "error" in result  # 可能是 error 或 error_code
+            assert "error" in result  # 可能性として error または error_code です
 
     @pytest.mark.asyncio
     async def test_execute_no_credentials(self):
@@ -861,7 +861,7 @@ class TestAWSExecutorErrors:
             assert any(x in help_text for x in ["timeout", "Timeout", "タイムアウト", "ヘルプコマンドがタイムアウト"])
 
     def test_get_help_exception(self):
-        """AWS-E25: get_help 例外 → error message"""
+        """AWS-E25: get_help 例外 → エラーメッセージ"""
         from app.aws_plugin.executor import AWSExecutor
 
         executor = AWSExecutor()

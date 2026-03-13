@@ -408,7 +408,7 @@ def admin_token():
 
 @pytest.fixture
 def testuser_token():
-    """普通用户JWT Token（限定角色）"""
+    """普通ユーザーのJWTトークン（役割限定）"""
     from jose import jwt
     from app.core.auth import SECRET_KEY, ALGORITHM
     payload = {
@@ -421,7 +421,7 @@ def testuser_token():
 
 @pytest.fixture
 def dashboard_user_token():
-    """仪表板用户Token"""
+    """ダッシュボードユーザーTOKEN"""
     from jose import jwt
     from app.core.auth import SECRET_KEY, ALGORITHM
     payload = {
@@ -434,7 +434,7 @@ def dashboard_user_token():
 
 @pytest.fixture
 def expired_token():
-    """过期的Token"""
+    """有効期限切れのトークン"""
     from jose import jwt
     from app.core.auth import SECRET_KEY, ALGORITHM
     payload = {
@@ -446,9 +446,10 @@ def expired_token():
 
 @pytest.fixture
 def disabled_user_in_db():
-    """将禁用用户临时添加到fake_users_db的夹具
+    """
+    ユーザーを一時的にfake_users_dbのfixtureに無効にする
 
-    测试结束后执行清理。
+        テスト終了後にクリーンアップを実行する。
     """
     from app.core.auth import fake_users_db
 
@@ -461,22 +462,23 @@ def disabled_user_in_db():
         "roles": []
     }
 
-    # 添加用户
+    # ユーザーを追加する
     fake_users_db["disabled-user"] = disabled_user_data
     yield disabled_user_data
 
-    # 清理
+    # クリアリング
     if "disabled-user" in fake_users_db:
         del fake_users_db["disabled-user"]
 
 
 @pytest.fixture
 def mock_role_required_endpoint(app):
-    """注册需要角色的测试端点的夹具
+    """
+    テスト用のエンドポイントを登録するfixture
 
-    在测试期间向FastAPI应用添加一个需要cspm_dashboard_read_role的临时端点。
+        テスト中、FastAPIアプリケーションにcspm_dashboard_read_roleを必要とする一時的なエンドポイントを追加する。
 
-    注意: FastAPI难以删除路由器，因此使用测试专用路径避免冲突。
+        注意: FastAPIではルーターの削除が難しいため、テスト専用のパスを使用して競合を避ける。
     """
     from fastapi import APIRouter, Depends
     from app.core.auth import require_roles
@@ -489,28 +491,29 @@ def mock_role_required_endpoint(app):
     ):
         return {"status": "ok", "user": user.username}
 
-    # 添加路由器
+    # ルーターを追加する
     app.include_router(test_router)
     yield
 
-    # 注意: FastAPI难以删除路由，但由于是测试专用路径，不会影响其他测试
+    # 注意: FastAPIはルートを削除するのが難しく、しかしテスト用のパスであるため他のテストに影響はありません。
 
 
 @pytest.fixture(autouse=True)
 def mock_password_verification():
-    """Mock密码验证以避免bcrypt/passlib兼容性问题
+    """
+    Mockパスワード検証を行い、bcrypt/passlibの互換性問題を回避する
 
-    Python 3.13 + 新版bcrypt与passlib存在兼容性问题。
-    此fixture使用mock来绕过实际的bcrypt调用。
+        Python 3.13 以降、新版のbcryptとpasslibの間で互換性の問題が存在します。
+        このfixtureはmockを使用して実際のbcrypt呼び出しを回避します。
     """
     from unittest.mock import patch
 
     def mock_verify(plain_password, hashed_password):
-        """模拟密码验证 - 密码为'secret'时返回True"""
+        """模拟パスワード検証 - パスワードが'secret'のときにTrueを返す"""
         return plain_password == "secret"
 
     def mock_hash(password):
-        """模拟密码哈希 - 返回固定格式的假哈希"""
+        """擬似パスワードハッシュ - 固定形式の偽ハッシュを返す"""
         return f"$2b$12$mockhash_{password}"
 
     with patch('app.core.auth.pwd_context.verify', side_effect=mock_verify):

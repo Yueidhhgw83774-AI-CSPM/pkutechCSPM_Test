@@ -74,38 +74,38 @@ class TestCompliance:
 
 
 class TestSeverity:
-    """Severity Enum正常系 (6 tests)"""
+    """Severity Enum 通常系 (6 tests)"""
 
     def test_critical_value(self):
-        """OUTM-005: Severity CRITICAL値"""
+        """OUTM-005: シverity CRITICAL値"""
         from app.doc_reader_plugin.output_models import Severity
 
         assert Severity.CRITICAL == "Critical"
         assert Severity.CRITICAL.value == "Critical"
 
     def test_high_value(self):
-        """OUTM-006: Severity HIGH値"""
+        """OUTM-006: シェビリティ HIGH値"""
         from app.doc_reader_plugin.output_models import Severity
 
         assert Severity.HIGH == "High"
         assert Severity.HIGH.value == "High"
 
     def test_medium_value(self):
-        """OUTM-007: Severity MEDIUM値"""
+        """OUTM-007: 脅威度 MEDIUM値"""
         from app.doc_reader_plugin.output_models import Severity
 
         assert Severity.MEDIUM == "Medium"
         assert Severity.MEDIUM.value == "Medium"
 
     def test_low_value(self):
-        """OUTM-008: Severity LOW値"""
+        """OUTM-008: シェビリティ LOW値"""
         from app.doc_reader_plugin.output_models import Severity
 
         assert Severity.LOW == "Low"
         assert Severity.LOW.value == "Low"
 
     def test_information_value(self):
-        """OUTM-009: Severity INFORMATION値"""
+        """OUTM-009: 警告度 INFORMATION値"""
         from app.doc_reader_plugin.output_models import Severity
 
         assert Severity.INFORMATION == "Informational"
@@ -119,7 +119,7 @@ class TestSeverity:
         assert severity == Severity.HIGH
 
     def test_all_values_exist(self):
-        """OUTM-010b: Severity 全値存在確認"""
+        """OUTM-010b: Severity すべての値が存在することを確認する"""
         from app.doc_reader_plugin.output_models import Severity
 
         all_values = list(Severity)
@@ -200,7 +200,7 @@ class TestComplianceDetails:
         assert instance.audit == []
 
     def test_audit_multiple_items(self):
-        """OUTM-014: ComplianceDetails audit複数項目"""
+        """OUTM-014: ComplianceDetails 実行内容 複数項目"""
         from app.doc_reader_plugin.output_models import ComplianceDetails, Severity
 
         instance = ComplianceDetails(
@@ -235,7 +235,7 @@ class TestComplianceDetails:
         assert instance.remediation == []
 
     def test_remediation_multiple_items(self):
-        """OUTM-016: ComplianceDetails remediation複数項目"""
+        """OUTM-016: ComplianceDetails 討正複数項目"""
         from app.doc_reader_plugin.output_models import ComplianceDetails, Severity
 
         instance = ComplianceDetails(
@@ -285,7 +285,7 @@ class TestComplianceDetails:
         assert instance.defaultValue is None
 
     def test_category_multiple(self):
-        """OUTM-019: ComplianceDetails category複数"""
+        """OUTM-019: ComplianceDetails カテゴリ複数"""
         from app.doc_reader_plugin.output_models import ComplianceDetails, Severity
 
         instance = ComplianceDetails(
@@ -355,7 +355,7 @@ class TestImageDiscriptionErrors:
     """ImageDiscription 異常系 (2 tests)"""
 
     def test_discription_missing(self):
-        """OUTM-E01: ImageDiscription discription欠落"""
+        """OUTM-E01: ImageDiscription 説明欠落"""
         from app.doc_reader_plugin.output_models import ImageDiscription
 
         with pytest.raises(ValidationError):
@@ -377,7 +377,7 @@ class TestImageDiscriptionErrors:
             Compliance(id="COMP-001")
 
     def test_page_type_coercion(self):
-        """OUTM-E04: Compliance page型強制"""
+        """OUTM-E04: コンプライアンスページ型強制"""
         from app.doc_reader_plugin.output_models import Compliance
         
         # Pydantic v2では型強制しないのでValidationError

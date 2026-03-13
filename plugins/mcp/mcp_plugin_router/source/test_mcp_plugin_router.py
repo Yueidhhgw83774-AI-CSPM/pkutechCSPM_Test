@@ -1,15 +1,15 @@
 """
-MCP Plugin Router 单元测试 - 完整实现
+MCP Plugin Router 単位テスト - 完全実装
 
-测试规格: docs/testing/plugins/mcp/mcp_plugin_router_tests.md
-覆盖率目标: 80%+
+テスト仕様: docs/testing/plugins/mcp/mcp_plugin_router_tests.md
+カバレッジ目標: 80%+
 
-测试类别:
-  - 正常系: 13 个测试
-  - 异常系: 22 个测试
-  - 安全测试: 8 个测试
+テストカテゴリ:
+  - 正常系: 13 のテスト
+  - 異常系: 22 のテスト
+  - セキュリティテスト: 8 のテスト
 
-总计: 43 个测试
+合計: 43 のテスト
 """
 
 import pytest
@@ -19,8 +19,8 @@ import sys
 from pathlib import Path
 import json
 
-# 导入被测试模块
-# 从 TestReport/plugins/mcp/mcp_plugin_router/source 到项目根目录
+# テスト対象のモジュールをインポートする
+# TestReport/plugins/mcp/mcp_plugin_router/source からプロジェクトのルートディレクトリまで
 # source -> mcp_plugin_router -> mcp -> plugins -> TestReport -> python_ai_cspm -> platform_python_backend-testing
 project_root = Path(__file__).resolve().parent.parent.parent.parent.parent.parent / "platform_python_backend-testing"
 if not project_root.exists():
@@ -37,7 +37,7 @@ from app.models.mcp import MCPServer, MCPChatRequest, MCPChatStreamRequest
 
 @pytest.fixture
 def app():
-    """FastAPI应用实例"""
+    """FastAPI アプリケーションの例"""
     from fastapi import FastAPI
     app = FastAPI()
     app.include_router(router)
@@ -46,7 +46,7 @@ def app():
 
 @pytest.fixture
 async def client(app):
-    """异步HTTP客户端"""
+    """非同期HTTPクライアント"""
     from httpx import ASGITransport
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as ac:
@@ -55,9 +55,9 @@ async def client(app):
 
 @pytest.fixture
 def mock_mcp_client():
-    """模拟MCP客户端"""
+    """MCPクライアントをシミュレートする"""
     with patch('app.mcp_plugin.router.mcp_client') as mock:
-        # 设置默认属性
+        # デフォルト属性を設定する
         mock.servers = {}
         mock.server_status = {}
         mock.get_available_tools = Mock(return_value=[])
@@ -67,7 +67,7 @@ def mock_mcp_client():
 
 @pytest.fixture
 def mock_invoke_mcp_chat():
-    """模拟invoke_mcp_chat函数"""
+    """:invoke_mcp_chat関数を模拟する"""
     with patch('app.mcp_plugin.router.invoke_mcp_chat') as mock:
         mock.return_value = ("测试响应", {"step": "completed"})
         yield mock
@@ -81,7 +81,7 @@ def mock_response_id_store():
 
 
 # ============================================
-# 正常系测试 (13个)
+# 正常系テスト（13件）
 # ============================================
 
 class TestMCPChatEndpoint:
@@ -91,7 +91,7 @@ class TestMCPChatEndpoint:
     async def test_chat_hierarchical_mode(self, client, mock_invoke_mcp_chat):
         """MCPR-001: 階層的エージェントでチャット成功"""
         # Arrange
-        # 使用 MCPProgress 的实际结构
+        # MCPProgress を使用した実際の構造体の使用方法
         from app.models.mcp import MCPProgress
         mock_progress = MCPProgress(
             task_analysis="テスト分析",
@@ -114,7 +114,7 @@ class TestMCPChatEndpoint:
         assert data["response"] == "テスト応答"
         assert data["session_id"] == "test-session-001"
         assert "progress" in data
-        # 验证 progress 包含正确的字段
+        # プログレスが正しいフィールドを含んでいることを確認する
         assert data["progress"]["task_analysis"] == "テスト分析"
         assert data["progress"]["sub_tasks"] == []
         assert data["progress"]["llm_calls"] == 1
@@ -200,7 +200,7 @@ class TestMCPServerManagement:
         """MCPR-005: ツール一覧取得"""
         # Arrange
         mock_mcp_client.servers = {"test-server": MCPServer(name="test-server", command="cmd")}
-        # MCPTool 需要 name 和 description 两个必需字段
+        # MCPTool は、name と description の 2 つの必須フィールドが必要です
         from app.models.mcp import MCPTool
         mock_tools = [
             MCPTool(name="tool1", description="Tool 1 description"),
@@ -395,7 +395,7 @@ class TestMCPStreaming:
 
 
 # ============================================
-# 异常系测试 (22个)
+# 異常系テスト (22個)
 # ============================================
 
 class TestMCPChatErrors:
@@ -417,7 +417,7 @@ class TestMCPChatErrors:
 
     @pytest.mark.asyncio
     async def test_chat_missing_message(self, client):
-        """MCPR-E02: message欠落"""
+        """MCPR-E02: メッセージ欠落"""
         # Arrange
         request_data = {
             "session_id": "test-session"
@@ -433,25 +433,25 @@ class TestMCPChatErrors:
     async def test_chat_invalid_session_id(self, client, mock_invoke_mcp_chat):
         """MCPR-E03: 無効なsession_id"""
         # Arrange
-        # 空字符串的 session_id 在 Pydantic 验证中是有效的（只要不是 None）
-        # 但业务逻辑可能会处理它
+        # 空の文字列の session_id は Pydantic バリデーションでは有効です（None でない限り）
+        # しかし、ビジネスロジックがそれを処理する可能性があります
         request_data = {
-            "session_id": "",  # 空的session_id
+            "session_id": "",  # 空のsession_id
             "message": "test"
         }
 
         # Act
         response = await client.post("/mcp/chat", json=request_data)
 
-        # Assert - 空字符串被 Pydantic 接受，但可能导致业务逻辑问题
-        # 实际中这会被正常处理，所以返回 200
+        # Assert - 空文字列が Pydantic によって受け入れられるが、ビジネスロジック上の問題を引き起こす可能性がある
+        # 実際にはこれが正常に処理されるため、200を返します。
         assert response.status_code == 200
 
     @pytest.mark.asyncio
     async def test_chat_empty_message(self, client, mock_invoke_mcp_chat):
         """MCPR-E04: 空メッセージ"""
         # Arrange
-        # 空字符串的 message 在 Pydantic 验证中是有效的
+        # 空の文字列の message は Pydantic バリデーションでは有効です
         request_data = {
             "session_id": "test-session",
             "message": ""  # 空のメッセージ
@@ -460,7 +460,7 @@ class TestMCPChatErrors:
         # Act
         response = await client.post("/mcp/chat", json=request_data)
 
-        # Assert - 空消息被接受，由 LLM 层处理
+        # Assert - 空メッセージが受け入れられ、LLM層で処理される
         assert response.status_code == 200
 
     @pytest.mark.asyncio
@@ -718,7 +718,7 @@ class TestMCPStreamingErrors:
                 "session_id": "test:123",
                 "message": "test",
                 "auth_hash": "some-hash"
-                # user_id 欠落
+                # user_id が欠落しています
             }
 
             # Act
@@ -752,7 +752,7 @@ class TestMCPStreamingErrors:
 
 
 # ============================================
-# 安全测试 (8个)
+# セキュリティテスト (8件)
 # ============================================
 
 @pytest.mark.security

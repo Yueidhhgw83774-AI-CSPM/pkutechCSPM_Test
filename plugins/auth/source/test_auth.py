@@ -1,19 +1,19 @@
 # test_auth.py
 """
-auth 模块单元测试
+authモジュールのユニットテスト
 
-测试对象:
-  - app/core/auth.py (认证核心逻辑)
-  - app/auth/router.py (认证端点)
-  - app/models/auth.py (认证模型)
+テスト対象:
+  - app/core/auth.py (認証のコアロジック)
+  - app/auth/router.py (認証エンドポイント)
+  - app/models/auth.py (認証モデル)
 
-测试规格: docs/testing/plugins/auth_tests.md
-覆盖率目标: 90%+
+テスト仕様: docs/testing/plugins/auth_tests.md
+カバレッジ目標: 90%+
 
-测试类别:
-  - 正常系: 12 个测试 (AUTH-001 ~ AUTH-012)
-  - 异常系: 18 个测试 (AUTH-E01 ~ AUTH-E18)
-  - 安全测试: 8 个测试 (AUTH-SEC-01 ~ AUTH-SEC-08)
+テストカテゴリ:
+  - 正常系: 12のテスト (AUTH-001 ~ AUTH-012)
+  - 異常系: 18のテスト (AUTH-E01 ~ AUTH-E18)
+  - セキュリティテスト: 8のテスト (AUTH-SEC-01 ~ AUTH-SEC-08)
 """
 
 import pytest
@@ -28,447 +28,447 @@ from unittest.mock import MagicMock, patch, AsyncMock
 from jose import jwt
 from httpx import AsyncClient
 
-# 项目根目录设置
+# プロジェクトルートディレクトリの設定
 project_root = Path(__file__).resolve().parent.parent.parent.parent.parent / "platform_python_backend-testing"
 if not project_root.exists():
     raise RuntimeError(f"项目根目录不存在: {project_root}")
 sys.path.insert(0, str(project_root))
 
-# 设置JWT密钥环境变量
+# JWTキーの環境変数を設定する
 os.environ["JWT_SECRET_KEY"] = "f4fae6a6c089204d69efdc35438312a81005e1c3825a40cfc706cbe5ec0f50b1"
 
 
 # ============================================================================
-# 正常系测试: 端点测试 (AUTH-001 ~ AUTH-003)
+# 正常系テスト: エンドポイントテスト (AUTH-001 ~ AUTH-003)
 # ============================================================================
 
 class TestAuthEndpoints:
     """
-    认证端点正常系测试
+    認証エンドポイント正常系テスト
 
-    测试ID: AUTH-001 ~ AUTH-003
-    测试对象: app/auth/router.py
+    テストID: AUTH-001 ~ AUTH-003
+    テスト対象: app/auth/router.py
     """
 
     @pytest.mark.asyncio
     async def test_login_success(self, async_client: AsyncClient):
         """
-        AUTH-001: 有效认证信息获取Token成功
+        AUTH-001: 有効な認証情報でToken取得に成功
 
-        覆盖代码行: router.py:16-40
+                覆盖コード行: router.py:16-40
 
-        测试目的:
-          - 验证正确的用户名密码可以获取access_token
-          - 验证返回的token_type为"bearer"
+                テスト目的:
+                  - 正しいユーザー名とパスワードでaccess_tokenが取得できることを確認する
+                  - 返されるtoken_typeが"bearer"であることを確認する
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         form_data = {
             "username": "testuser",
             "password": "secret"
         }
 
-        # Act - 执行被测试的函数
+        # アクション - テスト対象の関数を実行する
         response = await async_client.post(
             "/auth/token",
             data=form_data,
             headers={"Content-Type": "application/x-www-form-urlencoded"}
         )
 
-        # Assert - 验证结果
-        assert response.status_code == 200  # 验证状态码正确
+        # アサート - 結果の検証
+        assert response.status_code == 200  # 検証ステータスコードが正しいことを確認する
         data = response.json()
-        assert "access_token" in data  # 验证返回包含access_token
-        assert data["token_type"] == "bearer"  # 验证token_type为bearer
+        assert "access_token" in data  # 検証結果がaccess_tokenを含むことを確認します
+        assert data["token_type"] == "bearer"  # トークンタイプがbearerであることを確認する
 
     @pytest.mark.asyncio
     async def test_get_current_user(self, async_client: AsyncClient, valid_token: str):
         """
-        AUTH-002: 认证后获取用户信息成功
+        AUTH-002: 認証後にユーザー情報を取得に成功
 
-        覆盖代码行: router.py:42-52
+                覆盖コード行: router.py:42-52
 
-        测试目的:
-          - 验证使用有效Token可以获取用户信息
-          - 验证返回的用户信息包含username和email
+                テスト目的:
+                  - 有効なTokenを使用してユーザー情報を取得できるかを確認する
+                  - 返されるユーザー情報にusernameとemailが含まれているかを確認する
         """
-        # Arrange - 准备认证头
+        # Arrange - 認証ヘッダーの準備
         headers = {"Authorization": f"Bearer {valid_token}"}
 
-        # Act - 执行请求
+        # アクション - リクエストの実行
         response = await async_client.get("/auth/users/me", headers=headers)
 
-        # Assert - 验证结果
-        assert response.status_code == 200  # 验证状态码正确
+        # Assert - 結果の検証
+        assert response.status_code == 200  # 検証ステータスコードが正しいことを確認する
         data = response.json()
-        assert "username" in data  # 验证返回包含username
-        assert "email" in data  # 验证返回包含email
+        assert "username" in data  # 検証結果がusernameを含むことを確認する
+        assert "email" in data  # 検証結果がemailを含むことを確認する
 
     @pytest.mark.asyncio
     async def test_protected_route(self, async_client: AsyncClient, valid_token: str):
         """
-        AUTH-003: 访问受保护路由成功
+        AUTH-003: 保護されたルートへのアクセスに成功
 
-        覆盖代码行: router.py:54-67
+                カバレッジコード行: router.py:54-67
 
-        测试目的:
-          - 验证使用有效Token可以访问受保护端点
-          - 验证返回消息包含用户名
+                テスト目的:
+                  - 有効なTokenを使用して保護されたエンドポイントにアクセスできるかどうかを検証する
+                  - 返信メッセージにユーザー名が含まれていることを検証する
         """
-        # Arrange - 准备认证头
+        # Arrange - 認証ヘッダーの準備
         headers = {"Authorization": f"Bearer {valid_token}"}
 
-        # Act - 执行请求
+        # アクション - リクエストの実行
         response = await async_client.get("/auth/protected", headers=headers)
 
-        # Assert - 验证结果
-        assert response.status_code == 200  # 验证状态码正确
+        # アサート - 結果の検証
+        assert response.status_code == 200  # 検証ステータスコードが正しいことを確認する
         data = response.json()
-        assert "message" in data  # 验证返回包含消息
+        assert "message" in data  # 検証結果がメッセージを含むことを確認する
 
 
 # ============================================================================
-# 正常系测试: 核心逻辑测试 (AUTH-004 ~ AUTH-008)
+# 正常系テスト: コアロジックテスト (AUTH-004 ~ AUTH-008)
 # ============================================================================
 
 class TestAuthCoreLogic:
     """
-    认证核心逻辑正常系测试
+    認証コアロジック正常系テスト
 
-    测试ID: AUTH-004 ~ AUTH-008
-    测试对象: app/core/auth.py
+    テストID: AUTH-004 ~ AUTH-008
+    テスト対象: app/core/auth.py
     """
 
     def test_verify_password_success(self):
         """
-        AUTH-004: 正确密码验证成功
+        AUTH-004: 正しい平文パスワードの検証に成功
 
-        覆盖代码行: auth.py:58-60
+                カバレッジコード行: auth.py:58-60
 
-        测试目的:
-          - 验证正确的明文密码与哈希密码匹配返回True
+                テスト目的:
+                  - 正しい平文パスワードとハッシュ化されたパスワードが一致することを確認し、Trueを返す
 
-        注意: 使用mock绕过bcrypt/passlib兼容性问题
+                注意: bcrypt/passlibの互換性問題を回避するためにmockを使用する
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.auth import verify_password
         plain = "secret"
-        # 任意哈希值（mock会忽略它，只检查密码是否为"secret"）
+        # 任意のハッシュ値（mockは無視し、パスワードが"secret"であるかどうかだけをチェックします）
         hashed = "$2b$12$anyhashvalue"
 
-        # Act - 执行验证
+        # アクション - 認定検証実行
         result = verify_password(plain, hashed)
 
-        # Assert - 验证结果
-        assert result is True  # 验证密码匹配成功
+        # アサート - 結果の検証
+        assert result is True  # パスワードが一致しました
 
     def test_get_password_hash(self):
         """
-        AUTH-005: 密码哈希化成功
+        AUTH-005: パスワードのハッシュ化成功
 
-        覆盖代码行: auth.py:62-64
+                覆盖コード行: auth.py:62-64
 
-        测试目的:
-          - 验证密码被正确哈希化
-          - 验证哈希后的密码可以被验证
+                テスト目的:
+                  - パスワードが正しくハッシュ化されることを確認する
+                  - ハッシュ化されたパスワードが検証できることを確認する
 
-        注意: 使用mock绕过bcrypt/passlib兼容性问题
+                注意: bcrypt/passlibの互換性問題を回避するためにmockを使用する
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.auth import get_password_hash, verify_password
         password = "secret"
 
-        # Act - 执行哈希化
+        # アクション - ハッシュ化を実行する
         hashed = get_password_hash(password)
 
-        # Assert - 验证结果
-        assert hashed.startswith("$2b$")  # 验证是bcrypt格式（mock返回$2b$开头）
-        assert verify_password(password, hashed) is True  # 验证哈希可被验证
+        # Assert - 結果の検証
+        assert hashed.startswith("$2b$")  # 検証はbcrypt形式（mockが$2b$で始まる形式を返す）です
+        assert verify_password(password, hashed) is True  # ハッシュを検証できる
 
     def test_get_user_found(self):
         """
-        AUTH-006: 存在用户查询成功
+        AUTH-006: 存在するユーザーのクエリ成功
 
-        覆盖代码行: auth.py:66-71
+                覆盖コード行: auth.py:66-71
 
-        测试目的:
-          - 验证存在的用户名可以获取UserInDB实例
-          - 验证返回的用户信息正确
+                テスト目的:
+                  - 存在するユーザー名でUserInDBインスタンスを取得できるか検証する
+                  - 返却されるユーザー情報が正しいか検証する
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.auth import get_user, fake_users_db
 
-        # Act - 执行查询
+        # アクション - クエリの実行
         user = get_user(fake_users_db, "testuser")
 
-        # Assert - 验证结果
-        assert user is not None  # 验证用户存在
-        assert user.username == "testuser"  # 验证用户名正确
-        assert user.email == "test@example.com"  # 验证邮箱正确
+        # Assert - 結果の検証
+        assert user is not None  # ユーザー存在確認
+        assert user.username == "testuser"  # ユーザー名が正しいことを確認する
+        assert user.email == "test@example.com"  # メールアドレスの正しさを確認する
 
     def test_get_user_with_roles_found(self):
         """
-        AUTH-007: 带角色用户查询成功
+        AUTH-007: ロール付きユーザー検索成功
 
-        覆盖代码行: auth.py:73-78
+                覆盖コード行: auth.py:73-78
 
-        测试目的:
-          - 验证可以获取包含角色信息的用户
-          - 验证角色列表不为空
+                テスト目的:
+                  - ロール情報を含むユーザーを取得できるか確認する
+                  - ロールリストが空でないことを確認する
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.auth import get_user_with_roles, fake_users_db
 
-        # Act - 执行查询
+        # アクション - クエリの実行
         user = get_user_with_roles(fake_users_db, "admin")
 
-        # Assert - 验证结果
-        assert user is not None  # 验证用户存在
-        assert user.username == "admin"  # 验证用户名正确
-        assert "cspm_dashboard_read_role" in user.roles  # 验证包含预期角色
+        # Assert - 結果の検証
+        assert user is not None  # ユーザー存在確認
+        assert user.username == "admin"  # ユーザー名が正しいことを確認します
+        assert "cspm_dashboard_read_role" in user.roles  # 期待する役割を含むことを検証する
 
     def test_authenticate_user_with_roles_success(self):
         """
-        AUTH-008: 带角色认证成功
+        AUTH-008: ロール付き認証成功
 
-        覆盖代码行: auth.py:89-95
+                覆盖コード行: auth.py:89-95
 
-        测试目的:
-          - 验证正确凭据返回UserInDBWithRoles实例
-          - 验证角色列表不为空
+                テスト目的:
+                  - 正しい資格情報を使用してUserInDBWithRolesインスタンスが返されることを確認する
+                  - ロールリストが空でないことを確認する
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.auth import authenticate_user_with_roles, fake_users_db
 
-        # Act - 执行认证
+        # Act - 認証を実行する
         user = authenticate_user_with_roles(fake_users_db, "admin", "secret")
 
-        # Assert - 验证结果
-        assert user is not None  # 验证认证成功
-        assert user.username == "admin"  # 验证用户名正确
-        assert len(user.roles) > 0  # 验证有角色
+        # アサート - 結果の検証
+        assert user is not None  # 認証成功を確認する
+        assert user.username == "admin"  # ユーザー名が正しいことを確認する
+        assert len(user.roles) > 0  # 役割の検証がある
 
 
 # ============================================================================
-# 正常系测试: Token生成测试 (AUTH-009 ~ AUTH-012)
+# 正常系テスト: Token生成テスト (AUTH-009 ~ AUTH-012)
 # ============================================================================
 
 class TestTokenCreation:
     """
-    JWT Token生成正常系测试
+    JWTトークン生成正常系テスト
 
-    测试ID: AUTH-009 ~ AUTH-012
-    测试对象: app/core/auth.py
+    テストID: AUTH-009 ~ AUTH-012
+    テスト対象: app/core/auth.py
     """
 
     def test_create_access_token_with_expiry(self):
         """
-        AUTH-009: 指定有效期Token生成成功
+        AUTH-009: 指定有効期限のToken生成に成功
 
-        覆盖代码行: auth.py:97-107 (if expires_delta分支True侧)
+                覆盖コード行: auth.py:97-107 (expires_deltaがTrueの場合のif分岐)
 
-        测试目的:
-          - 验证指定有效期生成的Token包含正确的sub
-          - 验证Token包含exp字段
+                テスト目的:
+                  - 指定有効期限で生成されたTokenに正しいsubが含まれていることを確認する
+                  - Tokenにexpフィールドが含まれていることを確認する
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.auth import create_access_token, SECRET_KEY, ALGORITHM
         data = {"sub": "testuser"}
         expires = timedelta(minutes=60)
 
-        # Act - 执行Token生成
+        # Act - Token生成を実行
         token = create_access_token(data=data, expires_delta=expires)
 
-        # Assert - 验证结果
+        # アサート - 結果の検証
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        assert payload["sub"] == "testuser"  # 验证sub正确
-        assert "exp" in payload  # 验证包含过期时间
+        assert payload["sub"] == "testuser"  # subの検証が正しく行われていることを確認する
+        assert "exp" in payload  # 有効期限を含む検証を行う
 
     def test_create_access_token_default_expiry(self):
         """
-        AUTH-010: 默认有效期Token生成成功
+        AUTH-010: デフォルト有効期限のToken生成成功
 
-        覆盖代码行: auth.py:97-107 (else分支，默认15分钟)
+                覆盖コード行: auth.py:97-107 (elseブランチ、デフォルト15分)
 
-        测试目的:
-          - 验证不指定有效期时使用默认值
-          - 验证Token包含正确的sub和exp
+                テスト目的:
+                  - 有効期限を指定しない場合にデフォルト値が使用されることを確認する
+                  - Tokenが正しいsubとexpを含んでいることを確認する
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.auth import create_access_token, SECRET_KEY, ALGORITHM
         data = {"sub": "testuser"}
 
-        # Act - 执行Token生成（不指定expires_delta）
+        # Act - Token生成の実行（expires_delta未指定）
         token = create_access_token(data=data)
 
-        # Assert - 验证结果
+        # Assert - 結果の検証
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        assert payload["sub"] == "testuser"  # 验证sub正确
-        assert "exp" in payload  # 验证包含过期时间
+        assert payload["sub"] == "testuser"  # subの検証が正しく行われていることを確認する
+        assert "exp" in payload  # 有効期限を含む検証を行う
 
     def test_create_access_token_with_roles_and_expiry(self):
         """
-        AUTH-011: 带角色Token生成成功（指定有效期）
+        AUTH-011: ロール付きToken生成成功（有効期限指定）
 
-        覆盖代码行: auth.py:109-118 (if expires_delta分支True侧)
+                覆盖コード行: auth.py:109-118 (expires_delta分支がTrueの場合)
 
-        测试目的:
-          - 验证Token包含roles字段
-          - 验证角色列表正确
+                テスト目的:
+                  - Tokenがrolesフィールドを持つことを確認する
+                  - ロールリストが正しいことを確認する
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.auth import create_access_token_with_roles, SECRET_KEY, ALGORITHM
         roles = ["cspm_dashboard_read_role"]
 
-        # Act - 执行Token生成
+        # Act - Token生成を実行
         token = create_access_token_with_roles(
             "admin", roles, expires_delta=timedelta(minutes=60)
         )
 
-        # Assert - 验证结果
+        # アサート - 結果の検証
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        assert payload["sub"] == "admin"  # 验证sub正确
-        assert payload["roles"] == roles  # 验证角色正确
+        assert payload["sub"] == "admin"  # subの検証が正しく行われていることを確認する
+        assert payload["roles"] == roles  # 役割の検証が正しく行われていることを確認してください。
 
     def test_create_access_token_with_roles_default_expiry(self):
         """
-        AUTH-012: 带角色Token生成成功（默认30分钟有效期）
+        AUTH-012: ロール付きToken生成成功（デフォルト30分有効期限）
 
-        覆盖代码行: auth.py:109-118 (else分支，默认30分钟)
+                覆盖コード行: auth.py:109-118 (elseブランチ、デフォルト30分)
 
-        测试目的:
-          - 验证不指定有效期时使用ACCESS_TOKEN_EXPIRE_MINUTES(30分钟)
-          - 验证Token包含正确的roles
+                テスト目的:
+                  - 有効期限を指定しない場合にACCESS_TOKEN_EXPIRE_MINUTES(30分)が使用されることを確認する
+                  - Tokenに正しいrolesが含まれていることを確認する
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.auth import create_access_token_with_roles, SECRET_KEY, ALGORITHM
         roles = ["rag_search_read_role"]
 
-        # Act - 执行Token生成（不指定expires_delta）
+        # Act - Token生成の実行（expires_delta未指定）
         token = create_access_token_with_roles("testuser", roles)
 
-        # Assert - 验证结果
+        # Assert - 結果の検証
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        assert payload["sub"] == "testuser"  # 验证sub正确
-        assert payload["roles"] == roles  # 验证角色正确
+        assert payload["sub"] == "testuser"  # subの検証が正しく行われていることを確認する
+        assert payload["roles"] == roles  # 役割の検証が正しく行われていることを確認してください。
 
 
 # ============================================================================
-# 异常系测试: 端点错误测试 (AUTH-E01 ~ AUTH-E07)
+# 異常系テスト: エンドポイントエラーテスト (AUTH-E01 ~ AUTH-E07)
 # ============================================================================
 
 class TestAuthEndpointErrors:
     """
-    认证端点异常系测试
+    認証エンドポイント異常系テスト
 
-    测试ID: AUTH-E01 ~ AUTH-E07
-    测试对象: app/auth/router.py
+    テストID: AUTH-E01 ~ AUTH-E07
+    テスト対象: app/auth/router.py
     """
 
     @pytest.mark.asyncio
     async def test_login_invalid_password(self, async_client: AsyncClient):
         """
-        AUTH-E01: 无效密码返回401
+        AUTH-E01: 無効なパスワードの場合401を返す
 
-        覆盖代码行: router.py:31-36 (if not user分支)
+                覆盖コード行: router.py:31-36 (if not user分支)
 
-        测试目的:
-          - 验证错误密码返回401状态码
-          - 验证错误消息包含提示信息
+                テスト目的:
+                  - 無効なパスワードで401ステータスコードが返されることを確認する
+                  - エラーメッセージにヒントが含まれていることを確認する
         """
-        # Arrange - 准备错误密码的请求数据
+        # Arrange - 無効なパスワードのリクエストデータを準備する
         form_data = {
             "username": "testuser",
             "password": "wrongpassword"
         }
 
-        # Act - 执行请求
+        # アクション - リクエストの実行
         response = await async_client.post(
             "/auth/token",
             data=form_data,
             headers={"Content-Type": "application/x-www-form-urlencoded"}
         )
 
-        # Assert - 验证结果
-        assert response.status_code == 401  # 验证401状态码
-        assert "ユーザー名またはパスワード" in response.json()["detail"]  # 验证错误消息
+        # アサート - 結果の検証
+        assert response.status_code == 401  # 401ステータスコードを検証する
+        assert "ユーザー名またはパスワード" in response.json()["detail"]  # 検証エラーメッセージ
 
     @pytest.mark.asyncio
     async def test_login_unknown_user(self, async_client: AsyncClient):
         """
-        AUTH-E02: 不存在用户返回401
+        AUTH-E02: ユーザが存在しない場合401を返す
 
-        覆盖代码行: auth.py:83 (not user分支)
+                被覆行: auth.py:83 (not user分支)
 
-        测试目的:
-          - 验证不存在的用户名返回401
+                テスト目的:
+                  - 存在しないユーザ名が返す401を検証する
         """
-        # Arrange - 准备不存在用户的请求数据
+        # Arrange - 不存在するユーザーのリクエストデータを準備する
         form_data = {
             "username": "unknownuser",
             "password": "secret"
         }
 
-        # Act - 执行请求
+        # アクション - リクエストの実行
         response = await async_client.post(
             "/auth/token",
             data=form_data,
             headers={"Content-Type": "application/x-www-form-urlencoded"}
         )
 
-        # Assert - 验证结果
-        assert response.status_code == 401  # 验证401状态码
+        # アサート - 結果の検証
+        assert response.status_code == 401  # 401ステータスコードを検証する
 
     @pytest.mark.asyncio
     async def test_expired_token(self, async_client: AsyncClient, expired_token: str):
         """
-        AUTH-E03: 过期Token返回401
+        AUTH-E03: 有効期限切れのTokenは401を返す
 
-        覆盖代码行: auth.py:133 (JWTError分支)
+                覆盖コード行: auth.py:133 (JWTErrorブランチ)
 
-        测试目的:
-          - 验证过期Token被正确拒绝
+                テスト目的:
+                  - 有効期限切れのTokenが正しく拒否されることを確認する
         """
-        # Arrange - 使用过期Token
+        # Arrange - 有効期限切れのTokenを使用する
         headers = {"Authorization": f"Bearer {expired_token}"}
 
-        # Act - 执行请求
+        # アクション - リクエストの実行
         response = await async_client.get("/auth/users/me", headers=headers)
 
-        # Assert - 验证结果
-        assert response.status_code == 401  # 验证401状态码
+        # アサート - 結果の検証
+        assert response.status_code == 401  # 401ステータスコードを検証する
 
     @pytest.mark.asyncio
     async def test_malformed_token(self, async_client: AsyncClient):
         """
-        AUTH-E04: 无效Token格式返回401
+        AUTH-E04: 無効なToken形式の場合401を返す
 
-        覆盖代码行: auth.py:133 (JWTError分支)
+                覆盖コード行: auth.py:133 (JWTError分支)
 
-        测试目的:
-          - 验证格式错误的Token被拒绝
+                テスト目的:
+                  - フォーマットが正しくないTokenが拒否されることを確認する
         """
-        # Arrange - 使用格式错误的Token
+        # Arrange - フォーマットが正しくないTokenを使用する
         headers = {"Authorization": "Bearer invalid.token.format"}
 
-        # Act - 执行请求
+        # アクション - リクエストの実行
         response = await async_client.get("/auth/users/me", headers=headers)
 
-        # Assert - 验证结果
-        assert response.status_code == 401  # 验证401状态码
+        # Assert - 結果の検証
+        assert response.status_code == 401  # 401ステータスコードを検証する
 
     @pytest.mark.asyncio
     async def test_no_auth_header(self, async_client: AsyncClient):
         """
-        AUTH-E05: 无认证头返回401
+        AUTH-E05: Authorizationヘッダーがない場合401が返る
 
-        测试目的:
-          - 验证缺少Authorization头时返回401
+                テスト目的:
+                  - Authorizationヘッダーが欠如している場合に401が返されることを確認する
         """
-        # Act - 不带认证头执行请求
+        # アクション - 認証ヘッダー無しでリクエストを実行する
         response = await async_client.get("/auth/users/me")
 
-        # Assert - 验证结果
-        assert response.status_code == 401  # 验证401状态码
+        # Assert - 結果の検証
+        assert response.status_code == 401  # 401ステータスコードを検証する
 
     @pytest.mark.asyncio
     async def test_disabled_user(
@@ -485,7 +485,7 @@ class TestAuthEndpointErrors:
           - 验证disabled=True的用户被拒绝访问
           - 验证错误消息包含"無効なユーザー"
         """
-        # Arrange - 为禁用用户创建Token
+        # Arrange - 無効ユーザー用のTokenを作成する
         from app.core.auth import create_access_token
         token = create_access_token(
             data={"sub": "disabled-user"},
@@ -493,12 +493,12 @@ class TestAuthEndpointErrors:
         )
         headers = {"Authorization": f"Bearer {token}"}
 
-        # Act - 执行请求
+        # アクション - リクエストの実行
         response = await async_client.get("/auth/users/me", headers=headers)
 
-        # Assert - 验证结果
-        assert response.status_code == 400  # 验证400状态码
-        assert "無効なユーザー" in response.json()["detail"]  # 验证错误消息
+        # Assert - 結果の検証
+        assert response.status_code == 400  # 400ステータスコードの検証
+        assert "無効なユーザー" in response.json()["detail"]  # 検証エラーメッセージ
 
     @pytest.mark.asyncio
     async def test_insufficient_roles(
@@ -516,233 +516,233 @@ class TestAuthEndpointErrors:
           - 验证缺少必要角色时返回403
           - 验证错误消息包含"必要なロール権限がありません"
         """
-        # Arrange - 使用只有rag_search_read_role的用户Token
+        # Arrange - rag_search_read_roleのみのユーザーTokenを使用する
         headers = {"Authorization": f"Bearer {testuser_token}"}
 
-        # Act - 尝试访问需要cspm_dashboard_read_role的端点
+        # Act - cspm_dashboard_read_roleが必要なエンドポイントへのアクセスを試行します
         response = await async_client.get(
             "/protected-dashboard",
             headers=headers
         )
 
-        # Assert - 验证结果
-        assert response.status_code == 403  # 验证403状态码
-        assert "必要なロール権限がありません" in response.json()["detail"]  # 验证错误消息
+        # Assert - 結果の検証
+        assert response.status_code == 403  # 403ステータスコードを検証する
+        assert "必要なロール権限がありません" in response.json()["detail"]  # 検証エラーメッセージ
 
 
 # ============================================================================
-# 异常系测试: 核心逻辑错误测试 (AUTH-E08 ~ AUTH-E13)
+# 異常系テスト: コアロジックエラーテスト (AUTH-E08 ~ AUTH-E13)
 # ============================================================================
 
 class TestAuthCoreLogicErrors:
     """
-    认证核心逻辑异常系测试
+    認証コアロジック異常系テスト
 
-    测试ID: AUTH-E08 ~ AUTH-E13
-    测试对象: app/core/auth.py
+    テストID: AUTH-E08 ~ AUTH-E13
+    テスト対象: app/core/auth.py
     """
 
     def test_verify_password_failure(self):
         """
-        AUTH-E08: 错误密码验证失败
+        AUTH-E08: エラーパスワード検証失敗
 
-        覆盖代码行: auth.py:60 (verify_password失败路径)
+                カバレッジコード行: auth.py:60 (verify_password失敗パス)
 
-        测试目的:
-          - 验证错误密码返回False
+                テスト目的:
+                  - エラーなパスワードが返却される場合Falseを返すことを確認する
 
-        注意: 使用mock绕过bcrypt/passlib兼容性问题
+                注意: bcrypt/passlib互換性問題を回避するためにmockを使用する
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.auth import verify_password
-        # mock只接受"secret"为正确密码
+        # mockは正しいパスワードとしてのみ"secret"を接受する
         hashed = "$2b$12$anyhashvalue"
 
-        # Act - 使用错误密码执行验证
+        # アクション - 異なるパスワードで認証を行う
         result = verify_password("wrongpassword", hashed)
 
-        # Assert - 验证结果
-        assert result is False  # 验证密码不匹配
+        # アサート - 結果の検証
+        assert result is False  # パスワードが一致しません
 
     def test_get_user_not_found(self):
         """
-        AUTH-E09: 不存在用户查询返回None
+        AUTH-E09: 存在しないユーザーのクエリはNoneを返す
 
-        覆盖代码行: auth.py:71 (return None分支)
+                被覆コード行: auth.py:71 (return None支流)
 
-        测试目的:
-          - 验证不存在的用户名返回None
+                テスト目的:
+                  - 存在しないユーザー名がNoneを返すことを確認する
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.auth import get_user, fake_users_db
 
-        # Act - 执行查询
+        # アクション - クエリの実行
         user = get_user(fake_users_db, "nonexistent")
 
-        # Assert - 验证结果
-        assert user is None  # 验证返回None
+        # Assert - 結果の検証
+        assert user is None  # 検証がNoneを返す
 
     def test_authenticate_user_with_roles_unknown(self):
         """
-        AUTH-E10: 带角色认证-用户不存在返回None
+        AUTH-E10: ロール付き認証-ユーザーが存在しない場合Noneを返す
 
-        覆盖代码行: auth.py:92 (not user分支)
+                対象コード行: auth.py:92 (not user分支)
 
-        测试目的:
-          - 验证不存在的用户认证返回None
+                テスト目的:
+                  - 存在しないユーザーの認証がNoneを返すことを確認する
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.auth import authenticate_user_with_roles, fake_users_db
 
-        # Act - 执行认证
+        # Act - 認証を実行する
         user = authenticate_user_with_roles(fake_users_db, "unknown", "secret")
 
-        # Assert - 验证结果
-        assert user is None  # 验证返回None
+        # Assert - 結果の検証
+        assert user is None  # 検証がNoneを返す
 
     def test_authenticate_user_with_roles_wrong_password(self):
         """
-        AUTH-E11: 带角色认证-密码错误返回None
+        AUTH-E11: ロール付き認証-パスワードが間違っている場合Noneを返す
 
-        覆盖代码行: auth.py:94 (not verify_password分支)
+                覆盖コード行: auth.py:94 (not verify_password分支)
 
-        测试目的:
-          - 验证密码错误时认证返回None
+                テスト目的:
+                  - パスワードが間違っている場合、認証がNoneを返すことを確認する
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.auth import authenticate_user_with_roles, fake_users_db
 
-        # Act - 执行认证
+        # Act - 認証を実行する
         user = authenticate_user_with_roles(fake_users_db, "admin", "wrong")
 
-        # Assert - 验证结果
-        assert user is None  # 验证返回None
+        # Assert - 結果の検証
+        assert user is None  # 検証がNoneを返す
 
     @pytest.mark.asyncio
     async def test_get_current_user_no_sub(self):
         """
-        AUTH-E12: 无sub字段Token返回401
+        AUTH-E12: subフィールドのないTokenに対して401を返す
 
-        覆盖代码行: auth.py:130 (username is None分支)
+                被覆コード行: auth.py:130 (usernameがNoneの場合のブランチ)
 
-        测试目的:
-          - 验证Token中没有sub字段时抛出401异常
+                テスト目的:
+                  - Tokenにsubフィールドがない場合に401例外が送出されることを確認する
         """
-        # Arrange - 创建没有sub字段的Token
+        # Arrange - subフィールドのないTokenを作成する
         from app.core.auth import get_current_user, SECRET_KEY, ALGORITHM
         from fastapi import HTTPException
         token = jwt.encode({"data": "no-sub"}, SECRET_KEY, algorithm=ALGORITHM)
 
-        # Act & Assert - 验证抛出异常
+        # アクション & アサート - 例外の_THROW验证
         with pytest.raises(HTTPException) as exc_info:
             await get_current_user(token=token)
-        assert exc_info.value.status_code == 401  # 验证401状态码
+        assert exc_info.value.status_code == 401  # 401ステータスコードを検証する
 
     @pytest.mark.asyncio
     async def test_get_current_user_unknown_sub(self):
         """
-        AUTH-E13: sub不存在于DB返回401
+        AUTH-E13: DBにsubが存在しない場合、401を返す
 
-        覆盖代码行: auth.py:137 (user is None分支)
+                被覆行: auth.py:137 (userがNoneの場合の分岐)
 
-        测试目的:
-          - 验证Token中的sub用户不存在于DB时抛出401异常
+                テスト目的:
+                  - Token内のsubユーザーがDBに存在しない場合、401例外を投げる事を確認する
         """
-        # Arrange - 创建包含不存在用户的Token
+        # Arrange - 存在しないユーザーのTokenを含むものを作成する
         from app.core.auth import get_current_user, SECRET_KEY, ALGORITHM
         from fastapi import HTTPException
         token = jwt.encode({"sub": "ghost-user"}, SECRET_KEY, algorithm=ALGORITHM)
 
-        # Act & Assert - 验证抛出异常
+        # アクション & アサート - 例外の_THROW验证
         with pytest.raises(HTTPException) as exc_info:
             await get_current_user(token=token)
-        assert exc_info.value.status_code == 401  # 验证401状态码
+        assert exc_info.value.status_code == 401  # 401ステータスコードを検証する
 
 
 # ============================================================================
-# 异常系测试: get_current_user_with_roles错误测试 (AUTH-E15 ~ AUTH-E18)
+# 異常系テスト: get_current_user_with_roles エラーテスト (AUTH-E15 ~ AUTH-E18)
 # ============================================================================
 
 class TestGetCurrentUserWithRolesErrors:
     """
-    get_current_user_with_roles() 异常系测试
+    get_current_user_with_roles() の例外系テスト
 
-    测试ID: AUTH-E15 ~ AUTH-E18
-    测试对象: app/core/auth.py
+        テストID: AUTH-E15 ~ AUTH-E18
+        テスト対象: app/core/auth.py
     """
 
     @pytest.mark.asyncio
     async def test_get_current_user_with_roles_no_sub(self):
         """
-        AUTH-E15: 带角色获取用户-无sub返回401
+        AUTH-E15: ロール付きでユーザー取得- subが返らない場合401
 
-        覆盖代码行: auth.py:152 (username is None分支)
+                被覆コード行: auth.py:152 (usernameがNoneの分支)
 
-        测试目的:
-          - 验证Token中没有sub字段时抛出401异常
+                テスト目的:
+                  - Token中にsubフィールドがない場合に401例外を投げるかどうかを検証する
         """
-        # Arrange - 创建只有roles没有sub的Token
+        # Arrange - ロールのみ含みサブを含まないTokenを作成する
         from app.core.auth import get_current_user_with_roles, SECRET_KEY, ALGORITHM
         from fastapi import HTTPException
         token = jwt.encode({"roles": ["admin"]}, SECRET_KEY, algorithm=ALGORITHM)
 
-        # Act & Assert - 验证抛出异常
+        # アクションとアサート - 例外の投.throwを検証する
         with pytest.raises(HTTPException) as exc_info:
             await get_current_user_with_roles(token=token)
-        assert exc_info.value.status_code == 401  # 验证401状态码
+        assert exc_info.value.status_code == 401  # 401ステータスコードを検証する
 
     @pytest.mark.asyncio
     async def test_get_current_user_with_roles_jwt_error(self):
         """
-        AUTH-E16: 带角色获取用户-无效Token返回401
+        AUTH-E16: ロール付きユーザー取得-無効なTokenは401を返す
 
-        覆盖代码行: auth.py:156 (JWTError分支)
+                覆盖コード行: auth.py:156 (JWTError分支)
 
-        测试目的:
-          - 验证无效Token格式时抛出401异常
+                テスト目的:
+                  - 無効なToken形式の場合、401例外を投げる事を確認する
         """
-        # Arrange - 使用无效Token
+        # Arrange - 無効なTokenを使用する
         from app.core.auth import get_current_user_with_roles
         from fastapi import HTTPException
 
-        # Act & Assert - 验证抛出异常
+        # アクションとアサート - 例外の投.throwを検証する
         with pytest.raises(HTTPException) as exc_info:
             await get_current_user_with_roles(token="invalid.token.here")
-        assert exc_info.value.status_code == 401  # 验证401状态码
+        assert exc_info.value.status_code == 401  # 401ステータスコードを検証する
 
     @pytest.mark.asyncio
     async def test_get_current_user_with_roles_unknown_user(self):
         """
-        AUTH-E17: 带角色获取用户-用户不存在返回401
+        AUTH-E17: ロール付きでユーザーを取得-ユーザーが存在しない場合401を返す
 
-        覆盖代码行: auth.py:159 (user is None分支)
+                覆盖コード行: auth.py:159 (user is Noneのブランチ)
 
-        测试目的:
-          - 验证Token中的用户不存在于DB时抛出401异常
+                テスト目的:
+                  - Token内のユーザーがDBに存在しない場合、401例外を投げる事を確認する
         """
-        # Arrange - 创建包含不存在用户的Token
+        # Arrange - 存在しないユーザーのTokenを含むものを作成する
         from app.core.auth import get_current_user_with_roles, SECRET_KEY, ALGORITHM
         from fastapi import HTTPException
         token = jwt.encode(
             {"sub": "ghost-user", "roles": []}, SECRET_KEY, algorithm=ALGORITHM
         )
 
-        # Act & Assert - 验证抛出异常
+        # アクションとアサート - 例外の投.throwを検証する
         with pytest.raises(HTTPException) as exc_info:
             await get_current_user_with_roles(token=token)
-        assert exc_info.value.status_code == 401  # 验证401状态码
+        assert exc_info.value.status_code == 401  # 401ステータスコードを検証する
 
     @pytest.mark.asyncio
     async def test_disabled_user_with_roles(self):
         """
-        AUTH-E18: 带角色禁用用户返回400
+        AUTH-E18: 無効化されたユーザーを含む場合、400が返される
 
-        覆盖代码行: auth.py:181 (current_user.disabled分支)
+                覆盖コード行: auth.py:181 (current_user.disabled支流)
 
-        测试目的:
-          - 验证禁用用户通过get_current_active_user_with_roles时抛出400异常
+                テスト目的:
+                  - 無効化されたユーザーがget_current_active_user_with_roles時に400例外を投げる事を確認する
         """
-        # Arrange - 创建禁用用户对象
+        # Arrange - 無効ユーザー オブジェクトの作成
         from app.core.auth import get_current_active_user_with_roles
         from app.models.auth import UserWithRoles
         from fastapi import HTTPException
@@ -754,23 +754,23 @@ class TestGetCurrentUserWithRolesErrors:
             roles=["rag_search_read_role"]
         )
 
-        # Act & Assert - 验证抛出异常
+        # アクション & アサート - 例外の_THROW验证
         with pytest.raises(HTTPException) as exc_info:
             await get_current_active_user_with_roles(current_user=disabled_user)
-        assert exc_info.value.status_code == 400  # 验证400状态码
-        assert "無効なユーザー" in exc_info.value.detail  # 验证错误消息
+        assert exc_info.value.status_code == 400  # 400ステータスコードの検証
+        assert "無効なユーザー" in exc_info.value.detail  # 検証エラーメッセージ
 
 
 # ============================================================================
-# 异常系测试: RBAC错误测试 (AUTH-E14)
+# 異常系テスト: RBACエラーテスト (AUTH-E14)
 # ============================================================================
 
 class TestRBACErrors:
     """
-    RBAC (角色访问控制) 异常系测试
+    RBAC（役割ベースアクセス制御）異常系テスト
 
-    测试ID: AUTH-E14
-    测试对象: app/core/auth.py
+    テストID: AUTH-E14
+    テスト対象: app/core/auth.py
     """
 
     @pytest.mark.asyncio
@@ -784,7 +784,7 @@ class TestRBACErrors:
           - 验证用户只有部分要求角色时抛出403异常
           - 验证错误消息包含"不足ロール"
         """
-        # Arrange - 准备只有部分角色的用户
+        # Arrange - 一部の役割のみを持つユーザーの準備を行う
         from app.core.auth import require_all_roles
         from app.models.auth import UserWithRoles
         from fastapi import HTTPException
@@ -792,40 +792,40 @@ class TestRBACErrors:
         checker = require_all_roles(["cspm_dashboard_read_role", "cspm_job_execution_role"])
         user = UserWithRoles(
             username="dashboard-user",
-            roles=["cspm_dashboard_read_role"]  # 缺少cspm_job_execution_role
+            roles=["cspm_dashboard_read_role"]  # cspm_job_execution_roleが欠缺しています
         )
 
-        # Act & Assert - 验证抛出异常
+        # アクション & アサート - 例外の_THROW验证
         with pytest.raises(HTTPException) as exc_info:
             await checker(current_user=user)
-        assert exc_info.value.status_code == 403  # 验证403状态码
-        assert "不足ロール" in exc_info.value.detail  # 验证错误消息包含不足角色提示
+        assert exc_info.value.status_code == 403  # 403ステータスコードを検証する
+        assert "不足ロール" in exc_info.value.detail  # 検証エラーメッセージに不足する文字数のヒントが含まれていることを確認します。
 
 
 # ============================================================================
-# 安全测试 (AUTH-SEC-01 ~ AUTH-SEC-08)
+# セキュリティテスト (AUTH-SEC-01 ～ AUTH-SEC-08)
 # ============================================================================
 
 @pytest.mark.security
 class TestAuthSecurity:
     """
-    认证安全测试
+    認証セキュリティテスト
 
-    测试ID: AUTH-SEC-01 ~ AUTH-SEC-08
-    测试对象: app/core/auth.py
+    テストID: AUTH-SEC-01 ~ AUTH-SEC-08
+    テスト対象: app/core/auth.py
     """
 
     def test_password_is_hashed(self):
         """
-        AUTH-SEC-01: 密码bcrypt哈希验证
+        AUTH-SEC-01: パスワードのbcryptハッシュ検証
 
-        测试目的:
-          - 验证fake_users_db中所有用户的密码都是bcrypt哈希格式
+                テスト目的:
+                  - fake_users_dbのすべてのユーザーのパスワードがbcryptハッシュ形式であることを確認する
         """
-        # Arrange - 获取用户数据库
+        # Arrange - ユーザーデータベースを取得する
         from app.core.auth import fake_users_db
 
-        # Act & Assert - 验证所有密码都是bcrypt格式
+        # アクション & アサート - すべてのパスワードがbcrypt形式であることを確認する
         for username, user_data in fake_users_db.items():
             assert user_data["hashed_password"].startswith("$2b$"), \
                 f"用户 {username} 的密码不是bcrypt哈希格式"
@@ -837,20 +837,20 @@ class TestAuthSecurity:
         valid_token: str
     ):
         """
-        AUTH-SEC-02: 篡改Token被拒绝
+        AUTH-SEC-02: 編造されたTokenは拒否される
 
-        测试目的:
-          - 验证修改过的Token会被签名验证拒绝
+                テスト目的:
+                  - 編造されたTokenが署名検証で拒否されることを確認する
         """
-        # Arrange - 篡改Token（修改最后5个字符）
+        # Arrange - Tokenの改ざん（最後の5文字を変更）
         modified_token = valid_token[:-5] + "xxxxx"
         headers = {"Authorization": f"Bearer {modified_token}"}
 
-        # Act - 使用篡改的Token请求
+        # アクション - 改ざんされたTokenを使用したリクエスト
         response = await async_client.get("/auth/users/me", headers=headers)
 
-        # Assert - 验证被拒绝
-        assert response.status_code == 401  # 验证401状态码
+        # Assert - 確認が拒否されました
+        assert response.status_code == 401  # 401ステータスコードを検証する
 
     @pytest.mark.asyncio
     async def test_password_not_in_response(
@@ -859,21 +859,21 @@ class TestAuthSecurity:
         valid_token: str
     ):
         """
-        AUTH-SEC-03: 响应不包含密码信息
+        AUTH-SEC-03: レスポンスにはパスワード情報が含まれていない
 
-        测试目的:
-          - 验证API响应中不包含password或hashed相关字段
+                テスト目的:
+                  - APIのレスポンスにpasswordまたはhashedに関連するフィールドが含まれていないことを確認する
         """
-        # Arrange - 准备认证头
+        # Arrange - 認証ヘッダーの準備
         headers = {"Authorization": f"Bearer {valid_token}"}
 
-        # Act - 获取用户信息
+        # アクション - ユーザ情報取得
         response = await async_client.get("/auth/users/me", headers=headers)
 
-        # Assert - 验证响应不包含密码信息
+        # Assert - レスポンスにパスワード情報が含まれていないことを確認する
         response_text = str(response.json()).lower()
-        assert "password" not in response_text  # 验证不包含password
-        assert "hashed" not in response_text  # 验证不包含hashed
+        assert "password" not in response_text  # パスワードを含まないことを確認する
+        assert "hashed" not in response_text  # ハッシュされたものが含まれていないことを確認する
 
     @pytest.mark.asyncio
     async def test_token_expiry_enforced(
@@ -882,41 +882,41 @@ class TestAuthSecurity:
         expired_token: str
     ):
         """
-        AUTH-SEC-04: Token有效期强制执行
+        AUTH-SEC-04: Token有効期限の強制実行
 
-        测试目的:
-          - 验证过期Token被正确拒绝
+                テスト目的:
+                  - 过期Tokenが正しく拒否されることを確認する
         """
-        # Arrange - 使用过期Token
+        # Arrange - 有効期限切れのTokenを使用する
         headers = {"Authorization": f"Bearer {expired_token}"}
 
-        # Act - 使用过期Token请求受保护路由
+        # アクション - 有効期限切れのトークンを使用して保護されたルートにリクエストを行う
         response = await async_client.get("/auth/protected", headers=headers)
 
-        # Assert - 验证被拒绝
-        assert response.status_code == 401  # 验证401状态码
+        # アサートチェックが拒否されました
+        assert response.status_code == 401  # 401ステータスコードを検証する
 
     def test_default_secret_key_warning(self):
         """
-        AUTH-SEC-05: 默认SECRET_KEY警告
+        AUTH-SEC-05: デフォルトのSECRET_KEY警告
 
-        覆盖代码行: auth.py:18 (JWT_SECRET_KEY环境变量未设置时)
+                覆盖コード行: auth.py:18 (JWT_SECRET_KEY環境変数が設定されていない場合)
 
-        测试目的:
-          - 验证JWT_SECRET_KEY未设置时使用默认值
-          - 【安全建议】生产环境应强制要求设置环境变量
+                テスト目的:
+                  - JWT_SECRET_KEYが設定されていない場合、デフォルト値を使用することを確認する
+                  - 【セキュリティ推奨】本番環境では環境変数の設定を強制すること
 
-        注意: 此测试通过检查源代码中的默认值逻辑来验证
+                注意: このテストは、ソースコード中のデフォルト値のロジックを確認するために実施します。
         """
-        # Arrange - 检查auth.py中的默认值逻辑
+        # Arrange - auth.pyのデフォルト値の論理をチェックする
         import inspect
         from app.core import auth
 
-        # 获取模块源代码
+        # モジュールのソースコードを取得する
         source = inspect.getsource(auth)
 
-        # Assert - 验证源代码中存在默认值设置
-        # 检查是否有 os.getenv("JWT_SECRET_KEY", "your-secret-key...") 形式的代码
+        # Assert - デフォルト値の設定が存在することをソースコードで確認する
+        # "os.getenv("JWT_SECRET_KEY", "your-secret-key...") の形式のコードがあるかどうかをチェックします
         assert 'os.getenv("JWT_SECRET_KEY"' in source or "os.getenv('JWT_SECRET_KEY'" in source, \
             "auth.py应该从环境变量读取JWT_SECRET_KEY"
 
@@ -926,13 +926,13 @@ class TestAuthSecurity:
     @pytest.mark.asyncio
     async def test_jwt_alg_none_attack_rejected(self):
         """
-        AUTH-SEC-06: JWT alg=none攻击防御
+        AUTH-SEC-06: JWT alg=none攻撃防御
 
-        测试目的:
-          - 验证alg=none的Token会被jose.jwt.decode()拒绝
-          - 防止算法降级攻击
+                テスト目的:
+                  - alg=noneのTokenがjose.jwt.decode()で拒否されることを確認する
+                  - アルゴリズム降格攻撃を防止する
         """
-        # Arrange - 手动创建alg=none的JWT
+        # Arrange - 手動でalg=NoneのJWTを作成する
         from app.core.auth import get_current_user
         from fastapi import HTTPException
 
@@ -946,89 +946,89 @@ class TestAuthSecurity:
             json.dumps(payload).encode()
         ).decode().rstrip("=")
 
-        # alg=none时签名部分为空
+        # alg=noneの場合は、署名部分は空となる
         fake_token = f"{header_b64}.{payload_b64}."
 
-        # Act & Assert - 验证被拒绝
+        # アクション & アサート - リクエストが拒否されました
         with pytest.raises(HTTPException) as exc_info:
             await get_current_user(token=fake_token)
-        assert exc_info.value.status_code == 401  # 验证401状态码
+        assert exc_info.value.status_code == 401  # 401ステータスコードを検証する
 
     @pytest.mark.asyncio
     async def test_jwt_role_tampering_rejected(self):
         """
-        AUTH-SEC-07: JWT角色篡改检测
+        AUTH-SEC-07: JWTロール改ざん検出
 
-        测试目的:
-          - 验证篡改JWT payload后签名验证失败
-          - 防止角色注入攻击
+                テスト目的:
+                  - JWTペイロードを改ざんした後に署名検証が失敗することを確認する
+                  - ロールインジェクション攻撃を防止する
         """
-        # Arrange - 创建有效Token然后篡改payload
+        # Arrange - 有効なTokenを作成した後、payloadを改ざんする
         from app.core.auth import get_current_user_with_roles, SECRET_KEY, ALGORITHM
         from fastapi import HTTPException
 
-        # 创建有效Token
+        # 有効なトークンを作成する
         valid_payload = {"sub": "testuser", "roles": ["rag_search_read_role"]}
         valid_token = jwt.encode(valid_payload, SECRET_KEY, algorithm=ALGORITHM)
 
-        # 篡改payload（添加管理员角色）
+        # ペイロードを改ざん（管理者役割を追加）
         parts = valid_token.split(".")
         tampered_payload = {"sub": "testuser", "roles": ["cspm_job_execution_role"]}
         tampered_payload_b64 = base64.urlsafe_b64encode(
             json.dumps(tampered_payload).encode()
         ).decode().rstrip("=")
 
-        # 签名保持原样（与篡改后的payload不匹配）
+        # 署名は元のまま保持される（改ざんされたペイロードとマッチングしない）
         tampered_token = f"{parts[0]}.{tampered_payload_b64}.{parts[2]}"
 
-        # Act & Assert - 验证被拒绝
+        # アクション & アサート - リクエストが拒否されました
         with pytest.raises(HTTPException) as exc_info:
             await get_current_user_with_roles(token=tampered_token)
-        assert exc_info.value.status_code == 401  # 验证401状态码
+        assert exc_info.value.status_code == 401  # 401ステータスコードを検証する
 
     @pytest.mark.asyncio
     @pytest.mark.xfail(reason="当前实现存在安全漏洞：auth.py:163会合并JWT和DB角色，允许角色提权")
     async def test_role_escalation_prevented(self):
         """
-        AUTH-SEC-08: 角色提权防止
+        AUTH-SEC-08: ロールの昇格防止
 
-        覆盖代码行: auth.py:163 (combined_roles合并逻辑)
+                対象コード行: auth.py:163 (combined_rolesの合併ロジック)
 
-        测试目的:
-          - 验证JWT中的恶意角色不会被添加到用户权限中
-          - 验证只有DB中定义的角色是有效的
+                テスト目的:
+                  - JWT内の悪意のあるロールがユーザー権限に追加されないことを確認する
+                  - DBで定義されたロールのみが有効であることを確認する
 
-        【安全漏洞说明】
-        当前实现(auth.py:163)会合并JWT中的roles和DB中的roles:
-          combined_roles = list(set(token_data.roles + user.roles))
+                【セキュリティ脆弱性の説明】
+                現在の実装(auth.py:163)は、JWT内のrolesとDB内のrolesを合併します:
+                  combined_roles = list(set(token_data.roles + user.roles))
 
-        这允许攻击者在JWT中注入任意角色实现权限提升。
+                これにより、攻撃者がJWTに任意のロールを注入し、権限を昇格させることができます。
 
-        【修复建议】
-        应该只使用DB中的roles，忽略JWT中的roles:
-          return UserWithRoles(..., roles=user.roles)
+                【修正の提案】
+                DB内のrolesのみを使用し、JWT内のrolesを無視するべきです:
+                  return UserWithRoles(..., roles=user.roles)
         """
-        # Arrange - 创建包含恶意角色的Token
+        # Arrange - マルウェアを含むTokenを作成する
         from app.core.auth import get_current_user_with_roles, SECRET_KEY, ALGORITHM
 
-        # testuser在DB中只有rag_search_read_role
-        # 但JWT中包含cspm_job_execution_role（恶意注入）
+        # testuserはDBで seulement rag_search_read_role を持っています
+        # しかし、JWTには悪意のある注入であるcspm_job_execution_roleが含まれています
         malicious_payload = {
             "sub": "testuser",
-            "roles": ["cspm_job_execution_role"],  # DB中没有的角色
+            "roles": ["cspm_job_execution_role"],  # DBに存在しない役割
             "exp": 9999999999
         }
         malicious_token = jwt.encode(malicious_payload, SECRET_KEY, algorithm=ALGORITHM)
 
-        # Act - 获取用户
+        # アクション - ユーザ取得
         user = await get_current_user_with_roles(token=malicious_token)
 
-        # Assert - 验证DB中的角色存在
+        # Assert - DBに役割が存在することを確認する
         assert "rag_search_read_role" in user.roles, \
             "DB中定义的角色应该存在"
 
-        # Assert - 验证JWT中的恶意角色不存在
-        # 【注意】当前实现会失败此断言，因为存在安全漏洞
+        # Assert - JWTに悪意のあるロールが存在しないことを確認する
+        # 【注意】現在の実装はこのアサーションで失敗します因为它存在セキュリティ上の脆弱性
         assert "cspm_job_execution_role" not in user.roles, \
             "【安全漏洞】JWT中注入的角色不应该被接受。" \
             "请修改auth.py:163，只使用DB中的roles。"

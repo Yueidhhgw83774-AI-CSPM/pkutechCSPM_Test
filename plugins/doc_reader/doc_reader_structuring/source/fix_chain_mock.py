@@ -1,24 +1,24 @@
 """
-修复Structuring测试中的Mock设置
-使Chain的Mock正确返回期望的值
+StructuringテストでのMock設定の修正
+ChainのMockを期望値を正しく返すようにする
 """
 
 with open('test_doc_reader_structuring.py', 'r', encoding='utf-8') as f:
     content = f.read()
 
-# 修复所有测试中的Chain Mock
-# 问题：Chain是通过 prompt | llm | parser 构建的
-# 我们需要Mock这个管道操作符的结果
+# すべてのテストでのChain Mockの修正
+# 問題：Chainはprompt | llm | parserで構成されます
+# 我们需要Mockこのパイプ演算子の結果を必要とする
 
-# 策略：直接Mock structure_item_with_llm的返回值，而不是Mock内部实现
-# 或者正确地Mock整个Chain
+# stratégie：直接 `structure_item_with_llm` の返り値を Mock するのではなく、内部実装を Mock します
+# または、Chain全体を正しくMockする
 
-# 简单方法：为所有需要测试错误情况的测试，直接Mock function返回值
+# 簡単な方法：テストで必要なエラー状況をテストするために、直接Mock functionの返却値を設定する。
 
 import re
 
-# 查找所有使用mock_chain.invoke的测试并修复
-# 将 mock_prompt.from_template.return_value 改为 mock_prompt.from_messages.return_value
+# mock_chain.invokeを使用しているすべてのテストを検出し、修正する
+# mock_prompt.from_template.return_value を mock_prompt.from_messages.return_value に変更してください。
 
 content = re.sub(
     r'mock_prompt\.from_template\.return_value',
@@ -26,7 +26,7 @@ content = re.sub(
     content
 )
 
-# 保存
+# 保存する
 with open('test_doc_reader_structuring.py', 'w', encoding='utf-8') as f:
     f.write(content)
 

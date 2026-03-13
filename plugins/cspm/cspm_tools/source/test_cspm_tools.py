@@ -51,7 +51,7 @@ class TestValidatePolicy:
         assert "Validation successful" in result
 
     def test_validate_success_with_stderr_warning(self, mock_subprocess_success, mock_tempfile):
-        """CSPM-T-007: 検証成功＋stderr警告"""
+        """CSPM-T-007: バリデーション成功＋stderr警告"""
         from app.cspm_plugin.tools import validate_policy
         _, mock_result = mock_subprocess_success
         mock_result.stderr = "Warning: deprecated syntax"

@@ -66,7 +66,7 @@ class TestResultCollector:
             "duration": f"{duration:.3f}s"
         }
 
-        # 分類
+        # 分类
         if "Security" in class_name:
             self.results["security"].append(result)
         elif "Error" in class_name or "_e0" in test_name:
@@ -96,7 +96,7 @@ class TestResultCollector:
             "test_process_text_file_response_japanese_message": "日本語メッセージ",
             "test_process_text_file_response_nested_compliance": "ネストしたComplianceItem",
 
-            # Base64TextRequest 正常系
+            # Base64TextRequest 通常系
             "test_base64_text_request_minimal": "Base64TextRequest 最小構成",
             "test_base64_text_request_with_session_id": "session_id付き",
             "test_base64_text_request_empty_session_id": "空session_id",

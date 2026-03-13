@@ -9,7 +9,7 @@ import json
 from unittest.mock import patch, MagicMock, AsyncMock
 
 
-# ==================== 正常系 (JOB-001~010) ====================
+# ==================== 正常系 (ジョブ-001~010) ====================
 class TestJobsStartEndpoints:
     """ジョブ開始エンドポイントのテスト (3 tests)"""
 
@@ -336,7 +336,7 @@ class TestJobsErrors:
     @pytest.mark.asyncio
     async def test_job_status_not_found(self, authenticated_client, mock_status_manager):
         """JOB-E01: 存在しないジョブで404"""
-        # Arrange - mock返回None会导致404
+        # Arrange - mockがNoneを返すと404が発生する
 
         # Act
         response = await authenticated_client.get("/jobs/invalid-id/status")

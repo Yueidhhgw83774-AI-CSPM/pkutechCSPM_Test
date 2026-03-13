@@ -19,7 +19,7 @@ from pathlib import Path
 import base64
 from dotenv import load_dotenv
 
-# 读取 .env 配置
+# .envファイルの設定を読み込む
 _env_path = Path(__file__).resolve().parent.parent.parent.parent / ".env"
 if _env_path.exists():
     load_dotenv(_env_path)
@@ -164,7 +164,7 @@ class TestChatHistory:
         session_id = "test-session"
         history = chat_history_with_limit
 
-        # Act - 25件追加
+        # アクタ - 25件追加
         for i in range(25):
             history.add_message(session_id, "user", f"メッセージ{i}")
 
@@ -847,7 +847,7 @@ class TestToolErrors:
 
     @pytest.mark.asyncio
     async def test_simple_chat_http_exception_reraise(self):
-        """CHAT-E14: simple_chat_with_basic_auth HTTPException再発生"""
+        """CHAT-E14: simple_chat_with_basic_auth HTTPExceptionが再発生"""
         # Arrange
         from app.chat_dashboard.simple_chat_handler import simple_chat_with_basic_auth
         from fastapi import HTTPException
@@ -1035,7 +1035,7 @@ class TestChatDashboardSecurity:
 
     @pytest.mark.asyncio
     async def test_unicode_normalization_attack(self, authenticated_client, mock_simple_chatbot):
-        """CHAT-SEC-10: Unicode正規化攻撃対策"""
+        """CHAT-SEC-10: Unicode正常化攻撃対策"""
         request_data = {"session_id": "test-session", "prompt": "ａｄｍｉｎ"}
 
         response = await authenticated_client.post(

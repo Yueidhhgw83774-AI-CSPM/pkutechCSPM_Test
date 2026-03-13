@@ -305,7 +305,7 @@ class TestDeepAgentsProgress:
     """Deep Agents進捗情報のテスト"""
 
     def test_mcpda_005_build_progress_with_dict_tasks(self):
-        """MCPDA-005: 進捗情報構築（dict形式）"""
+        """MCPDA-005: 進行状況情報構築（dict形式）"""
         # Arrange
         from app.mcp_plugin.deep_agents.agent import build_progress_from_state
 
@@ -326,7 +326,7 @@ class TestDeepAgentsProgress:
         assert hasattr(progress, "llm_calls") or "llm_calls" in str(progress)
 
     def test_mcpda_009_build_progress_with_object_tasks(self):
-        """MCPDA-009: 進捗情報構築（object形式 - model_dump使用）"""
+        """MCPDA-009: 進行状況情報構築（object形式 - model_dump使用）"""
         # Arrange
         from app.mcp_plugin.deep_agents.agent import build_progress_from_state
 

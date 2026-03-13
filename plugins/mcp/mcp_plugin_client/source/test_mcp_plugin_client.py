@@ -1,15 +1,15 @@
 """
-MCP Plugin Client 单元测试
+MCP Plugin Client ユニットテスト
 
-测试规格: docs/testing/plugins/mcp/mcp_plugin_client_tests.md
-覆盖率目标: 85%+
+テスト仕様: docs/testing/plugins/mcp/mcp_plugin_client_tests.md
+カバレッジ目標: 85%+
 
-测试类别:
-  - 正常系: 18 个测试
-  - 异常系: 12 个测试
-  - 安全测试: 5 个测试
+テストカテゴリ:
+  - 正常系: 18 個のテスト
+  - 異常系: 12 個のテスト
+  - セキュリティテスト: 5 個のテスト
 
-总计: 35 个测试
+合計: 35 個のテスト
 """
 
 import pytest
@@ -20,7 +20,7 @@ import json
 import os
 import asyncio
 
-# 导入被测试模块
+# テスト対象のモジュールをインポートする
 project_root = Path(__file__).resolve().parent.parent.parent.parent.parent.parent / "platform_python_backend-testing"
 if not project_root.exists():
     raise RuntimeError(f"项目根目录不存在: {project_root}")
@@ -36,7 +36,7 @@ from app.models.mcp import MCPServer, MCPToolCall, MCPTool, MCPToolType
 
 @pytest.fixture
 def mcp_client_instance():
-    """MCP客户端实例"""
+    """MCPクライアントインスタンス"""
     client = MCPClient()
     yield client
     client.servers.clear()
@@ -46,7 +46,7 @@ def mcp_client_instance():
 
 @pytest.fixture
 def mock_process_pool():
-    """模拟进程池"""
+    """シミュレーションプロセスプール"""
     with patch('app.mcp_plugin.client.mcp_process_pool') as mock_pool:
         mock_pool.pools = {}
         mock_pool.initialize_pool = AsyncMock(return_value=True)
@@ -58,7 +58,7 @@ def mock_process_pool():
 
 @pytest.fixture
 def sample_server():
-    """示例服务器配置"""
+    """例のサーバ設定"""
     return MCPServer(
         name="test-server",
         command="npx",
@@ -69,7 +69,7 @@ def sample_server():
 
 
 # ============================================
-# 正常系测试 (18个)
+# 正常系テスト（18件）
 # ============================================
 
 class TestMCPClientServerManagement:
@@ -87,7 +87,7 @@ class TestMCPClientServerManagement:
         """MCPC-002: サーバー接続成功"""
         await mcp_client_instance.add_server(sample_server)
 
-        # 确保使用 mock 的 process_pool
+        # mockのprocess_poolを使用することを確認してください
         mcp_client_instance.process_pool = mock_process_pool
         mock_process_pool.initialize_pool.return_value = True
 
@@ -116,7 +116,7 @@ class TestMCPClientToolCalls:
     @pytest.mark.asyncio
     async def test_call_tool_success(self, mcp_client_instance, mock_process_pool):
         """MCPC-004: ツール呼び出し成功"""
-        # Arrange - 模拟服务器已连接
+        # Arrange - シミュレーションサーバーに接続されました
         from app.models.mcp import MCPServerStatus
         mcp_client_instance.servers["test-server"] = MCPServer(name="test-server", command="cmd")
         mcp_client_instance.server_status["test-server"] = MCPServerStatus(
@@ -124,7 +124,7 @@ class TestMCPClientToolCalls:
         )
         mcp_client_instance.process_pool = mock_process_pool
 
-        # 确保 process_pool.pools 中有该服务器（表示已连接）
+        # process_pool.pools にそのサーバーが存在することを確認してください（接続されていることを示します）
         mock_process_pool.pools = {"test-server": MagicMock()}
 
         tool_call = MCPToolCall(tool_name="search", parameters={"query": "test"})
@@ -217,7 +217,7 @@ class TestMCPClientRetryAndPool:
         """MCPC-011: 接続リトライ成功"""
         await mcp_client_instance.add_server(sample_server)
 
-        # 确保使用 mock 的 process_pool
+        # mockのprocess_poolを使用することを確認してください
         mcp_client_instance.process_pool = mock_process_pool
 
         call_count = 0
@@ -290,7 +290,7 @@ class TestMCPClientRetryAndPool:
 
 
 # ============================================
-# 异常系测试 (12个)
+# 異常系テスト (12個)
 # ============================================
 
 class TestMCPClientErrors:
@@ -359,7 +359,7 @@ class TestMCPClientErrors:
 
     @pytest.mark.asyncio
     async def test_load_config_invalid_json(self, mcp_client_instance, tmp_path):
-        """MCPC-E08: 不正JSON"""
+        """MCPC-E08: 不正なJSON"""
         f = tmp_path / "bad.json"
         f.write_text("{ bad json }")
         result = await mcp_client_instance.load_config_file(str(f))
@@ -368,9 +368,9 @@ class TestMCPClientErrors:
     @pytest.mark.asyncio
     async def test_disconnect_nonexistent(self, mcp_client_instance):
         """MCPC-E09: 存在しないサーバー切断"""
-        # disconnect_server 不检查服务器是否存在，总是返回 True
+        # disconnect_server はサーバが存在するかどうかをチェックせず、常に True を返します
         result = await mcp_client_instance.disconnect_server("nonexistent")
-        assert result is True  # 实际不报错，只是没有操作
+        assert result is True  # 実際にはエラーは出ないが、操作が行われないだけである
 
     @pytest.mark.asyncio
     async def test_call_internal_tool_not_found(self, mcp_client_instance):
@@ -396,7 +396,7 @@ class TestMCPClientErrors:
 
 
 # ============================================
-# 安全测试 (5个)
+# セキュリティテスト (5つ)
 # ============================================
 
 @pytest.mark.security
