@@ -59,21 +59,21 @@ from app.core.crypto import (
 # Test Result Collector
 # =============================================================================
 class TestResultCollector:
-    """收集测试结果并生成报告的工具类"""
+    """テスト結果を収集してレポートを生成するユーティリティクラス"""
     def __init__(self):
         self.results: List[Dict[str, Any]] = []
         self.start_time: Optional[datetime] = None
         self.end_time: Optional[datetime] = None
     def start(self):
-        """开始测试计时"""
+        """テスト計測を開始する"""
         self.start_time = datetime.now()
     def end(self):
-        """结束测试计时"""
+        """テスト計測を終了する"""
         self.end_time = datetime.now()
     def add_result(self, test_id: str, test_name: str, category: str, 
                    passed: bool, message: str = "", expected_fail: bool = False, 
                    duration: float = 0.0):
-        """添加测试结果"""
+        """テスト結果を追加する"""
         self.results.append({
             "test_id": test_id,
             "test_name": test_name,
@@ -85,7 +85,7 @@ class TestResultCollector:
             "timestamp": datetime.now().isoformat()
         })
     def generate_markdown_report(self, output_path: str):
-        """生成 Markdown 格式报告"""
+        """Markdownフォーマットのレポートを生成する"""
         total = len(self.results)
         passed = sum(1 for r in self.results if r["passed"])
         failed = sum(1 for r in self.results if not r["passed"] and not r["expected_fail"])
@@ -97,76 +97,76 @@ class TestResultCollector:
             duration = (self.end_time - self.start_time).total_seconds()
         else:
             duration = sum(r["duration"] for r in self.results)
-        report = f"""# crypto.py 测试报告
-## 测试概要
-| 项目 | 值 |
+        report = f"""# crypto.py テストレポート
+## テスト概要
+| 項目 | 値 |
 |------|-----|
-| 测试对象 | app/core/crypto.py |
-| 测试规格 | crypto_tests.md |
-| 执行时间 | {datetime.now().strftime("%Y-%m-%d %H:%M:%S")} |
-| 总执行时长 | {duration:.2f} 秒 |
-| 覆盖率目标 | 90% |
-## 测试结果统计
-| 类别 | 总数 | 通过 | 失败 | 预期失败 |
+| テスト対象 | app/core/crypto.py |
+| テスト仕様 | crypto_tests.md |
+| 実行日時 | {datetime.now().strftime("%Y-%m-%d %H:%M:%S")} |
+| 総実行時間 | {duration:.2f} 秒 |
+| カバレッジ目標 | 90% |
+## テスト結果集計
+| カテゴリ | 総数 | 成功 | 失敗 | 予期失敗 |
 |------|------|------|------|---------|
 | 正常系 | {len(normal_tests)} | {sum(1 for r in normal_tests if r["passed"])} | {sum(1 for r in normal_tests if not r["passed"] and not r["expected_fail"])} | {sum(1 for r in normal_tests if r["expected_fail"])} |
-| 异常系 | {len(error_tests)} | {sum(1 for r in error_tests if r["passed"])} | {sum(1 for r in error_tests if not r["passed"] and not r["expected_fail"])} | {sum(1 for r in error_tests if r["expected_fail"])} |
-| 安全测试 | {len(security_tests)} | {sum(1 for r in security_tests if r["passed"])} | {sum(1 for r in security_tests if not r["passed"] and not r["expected_fail"])} | {sum(1 for r in security_tests if r["expected_fail"])} |
-| **合计** | **{total}** | **{passed}** | **{failed}** | **{xfail}** |
-## 测试通过率
-- **实际通过率**: {(passed / total * 100) if total > 0 else 0:.1f}%
-- **有效通过率** (排除预期失败): {(passed / (total - xfail) * 100) if (total - xfail) > 0 else 0:.1f}%
+| 異常系 | {len(error_tests)} | {sum(1 for r in error_tests if r["passed"])} | {sum(1 for r in error_tests if not r["passed"] and not r["expected_fail"])} | {sum(1 for r in error_tests if r["expected_fail"])} |
+| セキュリティ | {len(security_tests)} | {sum(1 for r in security_tests if r["passed"])} | {sum(1 for r in security_tests if not r["passed"] and not r["expected_fail"])} | {sum(1 for r in security_tests if r["expected_fail"])} |
+| **合計** | **{total}** | **{passed}** | **{failed}** | **{xfail}** |
+## 合格率
+- **実際の合格率**: {(passed / total * 100) if total > 0 else 0:.1f}%
+- **有効合格率**（予期失敗を除く）: {(passed / (total - xfail) * 100) if (total - xfail) > 0 else 0:.1f}%
 ---
-## 正常系测试详情
-| ID | 测试名称 | 结果 | 执行时间 | 备注 |
+## 正常系テスト詳細
+| ID | テスト名 | 結果 | 実行時間 | 備考 |
 |----|---------|------|---------|------|
 """
         for r in normal_tests:
-            status = "✅ 通过" if r["passed"] else ("⚠️ 预期失败" if r["expected_fail"] else "❌ 失败")
+            status = "✅ 成功" if r["passed"] else ("⚠️ 予期失敗" if r["expected_fail"] else "❌ 失敗")
             report += f"| {r['test_id']} | {r['test_name']} | {status} | {r['duration']*1000:.2f}ms | {r['message']} |\n"
         report += """
 ---
-## 异常系测试详情
-| ID | 测试名称 | 结果 | 执行时间 | 备注 |
+## 異常系テスト詳細
+| ID | テスト名 | 結果 | 実行時間 | 備考 |
 |----|---------|------|---------|------|
 """
         for r in error_tests:
-            status = "✅ 通过" if r["passed"] else ("⚠️ 预期失败" if r["expected_fail"] else "❌ 失败")
+            status = "✅ 成功" if r["passed"] else ("⚠️ 予期失敗" if r["expected_fail"] else "❌ 失敗")
             report += f"| {r['test_id']} | {r['test_name']} | {status} | {r['duration']*1000:.2f}ms | {r['message']} |\n"
         report += """
 ---
-## 安全测试详情
-| ID | 测试名称 | 结果 | 执行时间 | 备注 |
+## セキュリティテスト詳細
+| ID | テスト名 | 結果 | 実行時間 | 備考 |
 |----|---------|------|---------|------|
 """
         for r in security_tests:
-            status = "✅ 通过" if r["passed"] else ("⚠️ 预期失败" if r["expected_fail"] else "❌ 失败")
+            status = "✅ 成功" if r["passed"] else ("⚠️ 予期失敗" if r["expected_fail"] else "❌ 失敗")
             report += f"| {r['test_id']} | {r['test_name']} | {status} | {r['duration']*1000:.2f}ms | {r['message']} |\n"
         report += """
 ---
-## 预期失败测试说明
-| ID | 问题描述 | 建议修复方案 |
+## 予期失敗テスト説明
+| ID | 問題説明 | 修正案 |
 |----|---------|-------------|
-| CRYPTO-SEC-01 | verify_auth_hash 使用 == 比较，存在时序攻击风险 | 使用 hmac.compare_digest() |
-| CRYPTO-SEC-03 | 解密错误时 str(e) 泄露内部详情 | 返回统一的通用错误信息 |
-| CRYPTO-SEC-06 | 不同类型的解密错误返回不同消息 | 统一所有解密错误消息 |
+| CRYPTO-SEC-01 | verify_auth_hash で == 比較を使用、タイミング攻撃リスクあり | hmac.compare_digest() を使用する |
+| CRYPTO-SEC-03 | 復号エラー時に str(e) が内部詳細を漏洩 | 統一した汎用エラーメッセージを返す |
+| CRYPTO-SEC-06 | 異なる種類の復号エラーに異なるメッセージを返す | 全復号エラーメッセージを統一する |
 ---
-## 结论
+## 結論
 """
         if failed == 0:
-            report += "✅ **所有非预期失败的测试均已通过。**\n\n"
+            report += "✅ **予期しない失敗のテストはすべて通過しました。**\n\n"
         else:
-            report += f"❌ **有 {failed} 个测试未通过，需要修复。**\n\n"
+            report += f"❌ **{failed} 件のテストが失敗しました。修正が必要です。**\n\n"
         if xfail > 0:
-            report += f"⚠️ **有 {xfail} 个预期失败的测试，这些是已知的安全问题，建议尽快修复。**\n"
+            report += f"⚠️ **{xfail} 件の予期失敗テストがあります。これらは既知のセキュリティ問題です。早急な修正を推奨します。**\n"
         report += f"""
 ---
-*报告生成时间: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}*
+*レポート生成日時: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}*
 """
         with open(output_path, "w", encoding="utf-8") as f:
             f.write(report)
     def generate_json_report(self, output_path: str):
-        """生成 JSON 格式报告"""
+        """JSONフォーマットのレポートを生成する"""
         total = len(self.results)
         passed = sum(1 for r in self.results if r["passed"])
         failed = sum(1 for r in self.results if not r["passed"] and not r["expected_fail"])
@@ -202,10 +202,10 @@ class TestResultCollector:
             json.dump(report, f, ensure_ascii=False, indent=2)
 _collector = TestResultCollector()
 def pytest_configure(config):
-    """pytest 配置钩子"""
+    """pytest設定フック"""
     _collector.start()
 def pytest_sessionfinish(session, exitstatus):
-    """pytest 会话结束钩子"""
+    """pytestセッション終了フック"""
     _collector.end()
     report_dir = r"C:\pythonProject\python_ai_cspm\TestReport\crypto\reports"
     os.makedirs(report_dir, exist_ok=True)
@@ -214,26 +214,26 @@ def pytest_sessionfinish(session, exitstatus):
 def record_result(test_id: str, test_name: str, category: str, 
                   passed: bool, message: str = "", expected_fail: bool = False, 
                   duration: float = 0.0):
-    """记录测试结果"""
+    """テスト結果を記録する"""
     _collector.add_result(test_id, test_name, category, passed, message, expected_fail, duration)
 # =============================================================================
 # 正常系テスト (CRYPTO-001 ~ CRYPTO-010)
 # =============================================================================
 @pytest.mark.normal
 class TestGetSharedSecret:
-    """CRYPTO-001 ~ CRYPTO-004: _get_shared_secret 正常系测试"""
+    """CRYPTO-001 ～ CRYPTO-004: _get_shared_secret 正常系テスト"""
     def test_crypto_001_get_from_env_variable(self):
         """CRYPTO-001: 环境変数SHARED_SECRETから鍵取得"""
         test_id = "CRYPTO-001"
-        test_name = "环境变量获取共享密钥"
+        test_name = "環境変数から共有キー取得"
         start = time.time()
         try:
             test_secret = "my_test_secret_key"
             with patch.dict(os.environ, {"SHARED_SECRET": test_secret}):
                 result = _get_shared_secret()
-            assert result == test_secret.encode('utf-8'), f"期望: {test_secret.encode('utf-8')}, 实际: {result}"
+            assert result == test_secret.encode('utf-8'), f"期待値: {test_secret.encode('utf-8')}, 実際値: {result}"
             duration = time.time() - start
-            record_result(test_id, test_name, "normal", True, "成功从环境变量获取密钥", False, duration)
+            record_result(test_id, test_name, "normal", True, "環境変数から鍵の取得に成功", False, duration)
         except Exception as e:
             duration = time.time() - start
             record_result(test_id, test_name, "normal", False, str(e), False, duration)
@@ -241,7 +241,7 @@ class TestGetSharedSecret:
     def test_crypto_002_get_from_file(self, tmp_path):
         """CRYPTO-002: ファイルから鍵取得"""
         test_id = "CRYPTO-002"
-        test_name = "文件获取共享密钥"
+        test_name = "ファイルから共有キー取得"
         start = time.time()
         try:
             secret_file = tmp_path / "shared_secret"
@@ -251,9 +251,9 @@ class TestGetSharedSecret:
             env["SHARED_SECRET_FILE"] = str(secret_file)
             with patch.dict(os.environ, env, clear=True):
                 result = _get_shared_secret()
-            assert result == b"file_secret_key_12345", f"期望: b'file_secret_key_12345', 实际: {result}"
+            assert result == b"file_secret_key_12345", f"期待値: b'file_secret_key_12345', 実際値: {result}"
             duration = time.time() - start
-            record_result(test_id, test_name, "normal", True, "成功从文件获取密钥", False, duration)
+            record_result(test_id, test_name, "normal", True, "ファイルから鍵の取得に成功", False, duration)
         except Exception as e:
             duration = time.time() - start
             record_result(test_id, test_name, "normal", False, str(e), False, duration)
@@ -261,7 +261,7 @@ class TestGetSharedSecret:
     def test_crypto_003_fallback_to_default_key(self):
         """CRYPTO-003: デフォルト開発用鍵のフォールバック"""
         test_id = "CRYPTO-003"
-        test_name = "默认密钥回退"
+        test_name = "デフォルトキーへのフォールバック"
         start = time.time()
         try:
             env = os.environ.copy()
@@ -271,9 +271,9 @@ class TestGetSharedSecret:
                 with patch("os.path.exists", return_value=False):
                     result = _get_shared_secret()
             expected = "default_shared_secret_for_development_only".encode('utf-8')
-            assert result == expected, f"期望默认密钥, 实际: {result}"
+            assert result == expected, f"デフォルトキーを期待, 実際値: {result}"
             duration = time.time() - start
-            record_result(test_id, test_name, "normal", True, "成功回退到默认密钥", False, duration)
+            record_result(test_id, test_name, "normal", True, "デフォルトキーへのフォールバックに成功", False, duration)
         except Exception as e:
             duration = time.time() - start
             record_result(test_id, test_name, "normal", False, str(e), False, duration)
@@ -281,7 +281,7 @@ class TestGetSharedSecret:
     def test_crypto_004_strip_whitespace_false(self, tmp_path):
         """CRYPTO-004: strip_whitespace=Falseで空白保持"""
         test_id = "CRYPTO-004"
-        test_name = "保留空白字符"
+        test_name = "空白文字の保持"
         start = time.time()
         try:
             secret_with_whitespace = b"  secret_with_spaces  \n"
@@ -292,19 +292,19 @@ class TestGetSharedSecret:
             env["SHARED_SECRET_FILE"] = str(secret_file)
             with patch.dict(os.environ, env, clear=True):
                 result = _get_shared_secret(strip_whitespace=False)
-            assert result == secret_with_whitespace, "空白应该被保留"
+            assert result == secret_with_whitespace, "空白文字は保持される必要があります"
             duration = time.time() - start
-            record_result(test_id, test_name, "normal", True, "空白字符成功保留", False, duration)
+            record_result(test_id, test_name, "normal", True, "空白文字の保持に成功", False, duration)
         except Exception as e:
             duration = time.time() - start
             record_result(test_id, test_name, "normal", False, str(e), False, duration)
             raise
 @pytest.mark.normal
 class TestVerifyAuthHash:
-    """CRYPTO-005, CRYPTO-010: verify_auth_hash 正常系测试"""
+    """CRYPTO-005, CRYPTO-010: verify_auth_hash 正常系テスト"""
     def _create_valid_auth_header(self, session_id: str, shared_secret: bytes, 
                                    timestamp: int = None) -> str:
-        """创建有效的认证头"""
+        """有効な認証ヘッダーを作成する"""
         if timestamp is None:
             timestamp = int(time.time())
         message = f"{session_id}:{timestamp}"
@@ -313,15 +313,15 @@ class TestVerifyAuthHash:
     def test_crypto_005_valid_auth_hash(self, test_shared_secret):
         """CRYPTO-005: 有効なHMAC認証ハッシュの検証成功"""
         test_id = "CRYPTO-005"
-        test_name = "有效HMAC认证哈希验证"
+        test_name = "有効なHMAC認証ハッシュ検証"
         start = time.time()
         try:
             session_id = "test-session-123"
             auth_header = self._create_valid_auth_header(session_id, test_shared_secret)
             result = verify_auth_hash(auth_header, session_id, test_shared_secret)
-            assert result is True, "有效的认证哈希应该通过验证"
+            assert result is True, "有効な認証ハッシュは検証に成功する必要があります"
             duration = time.time() - start
-            record_result(test_id, test_name, "normal", True, "认证哈希验证成功", False, duration)
+            record_result(test_id, test_name, "normal", True, "認証ハッシュ検証成功", False, duration)
         except Exception as e:
             duration = time.time() - start
             record_result(test_id, test_name, "normal", False, str(e), False, duration)
@@ -329,7 +329,7 @@ class TestVerifyAuthHash:
     def test_crypto_010_valid_hash_within_time_drift(self, test_shared_secret):
         """CRYPTO-010: 時刻ずれが許容範囲内での検証成功"""
         test_id = "CRYPTO-010"
-        test_name = "时间漂移容忍验证"
+        test_name = "時間ドリフト許容検証"
         start = time.time()
         try:
             session_id = "test-session-456"
@@ -338,20 +338,20 @@ class TestVerifyAuthHash:
                                                          timestamp=past_timestamp)
             result = verify_auth_hash(auth_header, session_id, test_shared_secret, 
                                      allowed_time_drift=600)
-            assert result is True, "300秒的时间差应该在600秒容忍范围内"
+            assert result is True, "300秒の時間差は600秒の許容範囲内である必要があります"
             duration = time.time() - start
-            record_result(test_id, test_name, "normal", True, "时间漂移验证成功", False, duration)
+            record_result(test_id, test_name, "normal", True, "時間ドリフト検証成功", False, duration)
         except Exception as e:
             duration = time.time() - start
             record_result(test_id, test_name, "normal", False, str(e), False, duration)
             raise
 @pytest.mark.normal
 class TestDecryptOpensearchDashboardPayload:
-    """CRYPTO-006, CRYPTO-007: decrypt_opensearch_dashboard_payload 正常系测试"""
+    """CRYPTO-006, CRYPTO-007: decrypt_opensearch_dashboard_payload 正常系テスト"""
     def test_crypto_006_decrypt_valid_payload(self, test_shared_secret_32, encrypted_payload):
         """CRYPTO-006: 有効なペイロードのAES-CBC復号成功"""
         test_id = "CRYPTO-006"
-        test_name = "有效载荷AES-CBC解密"
+        test_name = "有効なペイロードのAES-CBC復号"
         start = time.time()
         try:
             result = decrypt_opensearch_dashboard_payload(
@@ -359,9 +359,9 @@ class TestDecryptOpensearchDashboardPayload:
                 encrypted_payload["iv"],
                 test_shared_secret_32
             )
-            assert isinstance(result, dict), f"解密结果应该是字典类型, 实际: {type(result)}"
+            assert isinstance(result, dict), f"復号結果は辞書型である必要があります, 実際: {type(result)}"
             duration = time.time() - start
-            record_result(test_id, test_name, "normal", True, "AES-CBC解密成功", False, duration)
+            record_result(test_id, test_name, "normal", True, "AES-CBC復号成功", False, duration)
         except Exception as e:
             duration = time.time() - start
             record_result(test_id, test_name, "normal", False, str(e), False, duration)
@@ -369,7 +369,7 @@ class TestDecryptOpensearchDashboardPayload:
     def test_crypto_007_decrypt_returns_valid_json(self, test_shared_secret_32, encrypted_payload):
         """CRYPTO-007: 復号後のJSON正常パース"""
         test_id = "CRYPTO-007"
-        test_name = "解密后JSON解析"
+        test_name = "復号後のJSON解析"
         start = time.time()
         try:
             result = decrypt_opensearch_dashboard_payload(
@@ -377,9 +377,9 @@ class TestDecryptOpensearchDashboardPayload:
                 encrypted_payload["iv"],
                 test_shared_secret_32
             )
-            assert result == encrypted_payload["expected"], f"解密结果不匹配"
-            assert result["session_id"] == "test_123", "session_id 不匹配"
-            assert result["prompt"] == "テストメッセージ", "prompt 不匹配"
+            assert result == encrypted_payload["expected"], f"復号結果が一致しません"
+            assert result["session_id"] == "test_123", "session_id が一致しません"
+            assert result["prompt"] == "テストメッセージ", "prompt が一致しません"
             duration = time.time() - start
             record_result(test_id, test_name, "normal", True, "JSON解析成功", False, duration)
         except Exception as e:
@@ -388,36 +388,36 @@ class TestDecryptOpensearchDashboardPayload:
             raise
 @pytest.mark.normal
 class TestDecryptCredentialsField:
-    """CRYPTO-008: decrypt_credentials_field 正常系测试"""
+    """CRYPTO-008: decrypt_credentials_field 正常系テスト"""
     def test_crypto_008_decrypt_base64_encoded_data(self):
         """CRYPTO-008: 認証情報フィールドのBase64復号"""
         test_id = "CRYPTO-008"
-        test_name = "Base64解密认证信息"
+        test_name = "Base64から認証情報復号"
         start = time.time()
         try:
             original_data = '{"access_key": "AKIA...", "secret_key": "xxx"}'
             encoded_data = base64.b64encode(original_data.encode('utf-8')).decode()
             result = decrypt_credentials_field(encoded_data)
-            assert result == original_data, f"解密结果不匹配, 期望: {original_data}, 实际: {result}"
+            assert result == original_data, f"復号結果が一致しません, 期待値: {original_data}, 実際値: {result}"
             duration = time.time() - start
-            record_result(test_id, test_name, "normal", True, "Base64解密成功", False, duration)
+            record_result(test_id, test_name, "normal", True, "Base64復号成功", False, duration)
         except Exception as e:
             duration = time.time() - start
             record_result(test_id, test_name, "normal", False, str(e), False, duration)
             raise
 @pytest.mark.normal
 class TestDecryptionWithKnownData:
-    """CRYPTO-009: test_decryption_with_known_data 正常系测试"""
+    """CRYPTO-009: test_decryption_with_known_data 正常系テスト"""
     def test_crypto_009_known_data_decryption_success(self):
         """CRYPTO-009: test_decryption_with_known_dataの成功"""
         test_id = "CRYPTO-009"
-        test_name = "已知数据解密测试"
+        test_name = "既知データの復号テスト"
         start = time.time()
         try:
             result = test_decryption_with_known_data()
-            assert result is True, "已知数据解密测试应该返回 True"
+            assert result is True, "既知データの復号テストはTrueを返す必要があります"
             duration = time.time() - start
-            record_result(test_id, test_name, "normal", True, "已知数据解密成功", False, duration)
+            record_result(test_id, test_name, "normal", True, "既知データの復号成功", False, duration)
         except Exception as e:
             duration = time.time() - start
             record_result(test_id, test_name, "normal", False, str(e), False, duration)
@@ -427,11 +427,11 @@ class TestDecryptionWithKnownData:
 # =============================================================================
 @pytest.mark.error
 class TestGetSharedSecretErrors:
-    """CRYPTO-E01: _get_shared_secret 异常系测试"""
+    """CRYPTO-E01: _get_shared_secret 異常系テスト"""
     def test_crypto_e01_empty_secret_file_raises_error(self, tmp_path):
         """CRYPTO-E01: 鍵ファイルが空でValueError"""
         test_id = "CRYPTO-E01"
-        test_name = "空密钥文件错误"
+        test_name = "空の鍵ファイルエラー"
         start = time.time()
         try:
             empty_file = tmp_path / "empty_secret"
@@ -443,18 +443,18 @@ class TestGetSharedSecretErrors:
                 with pytest.raises(ValueError, match="共有鍵ファイルが空です"):
                     _get_shared_secret()
             duration = time.time() - start
-            record_result(test_id, test_name, "error", True, "空文件正确抛出ValueError", False, duration)
+            record_result(test_id, test_name, "error", True, "空のファイルで正しくValueErrorが発生", False, duration)
         except Exception as e:
             duration = time.time() - start
             record_result(test_id, test_name, "error", False, str(e), False, duration)
             raise
 @pytest.mark.error
 class TestVerifyAuthHashErrors:
-    """CRYPTO-E02 ~ CRYPTO-E04, CRYPTO-E11: verify_auth_hash 异常系测试"""
+    """CRYPTO-E02 ～ CRYPTO-E04, CRYPTO-E11: verify_auth_hash 異常系テスト"""
     def test_crypto_e02_invalid_format_returns_false(self, test_shared_secret):
         """CRYPTO-E02: 不正なHMAC形式でFalse返却"""
         test_id = "CRYPTO-E02"
-        test_name = "无效HMAC格式"
+        test_name = "無効なHMAC形式"
         start = time.time()
         try:
             invalid_headers = [
@@ -466,9 +466,9 @@ class TestVerifyAuthHashErrors:
             ]
             for header in invalid_headers:
                 result = verify_auth_hash(header, "session-id", test_shared_secret)
-                assert result is False, f"无效头 '{header}' 应返回 False"
+                assert result is False, f"無効ヘッダー '{header}' はFalseを返す必要があります"
             duration = time.time() - start
-            record_result(test_id, test_name, "error", True, "无效格式正确返回False", False, duration)
+            record_result(test_id, test_name, "error", True, "無効な形式で正しくFalseを返却", False, duration)
         except Exception as e:
             duration = time.time() - start
             record_result(test_id, test_name, "error", False, str(e), False, duration)
@@ -476,7 +476,7 @@ class TestVerifyAuthHashErrors:
     def test_crypto_e03_expired_timestamp_returns_false(self, test_shared_secret):
         """CRYPTO-E03: 時刻ずれ超過でFalse返却"""
         test_id = "CRYPTO-E03"
-        test_name = "时间戳过期"
+        test_name = "タイムスタンプ期限切れ"
         start = time.time()
         try:
             session_id = "test-session"
@@ -485,9 +485,9 @@ class TestVerifyAuthHashErrors:
             hash_value = hmac.new(test_shared_secret, message.encode(), hashlib.sha256).hexdigest()
             auth_header = f"SHARED-HMAC-{old_timestamp}-{hash_value}"
             result = verify_auth_hash(auth_header, session_id, test_shared_secret)
-            assert result is False, "过期的时间戳应返回False"
+            assert result is False, "期限切れのタイムスタンプはFalseを返す必要があります"
             duration = time.time() - start
-            record_result(test_id, test_name, "error", True, "过期时间戳正确返回False", False, duration)
+            record_result(test_id, test_name, "error", True, "期限切れタイムスタンプで正しくFalseを返却", False, duration)
         except Exception as e:
             duration = time.time() - start
             record_result(test_id, test_name, "error", False, str(e), False, duration)
@@ -502,9 +502,9 @@ class TestVerifyAuthHashErrors:
             tampered_hash = "a" * 64
             auth_header = f"SHARED-HMAC-{timestamp}-{tampered_hash}"
             result = verify_auth_hash(auth_header, "session-id", test_shared_secret)
-            assert result is False, "篡改的哈希值应返回False"
+            assert result is False, "改ざんされたハッシュ値はFalseを返す必要があります"
             duration = time.time() - start
-            record_result(test_id, test_name, "error", True, "篡改哈希正确返回False", False, duration)
+            record_result(test_id, test_name, "error", True, "改ざんハッシュで正しくFalseを返却", False, duration)
         except Exception as e:
             duration = time.time() - start
             record_result(test_id, test_name, "error", False, str(e), False, duration)
@@ -512,24 +512,24 @@ class TestVerifyAuthHashErrors:
     def test_crypto_e11_none_auth_header_returns_false(self, test_shared_secret):
         """CRYPTO-E11: auth_header=NoneでFalse返却"""
         test_id = "CRYPTO-E11"
-        test_name = "None认证头"
+        test_name = "None認証ヘッダー"
         start = time.time()
         try:
             result = verify_auth_hash(None, "session-id", test_shared_secret)
-            assert result is False, "None认证头应返回False"
+            assert result is False, "None認証ヘッダーはFalseを返す必要があります"
             duration = time.time() - start
-            record_result(test_id, test_name, "error", True, "None认证头正确返回False", False, duration)
+            record_result(test_id, test_name, "error", True, "None認証ヘッダーで正しくFalseを返却", False, duration)
         except Exception as e:
             duration = time.time() - start
             record_result(test_id, test_name, "error", False, str(e), False, duration)
             raise
 @pytest.mark.error
 class TestDecryptPayloadErrors:
-    """CRYPTO-E05 ~ CRYPTO-E10, CRYPTO-E12, CRYPTO-E13: decrypt_opensearch_dashboard_payload 异常系测试"""
+    """CRYPTO-E05 ～ CRYPTO-E10, CRYPTO-E12, CRYPTO-E13: decrypt_opensearch_dashboard_payload 異常系テスト"""
     def test_crypto_e05_invalid_iv_size_raises_error(self, test_shared_secret_32):
         """CRYPTO-E05: 無効なIVサイズでValueError"""
         test_id = "CRYPTO-E05"
-        test_name = "无效IV大小"
+        test_name = "無効なIVサイズ"
         start = time.time()
         try:
             invalid_iv = base64.b64encode(b"short_iv").decode()
@@ -537,7 +537,7 @@ class TestDecryptPayloadErrors:
             with pytest.raises(ValueError):
                 decrypt_opensearch_dashboard_payload(encrypted_data, invalid_iv, test_shared_secret_32)
             duration = time.time() - start
-            record_result(test_id, test_name, "error", True, "无效IV大小正确抛出ValueError", False, duration)
+            record_result(test_id, test_name, "error", True, "無効なIVサイズで正しくValueErrorが発生", False, duration)
         except Exception as e:
             duration = time.time() - start
             record_result(test_id, test_name, "error", False, str(e), False, duration)
@@ -545,7 +545,7 @@ class TestDecryptPayloadErrors:
     def test_crypto_e06_invalid_pkcs7_padding_raises_error(self, test_shared_secret_32):
         """CRYPTO-E06: 無効なPKCS7パディングでValueError"""
         test_id = "CRYPTO-E06"
-        test_name = "无效PKCS7填充"
+        test_name = "無効なPKCS7パディング"
         start = time.time()
         try:
             from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
@@ -561,7 +561,7 @@ class TestDecryptPayloadErrors:
             with pytest.raises(ValueError):
                 decrypt_opensearch_dashboard_payload(encrypted_data, iv_b64, test_shared_secret_32)
             duration = time.time() - start
-            record_result(test_id, test_name, "error", True, "无效填充正确抛出ValueError", False, duration)
+            record_result(test_id, test_name, "error", True, "無効なパディングで正しくValueErrorが発生", False, duration)
         except Exception as e:
             duration = time.time() - start
             record_result(test_id, test_name, "error", False, str(e), False, duration)
@@ -569,13 +569,13 @@ class TestDecryptPayloadErrors:
     def test_crypto_e07_empty_encrypted_input_raises_error(self, test_shared_secret_32):
         """CRYPTO-E07: 空の暗号化入力でValueError"""
         test_id = "CRYPTO-E07"
-        test_name = "空加密输入"
+        test_name = "空の暗号化入力"
         start = time.time()
         try:
             with pytest.raises(ValueError):
                 decrypt_opensearch_dashboard_payload("", "", test_shared_secret_32)
             duration = time.time() - start
-            record_result(test_id, test_name, "error", True, "空输入正确抛出ValueError", False, duration)
+            record_result(test_id, test_name, "error", True, "空の入力で正しくValueErrorが発生", False, duration)
         except Exception as e:
             duration = time.time() - start
             record_result(test_id, test_name, "error", False, str(e), False, duration)
@@ -583,7 +583,7 @@ class TestDecryptPayloadErrors:
     def test_crypto_e08_non_utf8_decrypted_data_raises_error(self, test_shared_secret_32):
         """CRYPTO-E08: UTF-8デコード不可でValueError"""
         test_id = "CRYPTO-E08"
-        test_name = "非UTF-8数据"
+        test_name = "非UTF-8データ"
         start = time.time()
         try:
             from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
@@ -602,7 +602,7 @@ class TestDecryptPayloadErrors:
             with pytest.raises(ValueError):
                 decrypt_opensearch_dashboard_payload(encrypted_data, iv_b64, test_shared_secret_32)
             duration = time.time() - start
-            record_result(test_id, test_name, "error", True, "非UTF-8数据正确抛出ValueError", False, duration)
+            record_result(test_id, test_name, "error", True, "非UTF-8データで正しくValueErrorが発生", False, duration)
         except Exception as e:
             duration = time.time() - start
             record_result(test_id, test_name, "error", False, str(e), False, duration)
@@ -610,7 +610,7 @@ class TestDecryptPayloadErrors:
     def test_crypto_e09_invalid_json_after_decrypt_raises_error(self, test_shared_secret_32):
         """CRYPTO-E09: JSON解析失敗でValueError"""
         test_id = "CRYPTO-E09"
-        test_name = "无效JSON"
+        test_name = "無効なJSON"
         start = time.time()
         try:
             from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
@@ -629,7 +629,7 @@ class TestDecryptPayloadErrors:
             with pytest.raises(ValueError):
                 decrypt_opensearch_dashboard_payload(encrypted_data, iv_b64, test_shared_secret_32)
             duration = time.time() - start
-            record_result(test_id, test_name, "error", True, "无效JSON正确抛出ValueError", False, duration)
+            record_result(test_id, test_name, "error", True, "無効なJSONで正しくValueErrorが発生", False, duration)
         except Exception as e:
             duration = time.time() - start
             record_result(test_id, test_name, "error", False, str(e), False, duration)
@@ -637,7 +637,7 @@ class TestDecryptPayloadErrors:
     def test_crypto_e12_data_shorter_than_padding_length_raises_error(self, test_shared_secret_32):
         """CRYPTO-E12: padded_dataがパディング長より短いでValueError"""
         test_id = "CRYPTO-E12"
-        test_name = "数据短于填充长度"
+        test_name = "パディング長より短いデータ"
         start = time.time()
         try:
             from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
@@ -653,7 +653,7 @@ class TestDecryptPayloadErrors:
             with pytest.raises(ValueError):
                 decrypt_opensearch_dashboard_payload(encrypted_b64, iv_b64, test_shared_secret_32)
             duration = time.time() - start
-            record_result(test_id, test_name, "error", True, "数据长度错误正确抛出ValueError", False, duration)
+            record_result(test_id, test_name, "error", True, "データ長エラーで正しくValueErrorが発生", False, duration)
         except Exception as e:
             duration = time.time() - start
             record_result(test_id, test_name, "error", False, str(e), False, duration)
@@ -661,7 +661,7 @@ class TestDecryptPayloadErrors:
     def test_crypto_e13_inconsistent_padding_bytes_raises_error(self, test_shared_secret_32):
         """CRYPTO-E13: パディングバイト不一致でValueError"""
         test_id = "CRYPTO-E13"
-        test_name = "填充字节不一致"
+        test_name = "パディングバイト不一致"
         start = time.time()
         try:
             from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
@@ -677,25 +677,25 @@ class TestDecryptPayloadErrors:
             with pytest.raises(ValueError):
                 decrypt_opensearch_dashboard_payload(encrypted_b64, iv_b64, test_shared_secret_32)
             duration = time.time() - start
-            record_result(test_id, test_name, "error", True, "填充不一致正确抛出ValueError", False, duration)
+            record_result(test_id, test_name, "error", True, "パディング不一致で正しくValueErrorが発生", False, duration)
         except Exception as e:
             duration = time.time() - start
             record_result(test_id, test_name, "error", False, str(e), False, duration)
             raise
 @pytest.mark.error
 class TestDecryptCredentialsFieldErrors:
-    """CRYPTO-E10: decrypt_credentials_field 异常系测试"""
+    """CRYPTO-E10: decrypt_credentials_field 異常系テスト"""
     def test_crypto_e10_invalid_base64_raises_error(self):
         """CRYPTO-E10: 不正なBase64データでValueError"""
         test_id = "CRYPTO-E10"
-        test_name = "无效Base64数据"
+        test_name = "無効なBase64データ"
         start = time.time()
         try:
             invalid_base64 = "!!!not-valid-base64!!!"
             with pytest.raises(ValueError):
                 decrypt_credentials_field(invalid_base64)
             duration = time.time() - start
-            record_result(test_id, test_name, "error", True, "无效Base64正确抛出ValueError", False, duration)
+            record_result(test_id, test_name, "error", True, "無効なBase64で正しくValueErrorが発生", False, duration)
         except Exception as e:
             duration = time.time() - start
             record_result(test_id, test_name, "error", False, str(e), False, duration)
@@ -705,22 +705,22 @@ class TestDecryptCredentialsFieldErrors:
 # =============================================================================
 @pytest.mark.security
 class TestCryptoSecurity:
-    """安全测试"""
-    @pytest.mark.xfail(reason="当前实现使用 == 比较，存在时序攻击风险", strict=False)
+    """セキュリティテスト"""
+    @pytest.mark.xfail(reason="現在の実装では == 比較を使用しており、タイミング攻撃リスクがあります", strict=False)
     def test_crypto_sec_01_hmac_uses_compare_digest(self):
         """CRYPTO-SEC-01: HMAC比較にhmac.compare_digest使用を検証（タイミング攻撃耐性）"""
         test_id = "CRYPTO-SEC-01"
-        test_name = "HMAC时序攻击防护"
+        test_name = "HMACタイミング攻撃防御"
         start = time.time()
         try:
             source = inspect.getsource(verify_auth_hash)
             assert "compare_digest" in source, (
-                "verify_auth_hash 应使用 hmac.compare_digest()。"
-                "== 比较存在时序攻击风险。"
+                "verify_auth_hash は hmac.compare_digest() を使用する必要があります。"
+                "== 比較はタイミング攻撃リスクがあります。"
                 "修正: received_hash == expected_hash → hmac.compare_digest(received_hash, expected_hash)"
             )
             duration = time.time() - start
-            record_result(test_id, test_name, "security", True, "使用compare_digest", False, duration)
+            record_result(test_id, test_name, "security", True, "compare_digestを使用", False, duration)
         except AssertionError as e:
             duration = time.time() - start
             record_result(test_id, test_name, "security", False, str(e), True, duration)
@@ -728,7 +728,7 @@ class TestCryptoSecurity:
     def test_crypto_sec_02_timestamp_tampering_detection(self, test_shared_secret):
         """CRYPTO-SEC-02: タイムスタンプ改ざん検出"""
         test_id = "CRYPTO-SEC-02"
-        test_name = "时间戳篡改检测"
+        test_name = "タイムスタンプ改ざん検出"
         start = time.time()
         try:
             session_id = "session-sec-02"
@@ -738,18 +738,18 @@ class TestCryptoSecurity:
             tampered_timestamp = original_timestamp + 1
             auth_header = f"SHARED-HMAC-{tampered_timestamp}-{hash_value}"
             result = verify_auth_hash(auth_header, session_id, test_shared_secret)
-            assert result is False, "篡改的时间戳应该被检测"
+            assert result is False, "改ざんされたタイムスタンプは検出される必要があります"
             duration = time.time() - start
-            record_result(test_id, test_name, "security", True, "时间戳篡改检测成功", False, duration)
+            record_result(test_id, test_name, "security", True, "タイムスタンプ改ざん検出成功", False, duration)
         except Exception as e:
             duration = time.time() - start
             record_result(test_id, test_name, "security", False, str(e), False, duration)
             raise
-    @pytest.mark.xfail(reason="当前实现的错误消息可能泄露内部详情", strict=False)
+    @pytest.mark.xfail(reason="現在の実装のエラーメッセージが内部詳細を漏洩する可能性があります", strict=False)
     def test_crypto_sec_03_padding_oracle_no_detail_leak(self, test_shared_secret_32):
         """CRYPTO-SEC-03: パディングオラクル攻撃対策 - エラーメッセージに内部詳細が含まれない"""
         test_id = "CRYPTO-SEC-03"
-        test_name = "填充预言攻击防护"
+        test_name = "パディングオラクル攻撃防御"
         start = time.time()
         try:
             from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
@@ -773,14 +773,14 @@ class TestCryptoSecurity:
                 errors.append(str(exc_info.value))
             unique_messages = set(errors)
             assert len(unique_messages) == 1, (
-                f"填充预言信息泄露: 不同错误模式返回不同消息。\n"
-                f"检测到的消息: {unique_messages}\n"
-                f"修正: 解密失败时返回统一消息"
+                f"パディングオラクル情報漏洩: エラーパターンによって異なるメッセージが返却されます。\n"
+                f"検出されたメッセージ: {unique_messages}\n"
+                f"修正: 復号失敗時は統一したメッセージを返す"
             )
             error_msg = errors[0]
-            assert "パディング" not in error_msg, f"错误消息包含填充详情: {error_msg}"
+            assert "パディング" not in error_msg, f"エラーメッセージにパディング詳細が含まれています: {error_msg}"
             duration = time.time() - start
-            record_result(test_id, test_name, "security", True, "填充预言攻击防护有效", False, duration)
+            record_result(test_id, test_name, "security", True, "パディングオラクル攻撃防御が有効", False, duration)
         except AssertionError as e:
             duration = time.time() - start
             record_result(test_id, test_name, "security", False, str(e), True, duration)
@@ -788,7 +788,7 @@ class TestCryptoSecurity:
     def test_crypto_sec_04_default_key_warning_output(self, capsys):
         """CRYPTO-SEC-04: デフォルト鍵使用時の警告出力確認"""
         test_id = "CRYPTO-SEC-04"
-        test_name = "默认密钥警告输出"
+        test_name = "デフォルトキー警告出力"
         start = time.time()
         try:
             env = os.environ.copy()
@@ -798,10 +798,10 @@ class TestCryptoSecurity:
                 with patch("os.path.exists", return_value=False):
                     _get_shared_secret()
             captured = capsys.readouterr()
-            assert "WARNING" in captured.out, "应输出WARNING"
-            assert "デフォルト開発用共有鍵" in captured.out or "default" in captured.out.lower(), "应提及默认密钥"
+            assert "WARNING" in captured.out, "WARNINGが出力される必要があります"
+            assert "デフォルト開発用共有鍵" in captured.out or "default" in captured.out.lower(), "デフォルトキーについて言及される必要があります"
             duration = time.time() - start
-            record_result(test_id, test_name, "security", True, "默认密钥警告输出正常", False, duration)
+            record_result(test_id, test_name, "security", True, "デフォルトキー警告出力が正常", False, duration)
         except Exception as e:
             duration = time.time() - start
             record_result(test_id, test_name, "security", False, str(e), False, duration)
@@ -809,7 +809,7 @@ class TestCryptoSecurity:
     def test_crypto_sec_05_hmac_single_bit_difference(self, test_shared_secret):
         """CRYPTO-SEC-05: 1ビット異なるHMACハッシュでFalse"""
         test_id = "CRYPTO-SEC-05"
-        test_name = "HMAC单比特差异检测"
+        test_name = "HMAC単一ビット差異検出"
         start = time.time()
         try:
             session_id = "session-sec-05"
@@ -821,18 +821,18 @@ class TestCryptoSecurity:
             tampered_hash = ''.join(tampered_hash)
             auth_header = f"SHARED-HMAC-{timestamp}-{tampered_hash}"
             result = verify_auth_hash(auth_header, session_id, test_shared_secret)
-            assert result is False, "单比特差异应被检测"
+            assert result is False, "単一ビット差異は検出される必要があります"
             duration = time.time() - start
-            record_result(test_id, test_name, "security", True, "单比特差异检测成功", False, duration)
+            record_result(test_id, test_name, "security", True, "単一ビット差異検出成功", False, duration)
         except Exception as e:
             duration = time.time() - start
             record_result(test_id, test_name, "security", False, str(e), False, duration)
             raise
-    @pytest.mark.xfail(reason="当前实现对不同类型的解密错误返回不同消息", strict=False)
+    @pytest.mark.xfail(reason="現在の実装では異なる種類の復号エラーに対して異なるメッセージを返します", strict=False)
     def test_crypto_sec_06_error_message_no_internal_details(self, test_shared_secret_32):
         """CRYPTO-SEC-06: エラーメッセージに内部詳細が含まれない"""
         test_id = "CRYPTO-SEC-06"
-        test_name = "错误消息不泄露内部详情"
+        test_name = "エラーメッセージに内部詳細が含まれない"
         start = time.time()
         try:
             from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
@@ -851,11 +851,11 @@ class TestCryptoSecurity:
             internal_detail_keywords = ["パディング長", "データ長", "バイト"]
             for keyword in internal_detail_keywords:
                 assert keyword not in error_msg, (
-                    f"错误消息包含内部详情 '{keyword}': {error_msg}\n"
-                    f"修正: 解密失败时只返回 'OpenSearchダッシュボード復号に失敗しました'"
+                    f"エラーメッセージに内部詳細 '{keyword}' が含まれています: {error_msg}\n"
+                    f"修正: 復号失敗時は 'OpenSearchダッシュボード復号に失敗しました' のみを返す"
                 )
             duration = time.time() - start
-            record_result(test_id, test_name, "security", True, "错误消息不泄露内部详情", False, duration)
+            record_result(test_id, test_name, "security", True, "エラーメッセージに内部詳細が含まれない", False, duration)
         except AssertionError as e:
             duration = time.time() - start
             record_result(test_id, test_name, "security", False, str(e), True, duration)

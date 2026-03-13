@@ -290,41 +290,41 @@ def pytest_sessionfinish(session, exitstatus):
 
     # Generate detailed Markdown report
     # 詳細なMarkdownレポートを生成する
-    report_md = f"""# crypto.py 测试报告
+    report_md = f"""# crypto.py テストレポート
 
-## 测试概要
+## テスト概要
 
-| 项目 | 值 |
+| 項目 | 値 |
 |------|-----|
-| 测试对象 | `app/core/crypto.py` |
-| 测试规格 | `crypto_tests.md` |
-| 执行时间 | {datetime.now().strftime("%Y-%m-%d %H:%M:%S")} |
-| 覆盖率目标 | 90% |
+| テスト対象 | `app/core/crypto.py` |
+| テスト仕様 | `crypto_tests.md` |
+| 実行日時 | {datetime.now().strftime("%Y-%m-%d %H:%M:%S")} |
+| カバレッジ目標 | 90% |
 
-## 测试结果统计
+## テスト結果集計
 
-| 类别 | 总数 | 通过 | 失败 | 预期失败 |
+| カテゴリ | 総数 | 成功 | 失敗 | 予期失敗 |
 |------|------|------|------|---------|
 | 正常系 | {len(normal_tests)} | {sum(1 for t in normal_tests if t['status']=='passed')} | {sum(1 for t in normal_tests if t['status']=='failed')} | {sum(1 for t in normal_tests if t['status']=='xfailed')} |
-| 异常系 | {len(error_tests)} | {sum(1 for t in error_tests if t['status']=='passed')} | {sum(1 for t in error_tests if t['status']=='failed')} | {sum(1 for t in error_tests if t['status']=='xfailed')} |
-| 安全测试 | {len(security_tests)} | {sum(1 for t in security_tests if t['status']=='passed')} | {sum(1 for t in security_tests if t['status']=='failed')} | {sum(1 for t in security_tests if t['status']=='xfailed')} |
-| **合计** | **{total}** | **{passed}** | **{failed}** | **{xfailed}** |
+| 異常系 | {len(error_tests)} | {sum(1 for t in error_tests if t['status']=='passed')} | {sum(1 for t in error_tests if t['status']=='failed')} | {sum(1 for t in error_tests if t['status']=='xfailed')} |
+| セキュリティ | {len(security_tests)} | {sum(1 for t in security_tests if t['status']=='passed')} | {sum(1 for t in security_tests if t['status']=='failed')} | {sum(1 for t in security_tests if t['status']=='xfailed')} |
+| **合計** | **{total}** | **{passed}** | **{failed}** | **{xfailed}** |
 
-## 测试通过率
+## 合格率
 
-- **实际通过率**: {(passed/total*100) if total>0 else 0:.1f}%
-- **有效通过率** (排除预期失败): {(passed/(total-xfailed)*100) if (total-xfailed)>0 else 0:.1f}%
+- **実際の合格率**: {(passed/total*100) if total>0 else 0:.1f}%
+- **有効合格率**（予期失敗を除く）: {(passed/(total-xfailed)*100) if (total-xfailed)>0 else 0:.1f}%
 
 ---
 
-## 正常系测试详情
+## 正常系テスト詳細
 
-| ID | 测试名称 | 结果 | 执行时间 |
+| ID | テスト名 | 結果 | 実行時間 |
 |----|---------|------|---------|
 """
 
     for t in normal_tests:
-        status_icon = "✅ 通过" if t['status'] == "passed" else "❌ 失败"
+        status_icon = "✅ 成功" if t['status'] == "passed" else "❌ 失敗"
         report_md += f"| {t['id']} | {t['name']} | {status_icon} | {t['duration']*1000:.2f}ms |\n"
 
     report_md += """

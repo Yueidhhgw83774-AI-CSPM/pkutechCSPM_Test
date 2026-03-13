@@ -2,7 +2,7 @@
   "metadata": {
     "test_target": "app/core/crypto.py",
     "test_spec": "crypto_tests.md",
-    "execution_time": "2026-03-13T16:39:10.396922",
+    "execution_time": "2026-03-13T17:47:31.239236",
     "coverage_target": "90%"
   },
   "summary": {
@@ -18,61 +18,61 @@
         "id": "CRYPTO-001",
         "name": "環境変数から共有キー取得",
         "status": "passed",
-        "duration": 0.0009444999741390347
+        "duration": 0.0009928999934345484
       },
       {
         "id": "CRYPTO-002",
         "name": "ファイルから共有キー取得",
         "status": "passed",
-        "duration": 0.0027615000144578516
+        "duration": 0.003407499985769391
       },
       {
         "id": "CRYPTO-003",
         "name": "デフォルトキーへのフォールバック",
         "status": "passed",
-        "duration": 0.0021770999883301556
+        "duration": 0.00200899998890236
       },
       {
         "id": "CRYPTO-004",
         "name": "空白文字の保持",
         "status": "passed",
-        "duration": 0.002945000014733523
+        "duration": 0.0027012999926228076
       },
       {
         "id": "CRYPTO-005",
         "name": "有効なHMAC認証ハッシュ検証",
         "status": "passed",
-        "duration": 0.0006913999968674034
+        "duration": 0.0005368000129237771
       },
       {
         "id": "CRYPTO-010",
         "name": "時間ドリフト許容検証",
         "status": "passed",
-        "duration": 0.00032850002753548324
+        "duration": 0.0003339000104460865
       },
       {
         "id": "CRYPTO-006",
         "name": "有効なペイロードのAES-CBC復号化",
         "status": "passed",
-        "duration": 0.0003121999907307327
+        "duration": 0.00026229998911730945
       },
       {
         "id": "CRYPTO-007",
         "name": "復号化後のJSON解析",
         "status": "passed",
-        "duration": 0.00022539999918080866
+        "duration": 0.0002052999916486442
       },
       {
         "id": "CRYPTO-008",
         "name": "Base64からの認証情報復号化",
         "status": "passed",
-        "duration": 0.000471699982881546
+        "duration": 0.0003913000109605491
       },
       {
         "id": "CRYPTO-009",
         "name": "既知データの復号化テスト",
         "status": "passed",
-        "duration": 0.0005335000168997794
+        "duration": 0.0006373000214807689
       }
     ],
     "error": [
@@ -80,79 +80,79 @@
         "id": "CRYPTO-E01",
         "name": "空キーファイルエラー",
         "status": "passed",
-        "duration": 0.002106400002958253
+        "duration": 0.0018597999878693372
       },
       {
         "id": "CRYPTO-E02",
         "name": "無効なHMAC形式",
         "status": "passed",
-        "duration": 0.00034320002305321395
+        "duration": 0.0015091999957803637
       },
       {
         "id": "CRYPTO-E03",
         "name": "タイムスタンプ期限切れ",
         "status": "passed",
-        "duration": 0.00033909999183379114
+        "duration": 0.00032240001019090414
       },
       {
         "id": "CRYPTO-E04",
         "name": "改ざんされたハッシュ値",
         "status": "passed",
-        "duration": 0.0003139000036753714
+        "duration": 0.0003567000094335526
       },
       {
         "id": "CRYPTO-E11",
         "name": "None認証ヘッダー",
         "status": "passed",
-        "duration": 0.00038070001755841076
+        "duration": 0.00031900001340545714
       },
       {
         "id": "CRYPTO-E05",
         "name": "無効なIVサイズ",
         "status": "passed",
-        "duration": 0.00024130000383593142
+        "duration": 0.00020030001178383827
       },
       {
         "id": "CRYPTO-E06",
         "name": "無効なPKCS7パディング",
         "status": "passed",
-        "duration": 0.00031289999606087804
+        "duration": 0.0002567000046838075
       },
       {
         "id": "CRYPTO-E07",
         "name": "空の暗号化入力",
         "status": "passed",
-        "duration": 0.00019500000053085387
+        "duration": 0.00015480001457035542
       },
       {
         "id": "CRYPTO-E08",
         "name": "非UTF-8データ",
         "status": "passed",
-        "duration": 0.0003176000027451664
+        "duration": 0.00023440000950358808
       },
       {
         "id": "CRYPTO-E09",
         "name": "無効なJSON",
         "status": "passed",
-        "duration": 0.000395399983972311
+        "duration": 0.00024819999816827476
       },
       {
         "id": "CRYPTO-E12",
         "name": "パディング長より短いデータ",
         "status": "passed",
-        "duration": 0.0003431999939493835
+        "duration": 0.00022239997633732855
       },
       {
         "id": "CRYPTO-E13",
         "name": "パディングバイト不一致",
         "status": "passed",
-        "duration": 0.00022830002126283944
+        "duration": 0.0001996000064536929
       },
       {
         "id": "CRYPTO-E10",
         "name": "無効なBase64データ",
         "status": "passed",
-        "duration": 0.0004301999870222062
+        "duration": 0.0003341000119689852
       }
     ],
     "security": [
@@ -160,37 +160,37 @@
         "id": "CRYPTO-SEC-01",
         "name": "HMACタイミング攻撃防御",
         "status": "xfailed",
-        "duration": 0.0009737000218592584
+        "duration": 0.0009064000041689724
       },
       {
         "id": "CRYPTO-SEC-02",
         "name": "タイムスタンプ改ざん検出",
         "status": "passed",
-        "duration": 0.0005137999833095819
+        "duration": 0.0003839000128209591
       },
       {
         "id": "CRYPTO-SEC-03",
         "name": "パディングオラクル攻撃防御",
         "status": "xfailed",
-        "duration": 0.0005578999989666045
+        "duration": 0.0005270999972708523
       },
       {
         "id": "CRYPTO-SEC-04",
         "name": "デフォルトキー警告出力",
         "status": "passed",
-        "duration": 0.00192910002078861
+        "duration": 0.0017760000191628933
       },
       {
         "id": "CRYPTO-SEC-05",
         "name": "HMAC単一ビット差異検出",
         "status": "passed",
-        "duration": 0.0004422999918460846
+        "duration": 0.0003645999822765589
       },
       {
         "id": "CRYPTO-SEC-06",
         "name": "エラーメッセージから内部詳細を漏洩しないこと",
         "status": "xfailed",
-        "duration": 0.0005817000055685639
+        "duration": 0.0005238000012468547
       }
     ]
   }
