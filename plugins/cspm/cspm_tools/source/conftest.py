@@ -1,8 +1,8 @@
 """
-CSPM Tools 测试配置和 Fixtures
+CSPM Tools テスト設定と Fixtures
 
-测试规格: docs/testing/plugins/cspm/cspm_tools_tests.md
-测试数量: 56 (正常系:20, 异常系:28, 安全:8)
+テスト仕様: docs/testing/plugins/cspm/cspm_tools_tests.md
+テスト数量: 56 (正常系:20, 異常系:28, セキュリティ:8)
 """
 
 import sys
@@ -12,20 +12,23 @@ import json
 from pathlib import Path
 from datetime import datetime
 from unittest.mock import patch, MagicMock, AsyncMock
-from dotenv import load_dotenv
 
-_env_path = Path(__file__).resolve().parent.parent.parent.parent.parent / ".env"
-if _env_path.exists():
-    load_dotenv(_env_path)
+# プロジェクトルート設定（env_loader を使用）
+try:
+    from env_loader import PROJECT_ROOT
+except ImportError:
+    _here = Path(__file__).resolve()
+    for _p in [_here, *_here.parents]:
+        if (_p / "env_loader.py").exists():
+            sys.path.insert(0, str(_p))
+            from env_loader import PROJECT_ROOT
+            break
+    else:
+        raise ImportError("env_loader.py が見つかりません")
 
-_source_root_env = os.environ.get("soure_root", "").strip().strip('"').strip("'")
-if _source_root_env and Path(_source_root_env).exists():
-    project_root = Path(_source_root_env)
-else:
-    project_root = Path(__file__).resolve().parents[5] / "platform_python_backend-testing"
-
+project_root = PROJECT_ROOT / "platform_python_backend-testing" if not str(PROJECT_ROOT).endswith("platform_python_backend-testing") else PROJECT_ROOT
 if not project_root.exists():
-    raise RuntimeError(f"项目根目录不存在: {project_root}")
+    raise RuntimeError(f"プロジェクトルートディレクトリが存在しません: {project_root}")
 sys.path.insert(0, str(project_root))
 
 # Mock weasyprint
@@ -63,14 +66,24 @@ def mock_tempfile():
 @pytest.fixture
 def mock_rag_system_success():
     """強化版RAGシステムのモック（成功）"""
-    with patch("app.cspm_plugin.tools.get_enhanced_rag_system") as mock_get:
+    with patch("app.core.rag_manager.get_enhanced_rag_search") as mock_get:
         mock_rag = AsyncMock()
-        mock_rag.search.return_value = [
+        # RAGSearchResponseをモック
+        mock_response = MagicMock()
+        mock_response.results = [
             MagicMock(
-                page_content="Test document content",
-                metadata={"Resource": "s3", "Framework": "AWS", "source": "test.md"}
+                content="Test document content",
+                metadata={"resource_name": "s3", "cloud": "AWS", "source": "test.md"},
+                score=0.85,
+                source="test.md",
+                cloud="AWS",
+                resource_name="s3",
+                function_name=None,
+                section_type=None,
+                section_title=None
             )
         ]
+        mock_rag.search.return_value = mock_response
         mock_get.return_value = mock_rag
         yield mock_rag
 
@@ -78,7 +91,7 @@ def mock_rag_system_success():
 @pytest.fixture
 def mock_rag_unavailable():
     """RAGシステム利用不可のモック"""
-    with patch("app.cspm_plugin.tools.get_enhanced_rag_system", return_value=None):
+    with patch("app.core.rag_manager.get_enhanced_rag_search", return_value=None):
         yield
 
 
@@ -99,7 +112,7 @@ class TestResultCollector:
     def generate_markdown_report(self, output_path: Path):
         total = sum(len(v) for v in self.results.values())
         passed = sum(1 for cat in self.results.values() for r in cat if r["outcome"] == "passed")
-        lines = [f"# CSPM Tools 测试报告\n", f"**通过率**: {passed}/{total} ({passed/total*100:.1f}%)\n"]
+        lines = [f"# CSPM Tools 测试报告\n", f"**通过率**: {passed}/{total} ({(passed/total*100 if total > 0 else 0.0):.1f}%)\n"]
         for cat, label in [("normal","正常系"),("error","异常系"),("security","安全测试")]:
             r = self.results[cat]
             p = sum(1 for x in r if x["outcome"] == "passed")
@@ -118,7 +131,9 @@ def pytest_runtest_makereport(item, call):
     outcome = yield
     rep = outcome.get_result()
     if rep.when == "call":
-        item.session.config._test_collector.add_result(item.nodeid, rep.outcome, rep.duration)
+        collector = getattr(item.session.config, '_test_collector', None)
+        if collector:
+            collector.add_result(item.nodeid, rep.outcome, rep.duration)
 
 
 def pytest_sessionstart(session):
@@ -126,7 +141,9 @@ def pytest_sessionstart(session):
 
 
 def pytest_sessionfinish(session, exitstatus):
-    collector = session.config._test_collector
+    collector = getattr(session.config, '_test_collector', None)
+    if not collector:
+        return
     reports_dir = Path(__file__).parent.parent / "reports"
     reports_dir.mkdir(parents=True, exist_ok=True)
     collector.generate_markdown_report(reports_dir / "TestReport_cspm_tools.md")

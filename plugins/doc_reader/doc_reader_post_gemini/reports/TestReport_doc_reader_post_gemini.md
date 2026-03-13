@@ -4,7 +4,7 @@
 
 | 項目 | 値 |
 |------|-----|
-| 実行日時 | 2026-03-11 15:49:26 |
+| 実行日時 | 2026-03-12 19:49:29 |
 | 総テスト数 | 18 |
 | 通過 | 18 |
 | 失敗 | 0 |
@@ -14,34 +14,34 @@
 
 | ID | テスト名 | 結果 | 時間 |
 |----|---------|------|------|
-| N/A | test_parse_compliance_normal | ✅ | 0.8ms |
-| N/A | test_parse_compliance_with_output_lang | ✅ | 0.55ms |
-| N/A | test_get_detail_normal | ✅ | 0.93ms |
-| N/A | test_get_detail_multiple_platforms | ✅ | 0.81ms |
-| N/A | test_extract_error_message_with_details | ✅ | 0.62ms |
-| N/A | test_extract_error_message_without_details | ✅ | 0.48ms |
-| N/A | test_delay_client_error_429_retry_allowed | ✅ | 2.27ms |
-| N/A | test_delay_client_error_429_with_retry_delay | ✅ | 6.6ms |
-| N/A | test_delay_client_error_429_without_retry_delay | ✅ | 1.99ms |
-| N/A | test_delay_server_error_500 | ✅ | 2.73ms |
-| N/A | test_delay_server_error_503 | ✅ | 2.88ms |
-| N/A | test_delay_server_error_other | ✅ | 2.73ms |
+| N/A | test_parse_compliance_normal | ✅ | 0.73ms |
+| N/A | test_parse_compliance_with_output_lang | ✅ | 0.84ms |
+| N/A | test_get_detail_normal | ✅ | 0.7ms |
+| N/A | test_get_detail_multiple_platforms | ✅ | 0.68ms |
+| N/A | test_extract_error_message_with_details | ✅ | 0.44ms |
+| N/A | test_extract_error_message_without_details | ✅ | 0.35ms |
+| N/A | test_delay_client_error_429_retry_allowed | ✅ | 1.38ms |
+| N/A | test_delay_client_error_429_with_retry_delay | ✅ | 2.5ms |
+| N/A | test_delay_client_error_429_without_retry_delay | ✅ | 1.67ms |
+| N/A | test_delay_server_error_500 | ✅ | 1.11ms |
+| N/A | test_delay_server_error_503 | ✅ | 1.19ms |
+| N/A | test_delay_server_error_other | ✅ | 1.07ms |
 
 ## 異常系テスト (4)
 
 | ID | テスト名 | 結果 | 時間 |
 |----|---------|------|------|
-| N/A | test_delay_client_error_non_429 | ✅ | 3.07ms |
-| N/A | test_delay_client_error_delay_too_long | ✅ | 2.96ms |
-| N/A | test_extract_error_message_exception | ✅ | 0.4ms |
-| N/A | test_gemini_api_error_with_original_error | ✅ | 0.22ms |
+| N/A | test_delay_client_error_non_429 | ✅ | 1.92ms |
+| N/A | test_delay_client_error_delay_too_long | ✅ | 1.21ms |
+| N/A | test_extract_error_message_exception | ✅ | 0.72ms |
+| N/A | test_gemini_api_error_with_original_error | ✅ | 0.2ms |
 
 ## セキュリティテスト (2)
 
 | ID | テスト名 | 結果 | 時間 |
 |----|---------|------|------|
-| N/A | test_prompt_injection_output_lang | ✅ | 1.14ms |
-| N/A | test_prompt_injection_categories | ✅ | 1.38ms |
+| N/A | test_prompt_injection_output_lang | ✅ | 0.7ms |
+| N/A | test_prompt_injection_categories | ✅ | 0.63ms |
 
 ---
-*生成時刻: 2026-03-11 15:51:56*
+*生成時刻: 2026-03-12 19:52:07*

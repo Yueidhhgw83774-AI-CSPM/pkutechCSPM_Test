@@ -1,17 +1,18 @@
 ﻿# -*- coding: utf-8 -*-
 """
-categories.py 单元测试
-测试对象: app/core/categories.py
-测试规格: categories_tests.md
-覆盖率目标: 60%
-本测试文件严格按照 categories_tests.md 测试规格文档编写，
-包含正常系测试、异常系测试和安全测试三大类。
-测试类别:
-  - 正常系: 8 个测试 (CAT-001 ~ CAT-008)
-  - 异常系: 4 个测试 (CAT-E01 ~ CAT-E04)
-  - 安全测试: 3 个测试 (CAT-SEC-01 ~ CAT-SEC-03)
+categories.py のテスト。
+テスト対象: app/core/categories.py
+テスト仕様: categories_tests.md
+カバレッジ目標: 60%
+このテストファイルは categories_tests.md 仕様書に従って記述されており、
+正常系テスト、異常系テスト、セキュリティテストの3カテゴリを含む。
+テストカテゴリ:
+  - 正常系: 8テスト (CAT-001 ~ CAT-008)
+  - 異常系: 4テスト (CAT-E01 ~ CAT-E04)
+  - セキュリティテスト: 3テスト (CAT-SEC-01 ~ CAT-SEC-03)
 """
 import os
+import re
 import sys
 import json
 import time
@@ -19,289 +20,313 @@ import tempfile
 from pathlib import Path
 from unittest.mock import patch, MagicMock
 import pytest
-# Add project root to path
-# 添加项目根目录到路径
-PROJECT_ROOT = r"C:\pythonProject\python_ai_cspm\platform_python_backend-testing"
-if PROJECT_ROOT not in sys.path:
+
+# ─── SourceCodeRoot を .env から読み込む ────────────────────────────────
+def _load_source_root() -> str:
+    """プロジェクトルートの .env から SourceCodeRoot を読み込む。"""
+    # 優先度1: ルート conftest.py が os.environ に設定済みの場合
+    from_env = os.environ.get("SourceCodeRoot", "").strip().strip("'\"")
+    if from_env:
+        return from_env
+    # 優先度2: ディレクトリツリーを遡って .env ファイルを検索する
+    current = Path(__file__).resolve()
+    for directory in [current, *current.parents]:
+        env_file = (directory if directory.is_dir() else directory.parent) / ".env"
+        if env_file.exists():
+            for line in env_file.read_text(encoding="utf-8").splitlines():
+                m = re.match(r"^\s*SourceCodeRoot\s*=\s*['\"]?(.+?)['\"]?\s*$", line)
+                if m:
+                    return m.group(1).strip()
+    return ""
+
+PROJECT_ROOT = _load_source_root()
+if PROJECT_ROOT and PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 # =============================================================================
-# 正常系测试 (CAT-001 ~ CAT-008)
+# 正常系テスト (CAT-001 ~ CAT-008)
 # =============================================================================
 class TestCategoriesImport:
-    """カテゴリモジュールインポートテスト"""
+    """カテゴリモジュールのインポートテスト。"""
     def test_import_categories_module(self):
-        """CAT-001: モジュールのインポート成功
-        验证 categories 模块可以正常导入，并且包含所需的函数和全局变量。
+        """CAT-001: モジュールのインポート成功。
+        
+        categories モジュールが正常にインポートでき、必要な関数とグローバル変数を含むことを検証する。
         """
-        # Arrange & Act - 准备并执行
+        # Arrange & Act: テストデータを準備し実行する
         from app.core import categories
-        # Assert - 验证结果
-        # 函数存在性验证
-        assert hasattr(categories, "load_categories"), "缺少 load_categories 函数"
-        assert hasattr(categories, "get_available_categories_for_prompt"), "缺少 get_available_categories_for_prompt 函数"
-        # 全局变量存在性验证
-        assert hasattr(categories, "_categories_data"), "缺少 _categories_data 全局变量"
-        assert hasattr(categories, "_categories_for_prompt_str"), "缺少 _categories_for_prompt_str 全局变量"
-        assert hasattr(categories, "DEFAULT_CATEGORIES_FILE_PATH"), "缺少 DEFAULT_CATEGORIES_FILE_PATH 常量"
+        # Assert: 期待値と比較する
+        # 関数の存在性を検証
+        assert hasattr(categories, "load_categories"), "load_categories 関数が見つかりません"
+        assert hasattr(categories, "get_available_categories_for_prompt"), "get_available_categories_for_prompt 関数が見つかりません"
+        # グローバル変数の存在性を検証
+        assert hasattr(categories, "_categories_data"), "_categories_data グローバル変数が見つかりません"
+        assert hasattr(categories, "_categories_for_prompt_str"), "_categories_for_prompt_str グローバル変数が見つかりません"
+        assert hasattr(categories, "DEFAULT_CATEGORIES_FILE_PATH"), "DEFAULT_CATEGORIES_FILE_PATH 定数が見つかりません"
 class TestLoadCategories:
-    """カテゴリ読み込みテスト"""
+    """カテゴリ読み込みテスト。"""
     def test_load_valid_categories(self, valid_categories_json):
-        """CAT-002: 有効なJSONファイルからカテゴリ読み込み成功
-        覆盖代码行: categories.py:21-38
-        验证从有效的 JSON 文件中正确读取类别数据。
+        """CAT-002: 有効なJSONファイルからカテゴリを読み込む。
+        
+        コード行 categories.py:21-38 をカバーする。
+        有効な JSON ファイルから正しくカテゴリデータを読み取ることを検証する。
         """
-        # Arrange - 准备测试数据
+        # Arrange: テストデータを準備する
         from app.core.categories import load_categories
         import app.core.categories as cat_module
-        # Act - 执行被测试函数
+        # Act: テスト対象を実行する
         load_categories(valid_categories_json)
-        # Assert - 验证结果
-        assert len(cat_module._categories_data) == 3, f"期望加载3个类别，实际: {len(cat_module._categories_data)}"
+        # Assert: 期待値と比較する
+        assert len(cat_module._categories_data) == 3, f"3つのカテゴリが読み込まれるべきです。実際: {len(cat_module._categories_data)}"
         assert cat_module._categories_data[0]["name"] == "Identity and Access Management"
-        assert cat_module._categories_for_prompt_str != "", "提示字符串不应为空"
+        assert cat_module._categories_for_prompt_str != "", "プロンプト文字列は空であってはなりません"
     def test_prompt_string_format(self, valid_categories_json):
-        """CAT-003: プロンプト文字列が番号付きリスト形式で生成される
-        覆盖代码行: categories.py:28-35
-        验证生成的提示字符串使用正确的编号列表格式。
+        """CAT-003: プロンプト文字列が番号付きリスト形式で生成される。
+        
+        コード行 categories.py:28-35 をカバーする。
+        生成されたプロンプト文字列が正しい番号付きリスト形式であることを検証する。
         """
-        # Arrange - 准备测试数据
+        # Arrange: テストデータを準備する
         from app.core.categories import load_categories
         import app.core.categories as cat_module
-        # Act - 执行被测试函数
+        # Act: テスト対象を実行する
         load_categories(valid_categories_json)
-        # Assert - 验证结果
+        # Assert: 期待値と比較する
         prompt_str = cat_module._categories_for_prompt_str
-        # 验证编号列表格式
-        assert "1. Identity and Access Management" in prompt_str, "缺少第1项"
-        assert "2. Data Security" in prompt_str, "缺少第2项"
-        assert "3. Network Security" in prompt_str, "缺少第3项"
-        # 验证描述包含在内
-        assert "(Description:" in prompt_str, "描述格式不正确"
+        # 番号付きリスト形式を検証
+        assert "1. Identity and Access Management" in prompt_str, "1つ目の項目が見つかりません"
+        assert "2. Data Security" in prompt_str, "2つ目の項目が見つかりません"
+        assert "3. Network Security" in prompt_str, "3つ目の項目が見つかりません"
+        # 説明が含まれることを検証
+        assert "(Description:" in prompt_str, "説明の形式が正しくありません"
     def test_empty_categories_list(self, tmp_path):
-        """CAT-006: 空のカテゴリリスト読み込み時のフォールバック
-        覆盖代码行: categories.py:37-38
-        验证空的类别列表时返回回退字符串。
+        """CAT-006: 空のカテゴリリストを読み込んだときのフォールバック。
+        
+        コード行 categories.py:37-38 をカバーする。
+        空のカテゴリリストに対してフォールバック文字列が返されることを検証する。
         """
-        # Arrange - 准备测试数据（空的 JSON 数组）
+        # Arrange: テストデータを準備する（空のJSON配列）
         json_file = tmp_path / "empty_categories.json"
         json_file.write_text("[]", encoding="utf-8")
         from app.core.categories import load_categories
         import app.core.categories as cat_module
-        # Act - 执行被测试函数
+        # Act: テスト対象を実行する
         load_categories(str(json_file))
-        # Assert - 验证结果
-        assert cat_module._categories_data == [], "数据应为空列表"
-        assert "No predefined categories are available" in cat_module._categories_for_prompt_str, "回退字符串不正确"
+        # Assert: 期待値と比較する
+        assert cat_module._categories_data == [], "データは空のリストであるべきです"
+        assert "No predefined categories are available" in cat_module._categories_for_prompt_str, "フォールバック文字列が正しくありません"
     def test_category_without_description(self, tmp_path):
-        """CAT-007: descriptionなしカテゴリが空の説明で処理される
-        覆盖代码行: categories.py:31
-        验证没有 description 字段的类别使用空字符串处理。
+        """CAT-007: descriptionなしのカテゴリが空の説明で処理される。
+        
+        コード行 categories.py:31 をカバーする。
+        description フィールドがないカテゴリが空文字列で処理されることを検証する。
         """
-        # Arrange - 准备测试数据（无 description 字段）
+        # Arrange: テストデータを準備する（descriptionフィールドなし）
         categories = [{"name": "Test Category"}]
         json_file = tmp_path / "no_desc_categories.json"
         json_file.write_text(json.dumps(categories), encoding="utf-8")
         from app.core.categories import load_categories
         import app.core.categories as cat_module
-        # Act - 执行被测试函数
+        # Act: テスト対象を実行する
         load_categories(str(json_file))
-        # Assert - 验证结果
-        assert len(cat_module._categories_data) == 1, "应加载1个类别"
-        # 验证空描述的处理
-        assert "1. Test Category (Description: )" in cat_module._categories_for_prompt_str, "空描述格式不正确"
+        # Assert: 期待値と比較する
+        assert len(cat_module._categories_data) == 1, "1つのカテゴリが読み込まれるべきです"
+        # 空の説明が処理されることを検証
+        assert "1. Test Category (Description: )" in cat_module._categories_for_prompt_str, "空の説明の形式が正しくありません"
     def test_category_without_name_skipped(self, tmp_path):
-        """CAT-008: nameなしカテゴリがスキップされる
-        覆盖代码行: categories.py:32
-        验证没有 name 或 name 为空的类别被跳过。
+        """CAT-008: nameなしまたは空のnameを持つカテゴリがスキップされる。
+        
+        コード行 categories.py:32 をカバーする。
+        name がないか空のカテゴリがスキップされることを検証する。
         """
-        # Arrange - 准备测试数据（混合有效和无效的类别）
+        # Arrange: テストデータを準備する（有効と無効が混在）
         categories = [
             {"name": "Valid Category", "description": "Has name"},
-            {"description": "No name field"},  # 无 name 字段
-            {"name": "", "description": "Empty name"},  # 空 name
+            {"description": "No name field"},  # nameフィールドなし
+            {"name": "", "description": "Empty name"},  # 空のname
             {"name": "Another Valid", "description": "Also has name"}
         ]
         json_file = tmp_path / "mixed_categories.json"
         json_file.write_text(json.dumps(categories), encoding="utf-8")
         from app.core.categories import load_categories
         import app.core.categories as cat_module
-        # Act - 执行被测试函数
+        # Act: テスト対象を実行する
         load_categories(str(json_file))
-        # Assert - 验证结果
+        # Assert: 期待値と比較する
         prompt_str = cat_module._categories_for_prompt_str
-        # 验证有效类别被包含
-        assert "1. Valid Category" in prompt_str, "有效类别1应被包含"
-        assert "4. Another Valid" in prompt_str, "有效类别2应被包含（索引为4）"
-        # 验证无效类别被排除
-        assert "No name field" not in prompt_str, "无name字段的类别应被排除"
-        assert "Empty name" not in prompt_str, "空name的类别应被排除"
-        # 验证只有2行有效类别
+        # 有効なカテゴリが含まれることを検証
+        assert "1. Valid Category" in prompt_str, "有効なカテゴリ1が含まれるべきです"
+        assert "4. Another Valid" in prompt_str, "有効なカテゴリ2が含まれるべきです（インデックス4）"
+        # 無効なカテゴリが除外されることを検証
+        assert "No name field" not in prompt_str, "nameフィールドがないカテゴリは除外されるべきです"
+        assert "Empty name" not in prompt_str, "空のnameを持つカテゴリは除外されるべきです"
+        # 2つの有効なカテゴリだけが存在することを検証
         lines = [line for line in prompt_str.split('\n') if line.strip()]
-        assert len(lines) == 2, f"期望2个有效类别，实际: {len(lines)}"
+        assert len(lines) == 2, f"2つの有効なカテゴリが期待されます。実際: {len(lines)}"
 class TestGetAvailableCategoriesForPrompt:
-    """プロンプト用カテゴリ取得テスト"""
+    """プロンプト用カテゴリ取得テスト。"""
     def test_auto_load_when_not_loaded(self, tmp_path):
-        """CAT-004: 未ロード時に自動的にロードされる
-        覆盖代码行: categories.py:61-62
-        验证未加载时自动调用 load_categories()。
+        """CAT-004: 未ロード時に自動的にロードされる。
+        
+        コード行 categories.py:61-62 をカバーする。
+        未ロード時に自動的に load_categories() が呼び出されることを検証する。
         """
-        # Arrange - 准备测试数据
+        # Arrange: テストデータを準備する
         import app.core.categories as cat_module
-
-        # 重置全局变量
+        # グローバル変数をリセット
         cat_module._categories_data = []
         cat_module._categories_for_prompt_str = ""
-
-        # Act - 调用函数(应该自动调用 load_categories 并加载真实数据)
+        # Act: 関数を呼び出す（自動的に load_categories を呼び出して実際のデータをロードする）
         result = cat_module.get_available_categories_for_prompt()
-
-        # Assert - 验证返回了加载的数据(真实的分类列表)
-        # 验证返回值不为空
-        assert result is not None, "自动加载失败,返回None"
-        assert len(result) > 0, "自动加载失败,返回空字符串"
-
-        # 验证包含分类内容(检查是否包含典型分类名称)
-        # 实际实现会加载真实的分类数据,而不是"Auto Loaded"字符串
+        # Assert: 期待値と比較する（ロードされたデータが返される）
+        # 返り値が空でないことを検証
+        assert result is not None, "自動ロードが失敗し、Noneが返されました"
+        assert len(result) > 0, "自動ロードが失敗し、空文字列が返されました"
+        # カテゴリ内容が含まれることを検証（典型的なカテゴリ名を確認）
+        # 実際の実装は実際のカテゴリデータをロードするため、"Auto Loaded"文字列ではない
         assert "Identity and Access Management" in result or "IAM" in result, \
-            f"自动加载失败,未包含预期分类内容。实际返回: {result[:200]}..."
-
-        # 验证包含序号格式(验证已格式化)
+            f"自動ロードが失敗し、期待されるカテゴリ内容が含まれていません。実際の返り値: {result[:200]}..."
+        # 番号形式が含まれることを検証（フォーマット済みであることを確認）
         assert "1." in result or "2." in result, \
-            "返回的字符串应该包含格式化的序号"
-
-        # 验证全局变量已更新
+            "返された文字列はフォーマットされた番号を含むべきです"
+        # グローバル変数が更新されたことを検証
         assert cat_module._categories_for_prompt_str == result, \
-            "全局缓存变量未正确更新"
+            "グローバルキャッシュ変数が正しく更新されていません"
         assert len(cat_module._categories_data) > 0, \
-            "全局分类数据未正确加载"
-
+            "グローバルカテゴリデータが正しくロードされていません"
     def test_cached_data_returned(self, tmp_path):
-        """CAT-005: キャッシュされたデータが返却される
-        验证第二次调用返回缓存的数据。
+        """CAT-005: キャッシュされたデータが返される。
+        
+        2回目の呼び出しでキャッシュされたデータが返されることを検証する。
         """
-        # Arrange - 准备测试数据
+        # Arrange: テストデータを準備する
         categories = [{"name": "Cached Category", "description": "Cache test"}]
         json_file = tmp_path / "categories.json"
         json_file.write_text(json.dumps(categories), encoding="utf-8")
         from app.core.categories import load_categories, get_available_categories_for_prompt
-        # 首次加载
+        # 最初のロード
         load_categories(str(json_file))
         first_result = get_available_categories_for_prompt()
-        # Act - 第二次调用
+        # Act: 2回目の呼び出し
         second_result = get_available_categories_for_prompt()
-        # Assert - 验证结果
-        assert first_result == second_result, "两次调用应返回相同字符串"
-        assert "Cached Category" in second_result, "缓存数据应包含正确内容"
+        # Assert: 期待値と比較する
+        assert first_result == second_result, "2回の呼び出しで同じ文字列が返されるべきです"
+        assert "Cached Category" in second_result, "キャッシュデータは正しい内容を含むべきです"
 # =============================================================================
-# 异常系测试 (CAT-E01 ~ CAT-E04)
+# 異常系テスト (CAT-E01 ~ CAT-E04)
 # =============================================================================
 class TestLoadCategoriesErrors:
-    """カテゴリ読み込みエラーテスト"""
+    """カテゴリ読み込みエラーテスト。"""
     def test_file_not_found(self, tmp_path, capsys):
-        """CAT-E01: 存在しないファイルパスでフォールバック文字列が設定される
-        覆盖代码行: categories.py:43-48
-        验证文件不存在时正确处理 FileNotFoundError。
+        """CAT-E01: 存在しないファイルパスでフォールバック文字列が設定される。
+        
+        コード行 categories.py:43-48 をカバーする。
+        ファイルが存在しないときに FileNotFoundError が正しく処理されることを検証する。
         """
-        # Arrange - 准备测试数据（不存在的文件路径）
+        # Arrange: テストデータを準備する（存在しないファイルパス）
         from app.core.categories import load_categories
         import app.core.categories as cat_module
         nonexistent_path = str(tmp_path / "nonexistent" / "categories.json")
-        # Act - 执行被测试函数
+        # Act: テスト対象を実行する
         load_categories(nonexistent_path)
-        # Assert - 验证结果
-        assert cat_module._categories_data == [], "数据应为空列表"
-        assert cat_module._categories_for_prompt_str == "Predefined category list not found.", "回退字符串不正确"
-        # 验证错误消息被输出
+        # Assert: 期待値と比較する
+        assert cat_module._categories_data == [], "データは空のリストであるべきです"
+        assert cat_module._categories_for_prompt_str == "Predefined category list not found.", "フォールバック文字列が正しくありません"
+        # エラーメッセージが出力されることを検証
         captured = capsys.readouterr()
         output = captured.out + captured.err
-        assert "ERROR: Category file not found" in output, "错误消息未输出"
+        assert "ERROR: Category file not found" in output, "エラーメッセージが出力されていません"
     def test_invalid_json_syntax(self, tmp_path, capsys):
-        """CAT-E02: 無効なJSON構文でフォールバック文字列が設定される
-        覆盖代码行: categories.py:49-52
-        验证无效 JSON 语法时正确处理 JSONDecodeError。
+        """CAT-E02: 無効なJSON構文でフォールバック文字列が設定される。
+        
+        コード行 categories.py:49-52 をカバーする。
+        無効な JSON 構文のときに JSONDecodeError が正しく処理されることを検証する。
         """
-        # Arrange - 准备测试数据（无效的 JSON）
+        # Arrange: テストデータを準備する（無効なJSON）
         invalid_json_file = tmp_path / "invalid.json"
         invalid_json_file.write_text("{invalid json syntax", encoding="utf-8")
         from app.core.categories import load_categories
         import app.core.categories as cat_module
-        # Act - 执行被测试函数
+        # Act: テスト対象を実行する
         load_categories(str(invalid_json_file))
-        # Assert - 验证结果
-        assert cat_module._categories_data == [], "数据应为空列表"
-        assert cat_module._categories_for_prompt_str == "Error loading predefined categories.", "回退字符串不正确"
-        # 验证错误消息被输出
+        # Assert: 期待値と比較する
+        assert cat_module._categories_data == [], "データは空のリストであるべきです"
+        assert cat_module._categories_for_prompt_str == "Error loading predefined categories.", "フォールバック文字列が正しくありません"
+        # エラーメッセージが出力されることを検証
         captured = capsys.readouterr()
         output = captured.out + captured.err
-        assert "ERROR: Could not decode JSON" in output, "错误消息未输出"
+        assert "ERROR: Could not decode JSON" in output, "エラーメッセージが出力されていません"
     def test_unexpected_exception(self, tmp_path, capsys):
-        """CAT-E03: 予期せぬ例外でフォールバック文字列が設定される
-        覆盖代码行: categories.py:53-56
-        验证预期外异常时正确处理。
+        """CAT-E03: 予期しない例外でフォールバック文字列が設定される。
+        
+        コード行 categories.py:53-56 をカバーする。
+        予期しない例外が正しく処理されることを検証する。
         """
-        # Arrange - 准备测试数据
+        # Arrange: テストデータを準備する
         from app.core.categories import load_categories
         import app.core.categories as cat_module
-        # 模拟 json.load 抛出 MemoryError
+        # json.load が MemoryError を発生させるようにモックする
         with patch("app.core.categories.json.load", side_effect=MemoryError("Out of memory")):
             valid_json_file = tmp_path / "valid.json"
             valid_json_file.write_text('[{"name": "Test"}]', encoding="utf-8")
-            # Act - 执行被测试函数
+            # Act: テスト対象を実行する
             load_categories(str(valid_json_file))
-        # Assert - 验证结果
-        assert cat_module._categories_data == [], "数据应为空列表"
-        assert cat_module._categories_for_prompt_str == "Unexpected error loading predefined categories.", "回退字符串不正确"
-        # 验证错误消息被输出
+        # Assert: 期待値と比較する
+        assert cat_module._categories_data == [], "データは空のリストであるべきです"
+        assert cat_module._categories_for_prompt_str == "Unexpected error loading predefined categories.", "フォールバック文字列が正しくありません"
+        # エラーメッセージが出力されることを検証
         captured = capsys.readouterr()
         output = captured.out + captured.err
-        assert "ERROR: An unexpected error occurred" in output, "错误消息未输出"
+        assert "ERROR: An unexpected error occurred" in output, "エラーメッセージが出力されていません"
     def test_permission_error(self, tmp_path, capsys):
-        """CAT-E04: 読み取り権限エラーでフォールバック文字列が設定される
-        覆盖代码行: categories.py:53-56
-        验证权限错误时正确处理（PermissionError 是 Exception 的子类）。
+        """CAT-E04: 読み取り権限エラーでフォールバック文字列が設定される。
+        
+        コード行 categories.py:53-56 をカバーする。
+        権限エラーが正しく処理されることを検証する（PermissionError は Exception のサブクラス）。
         """
-        # Arrange - 准备测试数据
+        # Arrange: テストデータを準備する
         from app.core.categories import load_categories
         import app.core.categories as cat_module
-        # 模拟 open 抛出 PermissionError
+        # open が PermissionError を発生させるようにモックする
         with patch("builtins.open", side_effect=PermissionError("Permission denied")):
-            # Act - 执行被测试函数
+            # Act: テスト対象を実行する
             load_categories("/some/protected/file.json")
-        # Assert - 验证结果
-        assert cat_module._categories_data == [], "数据应为空列表"
-        assert cat_module._categories_for_prompt_str == "Unexpected error loading predefined categories.", "回退字符串不正确"
-        # 验证错误消息被输出
+        # Assert: 期待値と比較する
+        assert cat_module._categories_data == [], "データは空のリストであるべきです"
+        assert cat_module._categories_for_prompt_str == "Unexpected error loading predefined categories.", "フォールバック文字列が正しくありません"
+        # エラーメッセージが出力されることを検証
         captured = capsys.readouterr()
         output = captured.out + captured.err
-        assert "ERROR: An unexpected error occurred" in output, "错误消息未输出"
+        assert "ERROR: An unexpected error occurred" in output, "エラーメッセージが出力されていません"
 # =============================================================================
-# 安全测试 (CAT-SEC-01 ~ CAT-SEC-03)
+# セキュリティテスト (CAT-SEC-01 ~ CAT-SEC-03)
 # =============================================================================
 @pytest.mark.security
 class TestCategoriesSecurity:
-    """カテゴリセキュリティテスト"""
+    """カテゴリセキュリティテスト。"""
     def test_path_traversal_handling(self, tmp_path, capsys):
-        """CAT-SEC-01: パストラバーサル攻撃パスが安全に処理される
-        验证包含 ".." 的路径遍历攻击路径被安全处理。
+        """CAT-SEC-01: パストラバーサル攻撃パスが安全に処理される。
+        
+        ".." を含むパストラバーサル攻撃パスが安全に処理されることを検証する。
         """
-        # Arrange - 准备测试数据（路径遍历攻击）
+        # Arrange: テストデータを準備する（パストラバーサル攻撃）
         from app.core.categories import load_categories
         import app.core.categories as cat_module
         malicious_path = str(tmp_path / ".." / ".." / ".." / "nonexistent" / "categories.json")
-        # Act - 执行被测试函数
+        # Act: テスト対象を実行する
         load_categories(malicious_path)
-        # Assert - 验证结果
-        assert cat_module._categories_data == [], "数据应为空列表（安全处理）"
-        assert cat_module._categories_for_prompt_str != "", "回退字符串应被设置"
-        # 验证错误被安全处理
+        # Assert: 期待値と比較する
+        assert cat_module._categories_data == [], "データは空のリストであるべきです（安全に処理）"
+        assert cat_module._categories_for_prompt_str != "", "フォールバック文字列が設定されるべきです"
+        # エラーが安全に処理されることを検証
         captured = capsys.readouterr()
         output = captured.out + captured.err
-        assert "ERROR" in output or "not found" in output.lower(), "错误应被记录"
+        assert "ERROR" in output or "not found" in output.lower(), "エラーが記録されるべきです"
     def test_large_categories_list_dos_resistance(self, tmp_path):
-        """CAT-SEC-02: 大量カテゴリリストによるDoS攻撃への耐性
-        验证大量类别列表不会导致内存溢出或超时。
+        """CAT-SEC-02: 大量カテゴリリストによるDoS攻撃への耐性。
+        
+        大量のカテゴリリストがメモリオーバーフローやタイムアウトを引き起こさないことを検証する。
         """
-        # Arrange - 准备测试数据（10000个类别）
+        # Arrange: テストデータを準備する（10000個のカテゴリ）
         large_categories = [
             {"name": f"Category {i}", "description": f"Description for category {i}"}
             for i in range(10000)
@@ -310,19 +335,20 @@ class TestCategoriesSecurity:
         json_file.write_text(json.dumps(large_categories), encoding="utf-8")
         from app.core.categories import load_categories
         import app.core.categories as cat_module
-        # Act - 执行被测试函数并测量时间
+        # Act: テスト対象を実行し時間を測定する
         start_time = time.time()
         load_categories(str(json_file))
         elapsed_time = time.time() - start_time
-        # Assert - 验证结果
-        assert elapsed_time < 10.0, f"处理时间过长: {elapsed_time}秒"
-        assert len(cat_module._categories_data) == 10000, "所有类别应被加载"
-        assert cat_module._categories_for_prompt_str != "", "提示字符串应被生成"
+        # Assert: 期待値と比較する
+        assert elapsed_time < 10.0, f"処理時間が長すぎます: {elapsed_time}秒"
+        assert len(cat_module._categories_data) == 10000, "すべてのカテゴリがロードされるべきです"
+        assert cat_module._categories_for_prompt_str != "", "プロンプト文字列が生成されるべきです"
     def test_malicious_json_content_handling(self, tmp_path):
-        """CAT-SEC-03: 悪意のあるJSONコンテンツが安全に処理される
-        验证包含特殊字符、HTML标签等恶意内容的类别名被安全处理。
+        """CAT-SEC-03: 悪意のあるJSONコンテンツが安全に処理される。
+        
+        特殊文字、HTMLタグなどの悪意のあるコンテンツを含むカテゴリ名が安全に処理されることを検証する。
         """
-        # Arrange - 准备测试数据（包含各种恶意内容）
+        # Arrange: テストデータを準備する（様々な悪意のあるコンテンツを含む）
         malicious_categories = [
             {
                 "name": "<script>alert('XSS')</script>",
@@ -345,14 +371,14 @@ class TestCategoriesSecurity:
         json_file.write_text(json.dumps(malicious_categories), encoding="utf-8")
         from app.core.categories import load_categories
         import app.core.categories as cat_module
-        # Act - 执行被测试函数
+        # Act: テスト対象を実行する
         load_categories(str(json_file))
-        # Assert - 验证结果
-        assert len(cat_module._categories_data) == 4, "所有类别应被加载（不过滤）"
-        # 验证恶意内容作为字符串被包含（未被执行）
+        # Assert: 期待値と比較する
+        assert len(cat_module._categories_data) == 4, "すべてのカテゴリがロードされるべきです（フィルタリングなし）"
+        # 悪意のあるコンテンツが文字列として含まれることを検証（実行されない）
         prompt_str = cat_module._categories_for_prompt_str
-        assert "<script>" in prompt_str, "HTML标签应作为字符串存在"
-        assert "DROP TABLE" in prompt_str, "SQL注入尝试应作为字符串存在"
+        assert "<script>" in prompt_str, "HTMLタグは文字列として存在すべきです"
+        assert "DROP TABLE" in prompt_str, "SQLインジェクション試行は文字列として存在すべきです"
 # =============================================================================
 # Main Entry Point
 # =============================================================================

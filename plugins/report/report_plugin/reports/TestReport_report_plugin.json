@@ -1,0 +1,312 @@
+{
+  "summary": {
+    "total": 59,
+    "passed": 58,
+    "failed": 1,
+    "pass_rate": 98.31
+  },
+  "categories": {
+    "normal": [
+      {
+        "test_id": "test_scan_001_start_scan_success",
+        "outcome": "passed",
+        "duration": 0.0037529999972321093
+      },
+      {
+        "test_id": "test_scan_002_command_preview_success",
+        "outcome": "passed",
+        "duration": 0.001639099995372817
+      },
+      {
+        "test_id": "test_scan_003_get_job_status",
+        "outcome": "passed",
+        "duration": 0.0017654999974183738
+      },
+      {
+        "test_id": "test_scan_005_multiregion_scan",
+        "outcome": "passed",
+        "duration": 0.002506099990569055
+      },
+      {
+        "test_id": "test_scan_val_002_policies_key_exists",
+        "outcome": "passed",
+        "duration": 0.0007637999951839447
+      },
+      {
+        "test_id": "test_scan_val_003_required_fields_present",
+        "outcome": "passed",
+        "duration": 0.0005969999911030754
+      },
+      {
+        "test_id": "test_scan_val_004_dangerous_keywords_detection",
+        "outcome": "passed",
+        "duration": 0.000797400003648363
+      },
+      {
+        "test_id": "test_scan_val_005_aws_access_key_format",
+        "outcome": "passed",
+        "duration": 0.00018489999638404697
+      },
+      {
+        "test_id": "test_scan_val_006_aws_secret_key_format",
+        "outcome": "passed",
+        "duration": 0.00017300000763498247
+      },
+      {
+        "test_id": "test_scan_val_007_aws_region_format",
+        "outcome": "passed",
+        "duration": 0.0001956000050995499
+      },
+      {
+        "test_id": "test_scan_val_008_azure_guid_format",
+        "outcome": "passed",
+        "duration": 0.000338400001055561
+      },
+      {
+        "test_id": "test_scan_val_009_assume_role_arn_format",
+        "outcome": "passed",
+        "duration": 0.00018250000721309334
+      },
+      {
+        "test_id": "test_scan_val_010_azure_regions_validation",
+        "outcome": "passed",
+        "duration": 0.00016650000179652125
+      },
+      {
+        "test_id": "test_scan_task_001_initialization",
+        "outcome": "passed",
+        "duration": 0.00021399999968707561
+      },
+      {
+        "test_id": "test_scan_task_003_aws_environment_setup",
+        "outcome": "passed",
+        "duration": 0.0004165999998804182
+      },
+      {
+        "test_id": "test_scan_task_003_azure_environment_setup",
+        "outcome": "passed",
+        "duration": 0.0003575000009732321
+      },
+      {
+        "test_id": "test_scan_task_009_decrypt_credentials_success",
+        "outcome": "skipped",
+        "duration": 0.0005969000048935413
+      },
+      {
+        "test_id": "test_scan_task_009_decrypt_not_needed",
+        "outcome": "passed",
+        "duration": 0.0003139000036753714
+      },
+      {
+        "test_id": "test_nscan_001_credential_processor",
+        "outcome": "passed",
+        "duration": 0.00025969999842345715
+      },
+      {
+        "test_id": "test_nscan_002_scan_coordinator",
+        "outcome": "passed",
+        "duration": 0.00027119999867863953
+      },
+      {
+        "test_id": "test_nscan_003_result_processor",
+        "outcome": "passed",
+        "duration": 0.0002305000089108944
+      },
+      {
+        "test_id": "test_nscan_004_error_history_handler",
+        "outcome": "passed",
+        "duration": 0.0001753999968059361
+      },
+      {
+        "test_id": "test_rpt_013_html_template_rendering",
+        "outcome": "passed",
+        "duration": 0.00028199999360367656
+      },
+      {
+        "test_id": "test_rpt_014_pdf_generation",
+        "outcome": "passed",
+        "duration": 0.00020110000332351774
+      },
+      {
+        "test_id": "test_rpt_015_chart_severity",
+        "outcome": "passed",
+        "duration": 0.00021159999596420676
+      },
+      {
+        "test_id": "test_rpt_016_chart_trend",
+        "outcome": "passed",
+        "duration": 0.00025599999935366213
+      },
+      {
+        "test_id": "test_rpt_019_provider_collect_audit",
+        "outcome": "passed",
+        "duration": 0.0013826999929733574
+      },
+      {
+        "test_id": "test_rpt_020_provider_collect_periodic",
+        "outcome": "passed",
+        "duration": 0.000519599998369813
+      },
+      {
+        "test_id": "test_rpt_021_get_template_name_audit",
+        "outcome": "passed",
+        "duration": 0.00035400000342633575
+      },
+      {
+        "test_id": "test_rpt_022_get_template_name_periodic",
+        "outcome": "passed",
+        "duration": 0.0008447000000160187
+      },
+      {
+        "test_id": "test_rpt_023_get_report_filename",
+        "outcome": "passed",
+        "duration": 0.000558999992790632
+      },
+      {
+        "test_id": "test_rpt_026_html_renderer_render",
+        "outcome": "passed",
+        "duration": 0.0002514999941922724
+      },
+      {
+        "test_id": "test_rpt_028_pdf_generator_generate",
+        "outcome": "passed",
+        "duration": 0.0019865999929606915
+      },
+      {
+        "test_id": "test_rpt_030_chart_severity_generation",
+        "outcome": "passed",
+        "duration": 0.0003640999930212274
+      },
+      {
+        "test_id": "test_rpt_031_chart_trend_generation",
+        "outcome": "passed",
+        "duration": 0.000324200009345077
+      },
+      {
+        "test_id": "test_rpt_032_data_fetcher_get_scan",
+        "outcome": "passed",
+        "duration": 0.0008383000094909221
+      }
+    ],
+    "error": [
+      {
+        "test_id": "test_scan_e01_empty_policy_error",
+        "outcome": "passed",
+        "duration": 0.0016155000048456714
+      },
+      {
+        "test_id": "test_scan_e02_invalid_yaml_format",
+        "outcome": "passed",
+        "duration": 0.0014289000100689009
+      },
+      {
+        "test_id": "test_scan_e03_missing_credentials",
+        "outcome": "passed",
+        "duration": 0.0015922999882604927
+      },
+      {
+        "test_id": "test_scan_e04_unsupported_cloud_provider",
+        "outcome": "passed",
+        "duration": 0.0020060000097146258
+      },
+      {
+        "test_id": "test_scan_e05_invalid_aws_access_key_format",
+        "outcome": "passed",
+        "duration": 0.0016687000024830922
+      },
+      {
+        "test_id": "test_scan_e06_invalid_azure_guid_format",
+        "outcome": "passed",
+        "duration": 0.0018440999992890283
+      },
+      {
+        "test_id": "test_scan_e07_dangerous_keyword_in_policy",
+        "outcome": "passed",
+        "duration": 0.001537299991468899
+      },
+      {
+        "test_id": "test_scan_e08_policy_size_exceeded",
+        "outcome": "passed",
+        "duration": 0.0074253000057069585
+      },
+      {
+        "test_id": "test_scan_e09_invalid_region_format",
+        "outcome": "passed",
+        "duration": 0.001583100005518645
+      }
+    ],
+    "security": [
+      {
+        "test_id": "test_scan_sec_001_path_traversal_prevention",
+        "outcome": "passed",
+        "duration": 0.00039929999911691993
+      },
+      {
+        "test_id": "test_scan_sec_001_system_directories_blocked",
+        "outcome": "passed",
+        "duration": 0.00037549999251496047
+      },
+      {
+        "test_id": "test_scan_sec_002_environment_variable_sanitization",
+        "outcome": "passed",
+        "duration": 0.0004885999951511621
+      },
+      {
+        "test_id": "test_scan_sec_002_command_injection_prevention",
+        "outcome": "passed",
+        "duration": 0.0005734000005759299
+      },
+      {
+        "test_id": "test_scan_sec_003_command_path_validation",
+        "outcome": "passed",
+        "duration": 0.00045649999810848385
+      },
+      {
+        "test_id": "test_scan_sec_004_credential_masking_in_logs",
+        "outcome": "passed",
+        "duration": 0.001064700001734309
+      },
+      {
+        "test_id": "test_scan_sec_004_internal_ip_masking",
+        "outcome": "passed",
+        "duration": 0.00019409999367780983
+      },
+      {
+        "test_id": "test_scan_sec_005_yaml_injection_prevention",
+        "outcome": "passed",
+        "duration": 0.0013927999971201643
+      },
+      {
+        "test_id": "test_scan_sec_006_redos_attack_prevention_input_limit",
+        "outcome": "passed",
+        "duration": 0.0010987999994540587
+      },
+      {
+        "test_id": "test_scan_sec_006_redos_attack_prevention_output_limit",
+        "outcome": "passed",
+        "duration": 0.0004332000098656863
+      },
+      {
+        "test_id": "test_scan_sec_007_large_file_dos_prevention",
+        "outcome": "passed",
+        "duration": 0.000753400003304705
+      },
+      {
+        "test_id": "test_scan_sec_007_path_traversal_in_log_file",
+        "outcome": "passed",
+        "duration": 0.0003449000068940222
+      },
+      {
+        "test_id": "test_scan_sec_008_security_validation_toggle_enabled",
+        "outcome": "passed",
+        "duration": 0.00019109999993816018
+      },
+      {
+        "test_id": "test_scan_sec_008_security_validation_toggle_disabled",
+        "outcome": "passed",
+        "duration": 0.00020370000856928527
+      }
+    ]
+  },
+  "generated_at": "2026-03-12T20:11:37.509503"
+}

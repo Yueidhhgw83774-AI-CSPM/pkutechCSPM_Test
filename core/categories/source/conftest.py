@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 """
-pytest fixtures for categories module tests.
-categories 模块测试的 pytest fixtures。
-
-This module provides shared fixtures and test result collection for testing categories module.
-本模块提供用于测试 categories 模块的共享 fixtures 和测试结果收集。
+categories モジュールテスト用 pytest 設定ファイル。
+テスト対象: app/core/categories.py
+テスト仕様: categories_tests.md
 """
 
 import os
+import re
 import sys
 import json
 from datetime import datetime
@@ -16,26 +15,34 @@ from typing import Any, Dict, List
 
 import pytest
 
-# Add the project root to Python path for imports
-# 将项目根目录添加到 Python 路径以便导入
-PROJECT_ROOT = r"C:\pythonProject\python_ai_cspm\platform_python_backend-testing"
-if PROJECT_ROOT not in sys.path:
+# ─── SourceCodeRoot を .env から読み込む ────────────────────────────────
+def _load_source_root() -> str:
+    """プロジェクトルートの .env から SourceCodeRoot を読み込む。"""
+    # 優先度1: ルート conftest.py が os.environ に設定済みの場合
+    from_env = os.environ.get("SourceCodeRoot", "").strip().strip("'\"")
+    if from_env:
+        return from_env
+    # 優先度2: ディレクトリツリーを遡って .env ファイルを検索する
+    current = Path(__file__).resolve()
+    for directory in [current, *current.parents]:
+        env_file = (directory if directory.is_dir() else directory.parent) / ".env"
+        if env_file.exists():
+            for line in env_file.read_text(encoding="utf-8").splitlines():
+                m = re.match(r"^\s*SourceCodeRoot\s*=\s*['\"]?(.+?)['\"]?\s*$", line)
+                if m:
+                    return m.group(1).strip()
+    return ""
+
+PROJECT_ROOT = _load_source_root()
+if PROJECT_ROOT and PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 
 
-# =============================================================================
-# Module Reset Fixture | 模块重置 Fixture
-# =============================================================================
-
+# ─── モジュールリセット Fixture ──────────────────────────────────────────
 @pytest.fixture(autouse=True)
 def reset_categories_module():
-    """
-    Reset categories module state between tests.
-    在测试之间重置 categories 模块状态。
-
-    categories.py 使用全局变量缓存数据，需要在测试间重置以确保独立性。
-    """
-    # 测试前清除模块缓存
+    """テストごとにモジュールのグローバル状態をリセットする。"""
+    # テスト前にモジュールキャッシュをクリアする
     modules_to_remove = [
         key for key in list(sys.modules.keys())
         if key.startswith("app.core.categories")
@@ -45,7 +52,7 @@ def reset_categories_module():
 
     yield
 
-    # 测试后清理
+    # テスト後にクリーンアップする
     try:
         import app.core.categories as cat_module
         cat_module._categories_data = []
@@ -53,7 +60,7 @@ def reset_categories_module():
     except ImportError:
         pass
 
-    # 再次清除模块缓存
+    # 再度モジュールキャッシュをクリアする
     modules_to_remove = [
         key for key in list(sys.modules.keys())
         if key.startswith("app.core.categories")
@@ -62,16 +69,10 @@ def reset_categories_module():
         del sys.modules[mod]
 
 
-# =============================================================================
-# Test Data Fixtures | 测试数据 Fixtures
-# =============================================================================
-
+# ─── テストデータ Fixtures ───────────────────────────────────────────────
 @pytest.fixture
 def valid_categories_json(tmp_path):
-    """
-    Create a valid categories JSON file for testing.
-    创建有效的测试用 categories JSON 文件。
-    """
+    """テスト用の有効な categories JSON ファイルを作成する。"""
     categories = [
         {
             "name": "Identity and Access Management",
@@ -91,27 +92,17 @@ def valid_categories_json(tmp_path):
     return str(json_file)
 
 
-# =============================================================================
-# Test Report Generation | 测试报告生成
-# =============================================================================
-
-# Global test results storage
-# 全局测试结果存储
-_test_results = []
-
+# ─── テスト結果収集 ──────────────────────────────────────────────────────
+_test_results = []  # テスト結果を格納するグローバルリスト
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
 def pytest_runtest_makereport(item, call):
-    """
-    Hook to capture test results.
-    捕获测试结果的钩子。
-    """
+    """テスト結果をキャプチャする pytest フック。"""
     outcome = yield
     rep = outcome.get_result()
 
     if rep.when == "call":
-        # Check if test is marked as xfail
-        # 检查测试是否标记为 xfail
+        # xfail マーカーの確認
         is_xfail = hasattr(rep, "wasxfail") or (
             hasattr(item, '_evalxfail') and item._evalxfail.wasvalid()
         )
@@ -127,15 +118,14 @@ def pytest_runtest_makereport(item, call):
 
 
 def pytest_sessionfinish(session, exitstatus):
-    """
-    Pytest hook to generate detailed reports after all tests complete.
-    在所有测试完成后生成详细报告的 pytest 钩子。
-    """
-    report_dir = r"C:\pythonProject\python_ai_cspm\TestReport\categories\reports"
+    """全テスト完了後にレポートを生成する pytest フック。"""
+    # ★★★ 重要: レポートパスの動的計算（絶対にハードコードしない） ★★★
+    from pathlib import Path
+    current_file = Path(__file__).resolve()
+    module_dir = current_file.parent.parent  # source/ の親 = categories/
+    report_dir = module_dir / "reports"
     os.makedirs(report_dir, exist_ok=True)
 
-    # Parse test results
-    # 解析测试结果
     normal_tests = []
     error_tests = []
     security_tests = []
@@ -150,23 +140,20 @@ def pytest_sessionfinish(session, exitstatus):
         duration = result["duration"]
         is_xfail = result.get("is_xfail", False)
 
-        # Override outcome for xfail tests
-        # 覆盖 xfail 测试的结果
+        # xfail テストのステータスを上書きする
         if is_xfail:
             outcome = "xfailed"
 
-        # Parse test ID and categorize
-        # 解析测试 ID 并分类
+        # nodeid パターンでテストを分類する
         if "test_categories.py" in nodeid:
-            # Security tests
-            # 安全测试
+            # セキュリティテストの分岐
             if "TestCategoriesSecurity" in nodeid or "Security" in nodeid:
                 if "path_traversal" in nodeid:
-                    test_id, test_name = "CAT-SEC-01", "路径遍历攻击防护"
+                    test_id, test_name = "CAT-SEC-01", "パストラバーサル攻撃への対応"
                 elif "large_categories" in nodeid or "dos_resistance" in nodeid:
-                    test_id, test_name = "CAT-SEC-02", "大量数据DoS防护"
+                    test_id, test_name = "CAT-SEC-02", "大量データによるDoS耐性"
                 elif "malicious_json" in nodeid:
-                    test_id, test_name = "CAT-SEC-03", "恶意JSON内容处理"
+                    test_id, test_name = "CAT-SEC-03", "悪意のあるJSONコンテンツの安全処理"
                 else:
                     continue
                 security_tests.append({
@@ -175,17 +162,16 @@ def pytest_sessionfinish(session, exitstatus):
                     "status": outcome,
                     "duration": duration
                 })
-            # Error tests
-            # 异常系测试
+            # 異常系テストの分岐
             elif "Error" in nodeid or "Errors" in nodeid:
                 if "file_not_found" in nodeid:
-                    test_id, test_name = "CAT-E01", "文件不存在处理"
+                    test_id, test_name = "CAT-E01", "ファイル未検出時のフォールバック"
                 elif "invalid_json" in nodeid:
-                    test_id, test_name = "CAT-E02", "无效JSON处理"
+                    test_id, test_name = "CAT-E02", "無効なJSON構文時のフォールバック"
                 elif "unexpected_exception" in nodeid:
-                    test_id, test_name = "CAT-E03", "预期外异常处理"
+                    test_id, test_name = "CAT-E03", "予期せぬ例外時のフォールバック"
                 elif "permission_error" in nodeid:
-                    test_id, test_name = "CAT-E04", "权限错误处理"
+                    test_id, test_name = "CAT-E04", "権限エラー時のフォールバック"
                 else:
                     continue
                 error_tests.append({
@@ -194,25 +180,24 @@ def pytest_sessionfinish(session, exitstatus):
                     "status": outcome,
                     "duration": duration
                 })
-            # Normal tests
-            # 正常系测试
+            # 正常系テストの分岐
             else:
                 if "import_categories_module" in nodeid:
-                    test_id, test_name = "CAT-001", "模块导入"
+                    test_id, test_name = "CAT-001", "モジュールインポート成功"
                 elif "load_valid_categories" in nodeid:
-                    test_id, test_name = "CAT-002", "有效JSON读取"
+                    test_id, test_name = "CAT-002", "有効なJSONファイルからの読み込み"
                 elif "prompt_string_format" in nodeid:
-                    test_id, test_name = "CAT-003", "提示字符串格式"
+                    test_id, test_name = "CAT-003", "プロンプト文字列のフォーマット検証"
                 elif "auto_load_when_not_loaded" in nodeid:
-                    test_id, test_name = "CAT-004", "未加载时自动加载"
+                    test_id, test_name = "CAT-004", "未ロード時の自動ロード"
                 elif "cached_data_returned" in nodeid:
-                    test_id, test_name = "CAT-005", "缓存数据返回"
+                    test_id, test_name = "CAT-005", "キャッシュデータの返却"
                 elif "empty_categories_list" in nodeid:
-                    test_id, test_name = "CAT-006", "空列表回退"
+                    test_id, test_name = "CAT-006", "空リスト時のフォールバック"
                 elif "category_without_description" in nodeid:
-                    test_id, test_name = "CAT-007", "无描述处理"
+                    test_id, test_name = "CAT-007", "説明なしカテゴリの処理"
                 elif "category_without_name_skipped" in nodeid:
-                    test_id, test_name = "CAT-008", "无名称跳过"
+                    test_id, test_name = "CAT-008", "名前なしカテゴリのスキップ"
                 else:
                     continue
                 normal_tests.append({
@@ -222,8 +207,7 @@ def pytest_sessionfinish(session, exitstatus):
                     "duration": duration
                 })
 
-        # Count outcomes
-        # 统计结果
+        # 集計
         if outcome == "passed":
             passed += 1
         elif outcome == "failed":
@@ -233,140 +217,110 @@ def pytest_sessionfinish(session, exitstatus):
 
     total = len(_test_results)
 
-    # Generate detailed Markdown report
-    # 生成详细的 Markdown 报告
-    report_md = f"""# categories.py 测试报告
+    # ─── Markdown レポート生成（全文日本語） ───
+    def _icon(status: str) -> str:
+        return "✅ 成功" if status == "passed" else ("⚠️ 予期失敗" if status == "xfailed" else "❌ 失敗")
 
-## 测试概要
+    rows_normal   = "\n".join(f"| {t['id']} | {t['name']} | {_icon(t['status'])} | {t['duration']*1000:.2f}ms |" for t in sorted(normal_tests,   key=lambda x: x["id"]))
+    rows_error    = "\n".join(f"| {t['id']} | {t['name']} | {_icon(t['status'])} | {t['duration']*1000:.2f}ms |" for t in sorted(error_tests,    key=lambda x: x["id"]))
+    rows_security = "\n".join(f"| {t['id']} | {t['name']} | {_icon(t['status'])} | {t['duration']*1000:.2f}ms |" for t in sorted(security_tests, key=lambda x: x["id"]))
 
-| 项目 | 值 |
+    conclusion = "✅ **予期しない失敗はありません。すべてのテストが正常に完了しました。**" if failed == 0 else f"❌ **{failed} 件のテストが失敗しました。**"
+
+    report_md = f"""# categories.py テストレポート
+
+## テスト概要
+
+| 項目 | 値 |
 |------|-----|
-| 测试对象 | `app/core/categories.py` |
-| 测试规格 | `categories_tests.md` |
-| 执行时间 | {datetime.now().strftime("%Y-%m-%d %H:%M:%S")} |
-| 覆盖率目标 | 60% |
+| テスト対象 | `app/core/categories.py` |
+| テスト仕様 | `categories_tests.md` |
+| 実行日時 | {datetime.now().strftime("%Y-%m-%d %H:%M:%S")} |
+| カバレッジ目標 | 60% |
 
-## 测试结果统计
+## テスト結果集計
 
-| 类别 | 总数 | 通过 | 失败 | 预期失败 |
-|------|------|------|------|---------|
+| カテゴリ | 総数 | 成功 | 失敗 | 予期失敗 |
+|---------|------|------|------|----------|
 | 正常系 | {len(normal_tests)} | {sum(1 for t in normal_tests if t['status']=='passed')} | {sum(1 for t in normal_tests if t['status']=='failed')} | {sum(1 for t in normal_tests if t['status']=='xfailed')} |
-| 异常系 | {len(error_tests)} | {sum(1 for t in error_tests if t['status']=='passed')} | {sum(1 for t in error_tests if t['status']=='failed')} | {sum(1 for t in error_tests if t['status']=='xfailed')} |
-| 安全测试 | {len(security_tests)} | {sum(1 for t in security_tests if t['status']=='passed')} | {sum(1 for t in security_tests if t['status']=='failed')} | {sum(1 for t in security_tests if t['status']=='xfailed')} |
-| **合计** | **{total}** | **{passed}** | **{failed}** | **{xfailed}** |
+| 異常系 | {len(error_tests)} | {sum(1 for t in error_tests if t['status']=='passed')} | {sum(1 for t in error_tests if t['status']=='failed')} | {sum(1 for t in error_tests if t['status']=='xfailed')} |
+| セキュリティ | {len(security_tests)} | {sum(1 for t in security_tests if t['status']=='passed')} | {sum(1 for t in security_tests if t['status']=='failed')} | {sum(1 for t in security_tests if t['status']=='xfailed')} |
+| **合計** | **{total}** | **{passed}** | **{failed}** | **{xfailed}** |
 
-## 测试通过率
+## 合格率
 
-- **实际通过率**: {(passed/total*100) if total>0 else 0:.1f}%
-- **有效通过率** (排除预期失败): {(passed/(total-xfailed)*100) if (total-xfailed)>0 else 0:.1f}%
+- **実際の合格率**: {round(passed/total*100, 1) if total > 0 else 0.0:.1f}%
+- **有効合格率**（予期失敗を除く）: {round(passed/(total-xfailed)*100, 1) if (total-xfailed) > 0 else 0.0:.1f}%
 
 ---
 
-## 正常系测试详情
+## 正常系テスト詳細
 
-| ID | 测试名称 | 结果 | 执行时间 |
-|----|---------|------|---------|
-"""
+| ID | テスト名 | 結果 | 実行時間 |
+|----|---------|------|----------|
+{rows_normal}
 
-    for t in sorted(normal_tests, key=lambda x: x['id']):
-        status_icon = "✅ 通过" if t['status'] == "passed" else ("⚠️ 预期失败" if t['status'] == "xfailed" else "❌ 失败")
-        report_md += f"| {t['id']} | {t['name']} | {status_icon} | {t['duration']*1000:.2f}ms |\n"
-
-    report_md += """
 ---
 
-## 异常系测试详情
+## 異常系テスト詳細
 
-| ID | 测试名称 | 结果 | 执行时间 |
-|----|---------|------|---------|
-"""
+| ID | テスト名 | 結果 | 実行時間 |
+|----|---------|------|----------|
+{rows_error}
 
-    for t in sorted(error_tests, key=lambda x: x['id']):
-        status_icon = "✅ 通过" if t['status'] == "passed" else ("⚠️ 预期失败" if t['status'] == "xfailed" else "❌ 失败")
-        report_md += f"| {t['id']} | {t['name']} | {status_icon} | {t['duration']*1000:.2f}ms |\n"
-
-    report_md += """
 ---
 
-## 安全测试详情
+## セキュリティテスト詳細
 
-| ID | 测试名称 | 结果 | 执行时间 |
-|----|---------|------|---------|
-"""
+| ID | テスト名 | 結果 | 実行時間 |
+|----|---------|------|----------|
+{rows_security}
 
-    for t in sorted(security_tests, key=lambda x: x['id']):
-        status_icon = "✅ 通过" if t['status'] == "passed" else ("⚠️ 预期失败" if t['status'] == "xfailed" else "❌ 失败")
-        report_md += f"| {t['id']} | {t['name']} | {status_icon} | {t['duration']*1000:.2f}ms |\n"
-
-    report_md += """
 ---
 
-## 结论
+## 結論
 
-"""
+{conclusion}
+{"" if xfailed == 0 else f"⚠️ **{xfailed} 件の予期失敗テストがあります（既知の問題）。**"}
 
-    if failed == 0:
-        report_md += "✅ **所有非预期失败的测试均已通过。**\n\n"
-    else:
-        report_md += f"❌ **有 {failed} 个测试未通过。**\n\n"
-
-    if xfailed > 0:
-        report_md += f"⚠️ **有 {xfailed} 个预期失败的测试（已知问题）。**\n"
-
-    report_md += f"""
 ---
-
-*报告生成时间: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}*
+*レポート生成日時: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}*
 """
 
-    # Write Markdown report
-    # 写入 Markdown 报告
+    # Markdown レポートを書き込む
     md_path = os.path.join(report_dir, "TestReport_categories.md")
     with open(md_path, "w", encoding="utf-8") as f:
         f.write(report_md)
+"""
 
-    # Generate JSON report
-    # 生成 JSON 报告
+    # ─── JSON レポート生成（★ 必須出力物） ───
     json_report = {
         "metadata": {
-            "test_target": "app/core/categories.py",
-            "test_spec": "categories_tests.md",
+            "test_target":    "app/core/categories.py",
+            "test_spec":      "categories_tests.md",
             "execution_time": datetime.now().isoformat(),
-            "coverage_target": "60%"
+            "coverage_target": "60%",
         },
         "summary": {
-            "total": total,
-            "passed": passed,
-            "failed": failed,
-            "xfailed": xfailed,
-            "pass_rate": (passed/total*100) if total>0 else 0
+            "total":     total,
+            "passed":    passed,
+            "failed":    failed,
+            "xfailed":   xfailed,
+            "pass_rate": round(passed / total * 100, 1) if total > 0 else 0.0,
         },
         "results": {
-            "normal": normal_tests,
-            "error": error_tests,
-            "security": security_tests
-        }
+            "normal":   normal_tests,
+            "error":    error_tests,
+            "security": security_tests,
+        },
     }
-
     json_path = os.path.join(report_dir, "TestReport_categories.json")
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(json_report, f, ensure_ascii=False, indent=2)
 
-    print(f"\n✅ 测试报告已生成:")
-    print(f"  - {md_path}")
-    print(f"  - {json_path}")
+    print(f"\n✅ テストレポートを生成しました:")
+    print(f"  JSON : {json_path}")
+    print(f"  Markdown: {md_path}")
+"""
 
 
-# =============================================================================
-# Report Configuration | 报告配置
-# =============================================================================
-
-@pytest.fixture(scope="session")
-def report_dir() -> str:
-    """
-    Provide the report output directory path.
-    提供报告输出目录路径。
-    """
-    report_path = r"C:\pythonProject\python_ai_cspm\TestReport\categories\reports"
-    os.makedirs(report_path, exist_ok=True)
-    return report_path

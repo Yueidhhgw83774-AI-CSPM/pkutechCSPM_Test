@@ -99,7 +99,7 @@ class TestResultCollector:
 | 総テスト数 | {total} |
 | 通過 | {passed} |
 | 失敗 | {failed} |
-| 通過率 | {passed/total*100:.1f}% |
+| 通過率 | {(passed/total*100 if total > 0 else 0.0):.1f}% |
 
 ## 正常系テスト ({len(self.results["normal"])})
 
@@ -135,7 +135,7 @@ class TestResultCollector:
                 "total": total,
                 "passed": passed,
                 "failed": total - passed,
-                "pass_rate": f"{passed/total*100:.1f}%"
+                "pass_rate": f"{passed/total*100:.1f}%" if total > 0 else "N/A"
             },
             "categories": self.results,
             "execution_time": self.start_time.strftime("%Y-%m-%d %H:%M:%S")

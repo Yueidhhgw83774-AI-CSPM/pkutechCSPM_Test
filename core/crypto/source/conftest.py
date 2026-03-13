@@ -1,39 +1,53 @@
 # -*- coding: utf-8 -*-
 """
-pytest fixtures for crypto module tests.
-crypto 模块测试的 pytest fixtures。
+crypto モジュールテスト用 pytest fixtures。
 
-This module provides shared fixtures for testing the crypto module,
-including environment setup, mock objects, and test data.
-本模块提供用于测试 crypto 模块的共享 fixtures，
-包括环境设置、模拟对象和测试数据。
+このモジュールは crypto モジュールテスト用の共有 fixtures を提供します。
+環境設定、モックオブジェクト、テストデータを含む。
 """
 
 import os
+import re
 import sys
 import base64
 import json
 import hashlib
 import pytest
+from pathlib import Path
 from unittest.mock import patch
 from typing import Generator
 
-# Add the project root to Python path for imports
-# 将项目根目录添加到 Python 路径以便导入
-PROJECT_ROOT = r"C:\pythonProject\python_ai_cspm\platform_python_backend-testing"
-if PROJECT_ROOT not in sys.path:
+# ─── SourceCodeRoot を .env から読み込む ────────────────────────────────
+def _load_source_root() -> str:
+    """プロジェクトルートの .env から SourceCodeRoot を読み込む。"""
+    # 優先度1: ルート conftest.py が os.environ に設定済みの場合
+    from_env = os.environ.get("SourceCodeRoot", "").strip().strip("'\"")
+    if from_env:
+        return from_env
+    # 優先度2: ディレクトリツリーを遡って .env ファイルを検索する
+    current = Path(__file__).resolve()
+    for directory in [current, *current.parents]:
+        env_file = (directory if directory.is_dir() else directory.parent) / ".env"
+        if env_file.exists():
+            for line in env_file.read_text(encoding="utf-8").splitlines():
+                m = re.match(r"^\s*SourceCodeRoot\s*=\s*['\"]?(.+?)['\"]?\s*$", line)
+                if m:
+                    return m.group(1).strip()
+    return ""
+
+PROJECT_ROOT = _load_source_root()
+if PROJECT_ROOT and PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 
 
 # =============================================================================
-# Shared Secret Fixtures | 共享密钥相关 Fixtures
+# 共有シークレット Fixtures | Shared Secret Fixtures
 # =============================================================================
 
 @pytest.fixture
 def test_shared_secret() -> bytes:
     """
-    Provide a test shared secret key.
-    提供测试用的共享秘密密钥。
+    テスト用の共有シークレットキーを提供する。
     """
     return b"test_shared_secret_for_hmac"
 
@@ -41,8 +55,7 @@ def test_shared_secret() -> bytes:
 @pytest.fixture
 def test_shared_secret_32() -> bytes:
     """
-    Provide a 32-byte test shared secret key for AES operations.
-    提供用于 AES 操作的 32 字节测试共享秘密密钥。
+    AES操作用の32バイトのテスト共有シークレットキーを提供する。
     """
     return b"test_shared_secret_key_123456789"
 
@@ -50,8 +63,7 @@ def test_shared_secret_32() -> bytes:
 @pytest.fixture
 def mock_env_shared_secret():
     """
-    Mock environment variable SHARED_SECRET.
-    模拟环境变量 SHARED_SECRET。
+    環境変数 SHARED_SECRET をモックする。
     """
     with patch.dict(os.environ, {"SHARED_SECRET": "env_secret_key"}):
         yield "env_secret_key"
@@ -60,8 +72,7 @@ def mock_env_shared_secret():
 @pytest.fixture
 def mock_secret_file(tmp_path):
     """
-    Create a mock secret file.
-    创建模拟的秘密密钥文件。
+    モックのシークレットファイルを作成する。
     """
     secret_file = tmp_path / "shared_secret"
     secret_file.write_bytes(b"file_secret_key_12345")
@@ -69,33 +80,32 @@ def mock_secret_file(tmp_path):
 
 
 # =============================================================================
-# Encrypted Payload Fixtures | 加密载荷相关 Fixtures
+# 暗号化ペイロード Fixtures | Encrypted Payload Fixtures
 # =============================================================================
 
 @pytest.fixture
 def encrypted_payload(test_shared_secret_32):
     """
-    Provide a test encrypted payload with IV.
-    提供带 IV 的测试加密载荷。
+    IV付きテスト暗号化ペイロードを提供する。
     """
     from cryptography.hazmat.primitives import padding
     from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
     from cryptography.hazmat.backends import default_backend
 
-    # Test plaintext JSON | 测试用明文 JSON
+    # テスト用平文 JSON
     plaintext = '{"session_id": "test_123", "prompt": "テストメッセージ"}'
 
-    # Generate key | 生成密钥
+    # キーを生成する
     key = hashlib.sha256(test_shared_secret_32).digest()
 
-    # Generate IV | 生成 IV
+    # IVを生成する
     iv = os.urandom(16)
 
-    # Add padding | 添加填充
+    # パディングを追加する
     padder = padding.PKCS7(128).padder()
     padded = padder.update(plaintext.encode('utf-8')) + padder.finalize()
 
-    # Encrypt | 加密
+    # 暗号化する
     cipher = Cipher(algorithms.AES(key), modes.CBC(iv), backend=default_backend())
     encryptor = cipher.encryptor()
     ciphertext = encryptor.update(padded) + encryptor.finalize()
@@ -108,38 +118,36 @@ def encrypted_payload(test_shared_secret_32):
 
 
 # =============================================================================
-# Report Configuration | 报告配置
+# レポート設定 | Report Configuration
 # =============================================================================
 
 @pytest.fixture(scope="session")
 def report_dir() -> str:
     """
-    Provide the report output directory path.
-    提供报告输出目录路径。
+    レポート出力ディレクトリパスを提供する。
     """
-    report_path = r"C:\pythonProject\python_ai_cspm\TestReport\crypto\reports"
+    report_path = Path(__file__).parent.parent / "reports"
     os.makedirs(report_path, exist_ok=True)
-    return report_path
+    return str(report_path)
 
 
 # =============================================================================
-# Test Report Generation | 测试报告生成
+# テストレポート生成 | Test Report Generation
 # =============================================================================
 
-# Global test results storage
+# グローバルテスト結果ストレージ
 _test_results = []
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
 def pytest_runtest_makereport(item, call):
     """
-    Hook to capture test results.
-    捕获测试结果的钩子。
+    テスト結果をキャプチャするフック。
     """
     outcome = yield
     rep = outcome.get_result()
 
     if rep.when == "call":
-        # Check if test is marked as xfail
+        # xfailマークがついているか確認する
         is_xfail = hasattr(rep, "wasxfail") or (hasattr(item, '_evalxfail') and item._evalxfail.wasvalid())
 
         result = {
@@ -153,18 +161,15 @@ def pytest_runtest_makereport(item, call):
 
 
 def pytest_sessionfinish(session, exitstatus):
-    """
-    Pytest hook to generate detailed reports after all tests complete.
-    在所有测试完成后生成详细报告的 pytest 钩子。
-    """
+    """すべてのテスト完了後に詳細レポートを生成する pytest フック。"""
     import json
     from datetime import datetime
 
-    report_dir = r"C:\pythonProject\python_ai_cspm\TestReport\crypto\reports"
+    # ★★★ 重要: レポートパスの動的計算（絶対にハードコードしない） ★★★
+    report_dir = Path(__file__).parent.parent / "reports"
     os.makedirs(report_dir, exist_ok=True)
 
-    # Parse test results
-    # 解析测试结果
+    # テスト結果を解析する
     normal_tests = []
     error_tests = []
     security_tests = []
@@ -179,34 +184,34 @@ def pytest_sessionfinish(session, exitstatus):
         duration = result["duration"]
         is_xfail = result.get("is_xfail", False)
 
-        # Override outcome for xfail tests
+        # xfail テストの結果を上書きする
         if is_xfail:
             outcome = "xfailed"
 
-        # Extract test ID and name
+        # テスト ID と名前を抽出する
         if "test_crypto_" in nodeid:
-            # Parse test ID
+            # テスト ID を解析する
             if "test_crypto_sec_" in nodeid:
-                # Security test
+                # セキュリティテスト
                 test_type = "security"
                 if "sec_01" in nodeid:
                     test_id = "CRYPTO-SEC-01"
-                    test_name = "HMAC时序攻击防护"
+                    test_name = "HMACタイミング攻撃防御"
                 elif "sec_02" in nodeid:
                     test_id = "CRYPTO-SEC-02"
-                    test_name = "时间戳篡改检测"
+                    test_name = "タイムスタンプ改ざん検出"
                 elif "sec_03" in nodeid:
                     test_id = "CRYPTO-SEC-03"
-                    test_name = "填充预言攻击防护"
+                    test_name = "パディングオラクル攻撃防御"
                 elif "sec_04" in nodeid:
                     test_id = "CRYPTO-SEC-04"
-                    test_name = "默认密钥警告输出"
+                    test_name = "デフォルトキー警告出力"
                 elif "sec_05" in nodeid:
                     test_id = "CRYPTO-SEC-05"
-                    test_name = "HMAC单比特差异检测"
+                    test_name = "HMAC単一ビット差異検出"
                 elif "sec_06" in nodeid:
                     test_id = "CRYPTO-SEC-06"
-                    test_name = "错误消息不泄露内部详情"
+                    test_name = "エラーメッセージから内部詳細を漏洩しないこと"
                 else:
                     continue
                 security_tests.append({
@@ -216,34 +221,34 @@ def pytest_sessionfinish(session, exitstatus):
                     "duration": duration
                 })
             elif "test_crypto_e" in nodeid:
-                # Error test
+                # 異常系テスト
                 test_type = "error"
                 if "_e01_" in nodeid:
-                    test_id, test_name = "CRYPTO-E01", "空密钥文件错误"
+                    test_id, test_name = "CRYPTO-E01", "空キーファイルエラー"
                 elif "_e02_" in nodeid:
-                    test_id, test_name = "CRYPTO-E02", "无效HMAC格式"
+                    test_id, test_name = "CRYPTO-E02", "無効なHMAC形式"
                 elif "_e03_" in nodeid:
-                    test_id, test_name = "CRYPTO-E03", "时间戳过期"
+                    test_id, test_name = "CRYPTO-E03", "タイムスタンプ期限切れ"
                 elif "_e04_" in nodeid:
-                    test_id, test_name = "CRYPTO-E04", "篡改的哈希值"
+                    test_id, test_name = "CRYPTO-E04", "改ざんされたハッシュ値"
                 elif "_e05_" in nodeid:
-                    test_id, test_name = "CRYPTO-E05", "无效IV大小"
+                    test_id, test_name = "CRYPTO-E05", "無効なIVサイズ"
                 elif "_e06_" in nodeid:
-                    test_id, test_name = "CRYPTO-E06", "无效PKCS7填充"
+                    test_id, test_name = "CRYPTO-E06", "無効なPKCS7パディング"
                 elif "_e07_" in nodeid:
-                    test_id, test_name = "CRYPTO-E07", "空加密输入"
+                    test_id, test_name = "CRYPTO-E07", "空の暗号化入力"
                 elif "_e08_" in nodeid:
-                    test_id, test_name = "CRYPTO-E08", "非UTF-8数据"
+                    test_id, test_name = "CRYPTO-E08", "非UTF-8データ"
                 elif "_e09_" in nodeid:
-                    test_id, test_name = "CRYPTO-E09", "无效JSON"
+                    test_id, test_name = "CRYPTO-E09", "無効なJSON"
                 elif "_e10_" in nodeid:
-                    test_id, test_name = "CRYPTO-E10", "无效Base64数据"
+                    test_id, test_name = "CRYPTO-E10", "無効なBase64データ"
                 elif "_e11_" in nodeid:
-                    test_id, test_name = "CRYPTO-E11", "None认证头"
+                    test_id, test_name = "CRYPTO-E11", "None認証ヘッダー"
                 elif "_e12_" in nodeid:
-                    test_id, test_name = "CRYPTO-E12", "数据短于填充长度"
+                    test_id, test_name = "CRYPTO-E12", "パディング長より短いデータ"
                 elif "_e13_" in nodeid:
-                    test_id, test_name = "CRYPTO-E13", "填充字节不一致"
+                    test_id, test_name = "CRYPTO-E13", "パディングバイト不一致"
                 else:
                     continue
                 error_tests.append({
@@ -253,27 +258,27 @@ def pytest_sessionfinish(session, exitstatus):
                     "duration": duration
                 })
             elif "_001_" in nodeid:
-                normal_tests.append({"id": "CRYPTO-001", "name": "环境变量获取共享密钥", "status": outcome, "duration": duration})
+                normal_tests.append({"id": "CRYPTO-001", "name": "環境変数から共有キー取得", "status": outcome, "duration": duration})
             elif "_002_" in nodeid:
-                normal_tests.append({"id": "CRYPTO-002", "name": "文件获取共享密钥", "status": outcome, "duration": duration})
+                normal_tests.append({"id": "CRYPTO-002", "name": "ファイルから共有キー取得", "status": outcome, "duration": duration})
             elif "_003_" in nodeid:
-                normal_tests.append({"id": "CRYPTO-003", "name": "默认密钥回退", "status": outcome, "duration": duration})
+                normal_tests.append({"id": "CRYPTO-003", "name": "デフォルトキーへのフォールバック", "status": outcome, "duration": duration})
             elif "_004_" in nodeid:
-                normal_tests.append({"id": "CRYPTO-004", "name": "保留空白字符", "status": outcome, "duration": duration})
+                normal_tests.append({"id": "CRYPTO-004", "name": "空白文字の保持", "status": outcome, "duration": duration})
             elif "_005_" in nodeid:
-                normal_tests.append({"id": "CRYPTO-005", "name": "有效HMAC认证哈希验证", "status": outcome, "duration": duration})
+                normal_tests.append({"id": "CRYPTO-005", "name": "有効なHMAC認証ハッシュ検証", "status": outcome, "duration": duration})
             elif "_006_" in nodeid:
-                normal_tests.append({"id": "CRYPTO-006", "name": "有效载荷AES-CBC解密", "status": outcome, "duration": duration})
+                normal_tests.append({"id": "CRYPTO-006", "name": "有効なペイロードのAES-CBC復号化", "status": outcome, "duration": duration})
             elif "_007_" in nodeid:
-                normal_tests.append({"id": "CRYPTO-007", "name": "解密后JSON解析", "status": outcome, "duration": duration})
+                normal_tests.append({"id": "CRYPTO-007", "name": "復号化後のJSON解析", "status": outcome, "duration": duration})
             elif "_008_" in nodeid:
-                normal_tests.append({"id": "CRYPTO-008", "name": "Base64解密认证信息", "status": outcome, "duration": duration})
+                normal_tests.append({"id": "CRYPTO-008", "name": "Base64からの認証情報復号化", "status": outcome, "duration": duration})
             elif "_009_" in nodeid:
-                normal_tests.append({"id": "CRYPTO-009", "name": "已知数据解密测试", "status": outcome, "duration": duration})
+                normal_tests.append({"id": "CRYPTO-009", "name": "既知データの復号化テスト", "status": outcome, "duration": duration})
             elif "_010_" in nodeid:
-                normal_tests.append({"id": "CRYPTO-010", "name": "时间漂移容忍验证", "status": outcome, "duration": duration})
+                normal_tests.append({"id": "CRYPTO-010", "name": "時間ドリフト許容検証", "status": outcome, "duration": duration})
 
-        # Count outcomes
+        # 結果を集計する
         if outcome == "passed":
             passed += 1
         elif outcome == "failed":
@@ -284,7 +289,7 @@ def pytest_sessionfinish(session, exitstatus):
     total = len(_test_results)
 
     # Generate detailed Markdown report
-    # 生成详细的Markdown报告
+    # 詳細なMarkdownレポートを生成する
     report_md = f"""# crypto.py 测试报告
 
 ## 测试概要
@@ -325,71 +330,71 @@ def pytest_sessionfinish(session, exitstatus):
     report_md += """
 ---
 
-## 异常系测试详情
+## 異常系テスト詳細
 
-| ID | 测试名称 | 结果 | 执行时间 |
+| ID | テスト名称 | 結果 | 実行時間 |
 |----|---------|------|---------|
 """
 
     for t in error_tests:
-        status_icon = "✅ 通过" if t['status'] == "passed" else "❌ 失败"
+        status_icon = "✅ 成功" if t['status'] == "passed" else "❌ 失敗"
         report_md += f"| {t['id']} | {t['name']} | {status_icon} | {t['duration']*1000:.2f}ms |\n"
 
     report_md += """
 ---
 
-## 安全测试详情
+## セキュリティテスト詳細
 
-| ID | 测试名称 | 结果 | 执行时间 |
+| ID | テスト名称 | 結果 | 実行時間 |
 |----|---------|------|---------|
 """
 
     for t in security_tests:
         if t['status'] == "passed":
-            status_icon = "✅ 通过"
+            status_icon = "✅ 成功"
         elif t['status'] == "xfailed":
-            status_icon = "⚠️ 预期失败"
+            status_icon = "⚠️ 予期される失敗"
         else:
-            status_icon = "❌ 失败"
+            status_icon = "❌ 失敗"
         report_md += f"| {t['id']} | {t['name']} | {status_icon} | {t['duration']*1000:.2f}ms |\n"
 
     report_md += """
 ---
 
-## 预期失败测试说明
+## 予期される失敗テスト説明
 
-| ID | 问题描述 | 代码位置 | 建议修复 |
+| ID | 問題説明 | コード位置 | 推奨修正 |
 |----|---------|---------|---------|
-| CRYPTO-SEC-01 | 使用==比较，存在时序攻击风险 | crypto.py:98 | 使用hmac.compare_digest() |
-| CRYPTO-SEC-03 | 错误消息泄露填充详情 | crypto.py:165 | 返回统一错误消息 |
-| CRYPTO-SEC-06 | 不同错误返回不同消息 | crypto.py:165 | 统一所有解密错误消息 |
+| CRYPTO-SEC-01 | ==比較を使用、タイミング攻撃リスクあり | crypto.py:98 | hmac.compare_digest()を使用 |
+| CRYPTO-SEC-03 | エラーメッセージがパディング詳細を漏洩 | crypto.py:165 | 統一エラーメッセージを返す |
+| CRYPTO-SEC-06 | 異なるエラーが異なるメッセージを返す | crypto.py:165 | すべての復号化エラーメッセージを統一 |
 
 ---
 
-## 结论
+## 結論
 
 """
 
     if failed == 0:
-        report_md += "✅ **所有非预期失败的测试均已通过。**\n\n"
+        report_md += "✅ **予期される失敗以外のすべてのテストが成功しました。**\n\n"
     else:
-        report_md += f"❌ **有 {failed} 个测试未通过。**\n\n"
+        report_md += f"❌ **{failed} 件のテストが失敗しました。**\n\n"
 
     if xfailed > 0:
-        report_md += f"⚠️ **有 {xfailed} 个预期失败的测试（已知安全问题）。**\n"
+        report_md += f"⚠️ **{xfailed} 件の予期される失敗テスト（既知のセキュリティ問題）があります。**\n"
 
     report_md += f"""
 ---
 
-*报告生成时间: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}*
+*レポート生成時間: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}*
 """
 
-    # Write Markdown report
+    # Markdown レポートの書き込み
     md_path = os.path.join(report_dir, "TestReport_crypto.md")
     with open(md_path, "w", encoding="utf-8") as f:
         f.write(report_md)
 
-    # Generate JSON report
+    # JSON レポートの生成
     json_report = {
         "metadata": {
             "test_target": "app/core/crypto.py",
@@ -415,7 +420,7 @@ def pytest_sessionfinish(session, exitstatus):
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(json_report, f, ensure_ascii=False, indent=2)
 
-    print(f"\n✅ 测试报告已生成:")
+    print(f"\n✅ テストレポートが生成されました:")
     print(f"  - {md_path}")
     print(f"  - {json_path}")
 

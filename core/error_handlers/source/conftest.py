@@ -6,14 +6,39 @@ error_handlers.py テスト用 pytest 設定ファイル
 import pytest
 import json
 import sys
+import os
 import re
 from pathlib import Path
 from datetime import datetime
+from dotenv import load_dotenv
 
 
-# プロジェクトルートをパスに追加
-project_root = Path(__file__).parent.parent.parent.parent / "platform_python_backend-testing"
-sys.path.insert(0, str(project_root))
+def _load_source_root():
+    """.env ファイルから SourceCodeRoot を読み込む
+
+    Returns:
+        str: SourceCodeRoot の絶対パス
+
+    Raises:
+        FileNotFoundError: .env ファイルが見つからない場合
+        KeyError: SourceCodeRoot キーが .env に存在しない場合
+    """
+    env_path = Path(__file__).parent.parent.parent.parent / ".env"
+    if not env_path.exists():
+        raise FileNotFoundError(f".env ファイルが見つかりません: {env_path}")
+
+    load_dotenv(env_path)
+    source_root = os.getenv("SourceCodeRoot")
+
+    if not source_root:
+        raise KeyError(".env ファイルに SourceCodeRoot キーが存在しません")
+
+    return source_root
+
+
+# ★★★ 重要: プロジェクトルートを動的に取得（絶対にハードコードしない） ★★★
+PROJECT_ROOT = _load_source_root()
+sys.path.insert(0, PROJECT_ROOT)
 
 
 class TestResultCollector:
@@ -34,7 +59,7 @@ class TestResultCollector:
         # テストIDの抽出を試みる
         test_id = self._extract_test_id(test_name)
 
-        # 分類
+        # 分类
         if "Security" in nodeid or "_SEC" in test_name or "SEC-" in test_id:
             category = "security"
         elif "Errors" in nodeid or "_E0" in test_name or test_id.startswith("ERH-E"):
@@ -190,42 +215,42 @@ class TestResultCollector:
         json_path = report_dir / "TestReport_error_handlers.json"
         self._generate_json_report(json_path, total, passed, failed, xfailed, pass_rate, effective_pass_rate, end_time)
 
-        print(f"\n✅ 测试报告已生成:")
+        print(f"\n✅ テストレポートが生成されました:")
         print(f"  - {md_path}")
         print(f"  - {json_path}\n")
 
     def _generate_markdown_report(self, path, total, passed, failed, xfailed, pass_rate, effective_pass_rate, end_time):
         """Markdownレポートを生成"""
-        content = f"""# error_handlers.py 测试报告
+        content = f"""# error_handlers.py テストレポート
 
-## 测试概要
+## テスト概要
 
-| 项目 | 值 |
-|------|-----|
-| 测试对象 | `app/core/error_handlers.py` |
-| 测试规格 | `error_handlers_tests.md` |
-| 执行时间 | {end_time.strftime('%Y-%m-%d %H:%M:%S')} |
-| 覆盖率目标 | 90% |
+| 項目 | 値 |
+|------|----|  
+| テスト対象 | `app/core/error_handlers.py` |
+| テスト仕様 | `error_handlers_tests.md` |
+| 実行時間 | {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} |
+| カバレッジ目標 | 90% |
 
-## 测试结果统计
+## テスト結果統計
 
-| 类别 | 总数 | 通过 | 失败 | 预期失败 |
+| カテゴリ | 合計 | 成功 | 失敗 | 予期される失敗 |
 |------|------|------|------|----------|
 | 正常系 | {len(self.results['normal'])} | {sum(1 for r in self.results['normal'] if r['outcome'] == 'passed')} | {sum(1 for r in self.results['normal'] if r['outcome'] == 'failed')} | {sum(1 for r in self.results['normal'] if r['outcome'] == 'xfailed')} |
-| 异常系 | {len(self.results['error'])} | {sum(1 for r in self.results['error'] if r['outcome'] == 'passed')} | {sum(1 for r in self.results['error'] if r['outcome'] == 'failed')} | {sum(1 for r in self.results['error'] if r['outcome'] == 'xfailed')} |
-| 安全测试 | {len(self.results['security'])} | {sum(1 for r in self.results['security'] if r['outcome'] == 'passed')} | {sum(1 for r in self.results['security'] if r['outcome'] == 'failed')} | {sum(1 for r in self.results['security'] if r['outcome'] == 'xfailed')} |
-| **合计** | **{total}** | **{passed}** | **{failed}** | **{xfailed}** |
+| 異常系 | {len(self.results['error'])} | {sum(1 for r in self.results['error'] if r['outcome'] == 'passed')} | {sum(1 for r in self.results['error'] if r['outcome'] == 'failed')} | {sum(1 for r in self.results['error'] if r['outcome'] == 'xfailed')} |
+| セキュリティ | {len(self.results['security'])} | {sum(1 for r in self.results['security'] if r['outcome'] == 'passed')} | {sum(1 for r in self.results['security'] if r['outcome'] == 'failed')} | {sum(1 for r in self.results['security'] if r['outcome'] == 'xfailed')} |
+| **総計** | **{total}** | **{passed}** | **{failed}** | **{xfailed}** |
 
-## 测试通过率
+## テスト合格率
 
-- **实际通过率**: {pass_rate:.1f}%
-- **有效通过率** (排除预期失败): {effective_pass_rate:.1f}%
+- **実際の合格率**: {pass_rate:.1f}%
+- **有効合格率** (予期される失敗を除外): {effective_pass_rate:.1f}%
 
 ---
 
-## 正常系测试详情
+## 正常系テスト詳細
 
-| ID | 测试名称 | 结果 | 执行时间 |
+| ID | テスト名称 | 結果 | 実行時間 |
 |----|---------|------|----------|
 """
         for result in self.results['normal']:
@@ -233,9 +258,9 @@ class TestResultCollector:
             content += f"| {result['id']} | {result['name']} | {status} | {result['duration']}ms |\n"
 
         content += """
-## 异常系测试详情
+## 異常系テスト詳細
 
-| ID | 测试名称 | 结果 | 执行时间 |
+| ID | テスト名称 | 結果 | 実行時間 |
 |----|---------|------|----------|
 """
         for result in self.results['error']:
@@ -243,16 +268,16 @@ class TestResultCollector:
             content += f"| {result['id']} | {result['name']} | {status} | {result['duration']}ms |\n"
 
         content += """
-## 安全测试详情
+## セキュリティテスト詳細
 
-| ID | 测试名称 | 结果 | 执行时间 |
+| ID | テスト名称 | 結果 | 実行時間 |
 |----|---------|------|----------|
 """
         for result in self.results['security']:
             status = "✅" if result['outcome'] == "passed" else "❌" if result['outcome'] == "failed" else "⚠️"
             content += f"| {result['id']} | {result['name']} | {status} | {result['duration']}ms |\n"
 
-        # 结论
+        # 結論
         if failed == 0:
             conclusion = "✅ **全てのテストが正常に完了しました。** error_handlers モジュールは期待通りに動作しています。"
         else:
@@ -267,7 +292,7 @@ class TestResultCollector:
 
 ---
 
-*报告生成时间: {end_time.strftime('%Y-%m-%d %H:%M:%S')}*
+*レポート生成時間: {end_time.strftime('%Y-%m-%d %H:%M:%S')}*
 """
 
         path.write_text(content, encoding='utf-8')

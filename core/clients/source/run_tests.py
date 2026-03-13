@@ -1,16 +1,16 @@
-"""简单的测试执行脚本"""
+"""シンプルなテスト実行スクリプト"""
 import sys
 from pathlib import Path
 
-# 添加项目根目录到路径
+# プロジェクトルートディレクトリをパスに追加する
 project_root = Path(__file__).parent.parent.parent / "platform_python_backend-testing"
 sys.path.insert(0, str(project_root))
 
-# 运行pytest
+# pytestを実行する
 import pytest
 
 if __name__ == "__main__":
-    # 运行测试
+    # テストを実行する
     exit_code = pytest.main([
         "test_clients.py",
         "-v",

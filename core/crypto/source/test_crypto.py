@@ -1,17 +1,18 @@
 ﻿# -*- coding: utf-8 -*-
 """
-crypto.py 单元测试
-测试对象: app/core/crypto.py
-测试规格: docs/testing/core/crypto_tests.md
-覆盖率目标: 90%
-本测试文件严格按照 crypto_tests.md 测试规格文档编写，
-包含正常系测试、异常系测试和安全测试三大类。
-测试命名规则:
+crypto.py のテスト。
+テスト対象: app/core/crypto.py
+テスト仕様: crypto_tests.md
+カバレッジ目標: 90%
+このテストファイルは crypto_tests.md 仕様書に従って記述されており、
+正常系テスト、異常系テスト、セキュリティテストの3カテゴリを含む。
+テスト命名規則:
 - 正常系: test_crypto_XXX_<description>  (CRYPTO-001 ~ CRYPTO-010)
-- 异常系: test_crypto_eXX_<description>  (CRYPTO-E01 ~ CRYPTO-E13)
-- 安全测试: test_crypto_sec_XX_<description>  (CRYPTO-SEC-01 ~ CRYPTO-SEC-06)
+- 異常系: test_crypto_eXX_<description>  (CRYPTO-E01 ~ CRYPTO-E13)
+- セキュリティテスト: test_crypto_sec_XX_<description>  (CRYPTO-SEC-01 ~ CRYPTO-SEC-06)
 """
 import os
+import re
 import sys
 import json
 import time
@@ -19,13 +20,32 @@ import base64
 import hashlib
 import hmac
 import inspect
+from pathlib import Path
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 from unittest.mock import patch
 import pytest
-# Add project root to path
-PROJECT_ROOT = r"C:\pythonProject\python_ai_cspm\platform_python_backend-testing"
-if PROJECT_ROOT not in sys.path:
+
+# ─── SourceCodeRoot を .env から読み込む ────────────────────────────────
+def _load_source_root() -> str:
+    """プロジェクトルートの .env から SourceCodeRoot を読み込む。"""
+    # 優先度1: ルート conftest.py が os.environ に設定済みの場合
+    from_env = os.environ.get("SourceCodeRoot", "").strip().strip("'\"")
+    if from_env:
+        return from_env
+    # 優先度2: ディレクトリツリーを遡って .env ファイルを検索する
+    current = Path(__file__).resolve()
+    for directory in [current, *current.parents]:
+        env_file = (directory if directory.is_dir() else directory.parent) / ".env"
+        if env_file.exists():
+            for line in env_file.read_text(encoding="utf-8").splitlines():
+                m = re.match(r"^\s*SourceCodeRoot\s*=\s*['\"]?(.+?)['\"]?\s*$", line)
+                if m:
+                    return m.group(1).strip()
+    return ""
+
+PROJECT_ROOT = _load_source_root()
+if PROJECT_ROOT and PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 # Import the module under test
 from app.core.crypto import (
@@ -197,7 +217,7 @@ def record_result(test_id: str, test_name: str, category: str,
     """记录测试结果"""
     _collector.add_result(test_id, test_name, category, passed, message, expected_fail, duration)
 # =============================================================================
-# 正常系测试 (CRYPTO-001 ~ CRYPTO-010)
+# 正常系テスト (CRYPTO-001 ~ CRYPTO-010)
 # =============================================================================
 @pytest.mark.normal
 class TestGetSharedSecret:
@@ -403,7 +423,7 @@ class TestDecryptionWithKnownData:
             record_result(test_id, test_name, "normal", False, str(e), False, duration)
             raise
 # =============================================================================
-# 异常系测试 (CRYPTO-E01 ~ CRYPTO-E13)
+# 異常系テスト (CRYPTO-E01 ~ CRYPTO-E13)
 # =============================================================================
 @pytest.mark.error
 class TestGetSharedSecretErrors:
@@ -681,7 +701,7 @@ class TestDecryptCredentialsFieldErrors:
             record_result(test_id, test_name, "error", False, str(e), False, duration)
             raise
 # =============================================================================
-# 安全测试 (CRYPTO-SEC-01 ~ CRYPTO-SEC-06)
+# セキュリティテスト (CRYPTO-SEC-01 ～ CRYPTO-SEC-06)
 # =============================================================================
 @pytest.mark.security
 class TestCryptoSecurity:

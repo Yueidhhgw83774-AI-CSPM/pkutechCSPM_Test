@@ -11,84 +11,84 @@
         "test_id": "N/A",
         "test_name": "test_parse_compliance_normal",
         "outcome": "passed",
-        "duration_ms": 0.8,
+        "duration_ms": 0.73,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_parse_compliance_with_output_lang",
         "outcome": "passed",
-        "duration_ms": 0.55,
+        "duration_ms": 0.84,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_get_detail_normal",
         "outcome": "passed",
-        "duration_ms": 0.93,
+        "duration_ms": 0.7,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_get_detail_multiple_platforms",
         "outcome": "passed",
-        "duration_ms": 0.81,
+        "duration_ms": 0.68,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_extract_error_message_with_details",
         "outcome": "passed",
-        "duration_ms": 0.62,
+        "duration_ms": 0.44,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_extract_error_message_without_details",
         "outcome": "passed",
-        "duration_ms": 0.48,
+        "duration_ms": 0.35,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_delay_client_error_429_retry_allowed",
         "outcome": "passed",
-        "duration_ms": 2.27,
+        "duration_ms": 1.38,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_delay_client_error_429_with_retry_delay",
         "outcome": "passed",
-        "duration_ms": 6.6,
+        "duration_ms": 2.5,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_delay_client_error_429_without_retry_delay",
         "outcome": "passed",
-        "duration_ms": 1.99,
+        "duration_ms": 1.67,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_delay_server_error_500",
         "outcome": "passed",
-        "duration_ms": 2.73,
+        "duration_ms": 1.11,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_delay_server_error_503",
         "outcome": "passed",
-        "duration_ms": 2.88,
+        "duration_ms": 1.19,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_delay_server_error_other",
         "outcome": "passed",
-        "duration_ms": 2.73,
+        "duration_ms": 1.07,
         "status": "✅"
       }
     ],
@@ -97,28 +97,28 @@
         "test_id": "N/A",
         "test_name": "test_delay_client_error_non_429",
         "outcome": "passed",
-        "duration_ms": 3.07,
+        "duration_ms": 1.92,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_delay_client_error_delay_too_long",
         "outcome": "passed",
-        "duration_ms": 2.96,
+        "duration_ms": 1.21,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_extract_error_message_exception",
         "outcome": "passed",
-        "duration_ms": 0.4,
+        "duration_ms": 0.72,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_gemini_api_error_with_original_error",
         "outcome": "passed",
-        "duration_ms": 0.22,
+        "duration_ms": 0.2,
         "status": "✅"
       }
     ],
@@ -127,17 +127,17 @@
         "test_id": "N/A",
         "test_name": "test_prompt_injection_output_lang",
         "outcome": "passed",
-        "duration_ms": 1.14,
+        "duration_ms": 0.7,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_prompt_injection_categories",
         "outcome": "passed",
-        "duration_ms": 1.38,
+        "duration_ms": 0.63,
         "status": "✅"
       }
     ]
   },
-  "execution_time": "2026-03-11 15:49:26"
+  "execution_time": "2026-03-12 19:49:29"
 }

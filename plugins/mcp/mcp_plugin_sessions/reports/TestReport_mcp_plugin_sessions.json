@@ -1,349 +1,1117 @@
 {
   "summary": {
-    "total": 67,
-    "passed": 67
+    "total": 220,
+    "passed": 212,
+    "failed": 8,
+    "pass_rate": "96.4%"
   },
   "categories": {
     "normal": [
       {
+        "test_id": "test_basic_auth_chat_success",
+        "outcome": "passed",
+        "duration": 0.0017872000025818124
+      },
+      {
+        "test_id": "test_shared_hmac_auth_chat_success",
+        "outcome": "passed",
+        "duration": 0.0012447999906726182
+      },
+      {
+        "test_id": "test_chat_with_context",
+        "outcome": "passed",
+        "duration": 0.000991799999610521
+      },
+      {
+        "test_id": "test_chat_with_opensearch_auth",
+        "outcome": "passed",
+        "duration": 0.0008661999891046435
+      },
+      {
+        "test_id": "test_add_and_get_messages",
+        "outcome": "passed",
+        "duration": 0.0002530999918235466
+      },
+      {
+        "test_id": "test_message_limit",
+        "outcome": "passed",
+        "duration": 0.00046749999455641955
+      },
+      {
+        "test_id": "test_decode_basic_auth_success",
+        "outcome": "passed",
+        "duration": 0.0001931000006152317
+      },
+      {
+        "test_id": "test_create_opensearch_client_success",
+        "outcome": "passed",
+        "duration": 0.0005946000019321218
+      },
+      {
+        "test_id": "test_opensearch_client_cache",
+        "outcome": "passed",
+        "duration": 0.0005367999983718619
+      },
+      {
+        "test_id": "test_extract_string_content",
+        "outcome": "passed",
+        "duration": 0.00018600000475998968
+      },
+      {
+        "test_id": "test_extract_list_content",
+        "outcome": "passed",
+        "duration": 0.00018649999401532114
+      },
+      {
+        "test_id": "test_generate_response_without_tool_calls",
+        "outcome": "passed",
+        "duration": 0.008762800003751181
+      },
+      {
+        "test_id": "test_shared_hmac_auth_direct",
+        "outcome": "passed",
+        "duration": 0.0008040000102482736
+      },
+      {
+        "test_id": "test_llm_not_initialized_guard",
+        "outcome": "passed",
+        "duration": 0.0018514999974286184
+      },
+      {
+        "test_id": "test_generate_final_response_fallback",
+        "outcome": "passed",
+        "duration": 0.002879200008464977
+      },
+      {
+        "test_id": "test_extract_output_text_content",
+        "outcome": "passed",
+        "duration": 0.00020989999757148325
+      },
+      {
+        "test_id": "test_extract_nested_content",
+        "outcome": "passed",
+        "duration": 0.00018590000399854034
+      },
+      {
+        "test_id": "test_extract_string_items_in_list",
+        "outcome": "passed",
+        "duration": 0.00019360000442247838
+      },
+      {
+        "test_id": "test_extract_non_string_non_list_type",
+        "outcome": "passed",
+        "duration": 0.00018740000086836517
+      },
+      {
+        "test_id": "test_get_message_count",
+        "outcome": "passed",
+        "duration": 0.00019619999511633068
+      },
+      {
+        "test_id": "test_clear_session",
+        "outcome": "passed",
+        "duration": 0.0003197999903932214
+      },
+      {
+        "test_id": "test_enhanced_input_with_comparison_keywords",
+        "outcome": "passed",
+        "duration": 0.0009777000086614862
+      },
+      {
+        "test_id": "test_enhanced_input_with_no_violations",
+        "outcome": "passed",
+        "duration": 0.0008991999930003658
+      },
+      {
+        "test_id": "test_singleton_behavior",
+        "outcome": "passed",
+        "duration": 0.001051500003086403
+      },
+      {
+        "test_id": "test_refine_policy_success",
+        "outcome": "passed",
+        "duration": 0.0012935000122524798
+      },
+      {
+        "test_id": "test_refine_without_policy",
+        "outcome": "passed",
+        "duration": 0.000684200000250712
+      },
+      {
+        "test_id": "test_refine_explanation_request",
+        "outcome": "passed",
+        "duration": 0.0009824000007938594
+      },
+      {
+        "test_id": "test_refine_empty_string_policy",
+        "outcome": "passed",
+        "duration": 0.0006476999988080934
+      },
+      {
+        "test_id": "test_agent_aws_policy_generation",
+        "outcome": "passed",
+        "duration": 0.0011474000057205558
+      },
+      {
+        "test_id": "test_agent_azure_policy_generation",
+        "outcome": "passed",
+        "duration": 0.0008200000011129305
+      },
+      {
+        "test_id": "test_agent_gcp_policy_generation",
+        "outcome": "passed",
+        "duration": 0.0010426999942865223
+      },
+      {
+        "test_id": "test_agent_minimal_recommendation",
+        "outcome": "passed",
+        "duration": 0.0008392000017920509
+      },
+      {
+        "test_id": "test_validate_valid_json",
+        "outcome": "passed",
+        "duration": 0.0008932000055210665
+      },
+      {
+        "test_id": "test_validate_valid_yaml",
+        "outcome": "passed",
+        "duration": 0.0006679000071017072
+      },
+      {
+        "test_id": "test_validate_failure_response",
+        "outcome": "passed",
+        "duration": 0.000657499986118637
+      },
+      {
+        "test_id": "test_validate_success",
+        "outcome": "passed",
+        "duration": 0.0016596999921603128
+      },
+      {
+        "test_id": "test_validate_failure",
+        "outcome": "passed",
+        "duration": 0.0008359000057680532
+      },
+      {
+        "test_id": "test_validate_empty_policy",
+        "outcome": "passed",
+        "duration": 0.0009180000051856041
+      },
+      {
+        "test_id": "test_validate_json_response_structure",
+        "outcome": "passed",
+        "duration": 0.0008460999961243942
+      },
+      {
+        "test_id": "test_schema_success",
+        "outcome": "passed",
+        "duration": 0.0011078999959863722
+      },
+      {
+        "test_id": "test_schema_empty_target",
+        "outcome": "passed",
+        "duration": 0.0007968999998411164
+      },
+      {
+        "test_id": "test_resources_success",
+        "outcome": "passed",
+        "duration": 0.0012110000097891316
+      },
+      {
+        "test_id": "test_resources_invalid_cloud",
+        "outcome": "passed",
+        "duration": 0.0011044999992009252
+      },
+      {
+        "test_id": "test_reference_success",
+        "outcome": "passed",
+        "duration": 0.0019010999967576936
+      },
+      {
+        "test_id": "test_reference_no_results",
+        "outcome": "passed",
+        "duration": 0.0008595999970566481
+      },
+      {
+        "test_id": "test_validate_tool_unavailable",
+        "outcome": "passed",
+        "duration": 0.0006564999930560589
+      },
+      {
+        "test_id": "test_schema_tool_unavailable",
+        "outcome": "passed",
+        "duration": 0.000680199998896569
+      },
+      {
+        "test_id": "test_resources_tool_unavailable",
+        "outcome": "passed",
+        "duration": 0.0006594000005861744
+      },
+      {
+        "test_id": "test_reference_tool_unavailable",
+        "outcome": "passed",
+        "duration": 0.000654399991617538
+      },
+      {
+        "test_id": "test_validate_exception",
+        "outcome": "passed",
+        "duration": 0.002308800001628697
+      },
+      {
+        "test_id": "test_schema_exception",
+        "outcome": "passed",
+        "duration": 0.0009588999964762479
+      },
+      {
+        "test_id": "test_resources_exception",
+        "outcome": "passed",
+        "duration": 0.0011955999943893403
+      },
+      {
+        "test_id": "test_reference_exception",
+        "outcome": "passed",
+        "duration": 0.0009726999996928498
+      },
+      {
+        "test_id": "test_chat_hierarchical_mode",
+        "outcome": "passed",
+        "duration": 0.0022508999973069876
+      },
+      {
+        "test_id": "test_chat_deep_agents_mode",
+        "outcome": "passed",
+        "duration": 0.0007874000002630055
+      },
+      {
+        "test_id": "test_add_server_success",
+        "outcome": "passed",
+        "duration": 0.0010135999909834936
+      },
+      {
+        "test_id": "test_list_servers",
+        "outcome": "passed",
+        "duration": 0.0009083000040845945
+      },
+      {
+        "test_id": "test_list_tools",
+        "outcome": "passed",
+        "duration": 0.00093120000383351
+      },
+      {
+        "test_id": "test_get_status",
+        "outcome": "passed",
+        "duration": 0.0034721999982139096
+      },
+      {
+        "test_id": "test_connect_server",
+        "outcome": "passed",
+        "duration": 0.0010086000111186877
+      },
+      {
+        "test_id": "test_disconnect_server",
+        "outcome": "passed",
+        "duration": 0.001193699994473718
+      },
+      {
+        "test_id": "test_remove_server",
+        "outcome": "passed",
+        "duration": 0.0011064999998779967
+      },
+      {
+        "test_id": "test_health_check",
+        "outcome": "passed",
+        "duration": 0.0015181000053416938
+      },
+      {
+        "test_id": "test_sse_streaming_debug_mode",
+        "outcome": "passed",
+        "duration": 0.0020367000106489286
+      },
+      {
+        "test_id": "test_sse_streaming_with_auth",
+        "outcome": "passed",
+        "duration": 0.0014841999945929274
+      },
+      {
+        "test_id": "test_sse_streaming_token_filter",
+        "outcome": "passed",
+        "duration": 0.0011971000058110803
+      },
+      {
         "test_id": "test_update_session_summary_success",
         "outcome": "passed",
-        "duration": 0.246016499993857
+        "duration": 0.00147790000482928
       },
       {
         "test_id": "test_get_session_metadata_success",
         "outcome": "passed",
-        "duration": 0.0023521999828517437
+        "duration": 0.00207939998654183
       },
       {
         "test_id": "test_update_session_name_success",
         "outcome": "passed",
-        "duration": 0.0008699999889358878
+        "duration": 0.0008484999998472631
       },
       {
         "test_id": "test_is_meaningful_ai_content_true",
         "outcome": "passed",
-        "duration": 0.000146100006531924
+        "duration": 0.00019890000112354755
       },
       {
         "test_id": "test_is_meaningful_ai_content_false_empty",
         "outcome": "passed",
-        "duration": 0.00013260002015158534
+        "duration": 0.00018069999350700527
       },
       {
         "test_id": "test_is_meaningful_ai_content_false_short",
         "outcome": "passed",
-        "duration": 0.00012890005018562078
+        "duration": 0.00018260000797454268
       },
       {
         "test_id": "test_is_meaningful_ai_content_false_json",
         "outcome": "passed",
-        "duration": 0.00013040000339969993
+        "duration": 0.00021149999520275742
       },
       {
         "test_id": "test_strip_thinking_tags_success",
         "outcome": "passed",
-        "duration": 0.0001352000399492681
+        "duration": 0.00018529999942984432
       },
       {
         "test_id": "test_strip_thinking_tags_multiple",
         "outcome": "passed",
-        "duration": 0.00013010000111535192
+        "duration": 0.00018430000636726618
       },
       {
         "test_id": "test_strip_thinking_tags_multiline",
         "outcome": "passed",
-        "duration": 0.00013110000872984529
+        "duration": 0.0003198000049451366
       },
       {
         "test_id": "test_strip_thinking_tags_empty",
         "outcome": "passed",
-        "duration": 0.00012620002962648869
+        "duration": 0.00021470000501722097
       },
       {
         "test_id": "test_get_messages_from_deepagents",
         "outcome": "passed",
-        "duration": 0.004454499983694404
+        "duration": 0.001626500001293607
       },
       {
         "test_id": "test_convert_langchain_messages",
         "outcome": "passed",
-        "duration": 0.0002457000082358718
+        "duration": 0.00029090000316500664
       },
       {
         "test_id": "test_merge_consecutive_messages",
         "outcome": "passed",
-        "duration": 0.00013480003690347075
+        "duration": 0.00018500001169741154
       },
       {
         "test_id": "test_extract_ai_content_string",
         "outcome": "passed",
-        "duration": 0.0001327999634668231
+        "duration": 0.00018449999333824962
       },
       {
         "test_id": "test_extract_ai_content_list",
         "outcome": "passed",
-        "duration": 0.00012849998893216252
+        "duration": 0.0001849999971454963
       },
       {
         "test_id": "test_save_thinking_logs_success",
         "outcome": "passed",
-        "duration": 0.0009244999964721501
+        "duration": 0.0011178999993717298
       },
       {
         "test_id": "test_save_thinking_logs_empty",
         "outcome": "passed",
-        "duration": 0.00022499996703118086
+        "duration": 0.00028700000257231295
       },
       {
         "test_id": "test_get_thinking_logs_success",
         "outcome": "passed",
-        "duration": 0.0007314000395126641
+        "duration": 0.000590300012845546
       },
       {
         "test_id": "test_save_deep_agents_progress_success",
         "outcome": "passed",
-        "duration": 0.0007072000298649073
+        "duration": 0.001066600001649931
       },
       {
         "test_id": "test_get_deep_agents_progress_success",
         "outcome": "passed",
-        "duration": 0.0005330999847501516
+        "duration": 0.0005945000011706725
       },
       {
         "test_id": "test_parse_checkpoint_data_success",
         "outcome": "passed",
-        "duration": 0.00019380002049729228
+        "duration": 0.0002158999996026978
       },
       {
         "test_id": "test_get_latest_checkpoint_success",
         "outcome": "passed",
-        "duration": 0.00152160000288859
+        "duration": 0.0013526999973692
       },
       {
         "test_id": "test_parse_metadata_dict",
         "outcome": "passed",
-        "duration": 0.00012839998817071319
+        "duration": 0.00018489999638404697
       },
       {
         "test_id": "test_parse_metadata_json_string",
         "outcome": "passed",
-        "duration": 0.00013430003309622407
+        "duration": 0.0001931000006152317
       },
       {
         "test_id": "test_build_request_response_map",
         "outcome": "passed",
-        "duration": 0.00015590002294629812
+        "duration": 0.00020229999790899456
       },
       {
         "test_id": "test_build_messages_from_map",
         "outcome": "passed",
-        "duration": 0.00013970001600682735
+        "duration": 0.00018730000010691583
       },
       {
         "test_id": "test_merge_agent_messages",
         "outcome": "passed",
-        "duration": 0.00013429997488856316
+        "duration": 0.0001900999923236668
       },
       {
         "test_id": "test_merge_agent_messages_dedup",
         "outcome": "passed",
-        "duration": 0.000132500019390136
+        "duration": 0.00018099999579135329
       },
       {
         "test_id": "test_build_session_info",
         "outcome": "passed",
-        "duration": 0.0005562999867834151
+        "duration": 0.0005777000042144209
       },
       {
         "test_id": "test_extract_preview_from_checkpoint",
         "outcome": "passed",
-        "duration": 0.00012989999959245324
+        "duration": 0.00018370000179857016
       },
       {
         "test_id": "test_extract_preview_truncate",
         "outcome": "passed",
-        "duration": 0.000312299991492182
+        "duration": 0.0002356000040890649
       },
       {
         "test_id": "test_find_session_name_success",
         "outcome": "passed",
-        "duration": 0.0011564999585971236
+        "duration": 0.0010852999985218048
       },
       {
         "test_id": "test_find_session_name_none",
         "outcome": "passed",
-        "duration": 0.0014597999979741871
+        "duration": 0.0011817999911727384
       },
       {
         "test_id": "test_get_sessions_list",
         "outcome": "passed",
-        "duration": 0.004435500013642013
+        "duration": 0.0034211000020150095
       },
       {
         "test_id": "test_get_session_history",
         "outcome": "passed",
-        "duration": 0.003464199951849878
+        "duration": 0.0024304999969899654
       },
       {
         "test_id": "test_get_storage_status",
         "outcome": "passed",
-        "duration": 0.0010026999516412616
+        "duration": 0.0013383000041358173
       },
       {
         "test_id": "test_update_session_success",
         "outcome": "passed",
-        "duration": 0.003268799977377057
+        "duration": 0.002636400007759221
       },
       {
         "test_id": "test_get_session_detail",
         "outcome": "passed",
-        "duration": 0.004648700007237494
+        "duration": 0.0037437999999383464
       },
       {
         "test_id": "test_delete_session_success",
         "outcome": "passed",
-        "duration": 0.0026718000299297273
+        "duration": 0.0027695999888237566
       },
       {
         "test_id": "test_pagination_boundary_values",
         "outcome": "passed",
-        "duration": 0.0033993999822996557
+        "duration": 0.0035158999962732196
       }
     ],
     "error": [
       {
+        "test_id": "test_no_authorization_header",
+        "outcome": "passed",
+        "duration": 0.0011473999911686406
+      },
+      {
+        "test_id": "test_invalid_basic_token",
+        "outcome": "passed",
+        "duration": 0.000898600002983585
+      },
+      {
+        "test_id": "test_basic_token_no_colon",
+        "outcome": "passed",
+        "duration": 0.00022659999376628548
+      },
+      {
+        "test_id": "test_empty_prompt",
+        "outcome": "passed",
+        "duration": 0.0009561000042594969
+      },
+      {
+        "test_id": "test_missing_session_id",
+        "outcome": "passed",
+        "duration": 0.00090079999063164
+      },
+      {
+        "test_id": "test_invalid_context_extra_field",
+        "outcome": "passed",
+        "duration": 0.0016795999981695786
+      },
+      {
+        "test_id": "test_llm_initialization_error",
+        "outcome": "passed",
+        "duration": 0.0021776000066893175
+      },
+      {
+        "test_id": "test_llm_response_error",
+        "outcome": "passed",
+        "duration": 0.0023932000040076673
+      },
+      {
+        "test_id": "test_opensearch_client_invalid_url",
+        "outcome": "passed",
+        "duration": 0.0006064000044716522
+      },
+      {
+        "test_id": "test_tool_execution_error",
+        "outcome": "passed",
+        "duration": 0.0022384999901987612
+      },
+      {
+        "test_id": "test_unknown_tool_call",
+        "outcome": "passed",
+        "duration": 0.0016519000055268407
+      },
+      {
+        "test_id": "test_chat_message_unknown_role",
+        "outcome": "passed",
+        "duration": 0.0002683000057004392
+      },
+      {
+        "test_id": "test_decode_basic_auth_error_message_leaks_info",
+        "outcome": "passed",
+        "duration": 0.00020909999147988856
+      },
+      {
+        "test_id": "test_simple_chat_http_exception_reraise",
+        "outcome": "passed",
+        "duration": 0.0007259999983943999
+      },
+      {
+        "test_id": "test_extract_text_no_text_elements",
+        "outcome": "passed",
+        "duration": 0.0004332999960752204
+      },
+      {
+        "test_id": "test_refine_empty_prompt",
+        "outcome": "passed",
+        "duration": 0.0009529999952064827
+      },
+      {
+        "test_id": "test_refine_missing_session_id",
+        "outcome": "passed",
+        "duration": 0.0014691999967908487
+      },
+      {
+        "test_id": "test_refine_unexpected_exception",
+        "outcome": "passed",
+        "duration": 0.0013057000032858923
+      },
+      {
+        "test_id": "test_refine_http_exception_propagation",
+        "outcome": "passed",
+        "duration": 0.0006671000010101125
+      },
+      {
+        "test_id": "test_agent_missing_uid",
+        "outcome": "passed",
+        "duration": 0.0008380999934161082
+      },
+      {
+        "test_id": "test_agent_invalid_cloud",
+        "outcome": "passed",
+        "duration": 0.000807299991720356
+      },
+      {
+        "test_id": "test_agent_execution_error",
+        "outcome": "passed",
+        "duration": 0.0018373000057181343
+      },
+      {
+        "test_id": "test_agent_http_exception_propagation",
+        "outcome": "passed",
+        "duration": 0.0012969000090379268
+      },
+      {
+        "test_id": "test_validate_empty_policy",
+        "outcome": "passed",
+        "duration": 0.0006264000112423673
+      },
+      {
+        "test_id": "test_validate_whitespace_only_policy",
+        "outcome": "passed",
+        "duration": 0.0006206999969435856
+      },
+      {
+        "test_id": "test_validate_tool_exception",
+        "outcome": "failed",
+        "duration": 0.0005781999934697524
+      },
+      {
+        "test_id": "test_validate_missing_policy_content",
+        "outcome": "passed",
+        "duration": 0.0008539000118616968
+      },
+      {
+        "test_id": "test_schema_missing_target",
+        "outcome": "passed",
+        "duration": 0.00275580000015907
+      },
+      {
+        "test_id": "test_resources_missing_cloud",
+        "outcome": "passed",
+        "duration": 0.0008488000021316111
+      },
+      {
+        "test_id": "test_reference_missing_query",
+        "outcome": "passed",
+        "duration": 0.0008078999962890521
+      },
+      {
+        "test_id": "test_chat_missing_session_id",
+        "outcome": "passed",
+        "duration": 0.0006993999995756894
+      },
+      {
+        "test_id": "test_chat_missing_message",
+        "outcome": "passed",
+        "duration": 0.0008932000055210665
+      },
+      {
+        "test_id": "test_chat_invalid_session_id",
+        "outcome": "passed",
+        "duration": 0.0007508999988203868
+      },
+      {
+        "test_id": "test_chat_empty_message",
+        "outcome": "passed",
+        "duration": 0.0006766999867977574
+      },
+      {
+        "test_id": "test_chat_nonexistent_server",
+        "outcome": "passed",
+        "duration": 0.0009818999969866127
+      },
+      {
+        "test_id": "test_chat_client_error",
+        "outcome": "passed",
+        "duration": 0.0008398000063607469
+      },
+      {
+        "test_id": "test_chat_timeout",
+        "outcome": "passed",
+        "duration": 0.0008089999901130795
+      },
+      {
+        "test_id": "test_chat_internal_error",
+        "outcome": "passed",
+        "duration": 0.0009009000059450045
+      },
+      {
+        "test_id": "test_add_server_duplicate",
+        "outcome": "passed",
+        "duration": 0.0009135000000242144
+      },
+      {
+        "test_id": "test_add_server_invalid_config",
+        "outcome": "passed",
+        "duration": 0.0007605999999213964
+      },
+      {
+        "test_id": "test_list_tools_nonexistent_server",
+        "outcome": "passed",
+        "duration": 0.0008195999980671331
+      },
+      {
+        "test_id": "test_connect_nonexistent_server",
+        "outcome": "passed",
+        "duration": 0.0008065000001806766
+      },
+      {
+        "test_id": "test_connect_already_connected",
+        "outcome": "passed",
+        "duration": 0.0008765000093262643
+      },
+      {
+        "test_id": "test_disconnect_nonexistent_server",
+        "outcome": "passed",
+        "duration": 0.0014244000049075112
+      },
+      {
+        "test_id": "test_disconnect_not_connected",
+        "outcome": "passed",
+        "duration": 0.0012490999943111092
+      },
+      {
+        "test_id": "test_remove_nonexistent_server",
+        "outcome": "passed",
+        "duration": 0.001404399998136796
+      },
+      {
+        "test_id": "test_remove_connected_server",
+        "outcome": "passed",
+        "duration": 0.0009158000029856339
+      },
+      {
+        "test_id": "test_server_connection_failure",
+        "outcome": "passed",
+        "duration": 0.0012822999997297302
+      },
+      {
+        "test_id": "test_sse_auth_failure",
+        "outcome": "passed",
+        "duration": 0.0015591999981552362
+      },
+      {
+        "test_id": "test_sse_invalid_auth_hash",
+        "outcome": "passed",
+        "duration": 0.0012146999943070114
+      },
+      {
+        "test_id": "test_sse_missing_user_id",
+        "outcome": "passed",
+        "duration": 0.0010617000079946592
+      },
+      {
+        "test_id": "test_sse_streaming_error",
+        "outcome": "passed",
+        "duration": 0.002604499997687526
+      },
+      {
         "test_id": "test_get_session_metadata_not_found",
         "outcome": "passed",
-        "duration": 0.0007677000248804688
+        "duration": 0.000796799999079667
       },
       {
         "test_id": "test_update_session_name_db_error",
         "outcome": "passed",
-        "duration": 0.0020437000202946365
+        "duration": 0.001361000002361834
       },
       {
         "test_id": "test_save_thinking_logs_db_error",
         "outcome": "passed",
-        "duration": 0.0010449000401422381
+        "duration": 0.0016559000068809837
       },
       {
         "test_id": "test_get_sessions_user_id_missing",
         "outcome": "passed",
-        "duration": 0.0007755000260658562
+        "duration": 0.0011297000019112602
       },
       {
         "test_id": "test_update_session_invalid_data",
         "outcome": "passed",
-        "duration": 0.0008212999673560262
+        "duration": 0.0007874000002630055
       },
       {
         "test_id": "test_strip_thinking_tags_malformed",
         "outcome": "passed",
-        "duration": 0.00013599998783320189
+        "duration": 0.00022159999934956431
       },
       {
         "test_id": "test_parse_metadata_invalid_json",
         "outcome": "passed",
-        "duration": 0.00014349998673424125
+        "duration": 0.0002133999951183796
       },
       {
         "test_id": "test_parse_checkpoint_data_invalid",
         "outcome": "passed",
-        "duration": 0.0002539000124670565
+        "duration": 0.00021749999723397195
       },
       {
         "test_id": "test_get_messages_db_error",
         "outcome": "passed",
-        "duration": 0.0005573999951593578
+        "duration": 0.00087340000027325
       },
       {
         "test_id": "test_extract_ai_content_none",
         "outcome": "passed",
-        "duration": 0.00012480001896619797
+        "duration": 0.0001832999987527728
       },
       {
         "test_id": "test_merge_consecutive_messages_empty",
         "outcome": "passed",
-        "duration": 0.00012049998622387648
+        "duration": 0.00018699999782256782
       }
     ],
     "security": [
       {
-        "test_id": "test_session_id_validation",
+        "test_id": "test_credentials_not_logged",
         "outcome": "passed",
-        "duration": 0.00061779998941347
+        "duration": 0.0015321999962907284
       },
       {
-        "test_id": "test_user_id_sql_injection",
+        "test_id": "test_opensearch_auth_not_in_response",
         "outcome": "passed",
-        "duration": 0.002960700017865747
+        "duration": 0.00112599998828955
       },
       {
-        "test_id": "test_session_name_xss_prevention",
+        "test_id": "test_xss_in_prompt",
         "outcome": "passed",
-        "duration": 0.0028731999918818474
+        "duration": 0.0012050999939674512
       },
       {
-        "test_id": "test_thinking_logs_data_leakage",
+        "test_id": "test_sql_injection_in_prompt",
         "outcome": "passed",
-        "duration": 0.0008602000307291746
+        "duration": 0.0009512999968137592
+      },
+      {
+        "test_id": "test_large_prompt_handling",
+        "outcome": "skipped",
+        "duration": 0.0016094000020530075
       },
       {
         "test_id": "test_session_isolation",
         "outcome": "passed",
-        "duration": 0.0015656999894417822
+        "duration": 0.0003938000008929521
+      },
+      {
+        "test_id": "test_invalid_shared_hmac_format",
+        "outcome": "skipped",
+        "duration": 0.1265482000017073
+      },
+      {
+        "test_id": "test_client_cache_size_limit",
+        "outcome": "passed",
+        "duration": 0.004687699998612516
+      },
+      {
+        "test_id": "test_prompt_injection_attempt",
+        "outcome": "passed",
+        "duration": 0.001203799998620525
+      },
+      {
+        "test_id": "test_unicode_normalization_attack",
+        "outcome": "passed",
+        "duration": 0.0009654999885242432
+      },
+      {
+        "test_id": "test_null_byte_injection",
+        "outcome": "passed",
+        "duration": 0.0009554999996908009
+      },
+      {
+        "test_id": "test_basic_auth_decode_valid_and_invalid",
+        "outcome": "passed",
+        "duration": 0.00020029999723192304
+      },
+      {
+        "test_id": "test_session_fixation_prevention",
+        "outcome": "passed",
+        "duration": 0.002078199991956353
+      },
+      {
+        "test_id": "test_cache_key_contains_plaintext_password",
+        "outcome": "skipped",
+        "duration": 0.0007285000028787181
+      },
+      {
+        "test_id": "test_opensearch_query_injection",
+        "outcome": "skipped",
+        "duration": 0.001065300006303005
+      },
+      {
+        "test_id": "test_session_cross_access",
+        "outcome": "skipped",
+        "duration": 0.0003763999993680045
+      },
+      {
+        "test_id": "test_refine_error_no_stacktrace",
+        "outcome": "passed",
+        "duration": 0.0011950000043725595
+      },
+      {
+        "test_id": "test_agent_error_no_internal_details",
+        "outcome": "skipped",
+        "duration": 0.0021810999896842986
+      },
+      {
+        "test_id": "test_policy_content_injection",
+        "outcome": "passed",
+        "duration": 0.0007224999862955883
+      },
+      {
+        "test_id": "test_large_policy_context_handling",
+        "outcome": "passed",
+        "duration": 0.0059231000050203875
+      },
+      {
+        "test_id": "test_validate_error_no_internal_details",
+        "outcome": "skipped",
+        "duration": 0.001131800003349781
+      },
+      {
+        "test_id": "test_validate_xss_in_policy_content",
+        "outcome": "passed",
+        "duration": 0.0010895000013988465
+      },
+      {
+        "test_id": "test_schema_command_injection",
+        "outcome": "passed",
+        "duration": 0.000758999987738207
+      },
+      {
+        "test_id": "test_resources_sql_injection",
+        "outcome": "passed",
+        "duration": 0.0008486999868182465
+      },
+      {
+        "test_id": "test_reference_query_injection",
+        "outcome": "passed",
+        "duration": 0.0008252000116044655
+      },
+      {
+        "test_id": "test_validate_log_injection",
+        "outcome": "passed",
+        "duration": 0.0009161000052699819
+      },
+      {
+        "test_id": "test_schema_unicode_normalization",
+        "outcome": "passed",
+        "duration": 0.0007538999925600365
+      },
+      {
+        "test_id": "test_sec_jwt_validation",
+        "outcome": "passed",
+        "duration": 0.4375058000005083
+      },
+      {
+        "test_id": "test_sec_hmac_validation",
+        "outcome": "passed",
+        "duration": 0.00158680000458844
+      },
+      {
+        "test_id": "test_sec_injection_prevention",
+        "outcome": "passed",
+        "duration": 0.0007827000081306323
+      },
+      {
+        "test_id": "test_sec_path_traversal_prevention",
+        "outcome": "passed",
+        "duration": 0.001109699995140545
+      },
+      {
+        "test_id": "test_sec_rate_limiting",
+        "outcome": "passed",
+        "duration": 0.0013104999961797148
+      },
+      {
+        "test_id": "test_sec_sensitive_data_protection",
+        "outcome": "passed",
+        "duration": 0.0008336000028066337
+      },
+      {
+        "test_id": "test_sec_cors_validation",
+        "outcome": "passed",
+        "duration": 0.0017422000091755763
+      },
+      {
+        "test_id": "test_sec_error_message_safety",
+        "outcome": "passed",
+        "duration": 0.0008868000004440546
+      },
+      {
+        "test_id": "test_session_id_validation",
+        "outcome": "passed",
+        "duration": 0.0013523000088753179
+      },
+      {
+        "test_id": "test_user_id_sql_injection",
+        "outcome": "passed",
+        "duration": 0.00254760000098031
+      },
+      {
+        "test_id": "test_session_name_xss_prevention",
+        "outcome": "passed",
+        "duration": 0.003552900001523085
+      },
+      {
+        "test_id": "test_thinking_logs_data_leakage",
+        "outcome": "passed",
+        "duration": 0.0007290999928954989
+      },
+      {
+        "test_id": "test_session_isolation",
+        "outcome": "passed",
+        "duration": 0.0016488999972352758
       },
       {
         "test_id": "test_strip_thinking_tags_nested_attack",
         "outcome": "passed",
-        "duration": 0.00013890000991523266
+        "duration": 0.00020130000484641641
       },
       {
         "test_id": "test_metadata_json_injection",
         "outcome": "passed",
-        "duration": 0.000847299990709871
+        "duration": 0.0010079999919980764
       },
       {
         "test_id": "test_checkpoint_data_size_limit",
         "outcome": "passed",
-        "duration": 0.0010374999837949872
+        "duration": 0.0009206999966409057
       },
       {
         "test_id": "test_session_deletion_cleanup",
         "outcome": "passed",
-        "duration": 0.005171900033019483
+        "duration": 0.0029829999984940514
       },
       {
         "test_id": "test_parse_metadata_unicode_normalization",
         "outcome": "passed",
-        "duration": 0.00018020003335550427
+        "duration": 0.0002508999896235764
       },
       {
         "test_id": "test_deep_agents_progress_validation",
         "outcome": "passed",
-        "duration": 0.0007531999726779759
+        "duration": 0.0010718999983510002
       },
       {
         "test_id": "test_history_pagination_limit",
         "outcome": "passed",
-        "duration": 0.0027546999626792967
+        "duration": 0.002936100005172193
       },
       {
         "test_id": "test_message_content_sanitization",
         "outcome": "passed",
-        "duration": 0.00014750001719221473
+        "duration": 0.00019789999350905418
       },
       {
         "test_id": "test_session_name_length_limit",
         "outcome": "passed",
-        "duration": 0.002856000035535544
+        "duration": 0.0027306999982101843
       },
       {
         "test_id": "test_thinking_tags_recursive_removal",
         "outcome": "passed",
-        "duration": 0.0001344000338576734
+        "duration": 0.00019809999503195286
       }
     ]
-  }
+  },
+  "execution_time": "2026-03-12T20:10:17.472221"
 }

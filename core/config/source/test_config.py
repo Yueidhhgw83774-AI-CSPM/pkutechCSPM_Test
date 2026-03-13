@@ -18,14 +18,14 @@ from pathlib import Path
 from pydantic import ValidationError
 from dotenv import load_dotenv
 
-# ✅ 首先加载.env文件(在导入config模块之前)
+# ✅ まず.envファイルを読み込みます（configモジュールのインポート前に）
 env_path = Path(__file__).parent.parent.parent / ".env"
 if env_path.exists():
     load_dotenv(env_path, override=True)
     print(f"✅ Loaded .env from: {env_path}")
 else:
     print(f"⚠️ Warning: .env file not found at: {env_path}")
-    # 如果.env不存在,设置最小必需的环境变量以防止import失败
+    # .envファイルが存在しない場合、import失敗を防ぐために最小限必要な環境変数を設定します。
     os.environ.setdefault('GPT5_1_CHAT_API_KEY', 'test-key')
     os.environ.setdefault('GPT5_1_CODEX_API_KEY', 'test-key')
     os.environ.setdefault('GPT5_2_API_KEY', 'test-key')
@@ -38,25 +38,25 @@ else:
     os.environ.setdefault('EMBEDDING_3_LARGE_API_KEY', 'test-key')
     os.environ.setdefault('OPENSEARCH_URL', 'https://localhost:9200')
 
-# 导入被测试模块
+# テスト対象のモジュールをインポートする
 project_root = Path(__file__).parent.parent.parent.parent / "platform_python_backend-testing"
 sys.path.insert(0, str(project_root))
 
 
-# ==================== 模块导入测试 ====================
+# ==================== モジュールインポートテスト ====================
 
 class TestConfigImport:
     """
-    config模块导入测试
+    configモジュールのインポートテスト
     """
 
     def test_import_config_module(self):
         """
-        测试config模块能否正常导入
+        configモジュールの正常なインポートをテストする
 
-        验证内容:
-          - Settings类可以导入
-          - is_aws_opensearch_service函数可以导入
+                評価内容:
+                  - Settingsクラスがインポート可能
+                  - is_aws_opensearch_service関数がインポート可能
         """
         # Act & Assert
         try:
@@ -68,13 +68,13 @@ class TestConfigImport:
             pytest.fail(f"模块导入失败: {e}")
 
 
-# ==================== Settings 正常系测试 ====================
+# ==================== Settings 通常系テスト ====================
 
 class TestSettings:
     """
-    Settings 正常系测试
+    Settings 通常系テスト
 
-    测试ID: CFG-001 ~ CFG-003
+        テストID: CFG-001 ~ CFG-003
     """
 
     def test_load_from_env(self):
@@ -86,11 +86,11 @@ class TestSettings:
           - 验证从环境变量正确加载配置
           - 验证必须字段正确读取
         """
-        # Arrange & Act - 导入settings实例(从.env文件加载)
+        # Arrange & Act - settingsインスタンスのインポート（.envファイルから読み込み）
         from app.core.config import settings
 
-        # Assert - 验证所有必需配置已正确加载
-        # GPT5系API Key
+        # Assert - 必要な設定が正しく読み込まれていることを確認します
+        # GPT5系APIキー
         assert settings.GPT5_1_CHAT_API_KEY is not None, "GPT5_1_CHAT_API_KEY不能为None"
         assert len(settings.GPT5_1_CHAT_API_KEY) > 0, "GPT5_1_CHAT_API_KEY不能为空"
         assert settings.GPT5_1_CODEX_API_KEY is not None, "GPT5_1_CODEX_API_KEY不能为None"
@@ -98,11 +98,11 @@ class TestSettings:
         assert settings.GPT5_MINI_API_KEY is not None, "GPT5_MINI_API_KEY不能为None"
         assert settings.GPT5_NANO_API_KEY is not None, "GPT5_NANO_API_KEY不能为None"
 
-        # Claude 4.5系API Key
+        # Claude 4.5のAPIキー
         assert settings.CLAUDE_HAIKU_4_5_KEY is not None, "CLAUDE_HAIKU_4_5_KEY不能为None"
         assert settings.CLAUDE_SONNET_4_5_KEY is not None, "CLAUDE_SONNET_4_5_KEY不能为None"
 
-        # Gemini API Key (注意:config.py中字段名为GEMINI_API_KEY,从GEMINI_API读取)
+        # Gemini APIキー（注意:config.pyのフィールド名はGEMINI_API_KEY、GEMINI_APIから読み取り）
         assert settings.GEMINI_API_KEY is not None, "GEMINI_API_KEY不能为None"
         assert len(settings.GEMINI_API_KEY) > 0, "GEMINI_API_KEY不能为空"
 
@@ -118,7 +118,7 @@ class TestSettings:
         assert settings.OPENSEARCH_URL is not None, "OPENSEARCH_URL不能为None"
         assert len(settings.OPENSEARCH_URL) > 0, "OPENSEARCH_URL不能为空"
 
-        # 验证URL格式正确
+        # URLの形式が正しいかを検証する
         assert settings.OPENSEARCH_URL.startswith("http"), f"OPENSEARCH_URL格式错误: {settings.OPENSEARCH_URL}"
         assert settings.DOCKER_BASE_URL.startswith("http"), f"DOCKER_BASE_URL格式错误: {settings.DOCKER_BASE_URL}"
 
@@ -133,10 +133,10 @@ class TestSettings:
           - 验证可选配置项使用默认值
           - 验证模型名称默认值正确
         """
-        # Arrange & Act - 使用现有settings实例(已加载默认值)
+        # Arrange & Act - 現有的settingsインスタンス（デフォルト値が読み込まれている）を使用する
         from app.core.config import settings
 
-        # Assert - 验证默认值
+        # Assert - デフォルト値の検証
         assert settings.MODEL_NAME is not None  # デフォルト値が設定されている
         assert settings.MINI_MODEL_NAME is not None
         assert settings.NANO_MODEL_NAME is not None
@@ -145,33 +145,33 @@ class TestSettings:
     def test_opensearch_url_generation(self):
         """
         CFG-003: OpenSearch URL生成
-        覆盖代码行: config.py:52
+                覆盖コード行: config.py:52
 
-        测试目的:
-          - 验证OPENSEARCH_URL配置项存在
-          - 验证URL格式正确
+                テスト目的:
+                  - OPENSEARCH_URL設定項目の存在を確認する
+                  - URL形式が正しいことを確認する
         """
         # Arrange & Act
         from app.core.config import settings
 
-        # Assert - 验证URL存在且格式正确
+        # Assert - URLが存在し、正しい形式であることを確認する
         assert settings.OPENSEARCH_URL is not None
         assert isinstance(settings.OPENSEARCH_URL, str)
         assert len(settings.OPENSEARCH_URL) > 0
 
     def test_min_interval_calculation(self):
         """
-        CFG-005: MIN_INTERVAL_SECONDS計算
-        覆盖代码行: config.py:121
+        CFG-005: MIN_INTERVAL_SECONDSの計算
+                覆盖コード行: config.py:121
 
-        测试目的:
-          - 验证MIN_INTERVAL_SECONDS根据RPM_LIMIT正确计算
-          - 验证计算公式: 60 / RPM_LIMIT
+                テスト目的:
+                  - RPM_LIMITに基づいてMIN_INTERVAL_SECONDSが正しく計算されることを確認する
+                  - 計算公式: 60 / RPM_LIMITを確認する
         """
         # Arrange & Act
         from app.core.config import settings, MIN_INTERVAL_SECONDS
 
-        # Assert - 验证计算正确
+        # Assert - 計算の正確性を確認する
         expected_interval = 60.0 / settings.RPM_LIMIT if settings.RPM_LIMIT > 0 else float('inf')
         assert MIN_INTERVAL_SECONDS == expected_interval
         assert MIN_INTERVAL_SECONDS > 0
@@ -188,12 +188,12 @@ class TestSettings:
         # Arrange & Act
         from app.core.config import settings, Settings
 
-        # Assert - 验证实例存在且类型正确
+        # Assert - インスタンスの存在と型の正しさを確認する
         assert settings is not None
         assert isinstance(settings, Settings)
 
 
-# ==================== is_aws_opensearch_service 测试 ====================
+# ==================== is_aws_opensearch_service テスト ====================
 
 class TestIsAWSOpenSearchService:
     """
@@ -205,12 +205,12 @@ class TestIsAWSOpenSearchService:
     def test_is_aws_opensearch_service(self):
         """
         CFG-004: AWS OpenSearch Service判定
-        覆盖代码行: config.py:123-133
+                被覆行数: config.py:123-133
 
-        测试目的:
-          - 验证AWS OpenSearch Service URL识别正确
-          - 验证非AWS URL识别正确
-          - 验证Serverless URL识别正确
+                テスト目的:
+                  - AWS OpenSearch Service URLの識別が正しいことを確認する
+                  - AWS以外のURLの識別が正しいことを確認する
+                  - Serverless URLの識別が正しいことを確認する
         """
         # Arrange
         from app.core.config import is_aws_opensearch_service
@@ -220,19 +220,19 @@ class TestIsAWSOpenSearchService:
         assert is_aws_opensearch_service("https://xxx.es.amazonaws.com") is True
         assert is_aws_opensearch_service("https://xxx.aoss.amazonaws.com") is True  # Serverless
 
-        # Act & Assert - 非AWS URLs
+        # Act & Assert - 非AWS URLS
         assert is_aws_opensearch_service("https://localhost:9200") is False
         assert is_aws_opensearch_service("https://opensearch.example.com") is False
         assert is_aws_opensearch_service("http://192.168.1.100:9200") is False
 
 
-# ==================== Settings 異常系测试 ====================
+# ==================== Settings 異常系テスト ====================
 
 class TestSettingsErrors:
     """
-    Settings 異常系测试
+    Settings 異常系テスト
 
-    测试ID: CFG-E01 ~ CFG-E03
+        テストID: CFG-E01 ~ CFG-E03
     """
 
     def test_missing_required_fields(self):
@@ -244,18 +244,18 @@ class TestSettingsErrors:
           - 验证缺少必须字段时抛出ValidationError
           - 验证错误消息包含缺失字段信息
         """
-        # Arrange - 空环境变量(缺少所有必须字段)
+        # Arrange - 空の環境変数（必要なすべてのフィールドが欠けています）
         env_vars = {}
 
-        # Act & Assert - 验证抛出ValidationError
+        # アクション & アサート - ValidationErrorが投げられるかの検証
         with patch.dict(os.environ, env_vars, clear=True):
             with pytest.raises(ValidationError) as exc_info:
                 from app.core.config import Settings
                 Settings()
 
-            # 验证错误信息包含必须字段
+            # 検証エラー情報に必須のフィールドが含まれていることを確認します。
             error_msg = str(exc_info.value)
-            # 至少应该包含一个必须字段的错误
+            # 必須のフィールドが至少一个應該包含至少一個必須的字段未指定です。
             assert "GPT5_1_CHAT_API_KEY" in error_msg or "Field required" in error_msg
 
     def test_invalid_rpm_limit_type(self):
@@ -267,7 +267,7 @@ class TestSettingsErrors:
           - 验证RPM_LIMIT为非数字时抛出错误
           - 验证类型验证机制正常工作
         """
-        # Arrange - RPM_LIMIT设为无效值
+        # Arrange - RPM_LIMITを無効な値に設定する
         env_vars = {
             "GPT5_1_CHAT_API_KEY": "test-key-chat",
             "GPT5_1_CODEX_API_KEY": "test-key-codex",
@@ -283,13 +283,13 @@ class TestSettingsErrors:
             "RPM_LIMIT": "not-a-number"  # 無効な型
         }
 
-        # Act & Assert - 验证抛出ValidationError
+        # アクション & アサート - ValidationErrorが投げられるかの検証
         with patch.dict(os.environ, env_vars, clear=True):
             with pytest.raises(ValidationError) as exc_info:
                 from app.core.config import Settings
                 Settings()
 
-            # 验证错误消息包含RPM_LIMIT
+            # 検証エラーメッセージにRPM_LIMITが含まれていることを確認します。
             error_msg = str(exc_info.value)
             assert "RPM_LIMIT" in error_msg or "int" in error_msg.lower()
 
@@ -303,7 +303,7 @@ class TestSettingsErrors:
 
         注意: Pydantic的Field验证主要是类型验证,不进行URL格式验证
         """
-        # Arrange - 使用无效的URL格式
+        # Arrange - 無効なURL形式を使用する
         env_vars = {
             "GPT5_1_CHAT_API_KEY": "test-key-chat",
             "GPT5_1_CODEX_API_KEY": "test-key-codex",
@@ -318,21 +318,21 @@ class TestSettingsErrors:
             "OPENSEARCH_URL": "invalid-url-without-scheme",  # 無効なURL
         }
 
-        # Act - 创建Settings(应该成功,因为只验证类型)
+        # アクション - Settingsの作成（タイプの検証のみを行うため成功するはず）
         with patch.dict(os.environ, env_vars, clear=True):
             from app.core.config import Settings
             test_settings = Settings()
 
-        # Assert - 验证URL虽然格式无效但已存储
+        # Assert - URLの形式が無効であるものの、URLが保存されていることを確認します
         assert test_settings.OPENSEARCH_URL == "invalid-url-without-scheme"
         assert isinstance(test_settings.OPENSEARCH_URL, str)
 
 
-# ==================== is_aws_opensearch_service 異常系测试 ====================
+# ==================== is_aws_opensearch_service 異常系テスト ====================
 
 class TestIsAWSOpenSearchServiceErrors:
     """
-    is_aws_opensearch_service 異常系测试
+    AWS OpenSearch Service 異常系テスト
     """
 
     def test_invalid_url_format(self):
@@ -347,71 +347,71 @@ class TestIsAWSOpenSearchServiceErrors:
         # Arrange
         from app.core.config import is_aws_opensearch_service
 
-        # Act & Assert - 无效URL应返回False
+        # アクション & アサート - 無効なURLはFalseを返す
         assert is_aws_opensearch_service("not-a-valid-url") is False
         assert is_aws_opensearch_service("") is False
         assert is_aws_opensearch_service("htp://broken-protocol.com") is False
 
     def test_none_url(self):
         """
-        CFG-E05: None URL的処理
-        覆盖代码行: config.py:128
+        CFG-E05: None URLの処理
+                被覆コード行: config.py:128
 
-        测试目的:
-          - 验证None输入的处理
-          - 验证返回False而不是抛出异常
+                テスト目的:
+                  - None入力の処理を確認する
+                  - 例外を投げずにFalseを返すことを確認する
         """
         # Arrange
         from app.core.config import is_aws_opensearch_service
 
-        # Act & Assert - None应返回False
+        # Act & Assert - NoneはFalseを返す
         assert is_aws_opensearch_service(None) is False
 
 
-# ==================== 集成测试 ====================
+# ==================== 統合テスト ====================
 
 class TestConfigIntegration:
     """
-    config模块集成测试
+    configモジュール統合テスト
     """
 
     def test_settings_and_helper_function_work_together(self):
         """
-        测试settings实例和辅助函数协同工作
+        settingsインスタンスとヘルパー関数の連携動作テスト
 
-        测试目的:
-          - 验证settings.OPENSEARCH_URL可以传递给is_aws_opensearch_service
-          - 验证两者配合使用无问题
+                テスト目的:
+                  - settings.OPENSEARCH_URLがis_aws_opensearch_serviceに正しく渡されることを確認する
+                  - 両者の連携が問題なく動作することを確認する
         """
         # Arrange
         from app.core.config import settings, is_aws_opensearch_service
 
-        # Act - 使用settings的URL调用判定函数
+        # アクション - settingsのURLを使用して判定関数を呼び出す
         result = is_aws_opensearch_service(settings.OPENSEARCH_URL)
 
-        # Assert - 验证函数正常执行(无异常)
+        # Assert - 関数の正常終了（異常なし）を検証する
         assert isinstance(result, bool)
 
     def test_min_interval_updates_with_rpm_limit(self):
         """
-        测试RPM_LIMIT变化时MIN_INTERVAL_SECONDS的更新
+        RPM_LIMITの変更時にMIN_INTERVAL_SECONDSの更新をテストする
 
-        测试目的:
-          - 验证MIN_INTERVAL_SECONDS与RPM_LIMIT的关系
-          - 验证计算逻辑正确
+                テスト目的:
+                  - MIN_INTERVAL_SECONDSとRPM_LIMITの関係を確認する
+                  - 計算ロジックの正確性を確認する
 
-        注意: MIN_INTERVAL_SECONDS在模块加载时计算,这个测试主要验证逻辑
+                注意: MIN_INTERVAL_SECONDSはモジュールの読み込み時に計算され、このテストでは主にロジックを検証する
         """
         # Arrange
         from app.core.config import settings, MIN_INTERVAL_SECONDS
 
-        # Act - 计算期望值
+        # アクタ - 期待値を計算する
         expected_interval = 60.0 / settings.RPM_LIMIT if settings.RPM_LIMIT > 0 else float('inf')
 
-        # Assert - 验证计算正确
+        # Assert - 計算の正しさを検証する
         assert MIN_INTERVAL_SECONDS == expected_interval
 
-        # 验证边界情况的逻辑(不实际修改settings)
+        # 境界情况のログิกを検証する（settingsを実際には変更しない）
         if settings.RPM_LIMIT > 0:
             assert MIN_INTERVAL_SECONDS == 60.0 / settings.RPM_LIMIT
         else:

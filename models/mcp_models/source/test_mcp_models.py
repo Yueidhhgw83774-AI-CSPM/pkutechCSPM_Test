@@ -15,6 +15,7 @@ from typing import List, Dict
 import sys
 from pathlib import Path
 from datetime import datetime
+import os
 
 # 导入被测试模块
 project_root = Path(__file__).parent.parent.parent.parent.parent / "platform_python_backend-testing"

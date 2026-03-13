@@ -14,12 +14,38 @@ encryption_middleware テスト用 pytest 設定ファイル
 import pytest
 import json
 import sys
+import os
 from pathlib import Path
 from datetime import datetime
+from dotenv import load_dotenv
 
-# プロジェクトルートをPythonパスに追加
-project_root = Path(__file__).parent.parent.parent.parent / "platform_python_backend-testing"
-sys.path.insert(0, str(project_root))
+
+def _load_source_root():
+    """.env ファイルから SourceCodeRoot を読み込む
+
+    Returns:
+        str: SourceCodeRoot の絶対パス
+
+    Raises:
+        FileNotFoundError: .env ファイルが見つからない場合
+        KeyError: SourceCodeRoot キーが .env に存在しない場合
+    """
+    env_path = Path(__file__).parent.parent.parent.parent / ".env"
+    if not env_path.exists():
+        raise FileNotFoundError(f".env ファイルが見つかりません: {env_path}")
+
+    load_dotenv(env_path)
+    source_root = os.getenv("SourceCodeRoot")
+
+    if not source_root:
+        raise KeyError(".env ファイルに SourceCodeRoot キーが存在しません")
+
+    return source_root
+
+
+# ★★★ 重要: プロジェクトルートを動的に取得（絶対にハードコードしない） ★★★
+PROJECT_ROOT = _load_source_root()
+sys.path.insert(0, PROJECT_ROOT)
 
 
 class TestResultCollector:
@@ -170,7 +196,7 @@ def pytest_sessionfinish(session, exitstatus):
         execution_time
     )
 
-    print(f"\n✅ 测试报告已生成:")
+    print(f"\n✅ テストレポートが生成されました:")
     print(f"  - {report_dir / 'TestReport_encryption_middleware.md'}")
     print(f"  - {report_dir / 'TestReport_encryption_middleware.json'}")
 
@@ -180,47 +206,47 @@ def _generate_markdown_report(filepath, stats, results, total, passed, failed, x
     """Markdown形式のテストレポートを生成"""
 
     with open(filepath, "w", encoding="utf-8") as f:
-        f.write("# encryption_middleware.py 测试报告\n\n")
+        f.write("# encryption_middleware.py テストレポート\n\n")
 
         # テスト概要
-        f.write("## 测试概要\n\n")
-        f.write("| 项目 | 值 |\n")
+        f.write("## テスト概要\n\n")
+        f.write("| 項目 | 値 |\n")
         f.write("|------|-----|\n")
-        f.write("| 测试对象 | `app/core/encryption_middleware.py` |\n")
-        f.write("| 测试规格 | `docs/testing/core/encryption_middleware_tests.md` |\n")
-        f.write(f"| 执行时间 | {execution_time.strftime('%Y-%m-%d %H:%M:%S')} |\n")
-        f.write("| 覆盖率目标 | 85% |\n\n")
+        f.write("| テスト対象 | `app/core/encryption_middleware.py` |\n")
+        f.write("| テスト仕様 | `docs/testing/core/encryption_middleware_tests.md` |\n")
+        f.write(f"| 実行時間 | {execution_time.strftime('%Y-%m-%d %H:%M:%S')} |\n")
+        f.write("| カバレッジ目標 | 85% |\n\n")
 
         # テスト結果統計
-        f.write("## 测试结果统计\n\n")
-        f.write("| 类别 | 总数 | 通过 | 失败 | 预期失败 | 跳过 |\n")
+        f.write("## テスト結果統計\n\n")
+        f.write("| カテゴリ | 合計 | 成功 | 失敗 | 予期される失敗 | スキップ |\n")
         f.write("|------|------|------|------|----------|------|\n")
         f.write(f"| 正常系 | {stats['normal']['total']} | {stats['normal']['passed']} | "
                 f"{stats['normal']['failed']} | {stats['normal']['xfailed']} | {stats['normal']['skipped']} |\n")
-        f.write(f"| 异常系 | {stats['error']['total']} | {stats['error']['passed']} | "
+        f.write(f"| 異常系 | {stats['error']['total']} | {stats['error']['passed']} | "
                 f"{stats['error']['failed']} | {stats['error']['xfailed']} | {stats['error']['skipped']} |\n")
-        f.write(f"| 安全测试 | {stats['security']['total']} | {stats['security']['passed']} | "
+        f.write(f"| セキュリティ | {stats['security']['total']} | {stats['security']['passed']} | "
                 f"{stats['security']['failed']} | {stats['security']['xfailed']} | {stats['security']['skipped']} |\n")
-        f.write(f"| **合计** | **{total}** | **{passed}** | **{failed}** | **{xfailed}** | **{skipped}** |\n\n")
+        f.write(f"| **総計** | **{total}** | **{passed}** | **{failed}** | **{xfailed}** | **{skipped}** |\n\n")
 
-        # 通過率
-        f.write("## 测试通过率\n\n")
-        f.write(f"- **实际通过率**: {pass_rate:.1f}%\n")
-        f.write(f"- **有效通过率** (排除预期失败): {effective_pass_rate:.1f}%\n\n")
+        # 合格率（ごうごくりつ）
+        f.write("## テスト合格率\n\n")
+        f.write(f"- **実際の合格率**: {pass_rate:.1f}%\n")
+        f.write(f"- **有効合格率** (予期される失敗を除外): {effective_pass_rate:.1f}%\n\n")
 
         f.write("---\n\n")
 
         # 各カテゴリの詳細
         categories = [
-            ("normal", "正常系测试详情"),
-            ("error", "异常系测试详情"),
-            ("security", "安全测试详情")
+            ("normal", "正常系テスト詳細"),
+            ("error", "異常系テスト詳細"),
+            ("security", "セキュリティテスト詳細")
         ]
 
         for cat_key, cat_title in categories:
             f.write(f"## {cat_title}\n\n")
             if results[cat_key]:
-                f.write("| ID | 测试名称 | 结果 | 执行时间 |\n")
+                f.write("| ID | テスト名称 | 結果 | 実行時間 |\n")
                 f.write("|----|---------|------|----------|\n")
                 for idx, result in enumerate(results[cat_key], 1):
                     outcome_symbol = {
@@ -240,18 +266,18 @@ def _generate_markdown_report(filepath, stats, results, total, passed, failed, x
         f.write("---\n\n")
 
         # 結論
-        f.write("## 结论\n\n")
+        f.write("## 結論\n\n")
         if failed == 0 and skipped == 0:
-            f.write("✅ **所有测试通过!** 加密中间件模块功能正常。\n\n")
+            f.write("✅ **すべてのテストが成功しました！** 暗号化ミドルウェアモジュールの機能は正常です。\n\n")
         elif failed == 0:
-            f.write(f"⚠️ **测试基本通过，但有 {skipped} 个测试被跳过。** 请检查跳过原因。\n\n")
+            f.write(f"⚠️ **テストは基本的に合格しましたが、{skipped} 件のテストがスキップされました。** スキップの理由を確認してください。\n\n")
         else:
-            f.write(f"❌ **有 {failed} 个测试失败!** 需要修复相关问题。\n\n")
+            f.write(f"❌ **{failed} 件のテストが失敗しました！** 関連する問題を修正する必要があります。\n\n")
 
         f.write("---\n\n")
-        f.write(f"*报告生成时间: {execution_time.strftime('%Y-%m-%d %H:%M:%S')}*\n")
+        f.write(f"*レポート生成時間: {execution_time.strftime('%Y-%m-%d %H:%M:%S')}*\n")
 
-    print(f"✅ Markdown报告已生成: {filepath}")
+    print(f"✅ Markdownレポートが生成されました: {filepath}")
 
 
 def _generate_json_report(filepath, stats, results, total, passed, failed, xfailed, skipped,
@@ -300,13 +326,13 @@ def _generate_json_report(filepath, stats, results, total, passed, failed, xfail
     with open(filepath, "w", encoding="utf-8") as f:
         json.dump(report, f, ensure_ascii=False, indent=2)
 
-    print(f"✅ JSON报告已生成: {filepath}")
+    print(f"✅ JSONレポートが生成されました: {filepath}")
 
 
 def _get_readable_name(test_name: str) -> str:
-    """测试方法名转换为可读名称
+    """テストメソッド名を可読名に変換
 
-    根据测试要件文档中的测试名称生成映射表
+    テスト仕様ドキュメントに基づいてテスト名のマッピング表を生成
     """
     name_map = {
         # 初期化テスト

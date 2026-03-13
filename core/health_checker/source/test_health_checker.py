@@ -1,13 +1,13 @@
 """
-health_checker.py 单元测试
+health_checker.py 単位テスト
 
-测试规格: health_checker_tests.md
-覆盖率目标: 90%+
+テスト仕様: health_checker_tests.md
+カバレッジ目標: 90%+
 
-测试类别:
-  - 正常系: 20 个测试
-  - 异常系: 20 个测试
-  - 安全测试: 5 个测试
+テストカテゴリ:
+  - 正常系: 20 個のテスト
+  - 異常系: 20 個のテスト
+  - セキュリティテスト: 5 個のテスト
 """
 
 import pytest
@@ -19,13 +19,13 @@ from datetime import datetime, timezone
 import time
 import asyncio
 
-# 设置测试环境变量
+# テスト環境変数を設定する
 os.environ.setdefault('OPENSEARCH_URL', 'https://172.19.75.181:9200/')
 os.environ.setdefault('OPENSEARCH_USER', 'admin')
 os.environ.setdefault('OPENSEARCH_PASSWORD', 'admin')
 os.environ.setdefault('AWS_REGION', 'us-east-1')
 
-# 在导入被测试模块之前,先mock有问题的模块
+# テスト対象のモジュールをインポートする前に、問題があるモジュールをmockします。
 mock_get_active_job_count = AsyncMock(return_value=0)
 mock_status_manager = MagicMock()
 mock_status_manager.get_active_job_count = mock_get_active_job_count
@@ -34,19 +34,19 @@ mock_status_manager.get_active_job_count = mock_get_active_job_count
 mock_new_custodian_scan_task = MagicMock()
 mock_new_custodian_scan_task.NewCustodianScanTask = MagicMock()
 
-# Mock所有必要的jobs模块(按照导入顺序)
+# Mockが必要なすべてのjobsモジュール(インポートの順序に従って)
 sys.modules['app.jobs.tasks'] = MagicMock()
 sys.modules['app.jobs.tasks.new_custodian_scan'] = MagicMock()
 sys.modules['app.jobs.tasks.new_custodian_scan.main_task'] = mock_new_custodian_scan_task
-sys.modules['app.jobs.main_task'] = mock_new_custodian_scan_task  # 添加这个 mock
+sys.modules['app.jobs.main_task'] = mock_new_custodian_scan_task  # このmockを追加する
 sys.modules['app.jobs.status_manager'] = mock_status_manager
 
-# 阻止 app.jobs.__init__.py 尝试导入 main_task
+# app.jobs.__init__.py から main_task のインポートを阻止する
 sys.modules['app.jobs'] = MagicMock()
 sys.modules['app.jobs'].status_manager = mock_status_manager
 sys.modules['app.jobs'].get_active_job_count = mock_get_active_job_count
 
-# 导入被测试模块
+# テスト対象モジュールをインポートする
 project_root = Path(__file__).parent.parent.parent.parent / "platform_python_backend-testing"
 sys.path.insert(0, str(project_root))
 
@@ -64,14 +64,14 @@ from app.models.health import (
 
 
 # ============================================================================
-# 正常系测试 - HealthChecker初期化
+# 正常系テスト - HealthChecker初期化
 # ============================================================================
 
 class TestHealthCheckerInit:
     """
-    HealthChecker 初期化正常系测试
+    HealthChecker初期化正常系テスト
 
-    测试ID: HC-001, HC-016
+        テストID: HC-001, HC-016
     """
 
     def test_init_records_start_time(self):
@@ -82,12 +82,12 @@ class TestHealthCheckerInit:
           - 验证HealthChecker初始化时记录启动时间
           - 验证start_time是合理的时间戳
         """
-        # Arrange & Act - 创建实例
+        # Arrange & Act - インスタンスの作成
         before_init = time.time()
         checker = HealthChecker()
         after_init = time.time()
 
-        # Assert - 验证start_time在合理范围内
+        # Assert - start_timeが合理的な範囲内にあることを確認する
         assert hasattr(checker, 'start_time')
         assert before_init <= checker.start_time <= after_init
 
@@ -104,29 +104,29 @@ class TestHealthCheckerInit:
 
 
 # ============================================================================
-# 正常系测试 - check_health()
+# 正常系テスト - check_health()
 # ============================================================================
 
 class TestCheckHealth:
     """
-    check_health() 正常系测试
+    check_health() 正常系テスト
 
-    测试ID: HC-002 ~ HC-020
+        テストID: HC-002 ~ HC-020
     """
 
     @pytest.mark.asyncio
     async def test_all_deps_healthy_returns_200(self):
         """
-        HC-002: 全依存関係正常→HEALTHY+200
+        HC-002: すべての依存関係が正常→HEALTHY+200
 
-        覆盖代码行: health_checker.py:30-77
+        カバレッジコード行: health_checker.py:30-77
 
-        测试目的:
-          - 验证所有依赖正常时返回HEALTHY状态
-          - 验证返回200状态码
-          - 验证warnings为None
+        テスト目的:
+          - すべての依存関係が正常な場合にHEALTHY状態を返すことを確認する
+          - 200ステータスコードが返されることを確認する
+          - warningsがNoneであることを確認する
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         checker = HealthChecker()
         mock_deps = HealthDependencies(
             aws_sdk=DependencyStatus.AVAILABLE,
@@ -139,10 +139,10 @@ class TestCheckHealth:
              patch.object(checker, '_get_memory_usage', return_value=100.0), \
              patch.object(checker, '_get_active_jobs', new_callable=AsyncMock, return_value=0):
 
-            # Act - 执行测试
+            # アクション - テストを実行する
             response, status_code = await checker.check_health()
 
-        # Assert - 验证结果
+        # Assert - 結果の検証
         assert status_code == 200
         assert response.status == HealthStatus.HEALTHY
         assert response.warnings is None
@@ -210,11 +210,11 @@ class TestCheckHealth:
     @pytest.mark.asyncio
     async def test_multiple_optional_deps_unavailable(self):
         """
-        HC-005: 非重要依存関係複数障害→DEGRADED
+        HC-005: 不要な依存関係の複数障害→DEGRADED
 
-        测试目的:
-          - 验证多个非重要依赖失败时返回DEGRADED
-          - 验证warnings包含2条警告
+        テスト目的:
+          - 複数の不要な依存関係の失敗時にDEGRADEDが返されることを確認する
+          - 警告が2件含まれていることを確認する
         """
         # Arrange
         checker = HealthChecker()
@@ -249,15 +249,15 @@ class TestCheckHealth:
         # Arrange
         checker = HealthChecker()
 
-        # 创建模拟的异步检查方法
+        # シミュレーション用の非同期チェックメソッドを作成する
         check_calls = []
 
         async def mock_check(name):
             check_calls.append((name, time.time()))
-            await asyncio.sleep(0.01)  # 模拟网络延迟
+            await asyncio.sleep(0.01)  # ネットワーク遅延をシミュレーションする
             return DependencyStatus.AVAILABLE
 
-        # 使用AsyncMock确保协程被正确处理
+        # AsyncMockを使用してコルーチンが正しく処理されることを確認する
         with patch.object(checker, '_check_aws_sdk', new_callable=AsyncMock, return_value=DependencyStatus.AVAILABLE), \
              patch.object(checker, '_check_azure_sdk', new_callable=AsyncMock, return_value=DependencyStatus.AVAILABLE), \
              patch.object(checker, '_check_custodian', new_callable=AsyncMock, return_value=DependencyStatus.AVAILABLE), \
@@ -266,7 +266,7 @@ class TestCheckHealth:
             # Act
             result = await checker._check_dependencies()
 
-        # Assert - 验证结果结构正确
+        # Assert - 結果構造の正しさを確認する
         assert isinstance(result, HealthDependencies)
         assert result.aws_sdk == DependencyStatus.AVAILABLE
         assert result.azure_sdk == DependencyStatus.AVAILABLE
@@ -276,14 +276,14 @@ class TestCheckHealth:
     @pytest.mark.asyncio
     async def test_uptime_calculation(self):
         """
-        HC-007: uptime_seconds計算
+        HC-007: uptime_secondsの計算
 
-        测试目的:
-          - 验证uptime计算正确
+                テスト目的:
+                  - uptimeの計算が正しいことを確認する
         """
         # Arrange
         checker = HealthChecker()
-        checker.start_time = time.time() - 5  # 5秒前启动
+        checker.start_time = time.time() - 5  # 5秒前に起動しました
 
         mock_deps = HealthDependencies(
             aws_sdk=DependencyStatus.AVAILABLE,
@@ -301,15 +301,15 @@ class TestCheckHealth:
 
         # Assert
         assert response.uptime_seconds >= 5
-        assert response.uptime_seconds < 10  # 应该不会超过10秒
+        assert response.uptime_seconds < 10  # 10秒以内になるはずだ
 
     @pytest.mark.asyncio
     async def test_memory_usage_retrieved(self):
         """
-        HC-008: memory_usage_mb取得
+        HC-008: memory_usage_mbの取得
 
-        测试目的:
-          - 验证内存使用量为正数
+                テスト目的:
+                  - メモリ使用量が正の数であることを確認する
         """
         # Arrange
         checker = HealthChecker()
@@ -336,8 +336,8 @@ class TestCheckHealth:
         """
         HC-009: active_jobs取得
 
-        测试目的:
-          - 验证活动作业数为非负整数
+                テスト目的:
+                  - アクティブジョブの数が非負の整数であることを確認する
         """
         # Arrange
         checker = HealthChecker()
@@ -411,7 +411,7 @@ class TestCheckHealth:
             # Act
             response, _ = await checker.check_health()
 
-        # Assert - 验证所有必需字段存在
+        # Assert - 必要なすべてのフィールドが存在することを確認する
         assert hasattr(response, 'status')
         assert hasattr(response, 'timestamp')
         assert hasattr(response, 'uptime_seconds')
@@ -454,9 +454,9 @@ class TestCheckHealth:
 
 class TestDependencyChecks:
     """
-    各依赖检查正常系测试
+    依存チェック各正常系テスト
 
-    测试ID: HC-012 ~ HC-015
+    テストID: HC-012 ~ HC-015
     """
 
     @pytest.mark.asyncio
@@ -482,8 +482,8 @@ class TestDependencyChecks:
         """
         HC-013: Azure SDK subprocess成功→AVAILABLE
 
-        测试目的:
-          - 验证Azure SDK命令成功时返回AVAILABLE
+        テスト目的:
+        - Azure SDKコマンドが成功した場合、AVAILABLEが返されることを確認する
         """
         # Arrange
         checker = HealthChecker()
@@ -505,8 +505,8 @@ class TestDependencyChecks:
         """
         HC-014: Custodian version成功→AVAILABLE
 
-        测试目的:
-          - 验证custodian version命令成功时返回AVAILABLE
+                テスト目的:
+                  - custodian versionコマンドが成功した場合、AVAILABLEが返されることを確認する
         """
         # Arrange
         checker = HealthChecker()
@@ -528,8 +528,8 @@ class TestDependencyChecks:
         """
         HC-015: OpenSearch接続成功→AVAILABLE
 
-        测试目的:
-          - 验证OpenSearch info成功时返回AVAILABLE
+        テスト目的:
+        - OpenSearch infoが成功した場合にAVAILABLEが返されることを確認する
         """
         # Arrange
         checker = HealthChecker()
@@ -546,22 +546,22 @@ class TestDependencyChecks:
 
 
 # ============================================================================
-# 正常系测试 - _determine_overall_status()
+# 正常系テスト - _determine_overall_status()
 # ============================================================================
 
 class TestDetermineOverallStatus:
     """
-    _determine_overall_status() 正常系测试
+    _determine_overall_status() 正常系テスト
 
-    测试ID: HC-018 ~ HC-020
+    テストID: HC-018 ~ HC-020
     """
 
     def test_all_available_returns_healthy(self):
         """
-        HC-018: _determine_overall_status: 全正常→HEALTHY
+        HC-018: _determine_overall_status: 全て正常→HEALTHY
 
-        测试目的:
-          - 验证所有依赖可用时返回HEALTHY
+        テスト目的:
+        - すべての依存が利用可能である場合にHEALTHYを返すことを確認する
         """
         # Arrange
         checker = HealthChecker()
@@ -582,10 +582,10 @@ class TestDetermineOverallStatus:
 
     def test_optional_deps_unavailable_returns_degraded(self):
         """
-        HC-019: _determine_overall_status: 非重要障害→DEGRADED
+        HC-019: _determine_overall_status: 重要でない障害→DEGRADED
 
-        测试目的:
-          - 验证非重要依赖失败时返回DEGRADED
+        テスト目的:
+        - 重要でない依存関係の失敗時にDEGRADEDが返されることを確認する
         """
         # Arrange
         checker = HealthChecker()
@@ -609,8 +609,8 @@ class TestDetermineOverallStatus:
         """
         HC-020: _determine_overall_status: 重要障害→UNHEALTHY
 
-        测试目的:
-          - 验证重要依赖失败时返回UNHEALTHY
+        テスト目的:
+        - 重要な依存関係が失敗した場合にUNHEALTHYを返すことを確認する
         """
         # Arrange
         checker = HealthChecker()
@@ -631,14 +631,14 @@ class TestDetermineOverallStatus:
 
 
 # ============================================================================
-# 異常系测试 - 重要依存関係障害
+# 異常系テスト - 重要依存関係障害
 # ============================================================================
 
 class TestHealthCheckerErrors:
     """
-    HealthChecker 异常系测试
+    HealthChecker 異常系テスト
 
-    测试ID: HC-E01 ~ HC-E20
+        テストID: HC-E01 ~ HC-E20
     """
 
     @pytest.mark.asyncio
@@ -646,11 +646,11 @@ class TestHealthCheckerErrors:
         """
         HC-E01: OpenSearch障害→UNHEALTHY+503
 
-        覆盖代码行: health_checker.py:48-55
+                カバレッジコード行: health_checker.py:48-55
 
-        测试目的:
-          - 验证OpenSearch失败时返回UNHEALTHY
-          - 验证返回HealthErrorResponse
+                テスト目的:
+                  - OpenSearchが失敗した場合にUNHEALTHYを返すことを確認する
+                  - HealthErrorResponseが返されることを確認する
         """
         # Arrange
         checker = HealthChecker()
@@ -708,8 +708,8 @@ class TestHealthCheckerErrors:
         """
         HC-E03: 複数重要依存関係障害→UNHEALTHY
 
-        测试目的:
-          - 验证多个重要依赖失败时errors包含多条错误
+                テスト目的:
+                  - 複数の重要依存関係が失敗した場合、errorsが複数のエラーを含むことを確認する
         """
         # Arrange
         checker = HealthChecker()
@@ -736,8 +736,8 @@ class TestHealthCheckerErrors:
         """
         HC-E04: check_health例外→UNHEALTHY+503
 
-        测试目的:
-          - 验证内部异常时返回HealthErrorResponse
+                テスト目的:
+                  - 内部異常時にHealthErrorResponseを返すことを確認する
         """
         # Arrange
         checker = HealthChecker()
@@ -757,8 +757,8 @@ class TestHealthCheckerErrors:
         """
         HC-E05: AWS SDK import例外
 
-        测试目的:
-          - 验证import异常时返回UNAVAILABLE
+                テスト目的:
+                  - import異常時、UNAVAILABLEを返すことを確認する
         """
         # Arrange
         checker = HealthChecker()
@@ -795,8 +795,8 @@ class TestHealthCheckerErrors:
         """
         HC-E06: Azure SDK subprocess失敗
 
-        测试目的:
-          - 验证subprocess返回非0时返回UNAVAILABLE
+                テスト目的:
+                  - subprocessが0以外を返した場合、UNAVAILABLEを返すことを確認する
         """
         # Arrange
         checker = HealthChecker()
@@ -836,10 +836,10 @@ class TestHealthCheckerErrors:
     @pytest.mark.asyncio
     async def test_azure_sdk_file_not_found(self):
         """
-        HC-E08: Azure SDK venv不在
+        HC-E08: Azure SDK venvが存在しない
 
-        测试目的:
-          - 验证文件不存在时返回UNAVAILABLE
+                テスト目的:
+                  - ファイルが存在しない場合にUNAVAILABLEを返すことを確認する
         """
         # Arrange
         checker = HealthChecker()
@@ -942,8 +942,8 @@ class TestHealthCheckerErrors:
         """
         HC-E14: OpenSearch client=None
 
-        测试目的:
-          - 验证client为None时返回UNAVAILABLE
+                テスト目的:
+                  - clientがNoneの場合、UNAVAILABLEが返されることを確認する
         """
         # Arrange
         checker = HealthChecker()
@@ -961,8 +961,8 @@ class TestHealthCheckerErrors:
         """
         HC-E15: OpenSearch info失敗
 
-        测试目的:
-          - 验证info()抛出异常时返回UNAVAILABLE
+                テスト目的:
+                  - info()が例外を投げた場合にUNAVAILABLEが返されることを確認する
         """
         # Arrange
         checker = HealthChecker()
@@ -1061,9 +1061,9 @@ class TestHealthCheckerErrors:
 @pytest.mark.security
 class TestHealthCheckerSecurity:
     """
-    HealthChecker 安全性测试
+    HealthChecker セキュリティテスト
 
-    测试ID: HC-SEC-01 ~ HC-SEC-05
+        テストID: HC-SEC-01 ~ HC-SEC-05
     """
 
     @pytest.mark.asyncio
@@ -1082,7 +1082,7 @@ class TestHealthCheckerSecurity:
         import re
         checker = HealthChecker()
 
-        # 模拟包含敏感信息的异常
+        # 敏感情報が含まれる例外のシミュレーション
         with caplog.at_level(logging.ERROR):
             with patch.object(checker, '_check_dependencies',
                             side_effect=Exception("Connection failed: password=secret123 token=abc123")):
@@ -1090,7 +1090,7 @@ class TestHealthCheckerSecurity:
                 # Act
                 response, _ = await checker.check_health()
 
-        # Assert - 验证日志中不包含凭据模式
+        # Assert - 認証情報パターンがログに含まれていないことを確認する
         credential_patterns = [
             r'password\s*[=:]\s*["\']?[\w\-!@#$%^&*()]+',
             r'secret\s*[=:]\s*["\']?[\w\-!@#$%^&*()]+',
@@ -1161,7 +1161,7 @@ class TestHealthCheckerSecurity:
 
         # Assert
         for error in response.errors:
-            # 错误消息应该简洁,不包含堆栈跟踪
+            # エラーメッセージは簡潔で、スタックトレースは含めないものとする
             assert "Traceback" not in error
             assert "File \"" not in error
 
@@ -1189,7 +1189,7 @@ class TestHealthCheckerSecurity:
             status = await checker._check_opensearch()
 
         # Assert
-        # 只验证可用性,不在响应中暴露版本详情
+        # 可用性のみを確認し、响应の中でバージョンの詳細を漏らさない
         assert status == DependencyStatus.AVAILABLE
 
     @pytest.mark.asyncio
@@ -1203,7 +1203,7 @@ class TestHealthCheckerSecurity:
         # Arrange
         checker = HealthChecker()
 
-        # 测试不同的失败场景
+        # 異なる失敗シーンをテストする
         scenarios = [
             HealthDependencies(
                 aws_sdk=DependencyStatus.UNAVAILABLE,
@@ -1231,7 +1231,7 @@ class TestHealthCheckerSecurity:
                 duration = time.time() - start
                 times.append(duration)
 
-        # Assert - 响应时间差异不应太大 (小于50ms)
+        # Assert - レスポンスタイムの差異は大きすぎない（50ms以下）
         if len(times) >= 2:
             time_diff = abs(times[0] - times[1])
             assert time_diff < 0.05  # 50ms

@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-pytest fixtures for permission_checker module tests.
-permission_checker 模块测试的 pytest fixtures。
-
-This module provides shared fixtures for testing the permission_checker module.
-本模块提供用于测试 permission_checker 模块的共享 fixtures。
+permission_checker モジュールテストのpytest fixtures。
 """
 
 import os
@@ -13,12 +9,37 @@ import json
 from datetime import datetime
 from typing import Any, Dict, List
 from unittest.mock import AsyncMock, MagicMock
+from pathlib import Path
 
 import pytest
+from dotenv import load_dotenv
 
-# Add the project root to Python path for imports
-# 将项目根目录添加到 Python 路径以便导入
-PROJECT_ROOT = r"C:\pythonProject\python_ai_cspm\platform_python_backend-testing"
+
+def _load_source_root():
+    """.env ファイルから SourceCodeRoot を読み込む
+
+    Returns:
+        str: SourceCodeRoot の絶対パス
+
+    Raises:
+        FileNotFoundError: .env ファイルが見つからない場合
+        KeyError: SourceCodeRoot キーが .env に存在しない場合
+    """
+    env_path = Path(__file__).parent.parent.parent.parent / ".env"
+    if not env_path.exists():
+        raise FileNotFoundError(f".env ファイルが見つかりません: {env_path}")
+
+    load_dotenv(env_path)
+    source_root = os.getenv("SourceCodeRoot")
+
+    if not source_root:
+        raise KeyError(".env ファイルに SourceCodeRoot キーが存在しません")
+
+    return source_root
+
+
+# ★★★ 重要: プロジェクトルートを動的に取得（絶対にハードコードしない） ★★★
+PROJECT_ROOT = _load_source_root()
 if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 
@@ -29,16 +50,12 @@ if PROJECT_ROOT not in sys.path:
 
 @pytest.fixture(autouse=True)
 def reset_permission_checker_module():
-    """
-    Reset permission_checker module state between tests.
-    在测试之间重置 permission_checker 模块状态。
+    """テスト間でpermission_checkerモジュール状態をリセットする。
 
-    Ensures test independence by clearing module cache.
-    通过清除模块缓存来确保测试独立性。
+    モジュールキャッシュをクリアすることでテストの独立性を保証する。
     """
     yield
-    # Clear module cache after test
-    # 测试后清除模块缓存
+    # テスト後にモジュールキャッシュをクリア
     if "app.core.permission_checker" in sys.modules:
         del sys.modules["app.core.permission_checker"]
 
@@ -50,11 +67,10 @@ def reset_permission_checker_module():
 @pytest.fixture
 def mock_admin_client():
     """
-    Provide AsyncOpenSearch admin client mock.
-    提供 AsyncOpenSearch 管理员客户端模拟。
+AsyncOpenSearch管理者クライアントのモックを提供する。
 
     Returns:
-        MagicMock: Mocked AsyncOpenSearch client
+        MagicMock: モックされたAsyncOpenSearchクライアント
     """
     client = MagicMock()
     client.transport = MagicMock()
@@ -64,12 +80,10 @@ def mock_admin_client():
 
 @pytest.fixture
 def mock_user_info():
-    """
-    Provide standard user info mock.
-    提供标准用户信息模拟。
+    """標準ユーザー情報のモックを提供する。
 
     Returns:
-        Dict: User information dictionary
+        Dict: ユーザー情報辞書
     """
     return {
         "backend_roles": ["user_role"],
@@ -80,12 +94,10 @@ def mock_user_info():
 
 @pytest.fixture
 def mock_role_permissions():
-    """
-    Provide standard role permissions mock.
-    提供标准角色权限模拟。
+    """標準ロール権限のモックを提供する。
 
     Returns:
-        Dict: Role permissions dictionary
+        Dict: ロール権限辞書
     """
     return {
         "index_permissions": [
@@ -100,12 +112,10 @@ def mock_role_permissions():
 
 @pytest.fixture
 def mock_admin_role_permissions():
-    """
-    Provide admin role permissions mock.
-    提供管理员角色权限模拟。
+    """管理者ロール権限のモックを提供する。
 
     Returns:
-        Dict: Admin role permissions dictionary
+        Dict: 管理者ロール権限辞書
     """
     return {
         "index_permissions": [
@@ -119,26 +129,22 @@ def mock_admin_role_permissions():
 
 
 # =============================================================================
-# Test Report Generation | 测试报告生成
+# テストレポート生成
 # =============================================================================
 
-# Global test results storage
-# 全局测试结果存储
+# グローバルテスト結果ストレージ
 _test_results = []
 
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
 def pytest_runtest_makereport(item, call):
-    """
-    Hook to capture test results.
-    捕获测试结果的钩子。
+    """テスト結果をキャプチャするフック。
     """
     outcome = yield
     rep = outcome.get_result()
 
     if rep.when == "call":
-        # Check if test is marked as xfail
-        # 检查测试是否标记为 xfail
+        # xfailマークされたテストをチェック
         is_xfail = hasattr(rep, "wasxfail") or (
             hasattr(item, '_evalxfail') and item._evalxfail.wasvalid() if hasattr(item, '_evalxfail') else False
         )
@@ -154,68 +160,64 @@ def pytest_runtest_makereport(item, call):
 
 
 def _get_readable_name(test_name: str) -> str:
-    """
-    Convert test method name to readable Chinese name.
-    将测试方法名转换为可读的中文名称。
+    """テストメソッド名を読みやすい名前に変換する。
 
     Args:
-        test_name: Test method name
+        test_name: テストメソッド名
 
     Returns:
-        str: Readable test name in Chinese
+        str: 読みやすいテスト名
     """
-    # Test ID to readable name mapping
-    # 测试 ID 到可读名称的映射
+    # テストIDから読みやすい名前へのマッピング
     name_map = {
-        # Normal tests - 正常系测试
-        "test_init_with_admin_client": "管理员客户端初始化",
-        "test_get_user_info_success": "用户信息取得成功",
-        "test_get_user_roles_success": "用户角色取得成功",
-        "test_get_user_roles_deduplicate": "角色统合（重复除去）",
-        "test_get_role_permissions_success": "角色权限取得成功",
-        "test_index_access_granted": "索引访问权限许可",
-        "test_index_access_denied": "索引访问权限拒绝",
-        "test_wildcard_index_pattern_match": "通配符索引模式匹配",
-        "test_expand_read_action": "汎用动作展开（read）",
-        "test_expand_write_action": "汎用动作展开（write）",
-        "test_expand_wildcard_action": "汎用动作展开（通配符）",
-        "test_expand_crud_action": "多动作许可（crud）",
-        "test_expand_manage_action": "汎用动作展开（manage）",
-        "test_expand_index_action": "汎用动作展开（index）",
-        "test_expand_delete_action": "汎用动作展开（delete）",
-        "test_expand_indices_all_action": "汎用动作展开（indices_all）",
-        "test_expand_create_index_action": "汎用动作展开（create_index）",
-        "test_fnmatch_wildcard_pattern": "fnmatch通配符模式匹配",
-        "test_no_match_action": "不匹配动作",
-        "test_multiple_index_access_check": "多索引一括检查",
-        "test_get_accessible_indices": "可访问索引取得",
-        "test_check_user_index_access_function": "便利函数检查",
+        # 正常系テスト
+        "test_init_with_admin_client": "管理者クライアント初期化",
+        "test_get_user_info_success": "ユーザー情報取得成功",
+        "test_get_user_roles_success": "ユーザーロール取得成功",
+        "test_get_user_roles_deduplicate": "ロール統合（重複除去）",
+        "test_get_role_permissions_success": "ロール権限取得成功",
+        "test_index_access_granted": "インデックスアクセス権限許可",
+        "test_index_access_denied": "インデックスアクセス権限拒否",
+        "test_wildcard_index_pattern_match": "ワイルドカードインデックスパターンマッチ",
+        "test_expand_read_action": "汎用アクション展開（read）",
+        "test_expand_write_action": "汎用アクション展開（write）",
+        "test_expand_wildcard_action": "汎用アクション展開（ワイルドカード）",
+        "test_expand_crud_action": "複数アクション許可（crud）",
+        "test_expand_manage_action": "汎用アクション展開（manage）",
+        "test_expand_index_action": "汎用アクション展開（index）",
+        "test_expand_delete_action": "汎用アクション展開（delete）",
+        "test_expand_indices_all_action": "汎用アクション展開（indices_all）",
+        "test_expand_create_index_action": "汎用アクション展開（create_index）",
+        "test_fnmatch_wildcard_pattern": "fnmatchワイルドカードパターンマッチ",
+        "test_no_match_action": "不一致アクション",
+        "test_multiple_index_access_check": "複数インデックス一括チェック",
+        "test_get_accessible_indices": "アクセス可能インデックス取得",
+        "test_check_user_index_access_function": "便利関数チェック",
 
-        # Error tests - 异常系测试
-        "test_get_user_info_not_found": "不存在用户信息取得返回None",
-        "test_get_user_info_api_error": "用户信息取得API错误",
-        "test_get_roles_user_not_found": "不存在用户的角色取得",
-        "test_get_permissions_role_not_found": "不存在角色的权限取得",
-        "test_get_permissions_api_error": "角色权限取得API错误",
-        "test_role_check_error_skip_continue": "角色检查错误时跳过继续",
-        "test_all_roles_check_failed": "全角色检查失败",
-        "test_user_roles_fetch_failed": "用户角色取得失败",
-        "test_batch_check_partial_role_error": "批量检查中部分角色错误",
-        "test_batch_check_user_error": "批量检查中用户取得失败",
-        "test_accessible_indices_user_error": "可访问索引取得用户错误",
-        "test_accessible_indices_partial_role_error": "部分角色错误时跳过继续",
+        # 異常系テスト
+        "test_get_user_info_not_found": "不存在ユーザー情報取得でNone返却",
+        "test_get_user_info_api_error": "ユーザー情報取得APIエラー",
+        "test_get_roles_user_not_found": "不存在ユーザーのロール取得",
+        "test_get_permissions_role_not_found": "不存在ロールの権限取得",
+        "test_get_permissions_api_error": "ロール権限取得APIエラー",
+        "test_role_check_error_skip_continue": "ロールチェックエラー時スキップ継続",
+        "test_all_roles_check_failed": "全ロールチェック失敗",
+        "test_user_roles_fetch_failed": "ユーザーロール取得失敗",
+        "test_batch_check_partial_role_error": "バッチチェック中部分ロールエラー",
+        "test_batch_check_user_error": "バッチチェック中ユーザー取得失敗",
+        "test_accessible_indices_user_error": "アクセス可能インデックス取得ユーザーエラー",
+        "test_accessible_indices_partial_role_error": "部分ロールエラー時スキップ継続",
 
-        # Security tests - 安全测试
-        "test_no_permission_user_denied": "无权限用户访问拒绝",
-        "test_wildcard_pattern_safety": "通配符模式安全性",
-        "test_minimum_privilege_principle": "最小权限原则验证",
-        "test_injection_attack_resistance": "注入攻击耐性",
-        "test_role_escalation_prevention": "角色提升攻击防止",
-        "test_timing_attack_resistance": "时间攻击耐性",
+        # セキュリティテスト
+        "test_no_permission_user_denied": "権限なしユーザーアクセス拒否",
+        "test_wildcard_pattern_safety": "ワイルドカードパターン安全性",
+        "test_minimum_privilege_principle": "最小権限原則検証",
+        "test_injection_attack_resistance": "インジェクション攻撃耐性",
+        "test_role_escalation_prevention": "ロール昇格攻撃防止",
+        "test_timing_attack_resistance": "タイミング攻撃耐性",
     }
 
-    # Extract test function name
-    # 提取测试函数名
+    # テスト関数名を抽出
     if "::" in test_name:
         test_name = test_name.split("::")[-1]
 
@@ -223,15 +225,12 @@ def _get_readable_name(test_name: str) -> str:
 
 
 def pytest_sessionfinish(session, exitstatus):
+    """すべてのテスト完了後に詳細レポートを生成する。
     """
-    Pytest hook to generate detailed reports after all tests complete.
-    在所有测试完成后生成详细报告的 pytest 钩子。
-    """
-    report_dir = r"C:\pythonProject\python_ai_cspm\TestReport\permission_checker\reports"
+    report_dir = Path(__file__).parent.parent / "reports"
     os.makedirs(report_dir, exist_ok=True)
 
-    # Parse test results
-    # 解析测试结果
+    # テスト結果を解析
     normal_tests = []
     error_tests = []
     security_tests = []
@@ -246,13 +245,11 @@ def pytest_sessionfinish(session, exitstatus):
         duration = result["duration"]
         is_xfail = result.get("is_xfail", False)
 
-        # Override outcome for xfail tests
-        # 覆盖 xfail 测试的结果
+        # xfailテストの結果を上書き
         if is_xfail:
             outcome = "xfailed"
 
-        # Count outcomes
-        # 统计结果
+        # 結果をカウント
         if outcome == "passed":
             passed += 1
         elif outcome == "failed":
@@ -260,15 +257,14 @@ def pytest_sessionfinish(session, exitstatus):
         elif outcome == "xfailed":
             xfailed += 1
 
-        # Parse test ID and categorize
-        # 解析测试 ID 并分类
+        # テストIDを解析して分類
         if "test_permission_checker.py" in nodeid:
             test_name = nodeid.split("::")[-1] if "::" in nodeid else nodeid
             readable_name = _get_readable_name(test_name)
 
             test_entry = {
                 "name": readable_name,
-                "status": "✅ 通过" if outcome == "passed" else ("❌ 失败" if outcome == "failed" else "⚠️ 预期失败"),
+                "status": "✅ 成功" if outcome == "passed" else ("❌ 失敗" if outcome == "failed" else "⚠️ 予期された失敗"),
                 "duration": f"{duration*1000:.2f}ms"
             }
 
@@ -342,38 +338,37 @@ def pytest_sessionfinish(session, exitstatus):
     pass_rate = (passed / total * 100) if total > 0 else 0
     effective_pass_rate = (passed / (passed + failed) * 100) if (passed + failed) > 0 else 0
 
-    # Generate Markdown report
-    # 生成 Markdown 报告
-    md_report = f"""# permission_checker.py 测试报告
+    # Markdownレポートを生成
+    md_report = f"""# permission_checker.py テストレポート
 
-## 测试概要
+## テスト概要
 
-| 项目 | 值 |
+| 項目 | 値 |
 |------|-----|
-| 测试对象 | `app/core/permission_checker.py` |
-| 测试规格 | `docs/testing/core/permission_checker_tests.md` |
-| 执行时间 | {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} |
-| 覆盖率目标 | 85% |
+| テスト対象 | `app/core/permission_checker.py` |
+| テスト仕様 | `docs/testing/core/permission_checker_tests.md` |
+| 実行時刻 | {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} |
+| カバレッジ目標 | 85% |
 
-## 测试结果统计
+## テスト結果統計
 
-| 类别 | 总数 | 通过 | 失败 | 预期失败 |
+| カテゴリ | 総数 | 成功 | 失敗 | 予期された失敗 |
 |------|------|------|------|----------|
 | 正常系 | {len(normal_tests)} | {sum(1 for t in normal_tests if '✅' in t['status'])} | {sum(1 for t in normal_tests if '❌' in t['status'])} | {sum(1 for t in normal_tests if '⚠️' in t['status'])} |
-| 异常系 | {len(error_tests)} | {sum(1 for t in error_tests if '✅' in t['status'])} | {sum(1 for t in error_tests if '❌' in t['status'])} | {sum(1 for t in error_tests if '⚠️' in t['status'])} |
-| 安全测试 | {len(security_tests)} | {sum(1 for t in security_tests if '✅' in t['status'])} | {sum(1 for t in security_tests if '❌' in t['status'])} | {sum(1 for t in security_tests if '⚠️' in t['status'])} |
-| **合计** | **{total}** | **{passed}** | **{failed}** | **{xfailed}** |
+| 異常系 | {len(error_tests)} | {sum(1 for t in error_tests if '✅' in t['status'])} | {sum(1 for t in error_tests if '❌' in t['status'])} | {sum(1 for t in error_tests if '⚠️' in t['status'])} |
+| セキュリティ | {len(security_tests)} | {sum(1 for t in security_tests if '✅' in t['status'])} | {sum(1 for t in security_tests if '❌' in t['status'])} | {sum(1 for t in security_tests if '⚠️' in t['status'])} |
+| **合計** | **{total}** | **{passed}** | **{failed}** | **{xfailed}** |
 
-## 测试通过率
+## テスト成功率
 
-- **实际通过率**: {pass_rate:.1f}%
-- **有效通过率** (排除预期失败): {effective_pass_rate:.1f}%
+- **実際の成功率**: {pass_rate:.1f}%
+- **有効成功率** (予期された失敗を除外): {effective_pass_rate:.1f}%
 
 ---
 
-## 正常系测试详情
+## 正常系テスト詳細
 
-| ID | 测试名称 | 结果 | 执行时间 |
+| ID | テスト名 | 結果 | 実行時間 |
 |----|---------|------|----------|
 """
 
@@ -381,9 +376,9 @@ def pytest_sessionfinish(session, exitstatus):
         md_report += f"| {test['id']} | {test['name']} | {test['status']} | {test['duration']} |\n"
 
     md_report += f"""
-## 异常系测试详情
+## 異常系テスト詳細
 
-| ID | 测试名称 | 结果 | 执行时间 |
+| ID | テスト名 | 結果 | 実行時間 |
 |----|---------|------|----------|
 """
 
@@ -391,9 +386,9 @@ def pytest_sessionfinish(session, exitstatus):
         md_report += f"| {test['id']} | {test['name']} | {test['status']} | {test['duration']} |\n"
 
     md_report += f"""
-## 安全测试详情
+## セキュリティテスト詳細
 
-| ID | 测试名称 | 结果 | 执行时间 |
+| ID | テスト名 | 結果 | 実行時間 |
 |----|---------|------|----------|
 """
 
@@ -403,34 +398,32 @@ def pytest_sessionfinish(session, exitstatus):
     md_report += f"""
 ---
 
-## 结论
+## 結論
 
 """
 
     if failed == 0:
-        md_report += "✅ **所有测试通过** - permission_checker 模块功能正常\n"
+        md_report += "✅ **すべてのテストが成功** - permission_checker モジュールは正常に動作しています\n"
     else:
-        md_report += f"⚠️ **存在 {failed} 个失败测试** - 需要进一步检查\n"
+        md_report += f"⚠️ **{failed}件の失敗テストがあります** - 追加確認が必要です\n"
 
     if xfailed > 0:
-        md_report += f"\n📝 **{xfailed} 个预期失败测试** - 这些是已知的限制或待实现功能\n"
+        md_report += f"\n📝 **{xfailed}件の予期された失敗テスト** - これらは既知の制限または実装待ち機能です\n"
 
     md_report += f"""
 ---
 
-*报告生成时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}*
+*レポート生成時刻: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}*
 """
 
-    # Write Markdown report
-    # 写入 Markdown 报告
+    # Markdownレポートを書き込み
     md_path = os.path.join(report_dir, "TestReport_permission_checker.md")
     with open(md_path, "w", encoding="utf-8") as f:
         f.write(md_report)
 
-    print(f"\n✅ Markdown 报告已生成: {md_path}")
+    print(f"\n✅ Markdownレポートを生成しました: {md_path}")
 
-    # Generate JSON report
-    # 生成 JSON 报告
+    # JSONレポートを生成
     json_report = {
         "summary": {
             "total": total,
@@ -457,10 +450,9 @@ def pytest_sessionfinish(session, exitstatus):
         "execution_time": datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     }
 
-    # Write JSON report
-    # 写入 JSON 报告
+    # JSONレポートを書き込み
     json_path = os.path.join(report_dir, "TestReport_permission_checker.json")
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(json_report, f, ensure_ascii=False, indent=2)
 
-    print(f"✅ JSON 报告已生成: {json_path}\n")
+    print(f"✅ JSONレポートを生成しました: {json_path}\n")

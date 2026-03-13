@@ -1,0 +1,406 @@
+{
+  "summary": {
+    "total": 77,
+    "passed": 77,
+    "failed": 0,
+    "pass_rate": 100.0
+  },
+  "categories": {
+    "normal": [
+      {
+        "test_id": "test_rag_001_initialize_success",
+        "outcome": "passed",
+        "duration": 1.8303032999974675
+      },
+      {
+        "test_id": "test_rag_002_already_initialized",
+        "outcome": "passed",
+        "duration": 0.0002888000017264858
+      },
+      {
+        "test_id": "test_rag_003_vectorstore_initialization",
+        "outcome": "passed",
+        "duration": 0.0009497999999439344
+      },
+      {
+        "test_id": "test_rag_004_chat_model_initialization",
+        "outcome": "passed",
+        "duration": 0.0009664000099292025
+      },
+      {
+        "test_id": "test_rag_005_aws_iam_auth",
+        "outcome": "passed",
+        "duration": 0.0010547999991104007
+      },
+      {
+        "test_id": "test_rag_006_basic_auth_fallback",
+        "outcome": "passed",
+        "duration": 0.0007920000061858445
+      },
+      {
+        "test_id": "test_rag_007_local_opensearch_auth",
+        "outcome": "passed",
+        "duration": 0.000759599992306903
+      },
+      {
+        "test_id": "test_rag_008_search_documents",
+        "outcome": "passed",
+        "duration": 0.00041199999395757914
+      },
+      {
+        "test_id": "test_rag_009_search_with_scores",
+        "outcome": "passed",
+        "duration": 0.0006510000093840063
+      },
+      {
+        "test_id": "test_rag_010_search_with_filters",
+        "outcome": "passed",
+        "duration": 0.0004850999976042658
+      },
+      {
+        "test_id": "test_rag_011_get_chat_model",
+        "outcome": "passed",
+        "duration": 0.000381199992261827
+      },
+      {
+        "test_id": "test_rag_012_health_check_success",
+        "outcome": "passed",
+        "duration": 0.00041689998761285096
+      },
+      {
+        "test_id": "test_rag_013_get_index_info",
+        "outcome": "passed",
+        "duration": 0.0003981000045314431
+      },
+      {
+        "test_id": "test_rag_015_build_filter_cloud",
+        "outcome": "passed",
+        "duration": 0.00018699999782256782
+      },
+      {
+        "test_id": "test_rag_016_build_filter_multiple",
+        "outcome": "passed",
+        "duration": 0.00019619999511633068
+      },
+      {
+        "test_id": "test_rag_017_build_filter_none",
+        "outcome": "passed",
+        "duration": 0.00016290000348817557
+      },
+      {
+        "test_id": "test_rag_046_build_filter_empty",
+        "outcome": "passed",
+        "duration": 0.00022600000374950469
+      },
+      {
+        "test_id": "test_rag_018_convert_documents",
+        "outcome": "passed",
+        "duration": 0.00028050001128576696
+      },
+      {
+        "test_id": "test_rag_019_convert_documents_with_scores",
+        "outcome": "passed",
+        "duration": 0.00023459999647457153
+      },
+      {
+        "test_id": "test_rag_020_basic_search",
+        "outcome": "passed",
+        "duration": 0.00042409999878145754
+      },
+      {
+        "test_id": "test_rag_021_filter_only_search",
+        "outcome": "passed",
+        "duration": 0.00028079999901819974
+      },
+      {
+        "test_id": "test_rag_022_action_only_search",
+        "outcome": "passed",
+        "duration": 0.00035960000241175294
+      },
+      {
+        "test_id": "test_rag_023_code_example_search",
+        "outcome": "passed",
+        "duration": 0.0004459000047063455
+      },
+      {
+        "test_id": "test_rag_024_qa_search_with_sources",
+        "outcome": "passed",
+        "duration": 0.00028819999715778977
+      },
+      {
+        "test_id": "test_rag_025_qa_search_without_sources",
+        "outcome": "passed",
+        "duration": 0.0005075999943073839
+      },
+      {
+        "test_id": "test_rag_026_health_check_healthy",
+        "outcome": "passed",
+        "duration": 0.0004734999965876341
+      },
+      {
+        "test_id": "test_rag_028_get_index_info",
+        "outcome": "passed",
+        "duration": 0.0002868000010494143
+      },
+      {
+        "test_id": "test_rag_029_get_instance_first_call",
+        "outcome": "passed",
+        "duration": 0.0009531000105198473
+      },
+      {
+        "test_id": "test_rag_030_get_instance_second_call",
+        "outcome": "passed",
+        "duration": 0.00025370001094415784
+      },
+      {
+        "test_id": "test_rag_032_is_initialized",
+        "outcome": "passed",
+        "duration": 0.0002447000006213784
+      },
+      {
+        "test_id": "test_rag_034_get_enhanced_rag_search",
+        "outcome": "passed",
+        "duration": 0.0004997000069124624
+      },
+      {
+        "test_id": "test_rag_035_initialize_global_rag_system",
+        "outcome": "passed",
+        "duration": 0.00045510000200010836
+      },
+      {
+        "test_id": "test_rag_036_search_endpoint",
+        "outcome": "passed",
+        "duration": 0.00197350000962615
+      },
+      {
+        "test_id": "test_rag_037_filter_search_endpoint",
+        "outcome": "passed",
+        "duration": 0.0011702000047080219
+      },
+      {
+        "test_id": "test_rag_038_action_search_endpoint",
+        "outcome": "passed",
+        "duration": 0.0011710999970091507
+      },
+      {
+        "test_id": "test_rag_039_code_example_endpoint",
+        "outcome": "passed",
+        "duration": 0.0010246000019833446
+      },
+      {
+        "test_id": "test_rag_040_qa_endpoint",
+        "outcome": "passed",
+        "duration": 0.0010959000064758584
+      },
+      {
+        "test_id": "test_rag_041_health_endpoint",
+        "outcome": "passed",
+        "duration": 0.0009677000052761286
+      },
+      {
+        "test_id": "test_rag_042_index_info_endpoint",
+        "outcome": "passed",
+        "duration": 0.001961200003279373
+      },
+      {
+        "test_id": "test_rag_043_aws_ec2_search",
+        "outcome": "passed",
+        "duration": 0.0016022999916458502
+      },
+      {
+        "test_id": "test_rag_044_aws_s3_search",
+        "outcome": "passed",
+        "duration": 0.0017251000099349767
+      },
+      {
+        "test_id": "test_rag_045_security_search",
+        "outcome": "passed",
+        "duration": 0.001145399990491569
+      }
+    ],
+    "error": [
+      {
+        "test_id": "test_rag_e03_search_empty_query",
+        "outcome": "passed",
+        "duration": 0.0004582999972626567
+      },
+      {
+        "test_id": "test_rag_e04_search_invalid_k",
+        "outcome": "passed",
+        "duration": 0.0004380000027595088
+      },
+      {
+        "test_id": "test_rag_e06_qa_search_llm_error",
+        "outcome": "passed",
+        "duration": 0.0004847999953199178
+      },
+      {
+        "test_id": "test_rag_e07_search_timeout",
+        "outcome": "passed",
+        "duration": 0.00040410000656265765
+      },
+      {
+        "test_id": "test_rag_e08_invalid_filter_values",
+        "outcome": "passed",
+        "duration": 0.0003473000106168911
+      },
+      {
+        "test_id": "test_rag_e09_opensearch_index_not_found",
+        "outcome": "passed",
+        "duration": 0.0004810999962501228
+      },
+      {
+        "test_id": "test_rag_e11_api_endpoint_not_initialized",
+        "outcome": "passed",
+        "duration": 0.000530099991010502
+      },
+      {
+        "test_id": "test_rag_e13_search_result_parsing_error",
+        "outcome": "passed",
+        "duration": 0.00038729999505449086
+      },
+      {
+        "test_id": "test_rag_e14_empty_search_results",
+        "outcome": "passed",
+        "duration": 0.00037739999243058264
+      },
+      {
+        "test_id": "test_rag_e15_qa_no_context",
+        "outcome": "passed",
+        "duration": 0.0003989999968325719
+      },
+      {
+        "test_id": "test_rag_e17_large_query_handling",
+        "outcome": "passed",
+        "duration": 0.000880700012203306
+      },
+      {
+        "test_id": "test_rag_e18_invalid_k_value_api",
+        "outcome": "passed",
+        "duration": 0.0008157999982358888
+      },
+      {
+        "test_id": "test_rag_e19_malformed_request_body",
+        "outcome": "passed",
+        "duration": 0.0008108000038191676
+      }
+    ],
+    "security": [
+      {
+        "test_id": "test_rag_sec_001_query_injection_prevention",
+        "outcome": "passed",
+        "duration": 0.0008869000012055039
+      },
+      {
+        "test_id": "test_rag_sec_002_filter_injection_prevention",
+        "outcome": "passed",
+        "duration": 0.0003510999958962202
+      },
+      {
+        "test_id": "test_rag_sec_003_xss_prevention_in_response",
+        "outcome": "passed",
+        "duration": 0.0010856000008061528
+      },
+      {
+        "test_id": "test_rag_sec_004_prompt_injection_prevention",
+        "outcome": "passed",
+        "duration": 0.0009034999966388568
+      },
+      {
+        "test_id": "test_rag_sec_005_credential_masking_in_logs",
+        "outcome": "passed",
+        "duration": 0.0004107999993721023
+      },
+      {
+        "test_id": "test_rag_sec_006_rate_limiting_simulation",
+        "outcome": "passed",
+        "duration": 0.0025507000100333244
+      },
+      {
+        "test_id": "test_rag_sec_007_unauthorized_access_prevention",
+        "outcome": "passed",
+        "duration": 0.0004126999992877245
+      },
+      {
+        "test_id": "test_rag_sec_008_input_size_limit",
+        "outcome": "passed",
+        "duration": 0.0033320999937132
+      },
+      {
+        "test_id": "test_rag_sec_009_path_traversal_prevention",
+        "outcome": "passed",
+        "duration": 0.000502099996083416
+      },
+      {
+        "test_id": "test_rag_sec_010_sensitive_data_exposure_prevention",
+        "outcome": "passed",
+        "duration": 0.0007733999955235049
+      }
+    ],
+    "performance": [
+      {
+        "test_id": "test_rag_perf_001_search_response_time",
+        "outcome": "passed",
+        "duration": 0.0008692999981576577
+      },
+      {
+        "test_id": "test_rag_perf_002_qa_response_time",
+        "outcome": "passed",
+        "duration": 0.0009585999941918999
+      },
+      {
+        "test_id": "test_rag_perf_003_concurrent_searches",
+        "outcome": "passed",
+        "duration": 0.0038449999992735684
+      },
+      {
+        "test_id": "test_rag_perf_004_large_result_set",
+        "outcome": "passed",
+        "duration": 0.000374399998690933
+      },
+      {
+        "test_id": "test_rag_perf_005_health_check_response_time",
+        "outcome": "passed",
+        "duration": 0.000785099997301586
+      },
+      {
+        "test_id": "test_rag_perf_006_index_info_response_time",
+        "outcome": "passed",
+        "duration": 0.0008252999978139997
+      },
+      {
+        "test_id": "test_rag_perf_007_repeated_searches",
+        "outcome": "passed",
+        "duration": 0.001439700004993938
+      }
+    ],
+    "integration": [
+      {
+        "test_id": "test_rag_int_001_full_search_flow",
+        "outcome": "passed",
+        "duration": 0.0011680999887175858
+      },
+      {
+        "test_id": "test_rag_int_002_full_qa_flow",
+        "outcome": "passed",
+        "duration": 0.0008566000033169985
+      },
+      {
+        "test_id": "test_rag_int_003_filter_action_code_search",
+        "outcome": "passed",
+        "duration": 0.0014435000048251823
+      },
+      {
+        "test_id": "test_rag_int_004_service_specific_searches",
+        "outcome": "passed",
+        "duration": 0.0011356999893905595
+      },
+      {
+        "test_id": "test_rag_int_005_health_and_info_endpoints",
+        "outcome": "passed",
+        "duration": 0.0009867000044323504
+      }
+    ]
+  },
+  "generated_at": "2026-03-12T20:00:33.827142"
+}

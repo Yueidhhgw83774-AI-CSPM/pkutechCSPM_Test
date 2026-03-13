@@ -7,20 +7,26 @@ import sys
 import os
 import importlib
 from pathlib import Path
-from dotenv import load_dotenv
 import json
 from datetime import datetime
 from typing import Dict, Any, List
 from unittest.mock import AsyncMock, MagicMock, patch
 
-# .envファイルから環境変数を読み込む
-env_path = Path(__file__).parents[3] / '.env'
-load_dotenv(env_path)
+# プロジェクトルート設定（env_loader を使用）
+try:
+    from env_loader import PROJECT_ROOT
+except ImportError:
+    _here = Path(__file__).resolve()
+    for _p in [_here, *_here.parents]:
+        if (_p / "env_loader.py").exists():
+            sys.path.insert(0, str(_p))
+            from env_loader import PROJECT_ROOT
+            break
+    else:
+        raise ImportError("env_loader.py が見つかりません")
 
-# source_root を環境変数から取得
-source_root = os.getenv('soure_root', 'C:\\pythonProject\\python_ai_cspm\\platform_python_backend-testing\\')
-if source_root not in sys.path:
-    sys.path.insert(0, source_root)
+project_root = PROJECT_ROOT / "platform_python_backend-testing"
+sys.path.insert(0, str(project_root))
 
 from unittest.mock import AsyncMock, MagicMock, patch
 from httpx import AsyncClient

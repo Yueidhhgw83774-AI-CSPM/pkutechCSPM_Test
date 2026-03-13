@@ -1,13 +1,13 @@
 # conftest.py
 """
-auth 测试配置和钩子函数
+auth テスト設定とフックファンクション
 
-测试对象:
+テスト対象:
   - app/core/auth.py
   - app/auth/router.py
   - app/models/auth.py
 
-测试规格: docs/testing/plugins/auth_tests.md
+テスト仕様: docs/testing/plugins/auth_tests.md
 """
 
 import pytest
@@ -19,50 +19,55 @@ from pathlib import Path
 from datetime import datetime, timedelta, timezone
 from typing import Dict, List, Any
 
-# 项目根目录设置
-# 从 TestReport/plugins/auth/source 向上5级到 python_ai_cspm
-project_root = Path(__file__).resolve().parent.parent.parent.parent.parent / "platform_python_backend-testing"
+# プロジェクトルート設定（env_loader を使用）
+try:
+    from env_loader import PROJECT_ROOT
+except ImportError:
+    _here = Path(__file__).resolve()
+    for _p in [_here, *_here.parents]:
+        if (_p / "env_loader.py").exists():
+            sys.path.insert(0, str(_p))
+            from env_loader import PROJECT_ROOT
+            break
+    else:
+        raise ImportError("env_loader.py が見つかりません")
+
+project_root = PROJECT_ROOT / "platform_python_backend-testing" if not str(PROJECT_ROOT).endswith("platform_python_backend-testing") else PROJECT_ROOT
 if not project_root.exists():
-    raise RuntimeError(f"项目根目录不存在: {project_root}")
+    raise RuntimeError(f"プロジェクトルートディレクトリが存在しません: {project_root}")
 sys.path.insert(0, str(project_root))
 
-# 设置JWT密钥环境变量（使用shared_secret中的密钥）
+# JWT秘密鍵を環境変数に設定（shared_secretの鍵を使用）
 os.environ["JWT_SECRET_KEY"] = "f4fae6a6c089204d69efdc35438312a81005e1c3825a40cfc706cbe5ec0f50b1"
-
-# 加载环境变量
-from dotenv import load_dotenv
-env_path = Path(__file__).parent.parent.parent / ".env"
-if env_path.exists():
-    load_dotenv(env_path)
 
 
 class TestResultCollector:
-    """收集测试结果用于生成报告"""
+    """テスト結果を収集してレポートを生成する"""
 
     def __init__(self):
         self.results: Dict[str, List[Dict[str, Any]]] = {
-            "normal": [],    # 正常系测试
-            "error": [],     # 异常系测试
-            "security": []   # 安全测试
+            "normal": [],    # 正常系テスト
+            "error": [],     # 異常系テスト
+            "security": []   # セキュリティテスト
         }
         self.start_time = datetime.now()
         self.end_time = None
 
     def add_result(self, nodeid: str, outcome: str, duration: float):
-        """添加测试结果
+        """テスト結果を追加する
 
-        分类规则:
-        - 包含 "Security" 或测试名包含 "SEC" → security
-        - 包含 "Error" 或测试名包含 "_e0" 或 "_E" → error
-        - 其他 → normal
+        分類ルール:
+        - "Security" を含むまたはテスト名に "SEC" を含む → security
+        - "Error" を含むまたはテスト名に "_e0" または "_E" を含む → error
+        - その他 → normal
         """
         test_name = nodeid.split("::")[-1] if "::" in nodeid else nodeid
         class_name = nodeid.split("::")[-2] if nodeid.count("::") >= 2 else ""
 
-        # 获取可读名称
+        # 可読名を取得する
         readable_name = self._get_readable_name(test_name)
 
-        # 提取测试ID
+        # テストIDを抽出する
         test_id = self._extract_test_id(test_name)
 
         result = {
@@ -76,7 +81,7 @@ class TestResultCollector:
             "duration_ms": round(duration * 1000, 2)
         }
 
-        # 分类
+        # 分類する
         if "Security" in class_name or "SEC" in test_name.upper() or "security" in test_name.lower():
             self.results["security"].append(result)
         elif "Error" in class_name or "_e0" in test_name.lower() or "_E" in test_name:
@@ -85,63 +90,63 @@ class TestResultCollector:
             self.results["normal"].append(result)
 
     def _get_readable_name(self, test_name: str) -> str:
-        """将测试方法名转换为可读名称"""
+        """テストメソッド名を可読名に変換する"""
         name_map = {
-            # 正常系测试 (AUTH-001 ~ AUTH-012)
-            "test_login_success": "AUTH-001: 有效认证信息获取Token",
-            "test_get_current_user": "AUTH-002: 认证后获取用户信息",
-            "test_protected_route": "AUTH-003: 访问受保护路由",
-            "test_verify_password_success": "AUTH-004: 密码验证成功",
-            "test_get_password_hash": "AUTH-005: 密码哈希化",
-            "test_get_user_found": "AUTH-006: 用户查询成功",
-            "test_get_user_with_roles_found": "AUTH-007: 带角色用户查询成功",
-            "test_authenticate_user_with_roles_success": "AUTH-008: 带角色认证成功",
-            "test_create_access_token_with_expiry": "AUTH-009: 指定有效期Token生成",
-            "test_create_access_token_default_expiry": "AUTH-010: 默认有效期Token生成",
-            "test_create_access_token_with_roles_and_expiry": "AUTH-011: 带角色Token生成(指定期限)",
-            "test_create_access_token_with_roles_default_expiry": "AUTH-012: 带角色Token生成(默认期限)",
+            # 正常系テスト (AUTH-001 ~ AUTH-012)
+            "test_login_success": "AUTH-001: 有効な認証情報でToken取得",
+            "test_get_current_user": "AUTH-002: 認証後にユーザー情報取得",
+            "test_protected_route": "AUTH-003: 保護されたルートへのアクセス",
+            "test_verify_password_success": "AUTH-004: パスワード検証成功",
+            "test_get_password_hash": "AUTH-005: パスワードハッシュ化",
+            "test_get_user_found": "AUTH-006: ユーザークエリ成功",
+            "test_get_user_with_roles_found": "AUTH-007: ロール付きユーザークエリ成功",
+            "test_authenticate_user_with_roles_success": "AUTH-008: ロール付き認証成功",
+            "test_create_access_token_with_expiry": "AUTH-009: 有効期限指定Token生成",
+            "test_create_access_token_default_expiry": "AUTH-010: デフォルト有効期限Token生成",
+            "test_create_access_token_with_roles_and_expiry": "AUTH-011: ロール付きToken生成(期限指定)",
+            "test_create_access_token_with_roles_default_expiry": "AUTH-012: ロール付きToken生成(デフォルト期限)",
 
-            # 异常系测试 (AUTH-E01 ~ AUTH-E18)
-            "test_login_invalid_password": "AUTH-E01: 无效密码返回401",
-            "test_login_unknown_user": "AUTH-E02: 不存在用户返回401",
-            "test_expired_token": "AUTH-E03: 过期Token返回401",
-            "test_malformed_token": "AUTH-E04: 无效Token格式返回401",
-            "test_no_auth_header": "AUTH-E05: 无认证头返回401",
-            "test_disabled_user": "AUTH-E06: 禁用用户返回400",
-            "test_insufficient_roles": "AUTH-E07: 权限不足返回403",
-            "test_verify_password_failure": "AUTH-E08: 密码验证失败",
-            "test_get_user_not_found": "AUTH-E09: 不存在用户返回None",
-            "test_authenticate_user_with_roles_unknown": "AUTH-E10: 带角色认证-用户不存在",
-            "test_authenticate_user_with_roles_wrong_password": "AUTH-E11: 带角色认证-密码错误",
-            "test_get_current_user_no_sub": "AUTH-E12: 无sub字段Token返回401",
-            "test_get_current_user_unknown_sub": "AUTH-E13: sub不存在于DB返回401",
-            "test_require_all_roles_partial_match": "AUTH-E14: require_all_roles部分匹配返回403",
-            "test_get_current_user_with_roles_no_sub": "AUTH-E15: 带角色获取用户-无sub返回401",
-            "test_get_current_user_with_roles_jwt_error": "AUTH-E16: 带角色获取用户-无效Token",
-            "test_get_current_user_with_roles_unknown_user": "AUTH-E17: 带角色获取用户-用户不存在",
-            "test_disabled_user_with_roles": "AUTH-E18: 带角色禁用用户返回400",
+            # 異常系テスト (AUTH-E01 ~ AUTH-E18)
+            "test_login_invalid_password": "AUTH-E01: 無効なパスワードで401返す",
+            "test_login_unknown_user": "AUTH-E02: 存在しないユーザーで401返す",
+            "test_expired_token": "AUTH-E03: 期限切れTokenで401返す",
+            "test_malformed_token": "AUTH-E04: 無効なToken形式で401返す",
+            "test_no_auth_header": "AUTH-E05: 認証ヘッダーなしで401返す",
+            "test_disabled_user": "AUTH-E06: 無効化されたユーザーで400返す",
+            "test_insufficient_roles": "AUTH-E07: 権限不足で403返す",
+            "test_verify_password_failure": "AUTH-E08: パスワード検証失敗",
+            "test_get_user_not_found": "AUTH-E09: 存在しないユーザーでNone返す",
+            "test_authenticate_user_with_roles_unknown": "AUTH-E10: ロール付き認証-ユーザー不存在",
+            "test_authenticate_user_with_roles_wrong_password": "AUTH-E11: ロール付き認証-パスワード誤り",
+            "test_get_current_user_no_sub": "AUTH-E12: subフィールドなしTokenで401返す",
+            "test_get_current_user_unknown_sub": "AUTH-E13: subがDBに存在せず401返す",
+            "test_require_all_roles_partial_match": "AUTH-E14: require_all_roles部分一致で403返す",
+            "test_get_current_user_with_roles_no_sub": "AUTH-E15: ロール付きユーザー取得-subなしで401返す",
+            "test_get_current_user_with_roles_jwt_error": "AUTH-E16: ロール付きユーザー取得-無効Token",
+            "test_get_current_user_with_roles_unknown_user": "AUTH-E17: ロール付きユーザー取得-ユーザー不存在",
+            "test_disabled_user_with_roles": "AUTH-E18: ロール付き無効化ユーザーで400返す",
 
-            # 安全测试 (AUTH-SEC-01 ~ AUTH-SEC-08)
-            "test_password_is_hashed": "AUTH-SEC-01: 密码bcrypt哈希验证",
-            "test_token_modified_rejected": "AUTH-SEC-02: 篡改Token被拒绝",
-            "test_password_not_in_response": "AUTH-SEC-03: 响应不包含密码信息",
-            "test_token_expiry_enforced": "AUTH-SEC-04: Token有效期强制执行",
-            "test_default_secret_key_warning": "AUTH-SEC-05: 默认SECRET_KEY警告",
-            "test_jwt_alg_none_attack_rejected": "AUTH-SEC-06: JWT alg=none攻击防御",
-            "test_jwt_role_tampering_rejected": "AUTH-SEC-07: JWT角色篡改检测",
-            "test_role_escalation_prevented": "AUTH-SEC-08: 角色提权防止",
+            # セキュリティテスト (AUTH-SEC-01 ~ AUTH-SEC-08)
+            "test_password_is_hashed": "AUTH-SEC-01: パスワードbcryptハッシュ検証",
+            "test_token_modified_rejected": "AUTH-SEC-02: 改ざんされたTokenは拒否される",
+            "test_password_not_in_response": "AUTH-SEC-03: レスポンスにパスワード情報を含まない",
+            "test_token_expiry_enforced": "AUTH-SEC-04: Token有効期限が強制される",
+            "test_default_secret_key_warning": "AUTH-SEC-05: デフォルトSECRET_KEYで警告",
+            "test_jwt_alg_none_attack_rejected": "AUTH-SEC-06: JWT alg=none攻撃を防御",
+            "test_jwt_role_tampering_rejected": "AUTH-SEC-07: JWTロール改ざんを検出",
+            "test_role_escalation_prevented": "AUTH-SEC-08: ロール昇格を防止",
         }
         return name_map.get(test_name, test_name)
 
     def _extract_test_id(self, test_name: str) -> str:
-        """从测试名称提取测试ID"""
+        """テスト名からテストIDを抽出する"""
         readable = self._get_readable_name(test_name)
         if ":" in readable:
             return readable.split(":")[0].strip()
         return ""
 
     def get_summary(self) -> Dict[str, Any]:
-        """获取测试摘要"""
+        """テストサマリーを取得する"""
         total = sum(len(v) for v in self.results.values())
         passed = sum(
             1 for cat in self.results.values()
@@ -175,40 +180,40 @@ class TestResultCollector:
         }
 
     def generate_markdown_report(self) -> str:
-        """生成Markdown格式报告"""
+        """Markdown形式のレポートを生成する"""
         summary = self.get_summary()
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-        report = f"""# auth 测试报告
+        report = f"""# auth テストレポート
 
-## 测试概要
+## テスト概要
 
-| 项目 | 值 |
+| 項目 | 値 |
 |------|-----|
-| 测试对象 | `app/core/auth.py`, `app/auth/router.py`, `app/models/auth.py` |
-| 测试规格 | `docs/testing/plugins/auth_tests.md` |
-| 执行时间 | {timestamp} |
-| 覆盖率目标 | 90% |
+| テスト対象 | `app/core/auth.py`, `app/auth/router.py`, `app/models/auth.py` |
+| テスト仕様 | `docs/testing/plugins/auth_tests.md` |
+| 実行時刻 | {timestamp} |
+| カバレッジ目標 | 90% |
 
-## 测试结果统计
+## テスト結果統計
 
-| 类别 | 总数 | 通过 | 失败 | 预期失败 | 跳过 |
+| カテゴリ | 総数 | 通過 | 失敗 | 予想失敗 | スキップ |
 |------|------|------|------|----------|------|
 | 正常系 | {len(self.results['normal'])} | {sum(1 for r in self.results['normal'] if r['outcome']=='passed')} | {sum(1 for r in self.results['normal'] if r['outcome']=='failed')} | {sum(1 for r in self.results['normal'] if r['outcome']=='xfailed')} | {sum(1 for r in self.results['normal'] if r['outcome']=='skipped')} |
-| 异常系 | {len(self.results['error'])} | {sum(1 for r in self.results['error'] if r['outcome']=='passed')} | {sum(1 for r in self.results['error'] if r['outcome']=='failed')} | {sum(1 for r in self.results['error'] if r['outcome']=='xfailed')} | {sum(1 for r in self.results['error'] if r['outcome']=='skipped')} |
-| 安全测试 | {len(self.results['security'])} | {sum(1 for r in self.results['security'] if r['outcome']=='passed')} | {sum(1 for r in self.results['security'] if r['outcome']=='failed')} | {sum(1 for r in self.results['security'] if r['outcome']=='xfailed')} | {sum(1 for r in self.results['security'] if r['outcome']=='skipped')} |
-| **合计** | **{summary['total']}** | **{summary['passed']}** | **{summary['failed']}** | **{summary['xfailed']}** | **{summary['skipped']}** |
+| 異常系 | {len(self.results['error'])} | {sum(1 for r in self.results['error'] if r['outcome']=='passed')} | {sum(1 for r in self.results['error'] if r['outcome']=='failed')} | {sum(1 for r in self.results['error'] if r['outcome']=='xfailed')} | {sum(1 for r in self.results['error'] if r['outcome']=='skipped')} |
+| セキュリティテスト | {len(self.results['security'])} | {sum(1 for r in self.results['security'] if r['outcome']=='passed')} | {sum(1 for r in self.results['security'] if r['outcome']=='failed')} | {sum(1 for r in self.results['security'] if r['outcome']=='xfailed')} | {sum(1 for r in self.results['security'] if r['outcome']=='skipped')} |
+| **合計** | **{summary['total']}** | **{summary['passed']}** | **{summary['failed']}** | **{summary['xfailed']}** | **{summary['skipped']}** |
 
-## 测试通过率
+## テスト通過率
 
-- **实际通过率**: {summary['pass_rate']}
-- **有效通过率** (排除预期失败): {summary['effective_pass_rate']}
+- **実際の通過率**: {summary['pass_rate']}
+- **有効通過率** (予想失敗を除外): {summary['effective_pass_rate']}
 
 ---
 
-## 正常系测试详情
+## 正常系テスト詳細
 
-| ID | 测试名称 | 结果 | 执行时间 |
+| ID | テスト名 | 結果 | 実行時間 |
 |----|---------|------|----------|
 """
         for r in self.results['normal']:
@@ -216,9 +221,9 @@ class TestResultCollector:
             report += f"| {r['test_id']} | {r['readable_name']} | {icon} | {r['duration_ms']}ms |\n"
 
         report += """
-## 异常系测试详情
+## 異常系テスト詳細
 
-| ID | 测试名称 | 结果 | 执行时间 |
+| ID | テスト名 | 結果 | 実行時間 |
 |----|---------|------|----------|
 """
         for r in self.results['error']:
@@ -226,36 +231,36 @@ class TestResultCollector:
             report += f"| {r['test_id']} | {r['readable_name']} | {icon} | {r['duration_ms']}ms |\n"
 
         report += """
-## 安全测试详情
+## セキュリティテスト詳細
 
-| ID | 测试名称 | 结果 | 执行时间 |
+| ID | テスト名 | 結果 | 実行時間 |
 |----|---------|------|----------|
 """
         for r in self.results['security']:
             icon = "✅" if r['outcome'] == 'passed' else "❌" if r['outcome'] == 'failed' else "⏭️"
             report += f"| {r['test_id']} | {r['readable_name']} | {icon} | {r['duration_ms']}ms |\n"
 
-        # 结论
+        # 結論
         if summary['failed'] == 0:
-            conclusion = "✅ 所有测试通过！认证模块运行正常。"
+            conclusion = "✅ 全テスト通過！認証モジュールは正常に動作しています。"
         else:
-            conclusion = f"⚠️ {summary['failed']} 个测试失败，需要检查和修复。"
+            conclusion = f"⚠️ {summary['failed']} 個のテストが失敗しました。確認と修正が必要です。"
 
         report += f"""
 ---
 
-## 结论
+## 結論
 
 {conclusion}
 
 ---
 
-*报告生成时间: {timestamp}*
+*レポート生成時刻: {timestamp}*
 """
         return report
 
     def generate_json_report(self) -> str:
-        """生成JSON格式报告"""
+        """JSON形式のレポートを生成する"""
         summary = self.get_summary()
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
@@ -289,13 +294,13 @@ class TestResultCollector:
         return json.dumps(report_data, indent=2, ensure_ascii=False)
 
 
-# 全局收集器实例
+# グローバルコレクターインスタンス
 _collector = TestResultCollector()
 
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
 def pytest_runtest_makereport(item, call):
-    """捕获每个测试的结果"""
+    """各テストの結果をキャプチャする"""
     outcome = yield
     report = outcome.get_result()
 
@@ -308,42 +313,42 @@ def pytest_runtest_makereport(item, call):
 
 
 def pytest_sessionfinish(session, exitstatus):
-    """测试会话结束时生成报告"""
+    """テストセッション終了時にレポートを生成する"""
     _collector.end_time = datetime.now()
 
-    # 确定报告输出目录
+    # レポート出力ディレクトリを確定する
     reports_dir = Path(__file__).parent.parent / "reports"
     reports_dir.mkdir(parents=True, exist_ok=True)
 
-    # 生成Markdown报告
+    # Markdownレポートを生成する
     md_report = _collector.generate_markdown_report()
     md_path = reports_dir / "TestReport_auth.md"
     with open(md_path, "w", encoding="utf-8") as f:
         f.write(md_report)
 
-    # 生成JSON报告
+    # JSONレポートを生成する
     json_report = _collector.generate_json_report()
     json_path = reports_dir / "TestReport_auth.json"
     with open(json_path, "w", encoding="utf-8") as f:
         f.write(json_report)
 
     print(f"\n{'='*60}")
-    print(f"📊 测试报告已生成:")
+    print(f"📊 テストレポートを生成しました:")
     print(f"   - Markdown: {md_path}")
     print(f"   - JSON: {json_path}")
     print(f"{'='*60}")
 
 
 # ============================================================================
-# Fixtures（测试夹具）
+# Fixtures（テストフィクスチャ）
 # ============================================================================
 
 @pytest.fixture(scope="session")
 def app():
-    """FastAPI应用程序实例（最小化测试版本）
+    """FastAPIアプリケーションインスタンス（最小化テスト版）
 
-    创建一个只包含auth路由的最小FastAPI应用，
-    避免导入其他可能缺少依赖的模块。
+    認証ルートのみを含む最小限のFastAPIアプリを作成し、
+    他の依存関係が不足する可能性のあるモジュールのインポートを回避する。
     """
     from fastapi import FastAPI
     from app.auth.router import router as auth_router
@@ -356,10 +361,10 @@ def app():
 
 @pytest_asyncio.fixture
 async def async_client(app):
-    """异步HTTP测试客户端
+    """非同期HTTPテストクライアント
 
-    使用ASGITransport直接连接FastAPI应用。
-    无需启动实际HTTP服务器即可进行测试。
+    ASGITransportを使用してFastAPIアプリに直接接続する。
+    実際のHTTPサーバーを起動せずにテストを実行できる。
     """
     from httpx import AsyncClient, ASGITransport
     transport = ASGITransport(app=app)
@@ -369,10 +374,10 @@ async def async_client(app):
 
 @pytest.fixture
 def valid_token():
-    """有效的JWT Token（testuser用）
+    """有効なJWT Token（testuser用）
 
-    注意: 使用应用的SECRET_KEY进行签名。
-    确保端点测试中认证功能正常工作。
+    注意: アプリケーションのSECRET_KEYを使用して署名する。
+    エンドポイントテストで認証機能が正常に動作することを確認する。
     """
     from jose import jwt
     from app.core.auth import SECRET_KEY, ALGORITHM
@@ -385,7 +390,7 @@ def valid_token():
 
 @pytest.fixture
 def admin_token():
-    """管理员JWT Token（全角色）"""
+    """管理者JWT Token（全ロール付き）"""
     from jose import jwt
     from app.core.auth import SECRET_KEY, ALGORITHM
     payload = {

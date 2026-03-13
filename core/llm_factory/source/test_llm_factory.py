@@ -17,7 +17,7 @@ from unittest.mock import patch, MagicMock
 import sys
 from pathlib import Path
 
-# 導入被測試模块
+# テスト対象のモジュールをインポートする
 project_root = Path(__file__).parent.parent.parent.parent / "platform_python_backend-testing"
 sys.path.insert(0, str(project_root))
 
@@ -39,13 +39,13 @@ class TestLLMFactoryCreateLLM:
           - create_llm()をmodel_name=Noneで呼んだ場合、
             settings.MODEL_NAME(デフォルト: "gpt-5.1-chat")が使用されることを検証
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.llm_factory import LLMFactory
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         result = LLMFactory.create_llm(model_name=None)
 
-        # Assert - 验证结果符合预期
+        # Assert - 結果が予期したものと一致することを確認する
         assert mock_chat_openai.called, "mock_chat_openai was not called!"
         call_kwargs = mock_chat_openai.call_args[1]
         assert call_kwargs["model"] == "gpt-5.1-chat"  # settings.MODEL_NAMEのデフォルト値
@@ -75,13 +75,13 @@ class TestLLMFactoryCreateLLM:
         テスト目的:
           - 全15エイリアスが正しいモデル名に解決されることを検証
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.llm_factory import LLMFactory
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         LLMFactory.create_llm(model_name=alias)
 
-        # Assert - 验证结果符合预期
+        # Assert - 結果が期待されるものと一致することを確認する
         call_kwargs = mock_chat_openai.call_args[1]
         assert call_kwargs["model"] == expected_model
 
@@ -93,13 +93,13 @@ class TestLLMFactoryCreateLLM:
         テスト目的:
           - エイリアスではなく直接モデル名を指定した場合、そのまま使用される
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.llm_factory import LLMFactory
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         LLMFactory.create_llm(model_name="gpt-5.1-chat")
 
-        # Assert - 验证结果符合预期
+        # Assert - 結果が予期したものと一致することを確認する
         call_kwargs = mock_chat_openai.call_args[1]
         assert call_kwargs["model"] == "gpt-5.1-chat"
 
@@ -112,13 +112,13 @@ class TestLLMFactoryCreateLLM:
           - gpt-5.1-chatはconfig.temperature=Noneだが、
             引数temperature=0.7を指定した場合、引数が優先される
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.llm_factory import LLMFactory
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         LLMFactory.create_llm(model_name="gpt-5.1-chat", temperature=0.7)
 
-        # Assert - 验证结果符合预期
+        # Assert - 結果が予期したものと一致することを確認する
         call_kwargs = mock_chat_openai.call_args[1]
         assert call_kwargs["temperature"] == 0.7
 
@@ -130,13 +130,13 @@ class TestLLMFactoryCreateLLM:
         テスト目的:
           - bedrock-claude-sonnetのconfig.temperature=0.1が使用される
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.llm_factory import LLMFactory
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         LLMFactory.create_llm(model_name="bedrock-claude-sonnet", temperature=None)
 
-        # Assert - 验证结果符合预期
+        # Assert - 結果が期待されるものと一致することを確認する
         call_kwargs = mock_chat_openai.call_args[1]
         assert call_kwargs["temperature"] == 0.1
 
@@ -149,13 +149,13 @@ class TestLLMFactoryCreateLLM:
           - gpt-5.1-chatはconfig.temperature=Noneのため、
             引数もNoneの場合はllm_paramsに"temperature"キーが含まれない
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.llm_factory import LLMFactory
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         LLMFactory.create_llm(model_name="gpt-5.1-chat", temperature=None)
 
-        # Assert - 验证结果符合预期
+        # Assert - 結果が期待されるものと一致することを確認する
         call_kwargs = mock_chat_openai.call_args[1]
         assert "temperature" not in call_kwargs
 
@@ -168,13 +168,13 @@ class TestLLMFactoryCreateLLM:
           - gpt-5.1-chatのconfigに"max_completion_tokens"キーがあるため、
             llm_paramsに"max_completion_tokens"が設定される ("max_tokens"ではない)
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.llm_factory import LLMFactory
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         LLMFactory.create_llm(model_name="gpt-5.1-chat")
 
-        # Assert - 验证结果符合预期
+        # Assert - 結果が予期したものと一致することを確認する
         call_kwargs = mock_chat_openai.call_args[1]
         assert call_kwargs["max_completion_tokens"] == 16000
         assert "max_tokens" not in call_kwargs
@@ -188,13 +188,13 @@ class TestLLMFactoryCreateLLM:
           - bedrock-claude-sonnetのconfigには"max_tokens"キーがあるため、
             llm_paramsに"max_tokens"が設定される ("max_completion_tokens"ではない)
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.llm_factory import LLMFactory
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         LLMFactory.create_llm(model_name="bedrock-claude-sonnet")
 
-        # Assert - 验证结果符合预期
+        # Assert - 結果が予期したものと一致することを確認する
         call_kwargs = mock_chat_openai.call_args[1]
         assert call_kwargs["max_tokens"] == 8000
         assert "max_completion_tokens" not in call_kwargs
@@ -208,13 +208,13 @@ class TestLLMFactoryCreateLLM:
           - gpt-5.1-chatでmax_tokens=5000を指定した場合、
             max_completion_tokens=5000として設定される
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.llm_factory import LLMFactory
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         LLMFactory.create_llm(model_name="gpt-5.1-chat", max_tokens=5000)
 
-        # Assert - 验证结果符合预期
+        # Assert - 結果が予期したものと一致することを確認する
         call_kwargs = mock_chat_openai.call_args[1]
         assert call_kwargs["max_completion_tokens"] == 5000
 
@@ -227,13 +227,13 @@ class TestLLMFactoryCreateLLM:
           - bedrock-claude-sonnetでmax_tokens=2000を指定した場合、
             max_tokens=2000として設定される
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.llm_factory import LLMFactory
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         LLMFactory.create_llm(model_name="bedrock-claude-sonnet", max_tokens=2000)
 
-        # Assert - 验证结果符合预期
+        # Assert - 結果が予期したものと一致することを確認する
         call_kwargs = mock_chat_openai.call_args[1]
         assert call_kwargs["max_tokens"] == 2000
 
@@ -246,13 +246,13 @@ class TestLLMFactoryCreateLLM:
           - gpt-5.1-chatのconfigにreasoning_effort="high"があるため、
             llm_paramsに追加される
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.llm_factory import LLMFactory
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         LLMFactory.create_llm(model_name="gpt-5.1-chat")
 
-        # Assert - 验证结果符合预期
+        # Assert - 結果が予期したものと一致することを確認する
         call_kwargs = mock_chat_openai.call_args[1]
         assert call_kwargs["reasoning_effort"] == "high"
 
@@ -265,13 +265,13 @@ class TestLLMFactoryCreateLLM:
           - bedrock-claude-sonnetのconfigにreasoning_effortがないため、
             llm_paramsに含まれない
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.llm_factory import LLMFactory
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         LLMFactory.create_llm(model_name="bedrock-claude-sonnet")
 
-        # Assert - 验证结果符合预期
+        # Assert - 結果が予期したものと一致することを確認する
         call_kwargs = mock_chat_openai.call_args[1]
         assert "reasoning_effort" not in call_kwargs
 
@@ -283,13 +283,13 @@ class TestLLMFactoryCreateLLM:
         テスト目的:
           - use_responses_api=Trueを指定した場合、llm_paramsに追加される
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.llm_factory import LLMFactory
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         LLMFactory.create_llm(model_name="gpt-5.1-chat", use_responses_api=True)
 
-        # Assert - 验证结果符合预期
+        # Assert - 結果が予期したものと一致することを確認する
         call_kwargs = mock_chat_openai.call_args[1]
         assert call_kwargs["use_responses_api"] is True
 
@@ -301,13 +301,13 @@ class TestLLMFactoryCreateLLM:
         テスト目的:
           - use_responses_api=Falseの場合、llm_paramsに含まれない
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.llm_factory import LLMFactory
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         LLMFactory.create_llm(model_name="gpt-5.1-chat", use_responses_api=False)
 
-        # Assert - 验证结果符合预期
+        # Assert - 結果が予期したものと一致することを確認する
         call_kwargs = mock_chat_openai.call_args[1]
         assert "use_responses_api" not in call_kwargs
 
@@ -319,13 +319,13 @@ class TestLLMFactoryCreateLLM:
         テスト目的:
           - streaming=Trueを指定した場合、llm_paramsに設定される
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.llm_factory import LLMFactory
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         LLMFactory.create_llm(model_name="gpt-5.1-chat", streaming=True)
 
-        # Assert - 验证结果符合预期
+        # Assert - 結果が期待されるものと一致することを確認する
         call_kwargs = mock_chat_openai.call_args[1]
         assert call_kwargs["streaming"] is True
 
@@ -338,13 +338,13 @@ class TestLLMFactoryCreateLLM:
           - kwargs経由で追加されたパラメータ(top_p=0.9など)が
             ChatOpenAI初期化時に正しく伝播される
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.llm_factory import LLMFactory
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         LLMFactory.create_llm(model_name="gpt-5.1-chat", top_p=0.9)
 
-        # Assert - 验证结果符合预期
+        # Assert - 結果が予期したものと一致することを確認する
         call_kwargs = mock_chat_openai.call_args[1]
         assert call_kwargs["top_p"] == 0.9
 
@@ -364,13 +364,13 @@ class TestLLMFactoryModelInfo:
           - "default"エイリアス → "gpt-5.1-chat" に解決され、
             そのconfig辞書(コピー)が返されることを検証
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.llm_factory import LLMFactory
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         info = LLMFactory.get_model_info("default")
 
-        # Assert - 验证结果符合预期
+        # Assert - 結果が予期したものと一致することを確認する
         assert info["model_name"] == "gpt-5.1-chat"
         assert info["api_key_field"] == "GPT5_1_CHAT_API_KEY"
         assert info["category"] == "production"
@@ -383,13 +383,13 @@ class TestLLMFactoryModelInfo:
         テスト目的:
           - MODEL_CONFIGSに定義された全7モデルが返されることを検証
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.llm_factory import LLMFactory
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         models = LLMFactory.list_available_models()
 
-        # Assert - 验证结果符合预期
+        # Assert - 結果が予期したものと一致することを確認する
         assert len(models) == 7
         expected_models = [
             "gpt-5.1-chat", "gpt-5.1-codex", "bedrock-claude-sonnet",
@@ -406,13 +406,13 @@ class TestLLMFactoryModelInfo:
         テスト目的:
           - "production"カテゴリに4モデルが含まれることを検証
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.llm_factory import LLMFactory
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         models = LLMFactory.list_models_by_category("production")
 
-        # Assert - 验证结果符合预期
+        # Assert - 結果が予期したものと一致することを確認する
         assert len(models) == 4
         assert "gpt-5.1-chat" in models
         assert "gpt-5.1-codex" in models
@@ -427,13 +427,13 @@ class TestLLMFactoryModelInfo:
         テスト目的:
           - "development"カテゴリに1モデル(gpt-5-mini)が含まれることを検証
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.llm_factory import LLMFactory
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         models = LLMFactory.list_models_by_category("development")
 
-        # Assert - 验证结果符合预期
+        # Assert - 結果が予期したものと一致することを確認する
         assert len(models) == 1
         assert "gpt-5-mini" in models
 
@@ -446,13 +446,13 @@ class TestLLMFactoryModelInfo:
           - "lightweight"カテゴリに2モデル(gpt-5-nano, bedrock-claude-haiku)が
             含まれることを検証
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.llm_factory import LLMFactory
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         models = LLMFactory.list_models_by_category("lightweight")
 
-        # Assert - 验证结果符合预期
+        # Assert - 結果が予期したものと一致することを確認する
         assert len(models) == 2
         assert "gpt-5-nano" in models
         assert "bedrock-claude-haiku" in models
@@ -466,13 +466,13 @@ class TestLLMFactoryModelInfo:
           - 全カテゴリ(production, development, lightweight)が返され、
             各カテゴリに正しい数のモデルが含まれることを検証
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.llm_factory import LLMFactory
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         categories = LLMFactory.get_all_categories()
 
-        # Assert - 验证结果符合预期
+        # Assert - 結果が予期したものと一致することを確認する
         assert len(categories) == 3
         assert "production" in categories
         assert "development" in categories
@@ -497,7 +497,7 @@ class TestLLMFactoryAddModelConfig:
           - 有効なconfig辞書を渡した場合、MODEL_CONFIGSに追加され、
             デフォルト値(max_tokens, temperature, description)が設定されることを検証
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.llm_factory import LLMFactory
 
         new_config = {
@@ -505,10 +505,10 @@ class TestLLMFactoryAddModelConfig:
             "model_name": "new-model-v1",
         }
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         LLMFactory.add_model_config("new-model-v1", new_config)
 
-        # Assert - 验证结果符合预期
+        # Assert - 結果が予期したものと一致することを確認する
         assert "new-model-v1" in LLMFactory.MODEL_CONFIGS
         added = LLMFactory.MODEL_CONFIGS["new-model-v1"]
         assert added["api_key_field"] == "NEW_MODEL_API_KEY"
@@ -537,13 +537,13 @@ class TestConvenienceFunctions:
           - get_llm()はkwargsにuse_responses_apiが未指定の場合、
             自動的にuse_responses_api=Trueを追加してcreate_llmを呼ぶ
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.llm_factory import get_llm
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         get_llm()
 
-        # Assert - 验证结果符合预期
+        # Assert - 結果が予期したものと一致することを確認する
         call_kwargs = mock_chat_openai.call_args[1]
         assert call_kwargs["use_responses_api"] is True
 
@@ -556,13 +556,13 @@ class TestConvenienceFunctions:
           - get_llm() -> create_llm() の呼び出しチェーンを検証
           - get_llm()で自動追加されるuse_responses_api=Trueも確認
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.llm_factory import get_policy_llm
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         get_policy_llm()
 
-        # Assert - 验证结果符合预期
+        # Assert - 結果が予期したものと一致することを確認する
         call_kwargs = mock_chat_openai.call_args[1]
         assert call_kwargs["model"] == "gpt-5-mini"
         assert call_kwargs.get("use_responses_api") is True
@@ -575,13 +575,13 @@ class TestConvenienceFunctions:
         テスト目的:
           - get_review_llm()が"review"エイリアス経由でgpt-5.1-codexを使用することを検証
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.llm_factory import get_review_llm
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         get_review_llm()
 
-        # Assert - 验证结果符合预期
+        # Assert - 結果が予期したものと一致することを確認する
         call_kwargs = mock_chat_openai.call_args[1]
         assert call_kwargs["model"] == "gpt-5.1-codex"
         assert call_kwargs.get("use_responses_api") is True
@@ -594,13 +594,13 @@ class TestConvenienceFunctions:
         テスト目的:
           - get_chat_llm()が"chat"エイリアス経由でgpt-5-miniを使用することを検証
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.llm_factory import get_chat_llm
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         get_chat_llm()
 
-        # Assert - 验证结果符合预期
+        # Assert - 結果が期待されるものと一致することを確認する
         call_kwargs = mock_chat_openai.call_args[1]
         assert call_kwargs["model"] == "gpt-5-mini"
         assert call_kwargs.get("use_responses_api") is True
@@ -613,13 +613,13 @@ class TestConvenienceFunctions:
         テスト目的:
           - get_extraction_llm()が"extraction"エイリアス経由でgpt-5-nanoを使用することを検証
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.llm_factory import get_extraction_llm
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         get_extraction_llm()
 
-        # Assert - 验证结果符合预期
+        # Assert - 結果が予期したものと一致することを確認する
         call_kwargs = mock_chat_openai.call_args[1]
         assert call_kwargs["model"] == "gpt-5-nano"
         assert call_kwargs.get("use_responses_api") is True
@@ -632,13 +632,13 @@ class TestConvenienceFunctions:
         テスト目的:
           - get_production_llm()が"production"エイリアス経由でgpt-5.1-chatを使用することを検証
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.llm_factory import get_production_llm
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         get_production_llm()
 
-        # Assert - 验证结果符合预期
+        # Assert - 結果が予期したものと一致することを確認する
         call_kwargs = mock_chat_openai.call_args[1]
         assert call_kwargs["model"] == "gpt-5.1-chat"
         assert call_kwargs.get("use_responses_api") is True
@@ -651,13 +651,13 @@ class TestConvenienceFunctions:
         テスト目的:
           - get_development_llm()が"development"エイリアス経由でgpt-5-miniを使用することを検証
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.llm_factory import get_development_llm
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         get_development_llm()
 
-        # Assert - 验证结果符合预期
+        # Assert - 結果が期待されるものと一致することを確認する
         call_kwargs = mock_chat_openai.call_args[1]
         assert call_kwargs["model"] == "gpt-5-mini"
         assert call_kwargs.get("use_responses_api") is True
@@ -670,13 +670,13 @@ class TestConvenienceFunctions:
         テスト目的:
           - get_lightweight_llm()が"lightweight"エイリアス経由でgpt-5-nanoを使用することを検証
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.llm_factory import get_lightweight_llm
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         get_lightweight_llm()
 
-        # Assert - 验证结果符合预期
+        # Assert - 結果が期待されるものと一致することを確認する
         call_kwargs = mock_chat_openai.call_args[1]
         assert call_kwargs["model"] == "gpt-5-nano"
         assert call_kwargs.get("use_responses_api") is True
@@ -699,10 +699,10 @@ class TestLLMFactoryErrors:
           - MODEL_CONFIGSに存在しないモデル名を指定した場合、
             適切なエラーメッセージを含むValueErrorが発生することを検証
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.llm_factory import LLMFactory
 
-        # Act & Assert - 执行并验证异常
+        # アクション & アサート - 異常の実行と検証
         with pytest.raises(ValueError, match="Unknown model: unknown-model"):
             LLMFactory.create_llm(model_name="unknown-model")
 
@@ -715,10 +715,10 @@ class TestLLMFactoryErrors:
           - MODEL_ALIASESに存在しない名前は、MODEL_CONFIGSにも存在しないため、
             ValueErrorが発生することを検証
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.llm_factory import LLMFactory
 
-        # Act & Assert - 执行并验证异常
+        # アクション & アサート - 例外の発生と検証
         with pytest.raises(ValueError, match="Unknown model"):
             LLMFactory.create_llm(model_name="nonexistent-alias")
 
@@ -731,7 +731,7 @@ class TestLLMFactoryErrors:
           - settings.GPT5_1_CHAT_API_KEYがNone/空の場合にValueErrorが発生
           - エラーメッセージにはフィールド名が含まれるが、キー値は含まれない
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.llm_factory import LLMFactory
 
         # settingsのAPIキーをNoneに設定
@@ -740,7 +740,7 @@ class TestLLMFactoryErrors:
             mock_settings.GPT5_1_CHAT_API_KEY = None
             mock_settings.DOCKER_BASE_URL = "http://localhost:11434"
 
-            # Act & Assert - 执行并验证异常
+            # アクション & アサート - 異常の実行と検証
             with pytest.raises(ValueError, match="API key not found: GPT5_1_CHAT_API_KEY"):
                 LLMFactory.create_llm(model_name="gpt-5.1-chat")
 
@@ -752,7 +752,7 @@ class TestLLMFactoryErrors:
         テスト目的:
           - 別のモデル(bedrock-claude-sonnet)でもAPIキー欠落時にValueErrorが発生することを検証
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.llm_factory import LLMFactory
 
         with patch("app.core.llm_factory.settings") as mock_settings:
@@ -760,7 +760,7 @@ class TestLLMFactoryErrors:
             mock_settings.CLAUDE_SONNET_4_5_KEY = None
             mock_settings.DOCKER_BASE_URL = "http://localhost:11434"
 
-            # Act & Assert - 执行并验证异常
+            # アクション & アサート - 異常の実行と検証
             with pytest.raises(ValueError, match="API key not found: CLAUDE_SONNET_4_5_KEY"):
                 LLMFactory.create_llm(model_name="bedrock-claude-sonnet")
 
@@ -772,10 +772,10 @@ class TestLLMFactoryErrors:
         テスト目的:
           - get_model_info()に未知モデル名を渡した場合、ValueErrorが発生することを検証
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.llm_factory import LLMFactory
 
-        # Act & Assert - 执行并验证异常
+        # アクション & アサート - 異常の実行と検証
         with pytest.raises(ValueError, match="Unknown model: unknown"):
             LLMFactory.get_model_info("unknown")
 
@@ -787,10 +787,10 @@ class TestLLMFactoryErrors:
         テスト目的:
           - 必須フィールド(api_key_field)が欠落している場合、ValueErrorが発生することを検証
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.llm_factory import LLMFactory
 
-        # Act & Assert - 执行并验证异常
+        # アクション & アサート - 異常の実行と検証
         with pytest.raises(ValueError, match="Missing required fields"):
             LLMFactory.add_model_config("bad-model", {
                 "model_name": "bad-model",
@@ -805,10 +805,10 @@ class TestLLMFactoryErrors:
         テスト目的:
           - 必須フィールド(model_name)が欠落している場合、ValueErrorが発生することを検証
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.llm_factory import LLMFactory
 
-        # Act & Assert - 执行并验证异常
+        # アクション & アサート - 例外の発生と検証
         with pytest.raises(ValueError, match="Missing required fields"):
             LLMFactory.add_model_config("bad-model", {
                 "api_key_field": "SOME_KEY",
@@ -824,13 +824,13 @@ class TestLLMFactoryErrors:
           - 存在しないカテゴリ名を指定した場合、空辞書が返されることを検証
           (エラーは発生しない)
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.llm_factory import LLMFactory
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         result = LLMFactory.list_models_by_category("premium")
 
-        # Assert - 验证结果符合预期
+        # Assert - 結果が予期したものと一致することを確認する
         assert result == {}
 
     def test_negative_temperature_no_validation(self, mock_chat_openai, mock_settings_env):
@@ -842,13 +842,13 @@ class TestLLMFactoryErrors:
           - llm_factory.pyにはtemperatureのバリデーションがないため、
             負数がそのままChatOpenAIに渡される(バリデーション不在の確認)
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.llm_factory import LLMFactory
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         LLMFactory.create_llm(model_name="gpt-5.1-chat", temperature=-1.0)
 
-        # Assert - 验证结果符合预期 (负数被接受)
+        # Assert - 結果が予期したものと一致することを確認（負の数が受け入れられる）
         call_kwargs = mock_chat_openai.call_args[1]
         assert call_kwargs["temperature"] == -1.0
 
@@ -860,13 +860,13 @@ class TestLLMFactoryErrors:
         テスト目的:
           - max_tokensのバリデーションがないため、0がそのまま渡される
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.llm_factory import LLMFactory
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         LLMFactory.create_llm(model_name="gpt-5.1-chat", max_tokens=0)
 
-        # Assert - 验证结果符合预期 (0被接受)
+        # Assert - 結果が予期したものと一致することを確認 (0が受け入れられる)
         call_kwargs = mock_chat_openai.call_args[1]
         assert call_kwargs["max_completion_tokens"] == 0
 
@@ -878,7 +878,7 @@ class TestLLMFactoryErrors:
         テスト目的:
           - MODEL_CONFIGSのreasoning_effortを一時的に不正値に変更して検証
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.llm_factory import LLMFactory
 
         # configのreasoning_effortを一時的に変更
@@ -886,7 +886,7 @@ class TestLLMFactoryErrors:
         try:
             LLMFactory.MODEL_CONFIGS["gpt-5.1-chat"]["reasoning_effort"] = "invalid"
 
-            # Act - 执行被测试函数
+            # Act - テスト対象の関数を実行する
             LLMFactory.create_llm(model_name="gpt-5.1-chat")
 
             # Assert - 验证结果符合预期 (不正値が受け入れられる)
@@ -916,7 +916,7 @@ class TestLLMFactorySecurity:
             テスト用のAPIキー値(test-gpt5-1-chat-key等)が含まれないことを検証
           - エラーメッセージにはフィールド名のみが表示されるべき
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.llm_factory import LLMFactory
         from conftest import MOCK_SETTINGS_ENV
 
@@ -925,7 +925,7 @@ class TestLLMFactorySecurity:
             mock_settings.GPT5_1_CHAT_API_KEY = None
             mock_settings.DOCKER_BASE_URL = "http://localhost:11434"
 
-            # Act & Assert - 执行并验证异常
+            # アクション & アサート - 異常の実行と検証
             with pytest.raises(ValueError) as exc_info:
                 LLMFactory.create_llm(model_name="gpt-5.1-chat")
 
@@ -946,10 +946,10 @@ class TestLLMFactorySecurity:
             参照していることを検証
           - 孤立したエイリアスはセキュリティリスク
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.llm_factory import LLMFactory
 
-        # Act & Assert - 验证所有别名
+        # アク & アサート - すべてのエイリアスを検証する
         for alias, target_model in LLMFactory.MODEL_ALIASES.items():
             assert target_model in LLMFactory.MODEL_CONFIGS, (
                 f"エイリアス '{alias}' が存在しないモデル '{target_model}' を参照しています"
@@ -966,7 +966,7 @@ class TestLLMFactorySecurity:
           - temperature: 0.1 (安定出力)
           - description: "Custom model" (情報漏洩なし)
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.llm_factory import LLMFactory
 
         new_config = {
@@ -974,10 +974,10 @@ class TestLLMFactorySecurity:
             "model_name": "safe-test-model",
         }
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         LLMFactory.add_model_config("safe-test-model", new_config)
 
-        # Assert - 验证安全的默认值
+        # Assert - 安全なデフォルト値の検証
         added = LLMFactory.MODEL_CONFIGS["safe-test-model"]
         assert added["max_tokens"] == 4096
         assert added["temperature"] == 0.1
@@ -992,10 +992,10 @@ class TestLLMFactorySecurity:
           - MODEL_CONFIGSの全7モデルにapi_key_fieldが定義され、
             空文字列やNoneでないことを検証
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.llm_factory import LLMFactory
 
-        # Act & Assert - 验证所有模型
+        # アクション & アサート - すべてのモデルの検証
         for model_name, config in LLMFactory.MODEL_CONFIGS.items():
             assert "api_key_field" in config, (
                 f"モデル '{model_name}' にapi_key_fieldが定義されていません"
@@ -1013,14 +1013,14 @@ class TestLLMFactorySecurity:
           - 全モデルがsettings.DOCKER_BASE_URLを使用してChatOpenAIを初期化すること
           - モデルごとに異なるbase_urlが設定されるとセキュリティリスクになる
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         from app.core.llm_factory import LLMFactory
         from app.core.config import settings
 
         test_models = ["gpt-5.1-chat", "bedrock-claude-sonnet", "gpt-5-mini"]
         expected_base_url = settings.DOCKER_BASE_URL  # 実際の設定値を使用
 
-        # Act & Assert - 验证每个模型使用同一 base_url
+        # Act & Assert - 各モデルが同じ base_url を使用することを確認する
         base_urls_used = []
         for model in test_models:
             mock_chat_openai.reset_mock()

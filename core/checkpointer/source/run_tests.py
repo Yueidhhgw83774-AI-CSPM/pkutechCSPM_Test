@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-运行 checkpointer 测试并捕获输出
+チェックポイントテストを実行し、出力をキャプチャする
 """
 import sys
 import subprocess
 
 def run_tests():
-    """运行测试并捕获输出"""
+    """テストを実行して出力をキャプチャする"""
     print("=" * 80)
     print("开始运行 checkpointer 测试")
     print("=" * 80)

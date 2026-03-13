@@ -1,20 +1,29 @@
 """
-MCP Plugin Sessions 测试配置
+MCP Plugin Sessions テスト設定
 
-测试规格: docs/testing/plugins/mcp/mcp_plugin_sessions_tests.md
-测试数量: 74 (正常系:41, 異常系:11, セキュリティ:22)
+テスト仕様: docs/testing/plugins/mcp/mcp_plugin_sessions_tests.md
+テスト数量: 74 (正常系:41, 異常系:11, セキュリティ:22)
 """
 
 import sys, os, pytest, pytest_asyncio, json
 from pathlib import Path
 from datetime import datetime
 from unittest.mock import patch, MagicMock, AsyncMock
-from dotenv import load_dotenv
 
-_env = Path(__file__).resolve().parents[5] / ".env"
-if _env.exists(): load_dotenv(_env)
-_root = os.environ.get("soure_root", "").strip().strip('"').strip("'")
-project_root = Path(_root) if _root and Path(_root).exists() else Path(__file__).resolve().parents[5] / "platform_python_backend-testing"
+# プロジェクトルート設定（env_loader を使用）
+try:
+    from env_loader import PROJECT_ROOT
+except ImportError:
+    _here = Path(__file__).resolve()
+    for _p in [_here, *_here.parents]:
+        if (_p / "env_loader.py").exists():
+            sys.path.insert(0, str(_p))
+            from env_loader import PROJECT_ROOT
+            break
+    else:
+        raise ImportError("env_loader.py が見つかりません")
+
+project_root = PROJECT_ROOT / "platform_python_backend-testing"
 sys.path.insert(0, str(project_root))
 
 # Mock weasyprint
@@ -133,14 +142,19 @@ class TestResultCollector:
 def pytest_runtest_makereport(item, call):
     outcome = yield
     rep = outcome.get_result()
-    if rep.when == "call": item.session.config._test_collector.add_result(item.nodeid, rep.outcome, rep.duration)
+    if rep.when == "call":
+        collector = getattr(item.session.config, '_test_collector', None)
+        if collector:
+            collector.add_result(item.nodeid, rep.outcome, rep.duration)
 
 
 def pytest_sessionstart(session): session.config._test_collector = TestResultCollector()
 
 
 def pytest_sessionfinish(session, exitstatus):
-    c = session.config._test_collector
+    c = getattr(session.config, '_test_collector', None)
+    if not c:
+        return
     reports_dir = Path(__file__).parent.parent / "reports"
     reports_dir.mkdir(parents=True, exist_ok=True)
     c.generate_markdown_report(reports_dir / "TestReport_mcp_plugin_sessions.md")

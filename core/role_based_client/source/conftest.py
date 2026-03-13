@@ -1,12 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-pytest fixtures for role_based_client module tests.
-role_based_client 模块测试的 pytest fixtures。
+role_based_client モジュールテストのpytest fixtures。
 
-This module provides shared fixtures for testing the role_based_client module,
-including environment setup, mock objects, and test data.
-本模块提供用于测试 role_based_client 模块的共享 fixtures，
-包括环境设置、模拟对象和测试数据。
+このモジュールはrole_based_clientモジュールのテスト用共有フィクスチャを提供し、
+環境設定、モックオブジェクト、テストデータを含みます。
 """
 
 import os
@@ -18,24 +15,46 @@ from typing import Generator
 from pathlib import Path
 from dotenv import load_dotenv
 
-# Add the project root to Python path for imports
-# 将项目根目录添加到 Python 路径以便导入
-PROJECT_ROOT = r"C:\pythonProject\python_ai_cspm\platform_python_backend-testing"
+
+def _load_source_root():
+    """.env ファイルから SourceCodeRoot を読み込む
+
+    Returns:
+        str: SourceCodeRoot の絶対パス
+
+    Raises:
+        FileNotFoundError: .env ファイルが見つからない場合
+        KeyError: SourceCodeRoot キーが .env に存在しない場合
+    """
+    env_path = Path(__file__).parent.parent.parent.parent / ".env"
+    if not env_path.exists():
+        raise FileNotFoundError(f".env ファイルが見つかりません: {env_path}")
+
+    load_dotenv(env_path)
+    source_root = os.getenv("SourceCodeRoot")
+
+    if not source_root:
+        raise KeyError(".env ファイルに SourceCodeRoot キーが存在しません")
+
+    return source_root
+
+
+# ★★★ 重要: プロジェクトルートを動的に取得（絶対にハードコードしない） ★★★
+PROJECT_ROOT = _load_source_root()
 if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 
-# Load environment variables from .env file
-# 从 .env 文件加载环境变量
+# .env ファイルから環境変数を読み込む
 ENV_FILE = Path(__file__).parent.parent.parent / ".env"
 if ENV_FILE.exists():
     load_dotenv(ENV_FILE)
 
 
 # =============================================================================
-# Test Environment Configuration | 测试环境配置
+# テスト環境設定
 # =============================================================================
 
-# 测试用环境变量（从 .env 文件加载）
+# テスト用環境変数（.envファイルから読み込み）
 MOCK_SETTINGS_ENV = {
     # LLM API Keys - 从 .env 加载
     "GPT5_1_CHAT_API_KEY": os.getenv("GPT5_1_CHAT_API_KEY", "test-key"),
@@ -66,36 +85,29 @@ MOCK_SETTINGS_ENV = {
 }
 
 # =============================================================================
-# Fixtures | 测试装置
+# Fixtures
 # =============================================================================
 
 @pytest.fixture(autouse=True)
 def reset_role_based_client_module():
-    """
-    テストごとにモジュールのグローバル変数をリセット
-    在每个测试后重置模块的全局变量
-    
+    """テストごとにモジュールのグローバル変数をリセットする。
+
     role_based_client.pyのグローバル変数（_role_based_client_instance）は
     モジュールレベルで管理されているため、テスト間の独立性を保つために
-    sys.modulesからapp.core系モジュールを削除して再読み込みを強制する。
-    
-    role_based_client.py 的全局变量（_role_based_client_instance）在模块级别管理，
-    为了保证测试间的独立性，从 sys.modules 中删除 app.core 系列模块以强制重新加载。
+    sys.modulesからapp.coreモジュールを削除して再読み込みを強制します。
     """
     yield
-    # テスト後にモジュールキャッシュをクリア | 测试后清除模块缓存
+    # テスト後にモジュールキャッシュをクリア
     modules_to_remove = [key for key in sys.modules if key.startswith("app.core")]
     for mod in modules_to_remove:
         del sys.modules[mod]
 
 @pytest.fixture
 def mock_settings_env():
-    """
-    テスト用環境変数設定＋モジュールリセット
-    设置测试用环境变量并重置模块
+    """テスト用環境変数設定＋モジュールリセット
     """
     with patch.dict("os.environ", MOCK_SETTINGS_ENV, clear=False):
-        # モジュールをリセット | 重置模块
+        # モジュールをリセット
         modules_to_remove = [key for key in sys.modules if key.startswith("app.core")]
         for mod in modules_to_remove:
             del sys.modules[mod]
@@ -105,14 +117,10 @@ def mock_settings_env():
 @pytest.fixture
 def mock_async_opensearch():
     """
-    AsyncOpenSearchモック（外部接続防止）
-    AsyncOpenSearch 模拟对象（防止外部连接）
-    
+AsyncOpenSearchモック（外部接続防止）
+
     全テストで実際のOpenSearch接続を防止するために使用。
     pingはデフォルトでTrueを返す。
-    
-    用于防止所有测试中的实际 OpenSearch 连接。
-    ping 默认返回 True。
     """
     with patch("app.core.role_based_client.AsyncOpenSearch") as mock_cls:
         mock_instance = AsyncMock()
@@ -122,39 +130,35 @@ def mock_async_opensearch():
 
 
 # =============================================================================
-# Report Configuration | 报告配置
+# レポート設定
 # =============================================================================
 
 @pytest.fixture(scope="session")
 def report_dir() -> str:
+    """レポート出力ディレクトリパスを提供する。
     """
-    Provide the report output directory path.
-    提供报告输出目录路径。
-    """
-    report_path = r"C:\pythonProject\python_ai_cspm\TestReport\role_based_client\reports"
+    report_path = Path(__file__).parent.parent / "reports"
     os.makedirs(report_path, exist_ok=True)
-    return report_path
+    return str(report_path)
 
 
 # =============================================================================
-# Test Report Generation | 测试报告生成
+# テストレポート生成
 # =============================================================================
 
-# Global test results storage | 全局测试结果存储
+# グローバルテスト結果ストレージ
 _test_results = []
 
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
 def pytest_runtest_makereport(item, call):
-    """
-    Hook to capture test results.
-    捕获测试结果的钩子。
+    """テスト結果をキャプチャするフック。
     """
     outcome = yield
     rep = outcome.get_result()
 
     if rep.when == "call":
-        # Check if test is marked as xfail | 检查测试是否标记为预期失败
+        # xfailマークされたテストをチェック
         is_xfail = hasattr(rep, "wasxfail") or (hasattr(item, '_evalxfail') and item._evalxfail.wasvalid())
 
         result = {
@@ -168,17 +172,15 @@ def pytest_runtest_makereport(item, call):
 
 
 def pytest_sessionfinish(session, exitstatus):
-    """
-    Pytest hook to generate detailed reports after all tests complete.
-    在所有测试完成后生成详细报告的 pytest 钩子。
+    """すべてのテスト完了後に詳細レポートを生成する。
     """
     import json
     from datetime import datetime
 
-    report_dir = r"C:\pythonProject\python_ai_cspm\TestReport\role_based_client\reports"
+    report_dir = Path(__file__).parent.parent / "reports"
     os.makedirs(report_dir, exist_ok=True)
 
-    # Parse test results | 解析测试结果
+    # テスト結果を解析
     normal_tests = []
     error_tests = []
     security_tests = []
@@ -187,9 +189,9 @@ def pytest_sessionfinish(session, exitstatus):
     failed = 0
     xfailed = 0
 
-    # Test ID to name mapping | 测试ID到名称映射
+    # テストIDから名前へのマッピング
     test_name_map = {
-        # 正常系测试 | Normal tests
+        # 正常系テスト
         "test_roles_constants_defined": ("RBC-001", "ロール定数が正しく定義されている"),
         "test_role_env_mapping_complete": ("RBC-002", "ROLE_ENV_MAPPINGが全ロールを含む"),
         "test_get_client_for_valid_role": ("RBC-003", "有効なロールでクライアント取得成功"),
@@ -209,7 +211,7 @@ def pytest_sessionfinish(session, exitstatus):
         "test_non_localhost_hostname_verification_enabled": ("RBC-017", "non-localhostでホスト名検証有効"),
         "test_ca_certs_path_file_not_exists": ("RBC-018", "CA_CERTS_PATH設定あるがファイル不存在→SSL検証無効化"),
         
-        # 異常系テスト | Error tests
+        # 異常系テスト
         "test_unknown_role_returns_none": ("RBC-E01", "未知のロール名→None"),
         "test_missing_username": ("RBC-E02", "認証情報未設定（USERNAME）"),
         "test_missing_password": ("RBC-E03", "認証情報未設定（PASSWORD）"),
@@ -224,7 +226,7 @@ def pytest_sessionfinish(session, exitstatus):
         "test_health_check_ping_failed": ("RBC-E12", "ヘルスチェック: ping失敗"),
         "test_health_check_exception": ("RBC-E13", "ヘルスチェック: 例外発生"),
         
-        # セキュリティテスト | Security tests
+        # セキュリティテスト
         "test_password_not_in_logs": ("RBC-SEC-01", "パスワードがログに出力されない"),
         "test_ssl_always_enabled": ("RBC-SEC-02", "SSL常時有効"),
         "test_credential_error_message_only_contains_env_var_names": ("RBC-SEC-03", "認証情報エラーメッセージに環境変数名のみ含む"),
@@ -375,15 +377,15 @@ def pytest_sessionfinish(session, exitstatus):
     report_md += f"""
 ---
 
-*报告生成时间: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}*
+*レポート生成時刻: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}*
 """
 
-    # Write Markdown report | 写入Markdown报告
+    # Markdownレポートを書き込み
     md_path = os.path.join(report_dir, "TestReport_role_based_client.md")
     with open(md_path, "w", encoding="utf-8") as f:
         f.write(report_md)
 
-    # Generate JSON report | 生成JSON报告
+    # JSONレポートを生成
     json_report = {
         "metadata": {
             "test_target": "app/core/role_based_client.py",
@@ -410,6 +412,6 @@ def pytest_sessionfinish(session, exitstatus):
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(json_report, f, ensure_ascii=False, indent=2)
 
-    print(f"\n✅ 测试报告已生成:")
+    print(f"\n✅ テストレポートを生成しました:")
     print(f"  - {md_path}")
     print(f"  - {json_path}")

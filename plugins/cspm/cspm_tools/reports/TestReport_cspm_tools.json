@@ -1,0 +1,84 @@
+{
+  "summary": {
+    "total": 14,
+    "passed": 14
+  },
+  "categories": {
+    "normal": [
+      {
+        "test_id": "test_validate_schema_target_empty",
+        "outcome": "passed",
+        "duration": 1.9697598999919137
+      }
+    ],
+    "error": [
+      {
+        "test_id": "test_validate_subprocess_timeout",
+        "outcome": "passed",
+        "duration": 0.0031658000079914927
+      },
+      {
+        "test_id": "test_validate_json_list_empty",
+        "outcome": "passed",
+        "duration": 0.0010566999990260229
+      },
+      {
+        "test_id": "test_invalid_cloud_name",
+        "outcome": "passed",
+        "duration": 0.00034749999758787453
+      },
+      {
+        "test_id": "test_invalid_category",
+        "outcome": "passed",
+        "duration": 0.00016490000416524708
+      },
+      {
+        "test_id": "test_list_resources_invalid_cloud",
+        "outcome": "passed",
+        "duration": 0.0006036000122549012
+      },
+      {
+        "test_id": "test_run_schema_command_not_found",
+        "outcome": "passed",
+        "duration": 0.0003804000007221475
+      },
+      {
+        "test_id": "test_run_schema_timeout",
+        "outcome": "passed",
+        "duration": 0.00032500000088475645
+      },
+      {
+        "test_id": "test_run_schema_general_exception",
+        "outcome": "passed",
+        "duration": 0.0003093999985139817
+      },
+      {
+        "test_id": "test_run_schema_returncode_nonzero",
+        "outcome": "passed",
+        "duration": 0.0003682999958982691
+      },
+      {
+        "test_id": "test_execute_schema_all_fallbacks_fail",
+        "outcome": "passed",
+        "duration": 0.0002690000110305846
+      }
+    ],
+    "security": [
+      {
+        "test_id": "test_validate_policy_no_stacktrace_in_error",
+        "outcome": "passed",
+        "duration": 0.004346500005340204
+      },
+      {
+        "test_id": "test_validate_policy_command_injection_prevention",
+        "outcome": "passed",
+        "duration": 0.0014195000112522393
+      },
+      {
+        "test_id": "test_get_schema_path_traversal_prevention",
+        "outcome": "passed",
+        "duration": 0.0007923999946797267
+      }
+    ]
+  }
+}

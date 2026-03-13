@@ -1,8 +1,8 @@
 """
-Chat Dashboard 测试配置和Fixtures
+Chat Dashboard テスト設定とFixtures
 
-测试规格: docs/testing/plugins/chat_dashboard/chat_dashboard_tests.md
-覆盖率目标: 85%+
+テスト仕様: docs/testing/plugins/chat_dashboard/chat_dashboard_tests.md
+カバレッジ目標: 85%+
 """
 
 import sys
@@ -13,22 +13,23 @@ import json
 from pathlib import Path
 from datetime import datetime
 from unittest.mock import patch, MagicMock, AsyncMock
-from dotenv import load_dotenv
 
-# 读取 .env 配置
-_env_path = Path(__file__).resolve().parent.parent.parent.parent / ".env"
-if _env_path.exists():
-    load_dotenv(_env_path)
+# プロジェクトルート設定（env_loader を使用）
+try:
+    from env_loader import PROJECT_ROOT
+except ImportError:
+    _here = Path(__file__).resolve()
+    for _p in [_here, *_p.parents]:
+        if (_p / "env_loader.py").exists():
+            sys.path.insert(0, str(_p))
+            from env_loader import PROJECT_ROOT
+            break
+    else:
+        raise ImportError("env_loader.py が見つかりません")
 
-# project_root: 优先从 .env 的 soure_root 读取，否则自动推断
-_source_root_env = os.environ.get("soure_root", "").strip().strip('"').strip("'")
-if _source_root_env and Path(_source_root_env).exists():
-    project_root = Path(_source_root_env)
-else:
-    project_root = Path(__file__).resolve().parent.parent.parent.parent.parent / "platform_python_backend-testing"
-
+project_root = PROJECT_ROOT / "platform_python_backend-testing" if not str(PROJECT_ROOT).endswith("platform_python_backend-testing") else PROJECT_ROOT
 if not project_root.exists():
-    raise RuntimeError(f"项目根目录不存在: {project_root}")
+    raise RuntimeError(f"プロジェクトルートディレクトリが存在しません: {project_root}")
 sys.path.insert(0, str(project_root))
 
 # weasyprint は libpango 等の OS 依存ライブラリが必要なため
@@ -224,7 +225,7 @@ def mock_opensearch_settings():
 
 
 # ============================================
-# 测试结果收集器
+# テスト結果コレクター
 # ============================================
 
 class TestResultCollector:
@@ -248,27 +249,27 @@ class TestResultCollector:
         failed = total - passed
         rate = f"{passed/total*100:.1f}%" if total > 0 else "N/A"
         lines = [
-            "# Chat Dashboard 测试报告\n",
-            "| 项目 | 值 |",
+            "# Chat Dashboard テストレポート\n",
+            "| 項目 | 値 |",
             "|------|-----|",
-            f"| 测试对象 | `app/chat_dashboard/router.py` |",
-            f"| 执行时间 | {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} |",
-            f"| 覆盖率目标 | 85% |\n",
-            "| 类别 | 总数 | 通过 | 失败 |",
+            f"| テスト対象 | `app/chat_dashboard/router.py` |",
+            f"| 実行時刻 | {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} |",
+            f"| カバレッジ目標 | 85% |\n",
+            "| カテゴリ | 総数 | 通過 | 失敗 |",
             "|------|------|------|------|",
         ]
-        for cat, label in [("normal","正常系"),("error","异常系"),("security","安全测试")]:
+        for cat, label in [("normal","正常系"),("error","異常系"),("security","セキュリティテスト")]:
             r = self.results[cat]
             p = sum(1 for x in r if x["outcome"] == "passed")
             lines.append(f"| {label} | {len(r)} | {p} | {len(r)-p} |")
-        lines.append(f"| **合计** | **{total}** | **{passed}** | **{failed}** |\n")
-        lines.append(f"**通过率**: {rate}\n")
-        for cat, label in [("normal","正常系"),("error","异常系"),("security","安全测试")]:
-            lines.append(f"\n## {label}测试详情\n| 测试名称 | 结果 | 执行时间 |\n|---------|------|----------|")
+        lines.append(f"| **合計** | **{total}** | **{passed}** | **{failed}** |\n")
+        lines.append(f"**通過率**: {rate}\n")
+        for cat, label in [("normal","正常系"),("error","異常系"),("security","セキュリティテスト")]:
+            lines.append(f"\n## {label}テスト詳細\n| テスト名 | 結果 | 実行時間 |\n|---------|------|----------|")
             for r in self.results[cat]:
                 s = "✅" if r["outcome"] == "passed" else "❌"
                 lines.append(f"| {r['test_id']} | {s} | {r['duration']:.3f}s |")
-        lines.append(f"\n---\n*报告生成时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}*")
+        lines.append(f"\n---\n*レポート生成時刻: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}*")
         output_path.write_text("\n".join(lines), encoding="utf-8")
 
     def generate_json_report(self, output_path: Path):
@@ -288,7 +289,9 @@ def pytest_runtest_makereport(item, call):
     outcome = yield
     rep = outcome.get_result()
     if rep.when == "call":
-        item.session.config._test_collector.add_result(item.nodeid, rep.outcome, rep.duration)
+        collector = getattr(item.session.config, '_test_collector', None)
+        if collector:
+            collector.add_result(item.nodeid, rep.outcome, rep.duration)
 
 
 def pytest_sessionstart(session):
@@ -296,7 +299,9 @@ def pytest_sessionstart(session):
 
 
 def pytest_sessionfinish(session, exitstatus):
-    collector = session.config._test_collector
+    collector = getattr(session.config, '_test_collector', None)
+    if not collector:
+        return
     reports_dir = Path(__file__).parent.parent / "reports"
     reports_dir.mkdir(parents=True, exist_ok=True)
     collector.generate_markdown_report(reports_dir / "TestReport_chat_dashboard.md")

@@ -1,214 +1,31 @@
 {
   "summary": {
-    "total": 36,
-    "passed": 36,
+    "total": 0,
+    "passed": 0,
     "failed": 0,
     "xfailed": 0,
-    "pass_rate": "100.0%",
-    "effective_pass_rate": "100.0%"
+    "pass_rate": "0.0%",
+    "effective_pass_rate": "0.0%"
   },
   "categories": {
     "normal": {
-      "total": 14,
-      "passed": 14,
+      "total": 0,
+      "passed": 0,
       "failed": 0,
-      "results": [
-        {
-          "nodeid": "core/clients/source/test_clients.py::TestExtractAwsRegionFromUrl::test_extract_aws_region_from_url_standard",
-          "status": "passed",
-          "duration": 0.00016190001042559743
-        },
-        {
-          "nodeid": "core/clients/source/test_clients.py::TestExtractAwsRegionFromUrl::test_extract_aws_region_from_url_serverless",
-          "status": "passed",
-          "duration": 0.0001471999567002058
-        },
-        {
-          "nodeid": "core/clients/source/test_clients.py::TestExtractAwsRegionFromUrl::test_extract_aws_region_from_url_fallback",
-          "status": "passed",
-          "duration": 0.00015729997539892793
-        },
-        {
-          "nodeid": "core/clients/source/test_clients.py::TestInitializeOpensearchClient::test_initialize_opensearch_success",
-          "status": "passed",
-          "duration": 0.0006834999658167362
-        },
-        {
-          "nodeid": "core/clients/source/test_clients.py::TestInitializeOpensearchClient::test_initialize_opensearch_with_basic_auth",
-          "status": "passed",
-          "duration": 0.0005800999933853745
-        },
-        {
-          "nodeid": "core/clients/source/test_clients.py::TestInitializeOpensearchClient::test_initialize_opensearch_aws_service",
-          "status": "passed",
-          "duration": 0.0007020999910309911
-        },
-        {
-          "nodeid": "core/clients/source/test_clients.py::TestInitializeOpensearchClient::test_initialize_opensearch_retry_success",
-          "status": "passed",
-          "duration": 0.0025857999571599066
-        },
-        {
-          "nodeid": "core/clients/source/test_clients.py::TestGetOpensearchClient::test_get_opensearch_client_success",
-          "status": "passed",
-          "duration": 0.0003139000036753714
-        },
-        {
-          "nodeid": "core/clients/source/test_clients.py::TestGetOpensearchClient::test_get_opensearch_client_with_auth_success",
-          "status": "passed",
-          "duration": 0.0006645999965257943
-        },
-        {
-          "nodeid": "core/clients/source/test_clients.py::TestInitializeEmbeddingFunction::test_initialize_embedding_function_success",
-          "status": "passed",
-          "duration": 0.0003587000537663698
-        },
-        {
-          "nodeid": "core/clients/source/test_clients.py::TestInitializeEmbeddingFunction::test_initialize_embedding_openai_model",
-          "status": "passed",
-          "duration": 0.0003236000193282962
-        },
-        {
-          "nodeid": "core/clients/source/test_clients.py::TestInitializeEmbeddingFunction::test_initialize_embedding_with_dimensions",
-          "status": "passed",
-          "duration": 0.00039170001400634646
-        },
-        {
-          "nodeid": "core/clients/source/test_clients.py::TestInitializeEmbeddingFunction::test_get_embedding_function_success",
-          "status": "passed",
-          "duration": 0.00020060001406818628
-        },
-        {
-          "nodeid": "core/clients/source/test_clients.py::TestModuleImport::test_module_import",
-          "status": "passed",
-          "duration": 0.00012780004180967808
-        }
-      ]
+      "results": []
     },
     "error": {
-      "total": 16,
-      "passed": 16,
+      "total": 0,
+      "passed": 0,
       "failed": 0,
-      "results": [
-        {
-          "nodeid": "core/clients/source/test_clients.py::TestInitializeOpensearchClientErrors::test_initialize_opensearch_e01_missing_url",
-          "status": "passed",
-          "duration": 0.0008107000030577183
-        },
-        {
-          "nodeid": "core/clients/source/test_clients.py::TestInitializeOpensearchClientErrors::test_initialize_opensearch_e02_invalid_url",
-          "status": "passed",
-          "duration": 0.0019819000153802335
-        },
-        {
-          "nodeid": "core/clients/source/test_clients.py::TestInitializeOpensearchClientErrors::test_initialize_opensearch_e03_missing_credentials",
-          "status": "passed",
-          "duration": 0.004192299966234714
-        },
-        {
-          "nodeid": "core/clients/source/test_clients.py::TestInitializeOpensearchClientErrors::test_initialize_opensearch_e04_connection_timeout",
-          "status": "passed",
-          "duration": 0.0035946000134572387
-        },
-        {
-          "nodeid": "core/clients/source/test_clients.py::TestInitializeOpensearchClientErrors::test_initialize_opensearch_e05_max_retries_exceeded",
-          "status": "passed",
-          "duration": 0.0026670999941416085
-        },
-        {
-          "nodeid": "core/clients/source/test_clients.py::TestInitializeOpensearchClientErrors::test_initialize_opensearch_e06_ping_failure",
-          "status": "passed",
-          "duration": 0.0015882999869063497
-        },
-        {
-          "nodeid": "core/clients/source/test_clients.py::TestInitializeOpensearchClientErrors::test_initialize_opensearch_e07_ssl_cert_error",
-          "status": "passed",
-          "duration": 0.001868200022727251
-        },
-        {
-          "nodeid": "core/clients/source/test_clients.py::TestGetOpensearchClientErrors::test_get_opensearch_client_e08_not_initialized",
-          "status": "passed",
-          "duration": 0.0002305000089108944
-        },
-        {
-          "nodeid": "core/clients/source/test_clients.py::TestGetOpensearchClientErrors::test_get_opensearch_client_e09_init_error_state",
-          "status": "passed",
-          "duration": 0.00022200000239536166
-        },
-        {
-          "nodeid": "core/clients/source/test_clients.py::TestGetOpensearchClientWithAuthErrors::test_get_opensearch_client_with_auth_e10_invalid_format",
-          "status": "passed",
-          "duration": 0.0006890000076964498
-        },
-        {
-          "nodeid": "core/clients/source/test_clients.py::TestGetOpensearchClientWithAuthErrors::test_get_opensearch_client_with_auth_e11_missing_url",
-          "status": "passed",
-          "duration": 0.0008433999610133469
-        },
-        {
-          "nodeid": "core/clients/source/test_clients.py::TestGetOpensearchClientWithAuthErrors::test_get_opensearch_client_with_auth_e12_ping_failure",
-          "status": "passed",
-          "duration": 0.0010612999903969467
-        },
-        {
-          "nodeid": "core/clients/source/test_clients.py::TestInitializeEmbeddingFunctionErrors::test_initialize_embedding_e13_missing_api_key",
-          "status": "passed",
-          "duration": 0.0010492000146768987
-        },
-        {
-          "nodeid": "core/clients/source/test_clients.py::TestInitializeEmbeddingFunctionErrors::test_initialize_embedding_e14_missing_model_name",
-          "status": "passed",
-          "duration": 0.0011483999551273882
-        },
-        {
-          "nodeid": "core/clients/source/test_clients.py::TestGetEmbeddingFunctionErrors::test_get_embedding_function_e15_not_initialized",
-          "status": "passed",
-          "duration": 0.0001330000231973827
-        },
-        {
-          "nodeid": "core/clients/source/test_clients.py::TestGetEmbeddingFunctionErrors::test_get_embedding_function_e16_init_error_state",
-          "status": "passed",
-          "duration": 0.0001265000319108367
-        }
-      ]
+      "results": []
     },
     "security": {
-      "total": 6,
-      "passed": 6,
+      "total": 0,
+      "passed": 0,
       "failed": 0,
-      "results": [
-        {
-          "nodeid": "core/clients/source/test_clients.py::TestClientsSecurity::test_sec_01_credentials_not_logged",
-          "status": "passed",
-          "duration": 0.0016215999494306743
-        },
-        {
-          "nodeid": "core/clients/source/test_clients.py::TestClientsSecurity::test_sec_02_api_key_not_exposed",
-          "status": "passed",
-          "duration": 0.0021245000534690917
-        },
-        {
-          "nodeid": "core/clients/source/test_clients.py::TestClientsSecurity::test_sec_03_ssl_verification_enabled",
-          "status": "passed",
-          "duration": 0.0010508999694138765
-        },
-        {
-          "nodeid": "core/clients/source/test_clients.py::TestClientsSecurity::test_sec_04_connection_timeout_reasonable",
-          "status": "passed",
-          "duration": 0.0018417999963276088
-        },
-        {
-          "nodeid": "core/clients/source/test_clients.py::TestClientsSecurity::test_sec_05_error_messages_sanitized",
-          "status": "passed",
-          "duration": 0.0018803999992087483
-        },
-        {
-          "nodeid": "core/clients/source/test_clients.py::TestClientsSecurity::test_sec_06_auth_header_not_exposed",
-          "status": "passed",
-          "duration": 0.0011205999762751162
-        }
-      ]
+      "results": []
     }
   },
-  "execution_time": "2026-03-11 19:33:40"
+  "execution_time": "2026-03-13 13:00:30"
 }

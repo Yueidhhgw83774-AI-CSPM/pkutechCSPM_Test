@@ -1,13 +1,13 @@
 """
-encryption_middleware.py 单元测试
+encryption_middleware.py 単位テスト
 
-测试规格: encryption_middleware_tests.md
-覆盖率目标: 85%+
+テスト仕様: encryption_middleware_tests.md
+カバレッジ目標: 85%+
 
-测试类别:
-  - 正常系: 15 个测试
-  - 异常系: 8 个测试
-  - 安全测试: 5 个测试
+テストカテゴリ:
+  - 正常系: 15 個のテスト
+  - 異常系: 8 個のテスト
+  - セキュリティテスト: 5 個のテスト
 """
 
 import pytest
@@ -20,7 +20,7 @@ import time
 from pathlib import Path
 from unittest.mock import patch, MagicMock, AsyncMock
 
-# 导入被测试模块
+# テスト対象モジュールをインポートする
 project_root = Path(__file__).parent.parent.parent.parent / "platform_python_backend-testing"
 sys.path.insert(0, str(project_root))
 
@@ -68,17 +68,17 @@ class TestDecryptionMiddlewareInit:
           - 初期化時に test_decryption_with_known_data() が成功した場合、
             ミドルウェアが正常に初期化されることを検証
         """
-        # Arrange - 准备测试数据和模拟对象
+        # Arrange - テストデータとシミュレーションオブジェクトの準備
         import logging
         caplog.set_level(logging.INFO)
         mock_app = AsyncMock()
 
         with patch("app.core.encryption_middleware.test_decryption_with_known_data", return_value=True):
-            # Act - 执行被测试的函数
+            # アクション - テスト対象の関数を実行する
             from app.core.encryption_middleware import DecryptionMiddleware
             middleware = DecryptionMiddleware(mock_app)
 
-        # Assert - 验证结果符合预期
+        # Assert - 結果が予期したものと一致することを確認する
         assert middleware.app == mock_app
         assert middleware.paths_to_decrypt == ["/chat"]
         assert "準備完了" in caplog.text or "ミドルウェア" in caplog.text
@@ -742,9 +742,10 @@ class TestDecryptionMiddlewareDecryptErrors:
 
     @pytest.mark.asyncio
     async def test_decrypt_with_invalid_ciphertext(self, middleware_and_mocks):
-        """ENCMW-E05: 暗号文復号失敗
+        """
+        ENCMW-E05: 暗号文復号失敗
 
-        覆盖代码行: encryption_middleware.py:228-230
+                コード行のオーバーライド: encryption_middleware.py:228-230
         """
         # Arrange
         middleware, mock_app = middleware_and_mocks

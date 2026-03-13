@@ -1,29 +1,49 @@
 """
-clients.py 单元测试
+clients.py のテスト。
 
-测试规格: clients_tests.md
-覆盖率目标: 90%+
+テスト仕様: clients_tests.md
+カバレッジ目標: 90%+
 
-测试类别:
-  - 正常系: 14个测试
-  - 异常系: 16个测试
-  - 安全测试: 6个测试
+テストカテゴリ:
+  - 正常系: 14テスト
+  - 異常系: 16テスト
+  - セキュリティテスト: 6テスト
 
-总计: 36个测试用例
+総計: 36テストケース
 """
 
 import pytest
 import asyncio
 from unittest.mock import MagicMock, patch, AsyncMock
+import os
+import re
 import sys
 from pathlib import Path
 from urllib.parse import urlparse
 
-# 导入被测试模块
-project_root = Path(__file__).parent.parent.parent.parent / "platform_python_backend-testing"
-sys.path.insert(0, str(project_root))
+# ─── SourceCodeRoot を .env から読み込む ────────────────────────────────
+def _load_source_root() -> str:
+    """プロジェクトルートの .env から SourceCodeRoot を読み込む。"""
+    # 優先度1: ルート conftest.py が os.environ に設定済みの場合
+    from_env = os.environ.get("SourceCodeRoot", "").strip().strip("'\"")
+    if from_env:
+        return from_env
+    # 優先度2: ディレクトリツリーを遡って .env ファイルを検索する
+    current = Path(__file__).resolve()
+    for directory in [current, *current.parents]:
+        env_file = (directory if directory.is_dir() else directory.parent) / ".env"
+        if env_file.exists():
+            for line in env_file.read_text(encoding="utf-8").splitlines():
+                m = re.match(r"^\s*SourceCodeRoot\s*=\s*['\"]?(.+?)['\"]?\s*$", line)
+                if m:
+                    return m.group(1).strip()
+    return ""
 
-# 导入要测试的模块和函数
+PROJECT_ROOT = _load_source_root()
+if PROJECT_ROOT and PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, PROJECT_ROOT)
+
+# テスト対象モジュールのインポート
 from app.core.clients import (
     extract_aws_region_from_url,
     initialize_opensearch_client,
@@ -35,93 +55,93 @@ from app.core.clients import (
 
 
 # ============================================================================
-# 正常系测试: extract_aws_region_from_url
+# 正常系テスト: extract_aws_region_from_url
 # ============================================================================
 
 class TestExtractAwsRegionFromUrl:
     """
-    extract_aws_region_from_url 正常系测试
+    extract_aws_region_from_url 通常テスト
 
-    测试ID: CLT-001 ~ CLT-003
+        テストID: CLT-001 ~ CLT-003
     """
 
     def test_extract_aws_region_from_url_standard(self):
         """
-        CLT-001: 标准AWS ES域名的区域提取
-        覆盖代码行: clients.py:27-35
+        CLT-001: 標準AWS ESドメインのリージョン抽出
+                対象コード行: clients.py:27-35
 
-        测试目的:
-          - 验证从标准AWS ES域名中正确提取区域
-          - 确认解析逻辑符合AWS域名规范
+                テスト目的:
+                  - 標準AWS ESドメインから正しくリージョンを抽出することを確認する
+                  - 解析ロジックがAWSドメイン規格に準拠していることを確認する
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         url = "https://search-domain-abc123.us-west-2.es.amazonaws.com:443"
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         region = extract_aws_region_from_url(url)
 
-        # Assert - 验证结果
+        # Assert - 結果の検証
         assert region == "us-west-2", f"期望区域 us-west-2, 实际得到 {region}"
 
     def test_extract_aws_region_from_url_serverless(self):
         """
-        CLT-002: AWS OpenSearch Serverless域名的区域提取
-        覆盖代码行: clients.py:27-35
+        CLT-002: AWS OpenSearch Serverlessドメインのリージョン抽出
+                覆盖コード行: clients.py:27-35
 
-        测试目的:
-          - 验证从AOSS域名中正确提取区域
-          - 确认支持Serverless服务的域名格式
+                テスト目的:
+                  - AOSSドメインから正しくリージョンを抽出することを確認する
+                  - サーバーレスサービスをサポートするドメイン形式を確認する
         """
-        # Arrange - 准备测试数据
+        # Arrange - テストデータの準備
         url = "https://collection-abc.ap-northeast-1.aoss.amazonaws.com:443"
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         region = extract_aws_region_from_url(url)
 
-        # Assert - 验证结果
+        # アサート - 結果の検証
         assert region == "ap-northeast-1", f"期望区域 ap-northeast-1, 实际得到 {region}"
 
     def test_extract_aws_region_from_url_fallback(self):
         """
-        CLT-003: 无效URL时使用默认区域
-        覆盖代码行: clients.py:44-46
+        CLT-003: 無効なURLの場合にデフォルトのリージョンを使用
+                カバレッジコード行: clients.py:44-46
 
-        测试目的:
-          - 验证无法提取区域时的降级处理
-          - 确认默认区域为 us-east-1
+                テスト目的:
+                  - リージョンの抽出に失敗した場合のデフォルト処理の検証
+                  - デフォルトのリージョンが us-east-1 であることを確認する
         """
-        # Arrange - 准备测试数据(非AWS域名)
+        # Arrange - テストデータの準備（AWSドメインではない）
         url = "https://localhost:9200"
 
-        # Act - 执行被测试函数
+        # Act - テスト対象の関数を実行する
         region = extract_aws_region_from_url(url)
 
-        # Assert - 验证结果
+        # Assert - 結果の検証
         assert region == "us-east-1", f"期望默认区域 us-east-1, 实际得到 {region}"
 
 
 # ============================================================================
-# 正常系测试: initialize_opensearch_client
+# 正常系テスト: initialize_opensearch_client
 # ============================================================================
 
 class TestInitializeOpensearchClient:
     """
-    initialize_opensearch_client 正常系测试
+    opensearch_clientの初期化テスト
 
-    测试ID: CLT-004 ~ CLT-007
+        テストID: CLT-004 ~ CLT-007
     """
 
     @pytest.mark.asyncio
     async def test_initialize_opensearch_success(self, mock_settings, reset_global_state):
         """
-        CLT-004: OpenSearch客户端初始化成功
-        覆盖代码行: clients.py:60-108
+        CLT-004: OpenSearchクライアント初期化成功
+                カバレッジコード行: clients.py:60-108
 
-        测试目的:
-          - 验证客户端初始化流程正确
-          - 确认全局状态正确设置
+                テスト目的:
+                  - クライアント初期化フローの正しさを確認する
+                  - グローバル状態の正しい設定を確認する
         """
-        # Arrange - 准备模拟对象
+        # Arrange - シミュレーションオブジェクトの準備
         with patch("app.core.clients.settings", mock_settings), \
              patch("app.core.clients.AsyncOpenSearch") as mock_os_class:
 
@@ -129,10 +149,10 @@ class TestInitializeOpensearchClient:
             mock_client.ping = AsyncMock(return_value=True)
             mock_os_class.return_value = mock_client
 
-            # Act - 执行初始化
+            # Act - 初期化を実行する
             await initialize_opensearch_client(max_retries=1)
 
-            # Assert - 验证结果
+            # Assert - 結果の検証
             import app.core.clients as clients_module
             assert clients_module.OS_CLIENT_INITIALIZED is True, "客户端应该被标记为已初始化"
             assert clients_module.OS_CLIENT_INIT_ERROR is None, "不应该有初始化错误"
@@ -141,14 +161,14 @@ class TestInitializeOpensearchClient:
     @pytest.mark.asyncio
     async def test_initialize_opensearch_with_basic_auth(self, mock_settings, reset_global_state):
         """
-        CLT-005: Basic认证配置正确应用
-        覆盖代码行: clients.py:78-88
+        CLT-005: Basic認証設定の正しい適用
+                覆盖コード行: clients.py:78-88
 
-        测试目的:
-          - 验证Basic认证凭据正确传递
-          - 确认认证配置格式正确
+                テスト目的:
+                  - Basic認証クレデンシャルの正しい伝達を確認
+                  - 認証設定の形式が正しいことを確認する
         """
-        # Arrange - 准备模拟对象
+        # Arrange - シミュレーションオブジェクトの準備
         with patch("app.core.clients.settings", mock_settings), \
              patch("app.core.clients.AsyncOpenSearch") as mock_os_class:
 
@@ -156,10 +176,10 @@ class TestInitializeOpensearchClient:
             mock_client.ping = AsyncMock(return_value=True)
             mock_os_class.return_value = mock_client
 
-            # Act - 执行初始化
+            # Act - 初期化を実行する
             await initialize_opensearch_client(max_retries=1)
 
-            # Assert - 验证认证配置被传递
+            # Assert - 認証設定が渡されていることを確認する
             call_args = mock_os_class.call_args
             assert "http_auth" in call_args[1], "应该包含 http_auth 参数"
             auth_tuple = call_args[1]["http_auth"]
@@ -168,14 +188,14 @@ class TestInitializeOpensearchClient:
     @pytest.mark.asyncio
     async def test_initialize_opensearch_aws_service(self, reset_global_state):
         """
-        CLT-006: AWS OpenSearch服务的特殊配置
-        覆盖代码行: clients.py:111-157
+        CLT-006: AWS OpenSearch サービスの特殊設定
+                覆盖コード行: clients.py:111-157
 
-        测试目的:
-          - 验证AWS服务检测逻辑
-          - 确认证书配置正确(ca_certs=None)
+                テスト目的:
+                  - AWSサービス検出ロジックの検証
+                  - 証明書設定の正しさの確認(ca_certs=None)
         """
-        # Arrange - 准备AWS OpenSearch配置
+        # Arrange - AWS OpenSearchの設定を準備する
         aws_settings = MagicMock()
         aws_settings.OPENSEARCH_URL = "https://search-test.us-east-1.es.amazonaws.com:443"
         aws_settings.OPENSEARCH_USER = "admin"
@@ -190,87 +210,87 @@ class TestInitializeOpensearchClient:
             mock_client.ping = AsyncMock(return_value=True)
             mock_os_class.return_value = mock_client
 
-            # Act - 执行初始化
+            # Act - 初期化を実行する
             await initialize_opensearch_client(max_retries=1)
 
-            # Assert - 验证AWS特定配置
+            # Assert - AWS特定設定の検証
             call_args = mock_os_class.call_args
             assert call_args[1].get("ca_certs") is None, "AWS服务应该使用 ca_certs=None"
 
     @pytest.mark.asyncio
     async def test_initialize_opensearch_retry_success(self, mock_settings, reset_global_state):
         """
-        CLT-007: 重试机制 - 第二次尝试成功
-        覆盖代码行: clients.py:102-197
+        CLT-007: リトライメカニズム - 2回目の試行で成功
+                カバレッジコード行: clients.py:102-197
 
-        测试目的:
-          - 验证重试逻辑正确工作
-          - 确认失败后能成功重连
+                テスト目的:
+                  - リトライロジックが正しく動作することを確認する
+                  - フェイル後の再接続が成功することを確認する
         """
-        # Arrange - 准备模拟对象(第一次失败,第二次成功)
+        # Arrange - シミュレーションオブジェクトの準備(第一次失败、第二次成功)
         with patch("app.core.clients.settings", mock_settings), \
              patch("app.core.clients.AsyncOpenSearch") as mock_os_class, \
              patch("asyncio.sleep", new_callable=AsyncMock):
 
             mock_client = AsyncMock()
-            # 第一次ping失败,第二次成功
+            # 最初のpingが失敗し、第二次が成功しました
             mock_client.ping = AsyncMock(side_effect=[False, True])
             mock_os_class.return_value = mock_client
 
-            # Act - 执行初始化(允许2次重试)
+            # Act - 初期化実行(2回のリトライを許可)
             await initialize_opensearch_client(max_retries=2, retry_delay=0.1)
 
-            # Assert - 验证最终成功
+            # Assert - 成功を最終的に確認する
             import app.core.clients as clients_module
             assert clients_module.OS_CLIENT_INITIALIZED is True, "重试后应该成功初始化"
             assert mock_client.ping.call_count == 2, f"应该调用ping两次,实际 {mock_client.ping.call_count} 次"
 
 
 # ============================================================================
-# 正常系测试: get_opensearch_client 和 get_opensearch_client_with_auth
+# 正常系テスト: get_opensearch_client と get_opensearch_client_with_auth
 # ============================================================================
 
 class TestGetOpensearchClient:
     """
-    get_opensearch_client 和 get_opensearch_client_with_auth 正常系测试
+    get_opensearch_client と get_opensearch_client_with_auth の正常系テスト
 
-    测试ID: CLT-008 ~ CLT-009
+        テストID: CLT-008 ～ CLT-009
     """
 
     @pytest.mark.asyncio
     async def test_get_opensearch_client_success(self, reset_global_state):
         """
-        CLT-008: 获取已初始化的客户端
-        覆盖代码行: clients.py:267-280
+        CLT-008: 初期化されたクライアントの取得
+                ソースコード行の置換: clients.py:267-280
 
-        测试目的:
-          - 验证客户端获取逻辑
-          - 确认返回正确的客户端实例
+                テスト目的:
+                  - クライアント取得ロジックの検証
+                  - 正しいクライアントインスタンスの返却確認
         """
-        # Arrange - 设置全局状态为已初始化
+        # Arrange - グローバル状態を初期化済みに設定
         import app.core.clients as clients_module
         mock_client = MagicMock()
         clients_module.os_client = mock_client
         clients_module.OS_CLIENT_INITIALIZED = True
         clients_module.OS_CLIENT_INIT_ERROR = None
 
-        # Act - 获取客户端
+        # アクション - クライアント取得
         result = await get_opensearch_client()
 
-        # Assert - 验证返回正确的客户端
+        # Assert - 正しいクライアントが返されることを確認する
         assert result is mock_client, "应该返回已初始化的客户端实例"
 
     @pytest.mark.asyncio
     async def test_get_opensearch_client_with_auth_success(self, mock_settings):
         """
-        CLT-009: 创建带有自定义认证的客户端
-        覆盖代码行: clients.py:283-357
+        CLT-009: カスタム認証を備えたクライアントの作成
+                ソースコード行の置き換え: clients.py:283-357
 
-        测试目的:
-          - 验证自定义认证客户端创建
-          - 确认认证信息正确解析和应用
+                テスト目的:
+                  - カスタム認証クライアントの作成を検証する
+                  - 認証情報の正しくな解析と適用を確認する
         """
-        # Arrange - 准备认证字符串
+        # Arrange - 認証文字列の準備
         opensearch_auth = "testuser:testpass123"
 
         with patch("app.core.clients.settings", mock_settings), \
@@ -281,46 +301,46 @@ class TestGetOpensearchClient:
             mock_client.ping = AsyncMock(return_value=True)
             mock_os_class.return_value = mock_client
 
-            # Act - 创建客户端
+            # アクション - クライアントを作成する
             result = await get_opensearch_client_with_auth(opensearch_auth)
 
-            # Assert - 验证结果
+            # Assert - 結果の検証
             assert result is not None, "应该成功创建客户端"
             call_args = mock_os_class.call_args
             assert call_args[1]["http_auth"] == ("testuser", "testpass123"), "认证信息应该正确解析"
 
 
 # ============================================================================
-# 正常系测试: initialize_embedding_function 和 get_embedding_function
+# 正常系テスト: initialize_embedding_function と get_embedding_function
 # ============================================================================
 
 class TestInitializeEmbeddingFunction:
     """
-    initialize_embedding_function 正常系测试
+    initialize_embedding_function 正常系テスト
 
-    测试ID: CLT-010 ~ CLT-013
+        テストID: CLT-010 ~ CLT-013
     """
 
     def test_initialize_embedding_function_success(self, mock_settings, reset_global_state):
         """
-        CLT-010: Embedding函数初始化成功
-        覆盖代码行: clients.py:205-253
+        CLT-010: Embedding関数初期化成功
+                カバレッジコード行: clients.py:205-253
 
-        测试目的:
-          - 验证Embedding初始化流程
-          - 确认全局状态正确设置
+                テスト目的:
+                  - Embedding初期化フローの検証
+                  - グローバル状態の正しい設定確認
         """
-        # Arrange - 准备模拟对象
+        # Arrange - シミュレーションオブジェクトの準備
         with patch("app.core.clients.settings", mock_settings), \
              patch("app.core.clients.OpenAIEmbeddings") as mock_embed_class:
 
             mock_embedding = MagicMock()
             mock_embed_class.return_value = mock_embedding
 
-            # Act - 执行初始化
+            # Act - 初期化を実行する
             initialize_embedding_function()
 
-            # Assert - 验证结果
+            # Assert - 結果の検証
             import app.core.clients as clients_module
             assert clients_module.EMBEDDING_INITIALIZED is True, "Embedding应该被标记为已初始化"
             assert clients_module.EMBEDDING_INIT_ERROR is None, "不应该有初始化错误"
@@ -328,24 +348,24 @@ class TestInitializeEmbeddingFunction:
 
     def test_initialize_embedding_openai_model(self, mock_settings, reset_global_state):
         """
-        CLT-011: OpenAI模型初始化配置
-        覆盖代码行: clients.py:218-236
+        CLT-011: OpenAIモデル初期化設定
+                カバレッジコード行: clients.py:218-236
 
-        测试目的:
-          - 验证OpenAI模型特定配置
-          - 确认API密钥和基础URL正确传递
+                テスト目的:
+                  - OpenAIモデルの特定設定の検証
+                  - APIキーとベースURLの正しい伝達確認
         """
-        # Arrange - 准备模拟对象
+        # Arrange - シミュレーションオブジェクトの準備
         with patch("app.core.clients.settings", mock_settings), \
              patch("app.core.clients.OpenAIEmbeddings") as mock_embed_class:
 
             mock_embedding = MagicMock()
             mock_embed_class.return_value = mock_embedding
 
-            # Act - 执行初始化
+            # Act - 初期化を実行する
             initialize_embedding_function()
 
-            # Assert - 验证调用参数
+            # Assert - パラメータの検証
             call_args = mock_embed_class.call_args
             assert call_args[1]["model"] == "text-embedding-3-large", "模型名称应该正确"
             assert call_args[1]["openai_api_key"] == "sk-test123", "API密钥应该正确传递"
@@ -353,14 +373,14 @@ class TestInitializeEmbeddingFunction:
 
     def test_initialize_embedding_with_dimensions(self, reset_global_state):
         """
-        CLT-012: 根据模型设置正确的维度
-        覆盖代码行: clients.py:238-242
+        CLT-012: モデル設定に応じた正しい次元を設定
+                カバレッジコード行: clients.py:238-242
 
-        测试目的:
-          - 验证不同模型的维度配置
-          - 确认large模型使用3072维度
+                テスト目的:
+                  - 違うモデルの次元設定の検証
+                  - largeモデルが3072次元を使用することの確認
         """
-        # Arrange - 准备配置
+        # Arrange - 設定の準備
         settings_3large = MagicMock()
         settings_3large.EMBEDDING_API_KEY = "sk-test"
         settings_3large.EMBEDDING_MODEL_NAME = "text-embedding-3-large"
@@ -372,60 +392,60 @@ class TestInitializeEmbeddingFunction:
             mock_embedding = MagicMock()
             mock_embed_class.return_value = mock_embedding
 
-            # Act - 执行初始化
+            # Act - 初期化を実行する
             initialize_embedding_function()
 
-            # Assert - 验证维度参数
+            # アサート - 次元パラメータの検証
             call_args = mock_embed_class.call_args
             assert call_args[1]["dimensions"] == 3072, "text-embedding-3-large 应该使用 3072 维度"
 
     def test_get_embedding_function_success(self, reset_global_state):
         """
-        CLT-013: 获取已初始化的Embedding函数
-        覆盖代码行: clients.py:360-369
+        CLT-013: 初期化されたEmbedding関数の取得
+                カバレッジコード行: clients.py:360-369
 
-        测试目的:
-          - 验证Embedding函数获取逻辑
-          - 确认返回正确的实例
+                テスト目的:
+                  - Embedding関数の取得ロジックの検証
+                  - 正しいインスタンスの返却確認
         """
-        # Arrange - 设置全局状态
+        # Arrange - グローバル状態の設定
         import app.core.clients as clients_module
         mock_embedding = MagicMock()
         clients_module.embedding_function = mock_embedding
         clients_module.EMBEDDING_INITIALIZED = True
         clients_module.EMBEDDING_INIT_ERROR = None
 
-        # Act - 获取Embedding函数
+        # アクション - Embedding関数を取得する
         result = get_embedding_function()
 
-        # Assert - 验证返回正确的实例
+        # Assert - 正しいインスタンスが返されることを確認する
         assert result is mock_embedding, "应该返回已初始化的Embedding函数实例"
 
 
 # ============================================================================
-# 正常系测试: 模块导入
+# 正常系テスト: モジュールのインポート
 # ============================================================================
 
 class TestModuleImport:
     """
-    模块导入测试
+    モジュールインポートテスト
 
-    测试ID: CLT-014
+        テストID: CLT-014
     """
 
     def test_module_import(self):
         """
-        CLT-014: 模块可以正常导入
+        CLT-014: モジュールは正常にインポートできます
 
-        测试目的:
-          - 验证模块导入无错误
-          - 确认所有公开函数可访问
+                テスト目的:
+                  - モジュールのインポートにエラーがないことを確認する
+                  - すべての公開関数にアクセスできるか確認する
         """
-        # Arrange & Act - 尝试导入
+        # Arrange & Act - インポートを試みる
         try:
             from app.core import clients
 
-            # Assert - 验证关键函数存在
+            # Assert - キーフункциが存在することを確認する
             assert hasattr(clients, "extract_aws_region_from_url"), "应该导出 extract_aws_region_from_url"
             assert hasattr(clients, "initialize_opensearch_client"), "应该导出 initialize_opensearch_client"
             assert hasattr(clients, "initialize_embedding_function"), "应该导出 initialize_embedding_function"
@@ -438,35 +458,35 @@ class TestModuleImport:
 
 
 # ============================================================================
-# 异常系测试: initialize_opensearch_client 错误处理
+# 異常系テスト: initialize_opensearch_client エラーハンドリング
 # ============================================================================
 
 class TestInitializeOpensearchClientErrors:
     """
-    initialize_opensearch_client 异常系测试
+    initialize_opensearch_client 例外系テスト
 
-    测试ID: CLT-E01 ~ CLT-E07
+        テストID: CLT-E01 ~ CLT-E07
     """
 
     @pytest.mark.asyncio
     async def test_initialize_opensearch_e01_missing_url(self, reset_global_state):
         """
-        CLT-E01: 缺少OPENSEARCH_URL配置
-        覆盖代码行: clients.py:67-72
+        CLT-E01: OPENSEARCH_URLの設定が欠如しています
+                コードカバレッジ: clients.py:67-72
 
-        测试目的:
-          - 验证缺少URL时的错误处理
-          - 确认设置正确的错误状态
+                テスト目的:
+                  - URLが欠如している場合のエラーハンドリングを確認する
+                  - 正しいエラーステータスが設定されていることを確認する
         """
-        # Arrange - 准备缺少URL的配置
+        # Arrange - リンクURLが欠けている設定を準備する
         bad_settings = MagicMock()
         bad_settings.OPENSEARCH_URL = None
 
         with patch("app.core.clients.settings", bad_settings):
-            # Act - 尝试初始化
+            # アクション - 初期化を試行する
             await initialize_opensearch_client(max_retries=1)
 
-            # Assert - 验证错误状态
+            # Assert - エラーステートの検証
             import app.core.clients as clients_module
             assert clients_module.OS_CLIENT_INITIALIZED is False, "不应该标记为已初始化"
             assert clients_module.OS_CLIENT_INIT_ERROR is not None, "应该记录错误"
@@ -475,22 +495,22 @@ class TestInitializeOpensearchClientErrors:
     @pytest.mark.asyncio
     async def test_initialize_opensearch_e02_invalid_url(self, reset_global_state):
         """
-        CLT-E02: 无效的OPENSEARCH_URL格式
-        覆盖代码行: clients.py:90-97
+        CLT-E02: OPENSEARCH_URL形式が無効です
+                覆盖コード行: clients.py:90-97
 
-        测试目的:
-          - 验证URL格式验证
-          - 确认拒绝无效的URL
+                テスト目的:
+                  - URL形式の検証を確認する
+                  - 無効なURLを拒否することを確認する
         """
-        # Arrange - 准备无效URL
+        # Arrange - 無効なURLを準備する
         bad_settings = MagicMock()
         bad_settings.OPENSEARCH_URL = "invalid-url-without-scheme"
 
         with patch("app.core.clients.settings", bad_settings):
-            # Act - 尝试初始化
+            # アクション - 初期化を試行する
             await initialize_opensearch_client(max_retries=1)
 
-            # Assert - 验证错误状态
+            # Assert - エラーステートの検証
             import app.core.clients as clients_module
             assert clients_module.OS_CLIENT_INITIALIZED is False, "不应该标记为已初始化"
             assert clients_module.OS_CLIENT_INIT_ERROR is not None, "应该记录错误"
@@ -499,14 +519,14 @@ class TestInitializeOpensearchClientErrors:
     @pytest.mark.asyncio
     async def test_initialize_opensearch_e03_missing_credentials(self, reset_global_state):
         """
-        CLT-E03: AWS OpenSearch服务缺少认证凭据
-        覆盖代码行: clients.py:117-125
+        CLT-E03: AWS OpenSearch サービスに認証情報が欠落しています
+                関連コード行: clients.py:117-125
 
-        测试目的:
-          - 验证认证凭据必需性检查
-          - 确认AWS服务强制要求认证
+                テスト目的:
+                  - 認証情報の必須チェックを確認する
+                  - AWSサービスが認証を強制することを確認する
         """
-        # Arrange - 准备AWS URL但无认证
+        # Arrange - AWS URLの準備（認証なし）
         aws_settings = MagicMock()
         aws_settings.OPENSEARCH_URL = "https://test.us-east-1.es.amazonaws.com:443"
         aws_settings.OPENSEARCH_USER = None
@@ -515,10 +535,10 @@ class TestInitializeOpensearchClientErrors:
         with patch("app.core.clients.settings", aws_settings), \
              patch("app.core.clients.is_aws_opensearch_service", return_value=True):
 
-            # Act - 尝试初始化
+            # アクション - 初期化を試行する
             await initialize_opensearch_client(max_retries=1)
 
-            # Assert - 验证错误状态
+            # Assert - エラーステートの検証
             import app.core.clients as clients_module
             assert clients_module.OS_CLIENT_INITIALIZED is False, "不应该标记为已初始化"
             assert clients_module.OS_CLIENT_INIT_ERROR is not None, "应该记录错误"
@@ -526,26 +546,26 @@ class TestInitializeOpensearchClientErrors:
     @pytest.mark.asyncio
     async def test_initialize_opensearch_e04_connection_timeout(self, mock_settings, reset_global_state):
         """
-        CLT-E04: 连接超时
-        覆盖代码行: clients.py:186-197
+        CLT-E04: 接続タイムアウト
+                カバレッジコード行: clients.py:186-197
 
-        测试目的:
-          - 验证超时错误处理
-          - 确认记录超时异常
+                テスト目的:
+                  - タイムアウトエラー処理の検証
+                  - タイムアウト例外の記録確認
         """
-        # Arrange - 模拟超时
+        # Arrange - タイムアウト模拟
         with patch("app.core.clients.settings", mock_settings), \
              patch("app.core.clients.AsyncOpenSearch") as mock_os_class:
 
             from opensearchpy.exceptions import ConnectionTimeout
-            # 创建正确格式的异常对象,opensearchpy 需要 (method, url, info) 三元组
+            # 正しい形式の例外オブジェクトを作成するために、opensearchpy は (method, url, info) のトリプルが必要です
             timeout_error = ConnectionTimeout("N/A", "Connection timeout", {"error": "timeout"})
             mock_os_class.side_effect = timeout_error
 
-            # Act - 尝试初始化
+            # アクション - 初期化を試行する
             await initialize_opensearch_client(max_retries=1, retry_delay=0.1)
 
-            # Assert - 验证错误状态
+            # Assert - エラーステートの検証
             import app.core.clients as clients_module
             assert clients_module.OS_CLIENT_INITIALIZED is False, "不应该标记为已初始化"
             assert clients_module.OS_CLIENT_INIT_ERROR is not None, "应该记录超时错误"
@@ -553,26 +573,26 @@ class TestInitializeOpensearchClientErrors:
     @pytest.mark.asyncio
     async def test_initialize_opensearch_e05_max_retries_exceeded(self, mock_settings, reset_global_state):
         """
-        CLT-E05: 超过最大重试次数
-        覆盖代码行: clients.py:175-184
+        CLT-E05: 最大リトライ回数を超えた
+                カバレッジコード行: clients.py:175-184
 
-        测试目的:
-          - 验证重试次数限制
-          - 确认达到上限后放弃
+                テスト目的:
+                  - リトライ回数の制限を検証する
+                  - 上限に達した場合に放弃されることを確認する
         """
-        # Arrange - 模拟持续失败
+        # Arrange - シミュレーションを継続的に失敗させる
         with patch("app.core.clients.settings", mock_settings), \
              patch("app.core.clients.AsyncOpenSearch") as mock_os_class, \
              patch("asyncio.sleep", new_callable=AsyncMock):
 
             mock_client = AsyncMock()
-            mock_client.ping = AsyncMock(return_value=False)  # 总是失败
+            mock_client.ping = AsyncMock(return_value=False)  # いつも失敗する
             mock_os_class.return_value = mock_client
 
-            # Act - 尝试初始化
+            # アクション - 初期化を試行する
             await initialize_opensearch_client(max_retries=3, retry_delay=0.1)
 
-            # Assert - 验证错误状态
+            # Assert - エラーステートの検証
             import app.core.clients as clients_module
             assert clients_module.OS_CLIENT_INITIALIZED is False, "不应该标记为已初始化"
             assert clients_module.OS_CLIENT_INIT_ERROR is not None, "应该记录错误"
@@ -581,14 +601,14 @@ class TestInitializeOpensearchClientErrors:
     @pytest.mark.asyncio
     async def test_initialize_opensearch_e06_ping_failure(self, mock_settings, reset_global_state):
         """
-        CLT-E06: Ping操作失败
-        覆盖代码行: clients.py:172-175
+        CLT-E06: Ping操作失敗
+                覆盖コード行: clients.py:172-175
 
-        测试目的:
-          - 验证ping失败处理
-          - 确认正确记录失败原因
+                テスト目的:
+                  - Ping失敗時の処理を確認する
+                  - 異常原因の記録が正しいことを確認する
         """
-        # Arrange - 模拟ping异常
+        # Arrange - ピング異常をシミュレート
         with patch("app.core.clients.settings", mock_settings), \
              patch("app.core.clients.AsyncOpenSearch") as mock_os_class:
 
@@ -596,10 +616,10 @@ class TestInitializeOpensearchClientErrors:
             mock_client.ping = AsyncMock(side_effect=Exception("Ping error"))
             mock_os_class.return_value = mock_client
 
-            # Act - 尝试初始化
+            # アクション - 初期化を試行する
             await initialize_opensearch_client(max_retries=1, retry_delay=0.1)
 
-            # Assert - 验证错误状态
+            # Assert - エラーステートの検証
             import app.core.clients as clients_module
             assert clients_module.OS_CLIENT_INITIALIZED is False, "不应该标记为已初始化"
             assert clients_module.OS_CLIENT_INIT_ERROR is not None, "应该记录错误"
@@ -607,191 +627,191 @@ class TestInitializeOpensearchClientErrors:
     @pytest.mark.asyncio
     async def test_initialize_opensearch_e07_ssl_cert_error(self, mock_settings, reset_global_state):
         """
-        CLT-E07: SSL证书验证错误
-        覆盖代码行: clients.py:186-197
+        CLT-E07: SSL証明書検証エラー
+                カバレッジコード行: clients.py:186-197
 
-        测试目的:
-          - 验证SSL错误处理
-          - 确认证书问题被正确捕获
+                テスト目的:
+                  - SSLエラーハンドリングの検証
+                  - 証明書問題の正しいキャッチを確認する
         """
-        # Arrange - 模拟SSL错误
+        # Arrange - SSLエラーを模拟する
         with patch("app.core.clients.settings", mock_settings), \
              patch("app.core.clients.AsyncOpenSearch") as mock_os_class:
 
             import ssl
             mock_os_class.side_effect = ssl.SSLError("Certificate verification failed")
 
-            # Act - 尝试初始化
+            # アクション - 初期化を試行する
             await initialize_opensearch_client(max_retries=1, retry_delay=0.1)
 
-            # Assert - 验证错误状态
+            # Assert - エラーステートの検証
             import app.core.clients as clients_module
             assert clients_module.OS_CLIENT_INITIALIZED is False, "不应该标记为已初始化"
             assert clients_module.OS_CLIENT_INIT_ERROR is not None, "应该记录SSL错误"
 
 
 # ============================================================================
-# 异常系测试: get_opensearch_client 错误处理
+# 異常系テスト: get_opensearch_client エラーハンドリング
 # ============================================================================
 
 class TestGetOpensearchClientErrors:
     """
-    get_opensearch_client 异常系测试
+    get_opensearch_client アノマリーテスト
 
-    测试ID: CLT-E08 ~ CLT-E09
+        テストID: CLT-E08 ~ CLT-E09
     """
 
     @pytest.mark.asyncio
     async def test_get_opensearch_client_e08_not_initialized(self, reset_global_state):
         """
-        CLT-E08: 客户端未初始化时调用
-        覆盖代码行: clients.py:273-280
+        CLT-E08: 未初始化のクライアント呼び出し
+                カバレッジコード行: clients.py:273-280
 
-        测试目的:
-          - 验证未初始化检测
-          - 确认返回None而不是抛出异常
+                テスト目的:
+                  - 未初期化検出の確認
+                  - 例外の送出ではなくNoneを返すことを確認する
         """
-        # Arrange - 确保未初始化
+        # Arrange - 未初期化状態を確認する
         import app.core.clients as clients_module
         clients_module.OS_CLIENT_INITIALIZED = False
         clients_module.OS_CLIENT_INIT_ERROR = None
 
-        # Act - 尝试获取客户端
+        # Act - クライアントの取得を試みる
         result = await get_opensearch_client()
 
-        # Assert - 验证返回None
+        # Assert - Noneを返すことを確認する
         assert result is None, "未初始化时应该返回None"
 
     @pytest.mark.asyncio
     async def test_get_opensearch_client_e09_init_error_state(self, reset_global_state):
         """
-        CLT-E09: 初始化错误状态下调用
-        覆盖代码行: clients.py:267-272
+        CLT-E09: エラーステータス中での初期化呼び出し
+                カバレッジコード行: clients.py:267-272
 
-        测试目的:
-          - 验证错误状态检测
-          - 确认有错误时返回None
+                テスト目的:
+                  - エラーステータス検出の確認
+                  - エラー時におけるNoneの返却確認
         """
-        # Arrange - 设置错误状态
+        # Arrange - エラーステートの設定
         import app.core.clients as clients_module
         clients_module.OS_CLIENT_INITIALIZED = False
         clients_module.OS_CLIENT_INIT_ERROR = ValueError("Init failed")
 
-        # Act - 尝试获取客户端
+        # Act - クライアントの取得を試みる
         result = await get_opensearch_client()
 
-        # Assert - 验证返回None
+        # Assert - Noneを返すことを確認する
         assert result is None, "有初始化错误时应该返回None"
 
 
 # ============================================================================
-# 异常系测试: get_opensearch_client_with_auth 错误处理
+# 異常系テスト: get_opensearch_client_with_auth エラーハンドリング
 # ============================================================================
 
 class TestGetOpensearchClientWithAuthErrors:
     """
-    get_opensearch_client_with_auth 异常系测试
+    get_opensearch_client_with_auth 例外テスト
 
-    测试ID: CLT-E10 ~ CLT-E12
+        テストID: CLT-E10 ~ CLT-E12
     """
 
     @pytest.mark.asyncio
     async def test_get_opensearch_client_with_auth_e10_invalid_format(self, mock_settings):
         """
-        CLT-E10: 无效的认证字符串格式
-        覆盖代码行: clients.py:291-295
+        CLT-E10: 認証文字列フォーマットが無効
+                カバレッジコード行: clients.py:291-295
 
-        测试目的:
-          - 验证认证格式验证
-          - 确认拒绝无效格式
+                テスト目的:
+                  - 認証フォーマットの検証を確認
+                  - 無効なフォーマットでの拒否を確認する
         """
-        # Arrange - 准备无效格式(缺少冒号)
+        # Arrange - 無効な形式の準備（コロンが欠缺）
         invalid_auth = "username_without_colon"
 
         with patch("app.core.clients.settings", mock_settings):
-            # Act - 尝试创建客户端
+            # Act - クライアントの作成を試行する
             result = await get_opensearch_client_with_auth(invalid_auth)
 
-            # Assert - 验证返回None
+            # Assert - Noneを返すことを確認する
             assert result is None, "无效格式应该返回None"
 
     @pytest.mark.asyncio
     async def test_get_opensearch_client_with_auth_e11_missing_url(self):
         """
-        CLT-E11: 缺少OPENSEARCH_URL配置
-        覆盖代码行: clients.py:298-302
+        CLT-E11: OPENSEARCH_URLの設定が欠如しています
+                被覆コード行: clients.py:298-302
 
-        测试目的:
-          - 验证URL必需性检查
-          - 确认无URL时返回None
+                テスト目的:
+                  - URLの必須チェックの検証
+                  - URLがない場合にNoneが返されることの確認
         """
-        # Arrange - 准备缺少URL的配置
+        # Arrange - リンクURLが欠けている設定を準備する
         bad_settings = MagicMock()
         bad_settings.OPENSEARCH_URL = None
 
         with patch("app.core.clients.settings", bad_settings):
-            # Act - 尝试创建客户端
+            # Act - クライアントの作成を試行する
             result = await get_opensearch_client_with_auth("user:pass")
 
-            # Assert - 验证返回None
+            # Assert - Noneを返すことを確認する
             assert result is None, "缺少URL时应该返回None"
 
     @pytest.mark.asyncio
     async def test_get_opensearch_client_with_auth_e12_ping_failure(self, mock_settings):
         """
-        CLT-E12: Ping失败导致客户端创建失败
-        覆盖代码行: clients.py:347-352
+        CLT-E12: Ping失敗によりクライアント作成失敗
+                カバレッジコード行: clients.py:347-352
 
-        测试目的:
-          - 验证连接测试失败处理
-          - 确认ping失败时返回None
+                テスト目的:
+                  - 接続テスト失敗処理の検証
+                  - Ping失敗時にNoneが返されることの確認
         """
-        # Arrange - 模拟ping失败
+        # Arrange - ピング失敗をシミュレート
         with patch("app.core.clients.settings", mock_settings), \
              patch("app.core.clients.is_aws_opensearch_service", return_value=False), \
              patch("app.core.clients.AsyncOpenSearch") as mock_os_class:
 
             mock_client = AsyncMock()
-            mock_client.ping = AsyncMock(return_value=False)  # ping失败
+            mock_client.ping = AsyncMock(return_value=False)  # ping失敗
             mock_os_class.return_value = mock_client
 
-            # Act - 尝试创建客户端
+            # Act - クライアントの作成を試行する
             result = await get_opensearch_client_with_auth("user:pass")
 
-            # Assert - 验证返回None
+            # Assert - Noneを返すことを確認する
             assert result is None, "ping失败时应该返回None"
 
 
 # ============================================================================
-# 异常系测试: initialize_embedding_function 错误处理
+# 異常系テスト: initialize_embedding_function エラーハンドリング
 # ============================================================================
 
 class TestInitializeEmbeddingFunctionErrors:
     """
-    initialize_embedding_function 异常系测试
+    initialize_embedding_function 例外テスト
 
-    测试ID: CLT-E13 ~ CLT-E14
+        テストID: CLT-E13 ~ CLT-E14
     """
 
     def test_initialize_embedding_e13_missing_api_key(self, reset_global_state):
         """
-        CLT-E13: 缺少Embedding API密钥
-        覆盖代码行: clients.py:214-218
+        CLT-E13: Embedding APIキーが欠落しています
+                覆盖コード行: clients.py:214-218
 
-        测试目的:
-          - 验证API密钥必需性检查
-          - 确认设置错误状态
+                テスト目的:
+                  - APIキーの必須チェックの検証
+                  - エラー設定状態の確認
         """
-        # Arrange - 准备缺少API密钥的配置
+        # Arrange - リスクAPIキーの不足している設定を準備する
         bad_settings = MagicMock()
         bad_settings.EMBEDDING_API_KEY = None
         bad_settings.EMBEDDING_MODEL_NAME = "text-embedding-3-large"
 
         with patch("app.core.clients.settings", bad_settings):
-            # Act - 尝试初始化
+            # アクション - 初期化を試行する
             initialize_embedding_function()
 
-            # Assert - 验证错误状态
+            # Assert - エラーステートの検証
             import app.core.clients as clients_module
             assert clients_module.EMBEDDING_INITIALIZED is False, "不应该标记为已初始化"
             assert clients_module.EMBEDDING_INIT_ERROR is not None, "应该记录错误"
@@ -799,102 +819,102 @@ class TestInitializeEmbeddingFunctionErrors:
 
     def test_initialize_embedding_e14_missing_model_name(self, reset_global_state):
         """
-        CLT-E14: 缺少Embedding模型名称
-        覆盖代码行: clients.py:214-218
+        CLT-E14: Embeddingモデル名の欠如
+                被覆コード行: clients.py:214-218
 
-        测试目的:
-          - 验证模型名称必需性检查
-          - 确认设置错误状态
+                テスト目的:
+                  - モデル名の必須チェックの検証
+                  - エラー設定状態の確認
         """
-        # Arrange - 准备缺少模型名称的配置
+        # Arrange - モデル名が欠落している設定を準備する
         bad_settings = MagicMock()
         bad_settings.EMBEDDING_API_KEY = "sk-test"
         bad_settings.EMBEDDING_MODEL_NAME = None
 
         with patch("app.core.clients.settings", bad_settings):
-            # Act - 尝试初始化
+            # アクション - 初期化を試行する
             initialize_embedding_function()
 
-            # Assert - 验证错误状态
+            # Assert - エラーステートの検証
             import app.core.clients as clients_module
             assert clients_module.EMBEDDING_INITIALIZED is False, "不应该标记为已初始化"
             assert clients_module.EMBEDDING_INIT_ERROR is not None, "应该记录错误"
 
 
 # ============================================================================
-# 异常系测试: get_embedding_function 错误处理
+# 異常系テスト: get_embedding_function エラーハンドリング
 # ============================================================================
 
 class TestGetEmbeddingFunctionErrors:
     """
-    get_embedding_function 异常系测试
+    get_embedding_function 例外テスト
 
-    测试ID: CLT-E15 ~ CLT-E16
+        テストID: CLT-E15 ~ CLT-E16
     """
 
     def test_get_embedding_function_e15_not_initialized(self, reset_global_state):
         """
-        CLT-E15: Embedding未初始化时调用
-        覆盖代码行: clients.py:365-369
+        CLT-E15: Embeddingが初期化されていない状態で呼び出し
+                被覆コード行: clients.py:365-369
 
-        测试目的:
-          - 验证未初始化检测
-          - 确认返回None
+                テスト目的:
+                  - 未初期化検出の確認
+                  - Noneが返されることの確認
         """
-        # Arrange - 确保未初始化
+        # Arrange - 未初期化状態を確認する
         import app.core.clients as clients_module
         clients_module.EMBEDDING_INITIALIZED = False
         clients_module.EMBEDDING_INIT_ERROR = None
 
-        # Act - 尝试获取Embedding函数
+        # Act - Embedding関数の取得を試みる
         result = get_embedding_function()
 
-        # Assert - 验证返回None
+        # Assert - Noneを返すことを確認する
         assert result is None, "未初始化时应该返回None"
 
     def test_get_embedding_function_e16_init_error_state(self, reset_global_state):
         """
-        CLT-E16: 初始化错误状态下调用
-        覆盖代码行: clients.py:360-364
+        CLT-E16: エラーステータス中に初期化呼び出し
+                カバレッジコード行: clients.py:360-364
 
-        测试目的:
-          - 验证错误状态检测
-          - 确认有错误时返回None
+                テスト目的:
+                  - エラーステータス検出の確認
+                  - エラー時Noneを返すことを確認する
         """
-        # Arrange - 设置错误状态
+        # Arrange - エラーステートの設定
         import app.core.clients as clients_module
         clients_module.EMBEDDING_INITIALIZED = False
         clients_module.EMBEDDING_INIT_ERROR = ValueError("Init failed")
 
-        # Act - 尝试获取Embedding函数
+        # Act - Embedding関数の取得を試みる
         result = get_embedding_function()
 
-        # Assert - 验证返回None
+        # Assert - Noneを返すことを確認する
         assert result is None, "有初始化错误时应该返回None"
 
 
 # ============================================================================
-# 安全测试
+# セキュリティテスト
 # ============================================================================
 
 @pytest.mark.security
 class TestClientsSecurity:
     """
-    clients.py 安全测试
+    clients.py セキュリティテスト
 
-    测试ID: CLT-SEC-01 ~ CLT-SEC-06
+        テストID: CLT-SEC-01 ~ CLT-SEC-06
     """
 
     @pytest.mark.asyncio
     async def test_sec_01_credentials_not_logged(self, mock_settings, reset_global_state, caplog):
         """
-        CLT-SEC-01: 认证凭据不被日志记录
+        CLT-SEC-01: 認証クレデンシャルはログに記録されない
 
-        验证内容:
-          - 用户名密码不出现在日志中
-          - 敏感信息被安全处理
+                評価内容:
+                  - ユーザ名とパスワードがログに表示されない
+                  - 機密情報が安全に取り扱われる
         """
-        # Arrange - 准备配置和日志捕获
+        # Arrange - 設定の準備とログキャプチャ
         import logging
         caplog.set_level(logging.INFO)
 
@@ -905,23 +925,23 @@ class TestClientsSecurity:
             mock_client.ping = AsyncMock(return_value=True)
             mock_os_class.return_value = mock_client
 
-            # Act - 执行初始化
+            # Act - 初期化を実行する
             await initialize_opensearch_client(max_retries=1)
 
-            # Assert - 验证日志中不包含密码
+            # アサート - ログにパスワードが含まれていないことを確認する
             log_text = caplog.text
             assert "admin123" not in log_text, "密码不应该出现在日志中"
             assert "password" not in log_text.lower() or "password=" not in log_text.lower(), "密码字段不应该被记录"
 
     def test_sec_02_api_key_not_exposed(self, reset_global_state, caplog):
         """
-        CLT-SEC-02: API密钥不暴露在错误消息中
+        CLT-SEC-02: APIキーはエラーメッセージに含まれない
 
-        验证内容:
-          - API密钥不出现在错误信息中
-          - 异常不泄露敏感配置
+                評価内容:
+                  - APIキーがエラーメッセージに表示されていない
+                  - エラーで敏感な設定情報が漏洩していない
         """
-        # Arrange - 准备配置和日志捕获
+        # Arrange - 設定の準備とログキャプチャ
         import logging
         caplog.set_level(logging.INFO)
 
@@ -933,13 +953,13 @@ class TestClientsSecurity:
         with patch("app.core.clients.settings", bad_settings), \
              patch("app.core.clients.OpenAIEmbeddings") as mock_embed_class:
 
-            # 模拟初始化失败
+            # シミュレーション初期化失敗
             mock_embed_class.side_effect = Exception("Model initialization failed")
 
-            # Act - 尝试初始化
+            # アクション - 初期化を試行する
             initialize_embedding_function()
 
-            # Assert - 验证日志中不包含API密钥
+            # Assert - ログにAPIキーが含まれていないことを確認する
             log_text = caplog.text
             assert "sk-secret-key-123456" not in log_text, "API密钥不应该出现在日志中"
             assert "secret" not in log_text.lower() or "api_key=" not in log_text.lower(), "API密钥字段不应该被记录"
@@ -947,13 +967,13 @@ class TestClientsSecurity:
     @pytest.mark.asyncio
     async def test_sec_03_ssl_verification_enabled(self, mock_settings, reset_global_state):
         """
-        CLT-SEC-03: SSL证书验证强制启用
+        CLT-SEC-03: SSL証明書検証の強制有効化
 
-        验证内容:
-          - verify_certs 总是为 True
-          - SSL验证不能被绕过
+                評価内容:
+                  - verify_certs は常に True
+                  - SSL検証をバイパスすることはできない
         """
-        # Arrange - 准备模拟对象
+        # Arrange - シミュレーションオブジェクトの準備
         with patch("app.core.clients.settings", mock_settings), \
              patch("app.core.clients.AsyncOpenSearch") as mock_os_class:
 
@@ -961,10 +981,10 @@ class TestClientsSecurity:
             mock_client.ping = AsyncMock(return_value=True)
             mock_os_class.return_value = mock_client
 
-            # Act - 执行初始化
+            # Act - 初期化を実行する
             await initialize_opensearch_client(max_retries=1)
 
-            # Assert - 验证SSL配置
+            # Assert - SSL設定の検証
             call_args = mock_os_class.call_args
             assert call_args[1]["use_ssl"] is True, "必须使用SSL"
             assert call_args[1]["verify_certs"] is True, "必须验证证书"
@@ -972,13 +992,13 @@ class TestClientsSecurity:
     @pytest.mark.asyncio
     async def test_sec_04_connection_timeout_reasonable(self, mock_settings, reset_global_state):
         """
-        CLT-SEC-04: 连接超时设置合理(防止DoS)
+        CLT-SEC-04: 接続タイムアウト設定が適切である（DoS防止）
 
-        验证内容:
-          - 超时时间不超过60秒
-          - 防止无限等待
+                証明内容:
+                  - タイムアウト時間が60秒以内である
+                  - 無限待ちを防止する
         """
-        # Arrange - 准备模拟对象
+        # Arrange - シミュレーションオブジェクトの準備
         with patch("app.core.clients.settings", mock_settings), \
              patch("app.core.clients.AsyncOpenSearch") as mock_os_class:
 
@@ -986,10 +1006,10 @@ class TestClientsSecurity:
             mock_client.ping = AsyncMock(return_value=True)
             mock_os_class.return_value = mock_client
 
-            # Act - 执行初始化
+            # Act - 初期化を実行する
             await initialize_opensearch_client(max_retries=1)
 
-            # Assert - 验证超时配置
+            # Assert - タイムアウト設定の検証
             call_args = mock_os_class.call_args
             timeout = call_args[1].get("timeout", 0)
             assert 0 < timeout <= 60, f"超时时间应该在1-60秒之间,实际为 {timeout}"
@@ -997,39 +1017,39 @@ class TestClientsSecurity:
     @pytest.mark.asyncio
     async def test_sec_05_error_messages_sanitized(self, mock_settings, reset_global_state):
         """
-        CLT-SEC-05: 错误消息已清理敏感信息
+        CLT-SEC-05: エラーメッセージに敏感情報がクリアされている
 
-        验证内容:
-          - URL中的认证信息被隐藏
-          - 错误不泄露系统路径
+                証明内容:
+                  - URL中の認証情報が隠されている
+                  - エラーがシステムパスを漏らしていない
         """
-        # Arrange - 准备会失败的配置
+        # Arrange - ファイルの準備を失敗させるような設定
         with patch("app.core.clients.settings", mock_settings), \
              patch("app.core.clients.AsyncOpenSearch") as mock_os_class:
 
-            # 模拟连接错误
+            # 接続エラーを模拟する
             from opensearchpy.exceptions import ConnectionError
-            # 创建正确格式的异常对象,opensearchpy 需要 (method, url, info) 三元组
+            # 正しい形式の例外オブジェクトを作成するために、opensearchpy は (method, url, info) のトリプルが必要です
             connection_error = ConnectionError("N/A", "Connection failed", {"error": "connection refused"})
             mock_os_class.side_effect = connection_error
 
-            # Act - 尝试初始化
+            # アクション - 初期化を試行する
             await initialize_opensearch_client(max_retries=1, retry_delay=0.1)
 
-            # Assert - 验证错误状态(不检查具体消息内容,只确认有错误记录)
+            # Assert - エラーステートの検証(具体的なメッセージ内容はチェックせず、ただエラーレコードがあることを確認する)
             import app.core.clients as clients_module
             assert clients_module.OS_CLIENT_INIT_ERROR is not None, "应该记录错误"
 
     @pytest.mark.asyncio
     async def test_sec_06_auth_header_not_exposed(self, mock_settings):
         """
-        CLT-SEC-06: 认证头信息不暴露在客户端对象中
+        CLT-SEC-06: 認証ヘッダ情報はクライアントオブジェクトに露出しない
 
-        验证内容:
-          - 认证信息不以明文形式存储
-          - 无法从客户端对象直接读取密码
+                評価内容:
+                  - 認証情報は平文で保存されていない
+                  - クライアントオブジェクトから直接パスワードを読み取ることはできない
         """
-        # Arrange - 创建带认证的客户端
+        # Arrange - 認証付きのクライアントを作成する
         opensearch_auth = "testuser:testpass"
 
         with patch("app.core.clients.settings", mock_settings), \
@@ -1038,17 +1058,17 @@ class TestClientsSecurity:
 
             mock_client = AsyncMock()
             mock_client.ping = AsyncMock(return_value=True)
-            # 模拟客户端不暴露http_auth
+            # 模拟クライアントはhttp_authを公開しない
             mock_client.transport = MagicMock()
             mock_client.transport.get_connection = MagicMock(return_value=MagicMock())
             mock_os_class.return_value = mock_client
 
-            # Act - 创建客户端
+            # アクション - クライアントを作成する
             result = await get_opensearch_client_with_auth(opensearch_auth)
 
-            # Assert - 验证客户端不直接暴露密码
+            # Assert - クライアントが直接パスワードを暴露しないことを確認する
             assert result is not None, "应该成功创建客户端"
-            # 验证密码不能从返回的客户端对象直接读取
+            # パスワードの検証は、返却されたクライアントオブジェクトから直接読み取ることはできません
             client_str = str(result)
             assert "testpass" not in client_str, "密码不应该出现在客户端字符串表示中"
 

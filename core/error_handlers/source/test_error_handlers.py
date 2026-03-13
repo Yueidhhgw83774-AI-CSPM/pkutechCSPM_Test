@@ -52,14 +52,14 @@ class TestCreateErrorResponse:
           - 基本パラメータでHTTPExceptionが正しく生成されること
           - エラーメッセージにerror_idが含まれること
         """
-        # Arrange - 準備測試數據
+        # Arrange - テストデータの準備
         status_code = 400
         message = "入力が不正です"
 
-        # Act - 執行被測試函数
+        # Act - テスト対象の関数を実行する
         result = create_error_response(status_code=status_code, message=message)
 
-        # Assert - 驗證結果
+        # Assert - 結果の検証
         assert isinstance(result, HTTPException)  # HTTPException型であることを確認
         assert result.status_code == 400  # ステータスコードが正しいことを確認
         assert "入力が不正です" in result.detail  # メッセージが含まれることを確認

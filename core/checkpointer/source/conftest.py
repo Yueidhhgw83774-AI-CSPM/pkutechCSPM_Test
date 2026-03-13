@@ -1,18 +1,15 @@
 # -*- coding: utf-8 -*-
 """
-pytest fixtures for checkpointer module tests.
-checkpointer 模块测试的 pytest fixtures。
-
-This module provides shared fixtures and test result collection for testing checkpointer module.
-本模块提供用于测试 checkpointer 模块的共享 fixtures 和测试结果收集。
+checkpointer モジュールテスト用 pytest 設定ファイル。
+テスト対象: app/core/checkpointer.py
+テスト仕様: checkpointer_tests.md
 """
 
 import os
+import re
 import sys
 
-# Set required environment variables BEFORE any imports to prevent config validation errors
-# 在任何导入之前设置必需的环境变量以防止配置验证错误
-# Using actual values from .env file for testing
+# インポート前に必須の環境変数を設定する（設定検証エラーを防ぐ）
 os.environ.setdefault("GPT5_1_CHAT_API_KEY", "sk-h6zKpdRQoYKEcj6vhTHMPg")
 os.environ.setdefault("GPT5_1_CODEX_API_KEY", "sk-h6zKpdRQoYKEcj6vhTHMPg")
 os.environ.setdefault("GPT5_2_API_KEY", "sk-h6zKpdRQoYKEcj6vhTHMPg")
@@ -34,26 +31,34 @@ from typing import Any, Dict, List
 
 import pytest
 
-# Add the project root to Python path for imports
-# 将项目根目录添加到 Python 路径以便导入
-PROJECT_ROOT = r"C:\pythonProject\python_ai_cspm\platform_python_backend-testing"
-if PROJECT_ROOT not in sys.path:
+# ─── SourceCodeRoot を .env から読み込む ────────────────────────────────
+def _load_source_root() -> str:
+    """プロジェクトルートの .env から SourceCodeRoot を読み込む。"""
+    # 優先度1: ルート conftest.py が os.environ に設定済みの場合
+    from_env = os.environ.get("SourceCodeRoot", "").strip().strip("'\"")
+    if from_env:
+        return from_env
+    # 優先度2: ディレクトリツリーを遡って .env ファイルを検索する
+    current = Path(__file__).resolve()
+    for directory in [current, *current.parents]:
+        env_file = (directory if directory.is_dir() else directory.parent) / ".env"
+        if env_file.exists():
+            for line in env_file.read_text(encoding="utf-8").splitlines():
+                m = re.match(r"^\s*SourceCodeRoot\s*=\s*['\"]?(.+?)['\"]?\s*$", line)
+                if m:
+                    return m.group(1).strip()
+    return ""
+
+PROJECT_ROOT = _load_source_root()
+if PROJECT_ROOT and PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 
 
-# =============================================================================
-# Module Reset Fixture | 模块重置 Fixture
-# =============================================================================
-
+# ─── モジュールリセット Fixture ──────────────────────────────────────────
 @pytest.fixture(autouse=True)
 def reset_checkpointer_module():
-    """
-    Reset checkpointer module state between tests.
-    在测试之间重置 checkpointer 模块状态。
-
-    checkpointer.py 使用全局变量缓存，需要在测试间重置以确保独立性。
-    """
-    # 测试前清除模块缓存
+    """テストごとに checkpointer モジュールのグローバル状態をリセットする。"""
+    # テスト前にモジュールキャッシュをクリアする
     modules_to_remove = [
         key for key in list(sys.modules.keys())
         if key.startswith("app.core.checkpointer")
@@ -63,7 +68,7 @@ def reset_checkpointer_module():
 
     yield
 
-    # 测试后重置全局变量
+    # テスト後にグローバル変数をリセットする
     try:
         import app.core.checkpointer as ckp_module
         ckp_module._checkpointer = None
@@ -73,7 +78,7 @@ def reset_checkpointer_module():
     except (ImportError, AttributeError):
         pass
 
-    # 再次清除模块缓存
+    # 再度モジュールキャッシュをクリアする
     modules_to_remove = [
         key for key in list(sys.modules.keys())
         if key.startswith("app.core.checkpointer")
@@ -82,27 +87,17 @@ def reset_checkpointer_module():
         del sys.modules[mod]
 
 
-# =============================================================================
-# Test Report Generation | 测试报告生成
-# =============================================================================
-
-# Global test results storage
-# 全局测试结果存储
-_test_results = []
-
+# ─── テスト結果収集 ──────────────────────────────────────────────────────
+_test_results = []  # テスト結果を格納するグローバルリスト
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
 def pytest_runtest_makereport(item, call):
-    """
-    Hook to capture test results.
-    捕获测试结果的钩子。
-    """
+    """テスト結果をキャプチャする pytest フック。"""
     outcome = yield
     rep = outcome.get_result()
 
     if rep.when == "call":
-        # Check if test is marked as xfail
-        # 检查测试是否标记为 xfail
+        # xfail マーカーの確認
         is_xfail = hasattr(rep, "wasxfail") or (
             hasattr(item, '_evalxfail') and item._evalxfail.wasvalid()
         )
@@ -118,15 +113,14 @@ def pytest_runtest_makereport(item, call):
 
 
 def pytest_sessionfinish(session, exitstatus):
-    """
-    Pytest hook to generate detailed reports after all tests complete.
-    在所有测试完成后生成详细报告的 pytest 钩子。
-    """
-    report_dir = r"C:\pythonProject\python_ai_cspm\TestReport\checkpointer\reports"
+    """全テスト完了後にレポートを生成する pytest フック。"""
+    # ★★★ 重要: レポートパスの動的計算（絶対にハードコードしない） ★★★
+    from pathlib import Path
+    current_file = Path(__file__).resolve()
+    module_dir = current_file.parent.parent  # source/ の親 = checkpointer/
+    report_dir = module_dir / "reports"
     os.makedirs(report_dir, exist_ok=True)
 
-    # Parse test results
-    # 解析测试结果
     normal_tests = []
     error_tests = []
     security_tests = []
@@ -141,23 +135,20 @@ def pytest_sessionfinish(session, exitstatus):
         duration = result["duration"]
         is_xfail = result.get("is_xfail", False)
 
-        # Override outcome for xfail tests
-        # 覆盖 xfail 测试的结果
+        # xfail テストのステータスを上書きする
         if is_xfail:
             outcome = "xfailed"
 
-        # Parse test ID and categorize
-        # 解析测试 ID 并分类
+        # nodeid パターンでテストを分類する
         if "test_checkpointer.py" in nodeid:
-            # Security tests
-            # 安全测试
+            # セキュリティテストの分岐
             if "TestCheckpointerSecurity" in nodeid or "Security" in nodeid:
                 if "postgres_url_not_logged" in nodeid:
-                    test_id, test_name = "CKP-SEC-01", "PostgreSQL URL不输出日志"
+                    test_id, test_name = "CKP-SEC-01", "PostgreSQL URLがログに出力されないこと"
                 elif "credentials_not_exposed" in nodeid:
-                    test_id, test_name = "CKP-SEC-02", "认证信息不泄露"
+                    test_id, test_name = "CKP-SEC-02", "認証情報が漏洩しないこと"
                 elif "connection_pool_max_size" in nodeid:
-                    test_id, test_name = "CKP-SEC-03", "连接池大小限制"
+                    test_id, test_name = "CKP-SEC-03", "接続プールサイズ制限"
                 else:
                     continue
                 security_tests.append({
@@ -166,19 +157,18 @@ def pytest_sessionfinish(session, exitstatus):
                     "status": outcome,
                     "duration": duration
                 })
-            # Error tests
-            # 异常系测试
+            # 異常系テストの分岐
             elif "Error" in nodeid or "Errors" in nodeid:
                 if "postgres_url_not_set" in nodeid:
-                    test_id, test_name = "CKP-E01", "PostgreSQL URL未设置"
+                    test_id, test_name = "CKP-E01", "PostgreSQL URL未設定時のフォールバック"
                 elif "psycopg_not_installed" in nodeid:
-                    test_id, test_name = "CKP-E02", "psycopg未安装"
+                    test_id, test_name = "CKP-E02", "psycopg未インストール時のフォールバック"
                 elif "postgres_connection_error" in nodeid:
-                    test_id, test_name = "CKP-E03", "PostgreSQL连接错误"
+                    test_id, test_name = "CKP-E03", "PostgreSQL接続エラー時のフォールバック"
                 elif "close_pool_error" in nodeid:
-                    test_id, test_name = "CKP-E04", "连接池关闭错误"
+                    test_id, test_name = "CKP-E04", "接続プール閉じるエラー処理"
                 elif "setup_fails" in nodeid:
-                    test_id, test_name = "CKP-E05", "setup失败"
+                    test_id, test_name = "CKP-E05", "setup失敗時のフォールバック"
                 else:
                     continue
                 error_tests.append({
@@ -187,35 +177,34 @@ def pytest_sessionfinish(session, exitstatus):
                     "status": outcome,
                     "duration": duration
                 })
-            # Normal tests
-            # 正常系测试
+            # 正常系テストの分岐
             else:
                 if "import_checkpointer_module" in nodeid:
-                    test_id, test_name = "CKP-INIT", "模块导入"
+                    test_id, test_name = "CKP-INIT", "モジュールインポート成功"
                 elif "initial_storage_mode" in nodeid:
-                    test_id, test_name = "CKP-001", "初始存储模式"
+                    test_id, test_name = "CKP-001", "初期ストレージモード確認"
                 elif "memory_saver_init_with_memory_type" in nodeid:
-                    test_id, test_name = "CKP-002", "MemorySaver初始化(memory)"
+                    test_id, test_name = "CKP-002", "MemorySaver初期化(memory指定)"
                 elif "memory_saver_fallback_unset" in nodeid:
-                    test_id, test_name = "CKP-003", "MemorySaver回退(未设置)"
+                    test_id, test_name = "CKP-003", "MemorySaverフォールバック(未設定)"
                 elif "cached_checkpointer_returned" in nodeid:
-                    test_id, test_name = "CKP-004", "缓存Checkpointer返回"
+                    test_id, test_name = "CKP-004", "キャッシュされたCheckpointer返却"
                 elif "postgres_checkpointer_init" in nodeid:
-                    test_id, test_name = "CKP-005", "PostgreSQL初始化"
+                    test_id, test_name = "CKP-005", "PostgreSQL Checkpointer初期化"
                 elif "sync_checkpointer_memory" in nodeid:
-                    test_id, test_name = "CKP-006", "同步Checkpointer(memory)"
+                    test_id, test_name = "CKP-006", "同期Checkpointer取得(memory)"
                 elif "sync_checkpointer_postgres_warning" in nodeid:
-                    test_id, test_name = "CKP-007", "同步Checkpointer(postgres警告)"
+                    test_id, test_name = "CKP-007", "同期Checkpointer警告(postgres)"
                 elif "close_checkpointer_memory" in nodeid:
-                    test_id, test_name = "CKP-008", "关闭Checkpointer(memory)"
+                    test_id, test_name = "CKP-008", "Checkpointer閉じる(memory)"
                 elif "reset_checkpointer_clears_cache" in nodeid:
-                    test_id, test_name = "CKP-009", "重置缓存"
+                    test_id, test_name = "CKP-009", "キャッシュリセット"
                 elif "opensearch_fallback_to_memory" in nodeid:
-                    test_id, test_name = "CKP-010", "OpenSearch回退"
+                    test_id, test_name = "CKP-010", "OpenSearchフォールバック"
                 elif "unknown_storage_fallback" in nodeid:
-                    test_id, test_name = "CKP-011", "未知存储回退"
+                    test_id, test_name = "CKP-011", "未知ストレージフォールバック"
                 elif "close_with_postgres_pool" in nodeid:
-                    test_id, test_name = "CKP-012", "关闭PostgreSQL连接池"
+                    test_id, test_name = "CKP-012", "PostgreSQL接続プール閉じる"
                 else:
                     continue
                 normal_tests.append({
@@ -225,8 +214,7 @@ def pytest_sessionfinish(session, exitstatus):
                     "duration": duration
                 })
 
-        # Count outcomes
-        # 统计结果
+        # 集計
         if outcome == "passed":
             passed += 1
         elif outcome == "failed":
@@ -236,140 +224,108 @@ def pytest_sessionfinish(session, exitstatus):
 
     total = len(_test_results)
 
-    # Generate detailed Markdown report
-    # 生成详细的 Markdown 报告
-    report_md = f"""# checkpointer.py 测试报告
+    # ─── Markdown レポート生成（全文日本語） ───
+    def _icon(status: str) -> str:
+        return "✅ 成功" if status == "passed" else ("⚠️ 予期失敗" if status == "xfailed" else "❌ 失敗")
 
-## 测试概要
+    rows_normal   = "\n".join(f"| {t['id']} | {t['name']} | {_icon(t['status'])} | {t['duration']*1000:.2f}ms |" for t in sorted(normal_tests,   key=lambda x: x["id"]))
+    rows_error    = "\n".join(f"| {t['id']} | {t['name']} | {_icon(t['status'])} | {t['duration']*1000:.2f}ms |" for t in sorted(error_tests,    key=lambda x: x["id"]))
+    rows_security = "\n".join(f"| {t['id']} | {t['name']} | {_icon(t['status'])} | {t['duration']*1000:.2f}ms |" for t in sorted(security_tests, key=lambda x: x["id"]))
 
-| 项目 | 值 |
+    conclusion = "✅ **予期しない失敗はありません。すべてのテストが正常に完了しました。**" if failed == 0 else f"❌ **{failed} 件のテストが失敗しました。**"
+
+    report_md = f"""# checkpointer.py テストレポート
+
+## テスト概要
+
+| 項目 | 値 |
 |------|-----|
-| 测试对象 | `app/core/checkpointer.py` |
-| 测试规格 | `checkpointer_tests.md` |
-| 执行时间 | {datetime.now().strftime("%Y-%m-%d %H:%M:%S")} |
-| 覆盖率目标 | 75% |
+| テスト対象 | `app/core/checkpointer.py` |
+| テスト仕様 | `checkpointer_tests.md` |
+| 実行日時 | {datetime.now().strftime("%Y-%m-%d %H:%M:%S")} |
+| カバレッジ目標 | 75% |
 
-## 测试结果统计
+## テスト結果集計
 
-| 类别 | 总数 | 通过 | 失败 | 预期失败 |
-|------|------|------|------|---------|
+| カテゴリ | 総数 | 成功 | 失敗 | 予期失敗 |
+|---------|------|------|------|----------|
 | 正常系 | {len(normal_tests)} | {sum(1 for t in normal_tests if t['status']=='passed')} | {sum(1 for t in normal_tests if t['status']=='failed')} | {sum(1 for t in normal_tests if t['status']=='xfailed')} |
-| 异常系 | {len(error_tests)} | {sum(1 for t in error_tests if t['status']=='passed')} | {sum(1 for t in error_tests if t['status']=='failed')} | {sum(1 for t in error_tests if t['status']=='xfailed')} |
-| 安全测试 | {len(security_tests)} | {sum(1 for t in security_tests if t['status']=='passed')} | {sum(1 for t in security_tests if t['status']=='failed')} | {sum(1 for t in security_tests if t['status']=='xfailed')} |
-| **合计** | **{total}** | **{passed}** | **{failed}** | **{xfailed}** |
+| 異常系 | {len(error_tests)} | {sum(1 for t in error_tests if t['status']=='passed')} | {sum(1 for t in error_tests if t['status']=='failed')} | {sum(1 for t in error_tests if t['status']=='xfailed')} |
+| セキュリティ | {len(security_tests)} | {sum(1 for t in security_tests if t['status']=='passed')} | {sum(1 for t in security_tests if t['status']=='failed')} | {sum(1 for t in security_tests if t['status']=='xfailed')} |
+| **合計** | **{total}** | **{passed}** | **{failed}** | **{xfailed}** |
 
-## 测试通过率
+## 合格率
 
-- **实际通过率**: {(passed/total*100) if total>0 else 0:.1f}%
-- **有效通过率** (排除预期失败): {(passed/(total-xfailed)*100) if (total-xfailed)>0 else 0:.1f}%
+- **実際の合格率**: {round(passed/total*100, 1) if total > 0 else 0.0:.1f}%
+- **有効合格率**（予期失敗を除く）: {round(passed/(total-xfailed)*100, 1) if (total-xfailed) > 0 else 0.0:.1f}%
 
 ---
 
-## 正常系测试详情
+## 正常系テスト詳細
 
-| ID | 测试名称 | 结果 | 执行时间 |
-|----|---------|------|---------|
-"""
+| ID | テスト名 | 結果 | 実行時間 |
+|----|---------|------|----------|
+{rows_normal}
 
-    for t in sorted(normal_tests, key=lambda x: x['id']):
-        status_icon = "✅ 通过" if t['status'] == "passed" else ("⚠️ 预期失败" if t['status'] == "xfailed" else "❌ 失败")
-        report_md += f"| {t['id']} | {t['name']} | {status_icon} | {t['duration']*1000:.2f}ms |\n"
-
-    report_md += """
 ---
 
-## 异常系测试详情
+## 異常系テスト詳細
 
-| ID | 测试名称 | 结果 | 执行时间 |
-|----|---------|------|---------|
-"""
+| ID | テスト名 | 結果 | 実行時間 |
+|----|---------|------|----------|
+{rows_error}
 
-    for t in sorted(error_tests, key=lambda x: x['id']):
-        status_icon = "✅ 通过" if t['status'] == "passed" else ("⚠️ 预期失败" if t['status'] == "xfailed" else "❌ 失败")
-        report_md += f"| {t['id']} | {t['name']} | {status_icon} | {t['duration']*1000:.2f}ms |\n"
-
-    report_md += """
 ---
 
-## 安全测试详情
+## セキュリティテスト詳細
 
-| ID | 测试名称 | 结果 | 执行时间 |
-|----|---------|------|---------|
-"""
+| ID | テスト名 | 結果 | 実行時間 |
+|----|---------|------|----------|
+{rows_security}
 
-    for t in sorted(security_tests, key=lambda x: x['id']):
-        status_icon = "✅ 通过" if t['status'] == "passed" else ("⚠️ 预期失败" if t['status'] == "xfailed" else "❌ 失败")
-        report_md += f"| {t['id']} | {t['name']} | {status_icon} | {t['duration']*1000:.2f}ms |\n"
-
-    report_md += """
 ---
 
-## 结论
+## 結論
 
-"""
+{conclusion}
+{"" if xfailed == 0 else f"⚠️ **{xfailed} 件の予期失敗テストがあります（既知の問題）。**"}
 
-    if failed == 0:
-        report_md += "✅ **所有非预期失败的测试均已通过。**\n\n"
-    else:
-        report_md += f"❌ **有 {failed} 个测试未通过。**\n\n"
-
-    if xfailed > 0:
-        report_md += f"⚠️ **有 {xfailed} 个预期失败的测试（已知问题）。**\n"
-
-    report_md += f"""
 ---
-
-*报告生成时间: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}*
+*レポート生成日時: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}*
 """
 
-    # Write Markdown report
-    # 写入 Markdown 报告
+    # Markdown レポートを書き込む
     md_path = os.path.join(report_dir, "TestReport_checkpointer.md")
     with open(md_path, "w", encoding="utf-8") as f:
         f.write(report_md)
 
-    # Generate JSON report
-    # 生成 JSON 报告
+    # ─── JSON レポート生成（★ 必須出力物） ───
     json_report = {
         "metadata": {
-            "test_target": "app/core/checkpointer.py",
-            "test_spec": "checkpointer_tests.md",
+            "test_target":    "app/core/checkpointer.py",
+            "test_spec":      "checkpointer_tests.md",
             "execution_time": datetime.now().isoformat(),
-            "coverage_target": "75%"
+            "coverage_target": "75%",
         },
         "summary": {
-            "total": total,
-            "passed": passed,
-            "failed": failed,
-            "xfailed": xfailed,
-            "pass_rate": (passed/total*100) if total>0 else 0
+            "total":     total,
+            "passed":    passed,
+            "failed":    failed,
+            "xfailed":   xfailed,
+            "pass_rate": round(passed / total * 100, 1) if total > 0 else 0.0,
         },
         "results": {
-            "normal": normal_tests,
-            "error": error_tests,
-            "security": security_tests
-        }
+            "normal":   normal_tests,
+            "error":    error_tests,
+            "security": security_tests,
+        },
     }
-
     json_path = os.path.join(report_dir, "TestReport_checkpointer.json")
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(json_report, f, ensure_ascii=False, indent=2)
 
-    print(f"\n✅ 测试报告已生成:")
-    print(f"  - {md_path}")
-    print(f"  - {json_path}")
+    print(f"\n✅ テストレポートを生成しました:")
+    print(f"  JSON : {json_path}")
+    print(f"  Markdown: {md_path}")
 
 
-# =============================================================================
-# Report Configuration | 报告配置
-# =============================================================================
-
-@pytest.fixture(scope="session")
-def report_dir() -> str:
-    """
-    Provide the report output directory path.
-    提供报告输出目录路径。
-    """
-    report_path = r"C:\pythonProject\python_ai_cspm\TestReport\checkpointer\reports"
-    os.makedirs(report_path, exist_ok=True)
-    return report_path

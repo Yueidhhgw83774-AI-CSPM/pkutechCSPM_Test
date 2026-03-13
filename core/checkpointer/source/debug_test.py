@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-调试测试环境
+デバッグテスト環境を設定する
 """
 import sys
 import os
@@ -21,7 +21,7 @@ print("\n" + "=" * 80)
 print("尝试导入模块")
 print("=" * 80)
 
-# 添加项目路径
+# プロジェクトパスを追加する
 PROJECT_ROOT = r"C:\pythonProject\python_ai_cspm\platform_python_backend-testing"
 if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
@@ -41,7 +41,7 @@ if 'langgraph.checkpoint.postgres.aio' not in sys.modules:
     sys.modules['langgraph.checkpoint.postgres.aio'].AsyncPostgresSaver = MagicMock
     print("✓ 已 mock langgraph.checkpoint.postgres")
 
-# 尝试导入 config
+# configをインポートしようとしています
 try:
     from app.core import config
     print(f"✓ 成功导入 app.core.config")
@@ -51,7 +51,7 @@ except Exception as e:
     import traceback
     traceback.print_exc()
 
-# 尝试导入 checkpointer
+# チェックポイントをインポートしようとしています
 try:
     from app.core import checkpointer
     print(f"✓ 成功导入 app.core.checkpointer")
@@ -61,7 +61,7 @@ except Exception as e:
     import traceback
     traceback.print_exc()
 
-# 检查 pytest
+# pytestをチェックする
 try:
     import pytest
     print(f"\n✓ pytest 已安装: {pytest.__version__}")

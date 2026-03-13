@@ -1,0 +1,207 @@
+{
+  "summary": {
+    "total": 38,
+    "passed": 38,
+    "failed": 0,
+    "pass_rate": 100.0
+  },
+  "categories": {
+    "normal": [
+      {
+        "test_id": "test_mcpda_001_initialize_components",
+        "outcome": "passed",
+        "duration": 2.2828781999996863
+      },
+      {
+        "test_id": "test_mcpda_002_invoke_chat_success",
+        "outcome": "passed",
+        "duration": 0.02794980000180658
+      },
+      {
+        "test_id": "test_mcpda_003_stream_chat_success",
+        "outcome": "passed",
+        "duration": 0.616097299993271
+      },
+      {
+        "test_id": "test_mcpda_007_tool_event_write_todos",
+        "outcome": "passed",
+        "duration": 0.0007193000055849552
+      },
+      {
+        "test_id": "test_mcpda_012_tool_event_call_mcp_tool",
+        "outcome": "passed",
+        "duration": 0.0010117000056197867
+      },
+      {
+        "test_id": "test_mcpda_013_tool_event_task",
+        "outcome": "passed",
+        "duration": 0.0008407999994233251
+      },
+      {
+        "test_id": "test_mcpda_016_policy_validation_integration",
+        "outcome": "passed",
+        "duration": 0.002950599999167025
+      },
+      {
+        "test_id": "test_mcpda_004_clear_session_cache",
+        "outcome": "passed",
+        "duration": 0.02802769999834709
+      },
+      {
+        "test_id": "test_mcpda_005_build_progress_with_dict_tasks",
+        "outcome": "passed",
+        "duration": 0.025283200011472218
+      },
+      {
+        "test_id": "test_mcpda_009_build_progress_with_object_tasks",
+        "outcome": "passed",
+        "duration": 0.028126299992436543
+      },
+      {
+        "test_id": "test_mcpda_010_build_progress_without_server_name",
+        "outcome": "passed",
+        "duration": 0.02705259999493137
+      },
+      {
+        "test_id": "test_mcpda_006_create_mcp_tools_call_mcp_tool",
+        "outcome": "passed",
+        "duration": 0.033566400001291186
+      },
+      {
+        "test_id": "test_mcpda_014_list_mcp_tools",
+        "outcome": "passed",
+        "duration": 0.03000179999799002
+      },
+      {
+        "test_id": "test_mcpda_015_list_mcp_servers",
+        "outcome": "passed",
+        "duration": 0.02935799999977462
+      },
+      {
+        "test_id": "test_mcpda_008_tool_with_cloud_credentials",
+        "outcome": "passed",
+        "duration": 0.03090479999082163
+      },
+      {
+        "test_id": "test_mcpda_011_create_custom_subagents",
+        "outcome": "passed",
+        "duration": 0.028406899989931844
+      }
+    ],
+    "error": [
+      {
+        "test_id": "test_mcpda_e01_initialize_error",
+        "outcome": "passed",
+        "duration": 0.025435699993977323
+      },
+      {
+        "test_id": "test_mcpda_e02_invoke_chat_error",
+        "outcome": "passed",
+        "duration": 0.02680569999211002
+      },
+      {
+        "test_id": "test_mcpda_e03_stream_error_event",
+        "outcome": "passed",
+        "duration": 0.005747599992901087
+      },
+      {
+        "test_id": "test_mcpda_e04_create_tools_error",
+        "outcome": "passed",
+        "duration": 0.027975699995295145
+      },
+      {
+        "test_id": "test_mcpda_e05_clear_nonexistent_session",
+        "outcome": "passed",
+        "duration": 0.025048299998161383
+      },
+      {
+        "test_id": "test_mcpda_e06_stream_initialization_failure",
+        "outcome": "passed",
+        "duration": 0.6989788000064436
+      },
+      {
+        "test_id": "test_mcpda_e07_stream_cancelled_error",
+        "outcome": "passed",
+        "duration": 0.0012981999898329377
+      },
+      {
+        "test_id": "test_mcpda_e08_stream_validation_error",
+        "outcome": "passed",
+        "duration": 0.11982790000911336
+      },
+      {
+        "test_id": "test_mcpda_e09_policy_validation_error",
+        "outcome": "passed",
+        "duration": 0.0020939999958500266
+      },
+      {
+        "test_id": "test_mcpda_e10_tool_execution_timeout",
+        "outcome": "passed",
+        "duration": 0.1373881000035908
+      }
+    ],
+    "security": [
+      {
+        "test_id": "test_mcpda_sec_01_system_prompt_security",
+        "outcome": "passed",
+        "duration": 0.02624360000481829
+      },
+      {
+        "test_id": "test_mcpda_sec_02_tool_result_sanitization",
+        "outcome": "passed",
+        "duration": 0.0007655999943381175
+      },
+      {
+        "test_id": "test_mcpda_sec_03_session_isolation",
+        "outcome": "passed",
+        "duration": 0.02537589998973999
+      },
+      {
+        "test_id": "test_mcpda_sec_04_prompt_injection_protection",
+        "outcome": "passed",
+        "duration": 0.0065891999984160066
+      },
+      {
+        "test_id": "test_mcpda_sec_05_credential_not_in_output",
+        "outcome": "passed",
+        "duration": 0.001944299991009757
+      },
+      {
+        "test_id": "test_mcpda_sec_06_session_hijacking_prevention",
+        "outcome": "passed",
+        "duration": 0.02438590000383556
+      },
+      {
+        "test_id": "test_mcpda_sec_07_large_input_handling",
+        "outcome": "passed",
+        "duration": 0.0029969000024721026
+      },
+      {
+        "test_id": "test_mcpda_sec_08_unauthorized_tool_access",
+        "outcome": "passed",
+        "duration": 0.031890199999907054
+      },
+      {
+        "test_id": "test_mcpda_sec_09_credentials_not_logged",
+        "outcome": "passed",
+        "duration": 0.0027649999974528328
+      },
+      {
+        "test_id": "test_mcpda_sec_10_invalid_session_id_format",
+        "outcome": "passed",
+        "duration": 0.006702800004859455
+      },
+      {
+        "test_id": "test_mcpda_sec_11_tool_parameter_tampering",
+        "outcome": "passed",
+        "duration": 0.03238889999920502
+      },
+      {
+        "test_id": "test_mcpda_sec_12_response_id_store_isolation",
+        "outcome": "passed",
+        "duration": 0.029726599997957237
+      }
+    ]
+  },
+  "generated_at": "2026-03-12T20:13:13.671299"
+}

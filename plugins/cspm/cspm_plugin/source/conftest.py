@@ -1,8 +1,8 @@
 """
-CSPM Plugin Router 测试配置和 Fixtures
+CSPM Plugin Router テスト設定と Fixtures
 
-测试规格: docs/testing/plugins/cspm/cspm_plugin_tests.md
-覆盖率目标: 90%+
+テスト仕様: docs/testing/plugins/cspm/cspm_plugin_tests.md
+カバレッジ目標: 90%+
 """
 
 import sys
@@ -13,22 +13,23 @@ import json
 from pathlib import Path
 from datetime import datetime
 from unittest.mock import patch, MagicMock, AsyncMock
-from dotenv import load_dotenv
 
-# 读取 .env 配置
-_env_path = Path(__file__).resolve().parent.parent.parent.parent.parent / ".env"
-if _env_path.exists():
-    load_dotenv(_env_path)
+# プロジェクトルート設定（env_loader を使用）
+try:
+    from env_loader import PROJECT_ROOT
+except ImportError:
+    _here = Path(__file__).resolve()
+    for _p in [_here, *_here.parents]:
+        if (_p / "env_loader.py").exists():
+            sys.path.insert(0, str(_p))
+            from env_loader import PROJECT_ROOT
+            break
+    else:
+        raise ImportError("env_loader.py が見つかりません")
 
-# project_root: 从 .env 的 soure_root 读取
-_source_root_env = os.environ.get("soure_root", "").strip().strip('"').strip("'")
-if _source_root_env and Path(_source_root_env).exists():
-    project_root = Path(_source_root_env)
-else:
-    project_root = Path(__file__).resolve().parent.parent.parent.parent.parent.parent / "platform_python_backend-testing"
-
+project_root = PROJECT_ROOT / "platform_python_backend-testing" if not str(PROJECT_ROOT).endswith("platform_python_backend-testing") else PROJECT_ROOT
 if not project_root.exists():
-    raise RuntimeError(f"项目根目录不存在: {project_root}")
+    raise RuntimeError(f"プロジェクトルートディレクトリが存在しません: {project_root}")
 sys.path.insert(0, str(project_root))
 
 # Mock weasyprint（避免 libpango 依赖）
@@ -215,7 +216,9 @@ def pytest_runtest_makereport(item, call):
     outcome = yield
     rep = outcome.get_result()
     if rep.when == "call":
-        item.session.config._test_collector.add_result(item.nodeid, rep.outcome, rep.duration)
+        collector = getattr(item.session.config, '_test_collector', None)
+        if collector:
+            collector.add_result(item.nodeid, rep.outcome, rep.duration)
 
 
 def pytest_sessionstart(session):
@@ -223,7 +226,9 @@ def pytest_sessionstart(session):
 
 
 def pytest_sessionfinish(session, exitstatus):
-    collector = session.config._test_collector
+    collector = getattr(session.config, '_test_collector', None)
+    if not collector:
+        return
     reports_dir = Path(__file__).parent.parent / "reports"
     reports_dir.mkdir(parents=True, exist_ok=True)
     collector.generate_markdown_report(reports_dir / "TestReport_cspm_plugin_router.md")

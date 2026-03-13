@@ -1,6 +1,6 @@
-"""Doc Reader Plugin 測試配置（通用）
+"""Doc Reader Plugin テスト設定（共通）
 
-所有 doc_reader 子模块共用的 pytest 配置
+全 doc_reader サブモジュール共通の pytest 設定
 """
 import pytest
 import sys
@@ -9,14 +9,21 @@ from pathlib import Path
 from datetime import datetime
 from unittest.mock import MagicMock, AsyncMock
 from typing import Dict, Any
-import os
-from dotenv import load_dotenv
 
-# 環境変数読み込み
-_env = Path(__file__).resolve().parents[5] / "TestReport" / ".env"
-if _env.exists(): load_dotenv(_env)
-_root = os.environ.get("soure_root", "").strip().strip('"').strip("'")
-project_root = Path(_root) if _root and Path(_root).exists() else Path(__file__).resolve().parents[6] / "platform_python_backend-testing"
+# プロジェクトルート設定（env_loader を使用）
+try:
+    from env_loader import PROJECT_ROOT
+except ImportError:
+    _here = Path(__file__).resolve()
+    for _p in [_here, *_here.parents]:
+        if (_p / "env_loader.py").exists():
+            sys.path.insert(0, str(_p))
+            from env_loader import PROJECT_ROOT
+            break
+    else:
+        raise ImportError("env_loader.py が見つかりません")
+
+project_root = PROJECT_ROOT / "platform_python_backend-testing"
 sys.path.insert(0, str(project_root))
 
 # Mock weasyprint
@@ -75,6 +82,7 @@ class TestResultCollector:
         failed = sum(1 for cat in self.results.values() for r in cat if r["outcome"] == "failed")
 
         if total == 0:
+            output_path.write_text(f"# {module_name} テストレポート\n\n**状態**: テスト未実装\n", encoding="utf-8")
             return
 
         report = f"""# {module_name} テストレポート
@@ -87,7 +95,7 @@ class TestResultCollector:
 | 総テスト数 | {total} |
 | 通過 | {passed} |
 | 失敗 | {failed} |
-| 通過率 | {passed/total*100:.1f}% |
+| 通過率 | {(passed/total*100 if total > 0 else 0.0):.1f}% |
 
 ## 正常系テスト ({len(self.results["normal"])})
 
@@ -115,8 +123,10 @@ class TestResultCollector:
 
     def generate_json_report(self, output_path: Path):
         """JSONレポート生成"""
+        import json
         total = sum(len(v) for v in self.results.values())
         if total == 0:
+            output_path.write_text(json.dumps({"summary": {"total": 0, "passed": 0, "failed": 0, "status": "未実装"}, "categories": self.results}, indent=2, ensure_ascii=False), encoding="utf-8")
             return
 
         passed = sum(1 for cat in self.results.values() for r in cat if r["outcome"] == "passed")
@@ -126,7 +136,7 @@ class TestResultCollector:
                 "total": total,
                 "passed": passed,
                 "failed": total - passed,
-                "pass_rate": f"{passed/total*100:.1f}%"
+                "pass_rate": f"{passed/total*100:.1f}%" if total > 0 else "N/A"
             },
             "categories": self.results,
             "execution_time": self.start_time.strftime("%Y-%m-%d %H:%M:%S")

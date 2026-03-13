@@ -17,24 +17,48 @@ from datetime import datetime
 from unittest.mock import patch, MagicMock
 from dotenv import load_dotenv
 
-# 項目根目录(固定路径)
-project_root = Path(__file__).parent.parent.parent.parent / "platform_python_backend-testing"
-sys.path.insert(0, str(project_root))
+
+def _load_source_root():
+    """.env ファイルから SourceCodeRoot を読み込む
+
+    Returns:
+        str: SourceCodeRoot の絶対パス
+
+    Raises:
+        FileNotFoundError: .env ファイルが見つからない場合
+        KeyError: SourceCodeRoot キーが .env に存在しない場合
+    """
+    env_path = Path(__file__).parent.parent.parent.parent / ".env"
+    if not env_path.exists():
+        raise FileNotFoundError(f".env ファイルが見つかりません: {env_path}")
+
+    load_dotenv(env_path)
+    source_root = os.getenv("SourceCodeRoot")
+
+    if not source_root:
+        raise KeyError(".env ファイルに SourceCodeRoot キーが存在しません")
+
+    return source_root
+
+
+# ★★★ 重要: プロジェクトルートを動的に取得（絶対にハードコードしない） ★★★
+project_root = _load_source_root()
+sys.path.insert(0, project_root)
 
 # レポート出力ディレクトリ
 REPORTS_DIR = Path(__file__).parent.parent / "reports"
 REPORTS_DIR.mkdir(parents=True, exist_ok=True)
 
-# 从 .env 文件加载真实的环境变量
+# .env ファイルから本物の環境変数を読み込む
 env_file = Path(__file__).parent.parent.parent / ".env"
 if env_file.exists():
     load_dotenv(env_file)
-    print(f"✅ 已加载环境变量文件: {env_file}")
+    print(f"✅ 環境変数ファイルを読み込みました: {env_file}")
 else:
-    print(f"⚠️ 环境变量文件不存在: {env_file}")
+    print(f"⚠️ 環境変数ファイルが存在しません: {env_file}")
 
 
-# ===== テスト用環境変数 (从 .env 文件读取) =====
+# ===== テスト用環境変数 (.env ファイルから読み込み) =====
 MOCK_SETTINGS_ENV = {
     "GPT5_1_CHAT_API_KEY": os.getenv("GPT5_1_CHAT_API_KEY", "sk-h6zKpdRQoYKEcj6vhTHMPg"),
     "GPT5_1_CODEX_API_KEY": os.getenv("GPT5_1_CODEX_API_KEY", "sk-h6zKpdRQoYKEcj6vhTHMPg"),
@@ -441,7 +465,7 @@ def _generate_markdown_report(results, passed, failed, xfailed, pass_rate, effec
         f.write("---\n\n")
         f.write(f"*レポート生成時間: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}*\n")
 
-    print(f"\n✅ Markdown報告已生成: {md_path}")
+    print(f"\n✅ Markdownレポートを生成しました: {md_path}")
 
 
 def _generate_json_report(results, total, passed, failed, xfailed, pass_rate, effective_pass_rate):
@@ -468,8 +492,8 @@ def _generate_json_report(results, total, passed, failed, xfailed, pass_rate, ef
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(report, f, indent=2, ensure_ascii=False)
 
-    print(f"✅ JSON報告已生成: {json_path}")
-    print(f"\n✅ テスト報告已生成:")
+    print(f"✅ JSONレポートを生成しました: {json_path}")
+    print(f"\n✅ テストレポートを生成しました:")
     print(f"  - {REPORTS_DIR / 'TestReport_llm_factory.md'}")
     print(f"  - {REPORTS_DIR / 'TestReport_llm_factory.json'}")
     print()

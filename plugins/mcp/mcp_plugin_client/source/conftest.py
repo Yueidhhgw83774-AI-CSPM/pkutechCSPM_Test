@@ -1,13 +1,13 @@
 """
-MCP Plugin Client 测试配置
+MCP Plugin Client テスト設定
 
-测试规格: docs/testing/plugins/mcp/mcp_plugin_client_tests.md
-覆盖率目标: 85%+
+テスト仕様: docs/testing/plugins/mcp/mcp_plugin_client_tests.md
+カバレッジ目標: 85%+
 
-测试类别:
-  - 正常系: 18 个测试
-  - 异常系: 12 个测试
-  - 安全测试: 5 个测试
+テストカテゴリ:
+  - 正常系: 18 個のテスト
+  - 異常系: 12 個のテスト
+  - セキュリティテスト: 5 個のテスト
 """
 
 import pytest
@@ -16,15 +16,25 @@ import sys
 from pathlib import Path
 from datetime import datetime
 
-# 项目根目录
-project_root = Path(__file__).resolve().parent.parent.parent.parent.parent.parent / "platform_python_backend-testing"
-if not project_root.exists():
-    raise RuntimeError(f"项目根目录不存在: {project_root}")
+# プロジェクトルート設定（env_loader を使用）
+try:
+    from env_loader import PROJECT_ROOT
+except ImportError:
+    _here = Path(__file__).resolve()
+    for _p in [_here, *_here.parents]:
+        if (_p / "env_loader.py").exists():
+            sys.path.insert(0, str(_p))
+            from env_loader import PROJECT_ROOT
+            break
+    else:
+        raise ImportError("env_loader.py が見つかりません")
+
+project_root = PROJECT_ROOT / "platform_python_backend-testing"
 sys.path.insert(0, str(project_root))
 
-# 测试结果收集器
+# テスト結果コレクター
 class TestResultCollector:
-    """收集测试结果用于生成报告"""
+    """テスト結果を収集してレポートを生成する"""
 
     def __init__(self):
         self.results = {
@@ -35,7 +45,7 @@ class TestResultCollector:
         self.start_time = datetime.now()
 
     def add_result(self, nodeid: str, outcome: str, duration: float):
-        """添加测试结果"""
+        """テスト結果を追加する"""
         test_name = nodeid.split("::")[-1]
 
         if "Security" in nodeid or "_sec_" in test_name.lower():
@@ -138,12 +148,13 @@ def pytest_runtest_makereport(item, call):
     rep = outcome.get_result()
 
     if rep.when == "call":
-        collector = item.session.config._test_collector
-        collector.add_result(
-            nodeid=item.nodeid,
-            outcome=rep.outcome,
-            duration=rep.duration
-        )
+        collector = getattr(item.session.config, '_test_collector', None)
+        if collector:
+            collector.add_result(
+                nodeid=item.nodeid,
+                outcome=rep.outcome,
+                duration=rep.duration
+            )
 
 
 def pytest_sessionstart(session):
@@ -153,7 +164,9 @@ def pytest_sessionstart(session):
 
 def pytest_sessionfinish(session, exitstatus):
     """测试会话结束，生成报告"""
-    collector = session.config._test_collector
+    collector = getattr(session.config, '_test_collector', None)
+    if not collector:
+        return
 
     reports_dir = Path(__file__).parent.parent / "reports"
     reports_dir.mkdir(parents=True, exist_ok=True)

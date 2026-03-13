@@ -1,0 +1,13 @@
+{
+  "summary": {
+    "total": 0,
+    "passed": 0,
+    "failed": 0,
+    "status": "未実装"
+  },
+  "categories": {
+    "normal": [],
+    "error": [],
+    "security": []
+  }
+}

@@ -12,19 +12,28 @@ Custodian Scan テストの共通フィクスチャとモック
 import pytest
 import sys
 import os
+import json
 from pathlib import Path
+from datetime import datetime
 from unittest.mock import MagicMock, AsyncMock, patch
 from httpx import AsyncClient, ASGITransport
 from fastapi import FastAPI
 
-# 環境変数からソースルートを読み込み
-from dotenv import load_dotenv
-env_path = Path(__file__).parents[4] / ".env"
-load_dotenv(env_path)
+# プロジェクトルート設定（env_loader を使用）
+try:
+    from env_loader import PROJECT_ROOT
+except ImportError:
+    _here = Path(__file__).resolve()
+    for _p in [_here, *_here.parents]:
+        if (_p / "env_loader.py").exists():
+            sys.path.insert(0, str(_p))
+            from env_loader import PROJECT_ROOT
+            break
+    else:
+        raise ImportError("env_loader.py が見つかりません")
 
-source_root = os.getenv("soure_root")
-if source_root and source_root not in sys.path:
-    sys.path.insert(0, source_root)
+project_root = PROJECT_ROOT / "platform_python_backend-testing"
+sys.path.insert(0, str(project_root))
 
 
 
@@ -385,10 +394,101 @@ def mock_custodian_output_success():
         "stdout_output": [
             "[CUSTODIAN_STDOUT] Scanning AWS resources...",
             "[CUSTODIAN_STDOUT] Found 5 violations"
-        ],
-        "stderr_output": [],
-        "cloud_provider": "aws"
+        ]
     }
+
+
+# ============================================================================
+# テストレポート生成
+# ============================================================================
+
+class TestResultCollector:
+    """テスト結果を収集してレポートを生成"""
+    def __init__(self):
+        self.results = {"normal": [], "error": [], "security": []}
+
+    def add_result(self, nodeid: str, outcome: str, duration: float):
+        test_name = nodeid.split("::")[-1]
+        if "Security" in nodeid:
+            cat = "security"
+        elif "Error" in nodeid:
+            cat = "error"
+        else:
+            cat = "normal"
+        self.results[cat].append({"test_id": test_name, "outcome": outcome, "duration": duration})
+
+    def generate_markdown_report(self, output_path: Path):
+        total = sum(len(v) for v in self.results.values())
+        passed = sum(1 for cat in self.results.values() for r in cat if r["outcome"] == "passed")
+        
+        lines = [
+            f"# Custodian Scan テストレポート\n",
+            f"**生成日時**: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n",
+            f"**通過率**: {passed}/{total} ({(passed/total*100 if total > 0 else 0.0):.1f}%)\n",
+            f"\n---\n"
+        ]
+        
+        for cat, label in [("normal", "正常系テスト"), ("error", "異常系テスト"), ("security", "セキュリティテスト")]:
+            r = self.results[cat]
+            if not r:
+                continue
+            p = sum(1 for x in r if x["outcome"] == "passed")
+            f = len(r) - p
+            lines.append(f"\n## {label}: {p}/{len(r)}\n")
+            lines.append(f"- ✅ 成功: {p}")
+            lines.append(f"- ❌ 失敗: {f}\n")
+            
+            if f > 0:
+                lines.append(f"\n### 失敗したテスト\n")
+                for test in r:
+                    if test["outcome"] != "passed":
+                        lines.append(f"- `{test['test_id']}` ({test['duration']:.3f}s)")
+        
+        output_path.write_text("\n".join(lines), encoding="utf-8")
+
+    def generate_json_report(self, output_path: Path):
+        total = sum(len(v) for v in self.results.values())
+        passed = sum(1 for cat in self.results.values() for r in cat if r["outcome"] == "passed")
+        report = {
+            "summary": {
+                "total": total, 
+                "passed": passed,
+                "failed": total - passed,
+                "pass_rate": round(passed/total*100 if total > 0 else 0.0, 2)
+            }, 
+            "categories": self.results,
+            "generated_at": datetime.now().isoformat()
+        }
+        output_path.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+
+
+@pytest.hookimpl(tryfirst=True, hookwrapper=True)
+def pytest_runtest_makereport(item, call):
+    """各テストの実行結果を収集"""
+    outcome = yield
+    rep = outcome.get_result()
+    if rep.when == "call":
+        collector = getattr(item.session.config, '_test_collector', None)
+        if collector:
+            collector.add_result(item.nodeid, rep.outcome, rep.duration)
+
+
+def pytest_sessionstart(session):
+    """テストセッション開始時にコレクターを初期化"""
+    session.config._test_collector = TestResultCollector()
+
+
+def pytest_sessionfinish(session, exitstatus):
+    """テストセッション終了時にレポートを生成"""
+    collector = getattr(session.config, '_test_collector', None)
+    if not collector:
+        return
+
+    reports_dir = Path(__file__).parent.parent / "reports"
+    reports_dir.mkdir(parents=True, exist_ok=True)
+
+    collector.generate_markdown_report(reports_dir / "TestReport_custodian_scan.md")
+    collector.generate_json_report(reports_dir / "TestReport_custodian_scan.json")
 
 
 @pytest.fixture

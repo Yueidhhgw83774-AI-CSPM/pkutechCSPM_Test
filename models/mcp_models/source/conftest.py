@@ -1,47 +1,60 @@
 """
-models/mcp.py 测试配置文件
+models/mcp.py テスト設定ファイル
 
-pytest配置和钩子函数,用于:
-  - 设置测试环境
-  - 收集测试结果
-  - 生成测试报告(Markdown + JSON)
+pytest設定とフック関数:
+  - テスト環境のセットアップ
+  - テスト結果の収集
+  - テストレポートの生成(Markdown + JSON)
 """
 
+import os
+import re
 import pytest
 import json
 import sys
 from pathlib import Path
 from datetime import datetime
 
-# 加载环境变量
-from dotenv import load_dotenv
-env_path = Path(__file__).parent.parent.parent.parent / ".env"
-if env_path.exists():
-    load_dotenv(env_path)
+def _load_source_root() -> str:
+    """プロジェクトルートの .env から SourceCodeRoot を読み込む。"""
+    # 優先度1: ルート conftest.py が os.environ に設定済みの場合
+    from_env = os.environ.get("SourceCodeRoot", "").strip().strip("'\"")
+    if from_env:
+        return from_env
+    # 優先度2: ディレクトリツリーを遡って .env ファイルを検索する
+    current = Path(__file__).resolve()
+    for directory in [current, *current.parents]:
+        env_file = (directory if directory.is_dir() else directory.parent) / ".env"
+        if env_file.exists():
+            for line in env_file.read_text(encoding="utf-8").splitlines():
+                m = re.match(r"^\s*SourceCodeRoot\s*=\s*['\"]?(.+?)['\"]?\s*$", line)
+                if m:
+                    return m.group(1).strip()
+    return ""
 
-# 项目根目录(固定路径)
-project_root = Path(__file__).parent.parent.parent.parent.parent / "platform_python_backend-testing"
-sys.path.insert(0, str(project_root))
+PROJECT_ROOT = _load_source_root()
+if PROJECT_ROOT and PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, PROJECT_ROOT)
 
 
 class TestResultCollector:
-    """收集测试结果用于生成报告"""
+    """テスト結果を収集してレポート生成に使用する。"""
 
     def __init__(self):
         self.results = {
-            "normal": [],    # 正常系测试
-            "error": [],     # 异常系测试
-            "security": []   # 安全测试
+            "normal": [],    # 正常系テスト
+            "error": [],     # 異常系テスト
+            "security": []   # セキュリティテスト
         }
         self.start_time = datetime.now()
 
     def add_result(self, nodeid: str, outcome: str, duration: float):
-        """添加测试结果
+        """テスト結果を追加する。
 
-        分类规则:
-        - 包含 "Security" → security
-        - 包含 "Error" 或 "_e0" → error
-        - 其他 → normal
+        分類ルール:
+        - "Security" を含む → security
+        - "Error" または "_e0" を含む → error
+        - その他 → normal
         """
         test_name = nodeid.split("::")[-1]
         class_name = nodeid.split("::")[-2] if len(nodeid.split("::")) > 2 else ""
@@ -53,7 +66,7 @@ class TestResultCollector:
             "duration": f"{duration:.3f}s"
         }
 
-        # 分类
+        # 分類
         if "Security" in class_name:
             self.results["security"].append(result)
         elif "Error" in class_name or "_e0" in test_name:
@@ -62,7 +75,7 @@ class TestResultCollector:
             self.results["normal"].append(result)
 
     def _extract_test_id(self, test_name: str) -> str:
-        """从测试方法名提取测试ID"""
+        """テストメソッド名からテストIDを抽出する。"""
         if "mcp_" in test_name.lower():
             parts = test_name.split("_")
             for i, part in enumerate(parts):
@@ -73,7 +86,7 @@ class TestResultCollector:
         return test_name
 
     def _get_readable_name(self, test_name: str) -> str:
-        """将测试方法名转换为可读名称"""
+        """テストメソッド名を読みやすい名称に変換する。"""
         name_map = {
             # CloudCredentialsContext
             "test_cloud_credentials_context_aws": "CloudCredentialsContext AWS構成",
@@ -124,11 +137,11 @@ class TestResultCollector:
         return name_map.get(test_name, test_name.replace("_", " ").title())
 
     def generate_reports(self):
-        """生成Markdown和JSON报告"""
+        """MarkdownとJSONレポートを生成する。"""
         end_time = datetime.now()
         duration = (end_time - self.start_time).total_seconds()
 
-        # 统计
+        # 統計情報
         total = sum(len(v) for v in self.results.values())
         passed = sum(1 for category in self.results.values()
                     for r in category if r["outcome"] == "passed")
@@ -137,13 +150,13 @@ class TestResultCollector:
         xfailed = sum(1 for category in self.results.values()
                      for r in category if r["outcome"] == "xfailed")
 
-        # 生成 Markdown 报告
+        # Markdown レポート生成
         md_report = self._generate_markdown_report(total, passed, failed, xfailed, duration)
 
-        # 生成 JSON 报告
+        # JSON レポート生成
         json_report = self._generate_json_report(total, passed, failed, xfailed)
 
-        # 保存报告
+        # レポート保存
         report_dir = Path(__file__).parent.parent / "reports"
         report_dir.mkdir(exist_ok=True)
 
@@ -157,50 +170,50 @@ class TestResultCollector:
             json.dump(json_report, f, ensure_ascii=False, indent=2)
 
     def _generate_markdown_report(self, total, passed, failed, xfailed, duration):
-        """生成 Markdown 格式报告"""
+        """Markdown形式のレポートを生成する。"""
         pass_rate = (passed / total * 100) if total > 0 else 0
         effective_total = total - xfailed
         effective_pass_rate = (passed / effective_total * 100) if effective_total > 0 else 0
 
-        report = f"""# models/mcp.py 测试报告
+        report = f"""# models/mcp.py テストレポート
 
-## 测试概要
+## テスト概要
 
-| 项目 | 值 |
+| 項目 | 値 |
 |------|-----|
-| 测试对象 | `app/models/mcp.py` |
-| 测试规格 | `docs/testing/models/mcp_models_tests.md` |
-| 执行时间 | {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} |
-| 总耗时 | {duration:.2f}s |
-| 覆盖率目标 | 90% |
+| テスト対象 | `app/models/mcp.py` |
+| テスト仕様 | `docs/testing/models/mcp_models_tests.md` |
+| 実行時刻 | {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} |
+| 総実行時間 | {duration:.2f}s |
+| カバレッジ目標 | 90% |
 
-## 测试结果统计
+## テスト結果統計
 
-| 类别 | 总数 | 通过 | 失败 | 预期失败 |
+| カテゴリ | 総数 | 合格 | 失敗 | 予期された失敗 |
 |------|------|------|------|----------|
 | 正常系 | {len(self.results['normal'])} | {sum(1 for r in self.results['normal'] if r['outcome']=='passed')} | {sum(1 for r in self.results['normal'] if r['outcome']=='failed')} | {sum(1 for r in self.results['normal'] if r['outcome']=='xfailed')} |
-| 异常系 | {len(self.results['error'])} | {sum(1 for r in self.results['error'] if r['outcome']=='passed')} | {sum(1 for r in self.results['error'] if r['outcome']=='failed')} | {sum(1 for r in self.results['error'] if r['outcome']=='xfailed')} |
-| 安全测试 | {len(self.results['security'])} | {sum(1 for r in self.results['security'] if r['outcome']=='passed')} | {sum(1 for r in self.results['security'] if r['outcome']=='failed')} | {sum(1 for r in self.results['security'] if r['outcome']=='xfailed')} |
-| **合计** | **{total}** | **{passed}** | **{failed}** | **{xfailed}** |
+| 異常系 | {len(self.results['error'])} | {sum(1 for r in self.results['error'] if r['outcome']=='passed')} | {sum(1 for r in self.results['error'] if r['outcome']=='failed')} | {sum(1 for r in self.results['error'] if r['outcome']=='xfailed')} |
+| セキュリティ | {len(self.results['security'])} | {sum(1 for r in self.results['security'] if r['outcome']=='passed')} | {sum(1 for r in self.results['security'] if r['outcome']=='failed')} | {sum(1 for r in self.results['security'] if r['outcome']=='xfailed')} |
+| **合計** | **{total}** | **{passed}** | **{failed}** | **{xfailed}** |
 
-## 测试通过率
+## テスト合格率
 
-- **实际通过率**: {pass_rate:.1f}%
-- **有效通过率** (排除预期失败): {effective_pass_rate:.1f}%
+- **実際の合格率**: {pass_rate:.1f}%
+- **有効合格率** (予期された失敗を除く): {effective_pass_rate:.1f}%
 
 ---
 
-## 正常系测试详情
+## 正常系テスト詳細
 
-| ID | 测试名称 | 结果 | 执行时间 |
+| ID | テスト名 | 結果 | 実行時間 |
 |----|---------|------|----------|
 """
         for r in self.results['normal']:
             status = "✅" if r['outcome'] == 'passed' else "❌" if r['outcome'] == 'failed' else "⏭️"
             report += f"| {r['id']} | {r['name']} | {status} | {r['duration']} |\n"
 
-        report += "\n## 异常系测试详情\n\n"
-        report += "| ID | 测试名称 | 结果 | 执行时间 |\n"
+        report += "\n## 異常系テスト詳細\n\n"
+        report += "| ID | テスト名 | 結果 | 実行時間 |\n"
         report += "|----|---------|------|----------|\n"
 
         for r in self.results['error']:
@@ -208,8 +221,8 @@ class TestResultCollector:
             report += f"| {r['id']} | {r['name']} | {status} | {r['duration']} |\n"
 
         if self.results['security']:
-            report += "\n## 安全测试详情\n\n"
-            report += "| ID | 测试名称 | 结果 | 执行时间 |\n"
+            report += "\n## セキュリティテスト詳細\n\n"
+            report += "| ID | テスト名 | 結果 | 実行時間 |\n"
             report += "|----|---------|------|----------|\n"
 
             for r in self.results['security']:
@@ -220,18 +233,18 @@ class TestResultCollector:
 
 ---
 
-## 结论
+## 結論
 
-{"✅ 所有测试通过！" if failed == 0 else f"❌ {failed} 个测试失败"}
+{"✅ すべてのテストに合格しました！" if failed == 0 else f"❌ {failed} 件のテストが失敗しました"}
 
 ---
 
-*报告生成时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}*
+*レポート生成時刻: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}*
 """
         return report
 
     def _generate_json_report(self, total, passed, failed, xfailed):
-        """生成 JSON 格式报告"""
+        """JSON形式のレポートを生成する。"""
         pass_rate = (passed / total * 100) if total > 0 else 0
         effective_total = total - xfailed
         effective_pass_rate = (passed / effective_total * 100) if effective_total > 0 else 0
@@ -254,12 +267,12 @@ class TestResultCollector:
         }
 
 
-# Pytest 钩子
+# Pytest フック
 collector = TestResultCollector()
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
 def pytest_runtest_makereport(item, call):
-    """捕获每个测试的结果"""
+    """各テストの結果をキャプチャする。"""
     outcome = yield
     report = outcome.get_result()
 
@@ -271,6 +284,9 @@ def pytest_runtest_makereport(item, call):
         )
 
 def pytest_sessionfinish(session, exitstatus):
-    """测试会话结束时生成报告"""
+    """すべてのテスト完了後に詳細レポートを生成するpytestフック。"""
     collector.generate_reports()
+    print(f"\n✅ テストレポートを生成しました:")
+    print(f"  - TestReport_mcp_models.md")
+    print(f"  - TestReport_mcp_models.json")
 

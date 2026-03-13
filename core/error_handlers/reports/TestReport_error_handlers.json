@@ -1,271 +1,34 @@
 {
   "summary": {
-    "total": 39,
-    "passed": 38,
+    "total": 0,
+    "passed": 0,
     "failed": 0,
     "xfailed": 0,
-    "pass_rate": "97.4%",
-    "effective_pass_rate": "97.4%"
+    "pass_rate": "0.0%",
+    "effective_pass_rate": "0.0%"
   },
   "categories": {
     "normal": {
-      "total": 23,
-      "passed": 23,
+      "total": 0,
+      "passed": 0,
       "failed": 0,
       "xfailed": 0,
-      "results": [
-        {
-          "id": "ERH-001",
-          "name": "基本パラメータのみでエラーレスポンスを作成",
-          "outcome": "passed",
-          "duration": 0.58
-        },
-        {
-          "id": "ERH-002",
-          "name": "カスタムerror_id指定",
-          "outcome": "passed",
-          "duration": 0.68
-        },
-        {
-          "id": "ERH-003",
-          "name": "details指定でログ出力",
-          "outcome": "passed",
-          "duration": 0.56
-        },
-        {
-          "id": "ERH-004",
-          "name": "detailsなしでログ出力",
-          "outcome": "passed",
-          "duration": 0.52
-        },
-        {
-          "id": "ERH-005",
-          "name": "空の辞書detailsでログ出力なし",
-          "outcome": "passed",
-          "duration": 0.53
-        },
-        {
-          "id": "ERH-006",
-          "name": "自動生成error_idがUUID形式",
-          "outcome": "passed",
-          "duration": 0.6
-        },
-        {
-          "id": "ERH-007",
-          "name": "AuthenticationException処理",
-          "outcome": "passed",
-          "duration": 0.73
-        },
-        {
-          "id": "ERH-008",
-          "name": "AuthorizationException処理",
-          "outcome": "passed",
-          "duration": 0.74
-        },
-        {
-          "id": "ERH-015",
-          "name": "その他例外の500エラー",
-          "outcome": "passed",
-          "duration": 0.75
-        },
-        {
-          "id": "ERH-010",
-          "name": "カスタムoperation指定",
-          "outcome": "passed",
-          "duration": 1.43
-        },
-        {
-          "id": "ERH-011",
-          "name": "デフォルトoperation使用",
-          "outcome": "passed",
-          "duration": 1.57
-        },
-        {
-          "id": "ERH-012",
-          "name": "OpenSearch認証例外の委譲",
-          "outcome": "passed",
-          "duration": 1.56
-        },
-        {
-          "id": "ERH-013",
-          "name": "OpenSearch認可例外の委譲",
-          "outcome": "passed",
-          "duration": 0.79
-        },
-        {
-          "id": "ERH-014",
-          "name": "HTTPExceptionの再発生",
-          "outcome": "passed",
-          "duration": 0.58
-        },
-        {
-          "id": "ERH-015",
-          "name": "その他例外の500エラー",
-          "outcome": "passed",
-          "duration": 0.74
-        },
-        {
-          "id": "ERH-016",
-          "name": "デフォルトoperation使用",
-          "outcome": "passed",
-          "duration": 1.41
-        },
-        {
-          "id": "ERH-017",
-          "name": "基本ログ出力",
-          "outcome": "passed",
-          "duration": 0.23
-        },
-        {
-          "id": "ERH-018",
-          "name": "追加kwargs（DEBUG有効）",
-          "outcome": "passed",
-          "duration": 0.31
-        },
-        {
-          "id": "ERH-019",
-          "name": "空kwargs（DEBUG有効）",
-          "outcome": "passed",
-          "duration": 0.23
-        },
-        {
-          "id": "ERH-020",
-          "name": "追加kwargs（DEBUG無効）",
-          "outcome": "passed",
-          "duration": 0.26
-        },
-        {
-          "id": "ERH-021",
-          "name": "success=True時のログ",
-          "outcome": "passed",
-          "duration": 0.22
-        },
-        {
-          "id": "ERH-022",
-          "name": "success=False時のログ",
-          "outcome": "passed",
-          "duration": 0.21
-        },
-        {
-          "id": "ERH-023",
-          "name": "デフォルトsuccess時のログ",
-          "outcome": "passed",
-          "duration": 0.22
-        }
-      ]
+      "results": []
     },
     "error": {
-      "total": 7,
-      "passed": 7,
+      "total": 0,
+      "passed": 0,
       "failed": 0,
       "xfailed": 0,
-      "results": [
-        {
-          "id": "ERH-E01",
-          "name": "空メッセージ処理",
-          "outcome": "passed",
-          "duration": 0.42
-        },
-        {
-          "id": "ERH-E02",
-          "name": "不正ステータスコード処理",
-          "outcome": "passed",
-          "duration": 1.01
-        },
-        {
-          "id": "ERH-E03",
-          "name": "None例外処理",
-          "outcome": "passed",
-          "duration": 1.27
-        },
-        {
-          "id": "ERH-E04",
-          "name": "None session_id処理",
-          "outcome": "passed",
-          "duration": 0.66
-        },
-        {
-          "id": "ERH-E05",
-          "name": "空session_id処理",
-          "outcome": "passed",
-          "duration": 0.64
-        },
-        {
-          "id": "ERH-E06",
-          "name": "None operation処理",
-          "outcome": "passed",
-          "duration": 0.21
-        },
-        {
-          "id": "ERH-E07",
-          "name": "None session_id処理",
-          "outcome": "passed",
-          "duration": 0.21
-        }
-      ]
+      "results": []
     },
     "security": {
-      "total": 9,
-      "passed": 8,
+      "total": 0,
+      "passed": 0,
       "failed": 0,
       "xfailed": 0,
-      "results": [
-        {
-          "id": "ERH-SEC-01",
-          "name": "内部パス未露出",
-          "outcome": "passed",
-          "duration": 0.81
-        },
-        {
-          "id": "ERH-SEC-02",
-          "name": "スタックトレース未露出",
-          "outcome": "passed",
-          "duration": 1.0
-        },
-        {
-          "id": "ERH-SEC-03",
-          "name": "予測不可能なUUID",
-          "outcome": "passed",
-          "duration": 1.31
-        },
-        {
-          "id": "ERH-SEC-04",
-          "name": "認証情報未露出",
-          "outcome": "passed",
-          "duration": 0.51
-        },
-        {
-          "id": "ERH-SEC-05",
-          "name": "detailsパラメータ未露出",
-          "outcome": "passed",
-          "duration": 0.4
-        },
-        {
-          "id": "ERH-SEC-06",
-          "name": "セッションID未露出",
-          "outcome": "passed",
-          "duration": 0.59
-        },
-        {
-          "id": "ERH-SEC-07",
-          "name": "error_id長さ検証",
-          "outcome": "passed",
-          "duration": 0.5
-        },
-        {
-          "id": "ERH-SEC-08",
-          "name": "ログインジェクション対策",
-          "outcome": "skipped",
-          "duration": 1.08
-        },
-        {
-          "id": "ERH-SEC-09",
-          "name": "CRLFインジェクション対策",
-          "outcome": "passed",
-          "duration": 0.52
-        }
-      ]
+      "results": []
     }
   },
-  "execution_time": "2026-03-11 19:33:40"
+  "execution_time": "2026-03-13 13:00:30"
 }
