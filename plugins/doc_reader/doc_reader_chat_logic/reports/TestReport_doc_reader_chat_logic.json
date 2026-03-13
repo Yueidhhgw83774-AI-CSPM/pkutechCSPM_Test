@@ -11,91 +11,91 @@
         "test_id": "N/A",
         "test_name": "test_string_input",
         "outcome": "passed",
-        "duration_ms": 0.5,
+        "duration_ms": 0.21,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_list_with_type_text",
         "outcome": "passed",
-        "duration_ms": 0.45,
+        "duration_ms": 0.21,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_list_with_content_key_single_level",
         "outcome": "passed",
-        "duration_ms": 0.23,
+        "duration_ms": 0.2,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_list_with_content_key_multi_level",
         "outcome": "passed",
-        "duration_ms": 0.53,
+        "duration_ms": 0.22,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_list_with_string_elements",
         "outcome": "passed",
-        "duration_ms": 0.25,
+        "duration_ms": 0.2,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_other_type",
         "outcome": "passed",
-        "duration_ms": 0.2,
+        "duration_ms": 0.21,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_empty_list",
         "outcome": "passed",
-        "duration_ms": 0.2,
+        "duration_ms": 0.26,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_mixed_list",
         "outcome": "passed",
-        "duration_ms": 0.2,
+        "duration_ms": 0.22,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_chat_llm_node_normal_execution",
         "outcome": "passed",
-        "duration_ms": 3.01,
+        "duration_ms": 3.99,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_chat_llm_node_context_key_exists_value_none",
         "outcome": "passed",
-        "duration_ms": 4.98,
+        "duration_ms": 2.56,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_chat_llm_node_context_key_not_exists",
         "outcome": "passed",
-        "duration_ms": 2.05,
+        "duration_ms": 2.59,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_invoke_chat_graph_normal_execution",
         "outcome": "passed",
-        "duration_ms": 0.85,
+        "duration_ms": 1.2,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_invoke_chat_graph_with_all_parameters",
         "outcome": "passed",
-        "duration_ms": 0.76,
+        "duration_ms": 1.16,
         "status": "✅"
       }
     ],
@@ -104,49 +104,49 @@
         "test_id": "N/A",
         "test_name": "test_chat_llm_node_llm_not_initialized",
         "outcome": "passed",
-        "duration_ms": 0.25,
+        "duration_ms": 0.3,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_chat_llm_node_chain_execution_exception",
         "outcome": "passed",
-        "duration_ms": 3.03,
+        "duration_ms": 2.49,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_invoke_chat_graph_llm_not_initialized",
         "outcome": "passed",
-        "duration_ms": 0.38,
+        "duration_ms": 0.67,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_invoke_chat_graph_graph_execution_exception",
         "outcome": "passed",
-        "duration_ms": 1.42,
+        "duration_ms": 1.65,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_invoke_chat_graph_unexpected_message_type",
         "outcome": "passed",
-        "duration_ms": 1.19,
+        "duration_ms": 1.34,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_invoke_chat_graph_no_messages",
         "outcome": "passed",
-        "duration_ms": 1.07,
+        "duration_ms": 1.98,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_invoke_chat_graph_http_exception_rewrap",
         "outcome": "skipped",
-        "duration_ms": 1.9,
+        "duration_ms": 2.15,
         "status": "⚠️"
       }
     ],
@@ -155,59 +155,59 @@
         "test_id": "N/A",
         "test_name": "test_error_id_traceability",
         "outcome": "passed",
-        "duration_ms": 1.55,
+        "duration_ms": 1.66,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_no_stack_trace_in_response",
         "outcome": "passed",
-        "duration_ms": 1.37,
+        "duration_ms": 1.65,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_exception_detail_exposure",
         "outcome": "skipped",
-        "duration_ms": 1.67,
+        "duration_ms": 2.15,
         "status": "⚠️"
       },
       {
         "test_id": "N/A",
         "test_name": "test_xss_payload",
         "outcome": "passed",
-        "duration_ms": 1.12,
+        "duration_ms": 1.21,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_sql_injection_input",
         "outcome": "passed",
-        "duration_ms": 0.89,
+        "duration_ms": 1.3,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_prompt_injection_basic",
         "outcome": "passed",
-        "duration_ms": 0.78,
+        "duration_ms": 1.12,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_prompt_injection_json_extraction",
         "outcome": "passed",
-        "duration_ms": 0.8,
+        "duration_ms": 1.07,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_large_input",
         "outcome": "passed",
-        "duration_ms": 0.79,
+        "duration_ms": 2.28,
         "status": "✅"
       }
     ]
   },
-  "execution_time": "2026-03-12 19:49:27"
+  "execution_time": "2026-03-13 16:59:48"
 }

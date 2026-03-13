@@ -2,19 +2,136 @@
   "metadata": {
     "test_target": "app/core/checkpointer.py",
     "test_spec": "checkpointer_tests.md",
-    "execution_time": "2026-03-13T13:00:30.918917",
+    "execution_time": "2026-03-13T16:39:10.401487",
     "coverage_target": "75%"
   },
   "summary": {
-    "total": 0,
-    "passed": 0,
+    "total": 21,
+    "passed": 19,
     "failed": 0,
     "xfailed": 0,
-    "pass_rate": 0.0
+    "pass_rate": 90.5
   },
   "results": {
-    "normal": [],
-    "error": [],
-    "security": []
+    "normal": [
+      {
+        "id": "CKP-INIT",
+        "name": "モジュールインポート成功",
+        "status": "passed",
+        "duration": 0.0007296999974641949
+      },
+      {
+        "id": "CKP-001",
+        "name": "初期ストレージモード確認",
+        "status": "passed",
+        "duration": 0.0006025000184308738
+      },
+      {
+        "id": "CKP-002",
+        "name": "MemorySaver初期化(memory指定)",
+        "status": "passed",
+        "duration": 0.016528400010429323
+      },
+      {
+        "id": "CKP-004",
+        "name": "キャッシュされたCheckpointer返却",
+        "status": "passed",
+        "duration": 0.0010123999963980168
+      },
+      {
+        "id": "CKP-005",
+        "name": "PostgreSQL Checkpointer初期化",
+        "status": "passed",
+        "duration": 0.002685399987967685
+      },
+      {
+        "id": "CKP-010",
+        "name": "OpenSearchフォールバック",
+        "status": "passed",
+        "duration": 0.0015384000143967569
+      },
+      {
+        "id": "CKP-011",
+        "name": "未知ストレージフォールバック",
+        "status": "passed",
+        "duration": 0.00147720001405105
+      },
+      {
+        "id": "CKP-007",
+        "name": "同期Checkpointer警告(postgres)",
+        "status": "passed",
+        "duration": 0.0010759000142570585
+      },
+      {
+        "id": "CKP-008",
+        "name": "Checkpointer閉じる(memory)",
+        "status": "passed",
+        "duration": 0.0007747999916318804
+      },
+      {
+        "id": "CKP-012",
+        "name": "PostgreSQL接続プール閉じる",
+        "status": "passed",
+        "duration": 0.0012506000057328492
+      },
+      {
+        "id": "CKP-009",
+        "name": "キャッシュリセット",
+        "status": "passed",
+        "duration": 0.0007208999886643142
+      }
+    ],
+    "error": [
+      {
+        "id": "CKP-E01",
+        "name": "PostgreSQL URL未設定時のフォールバック",
+        "status": "passed",
+        "duration": 0.001718400017125532
+      },
+      {
+        "id": "CKP-E02",
+        "name": "psycopg未インストール時のフォールバック",
+        "status": "passed",
+        "duration": 0.0014059999957680702
+      },
+      {
+        "id": "CKP-E03",
+        "name": "PostgreSQL接続エラー時のフォールバック",
+        "status": "passed",
+        "duration": 0.0017675000126473606
+      },
+      {
+        "id": "CKP-E05",
+        "name": "setup失敗時のフォールバック",
+        "status": "passed",
+        "duration": 0.0038296999991871417
+      },
+      {
+        "id": "CKP-E04",
+        "name": "接続プール閉じるエラー処理",
+        "status": "passed",
+        "duration": 0.001414199999999255
+      }
+    ],
+    "security": [
+      {
+        "id": "CKP-SEC-01",
+        "name": "PostgreSQL URLがログに出力されないこと",
+        "status": "passed",
+        "duration": 0.0023682000173721462
+      },
+      {
+        "id": "CKP-SEC-02",
+        "name": "認証情報が漏洩しないこと",
+        "status": "passed",
+        "duration": 0.002533199993195012
+      },
+      {
+        "id": "CKP-SEC-03",
+        "name": "接続プールサイズ制限",
+        "status": "passed",
+        "duration": 0.002086300024529919
+      }
+    ]
   }
 }

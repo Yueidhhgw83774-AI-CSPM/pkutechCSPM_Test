@@ -305,27 +305,18 @@ def mock_enhanced_rag_search(mock_rag_client):
 async def test_app(mock_jwt_auth, mock_enhanced_rag_search):
     """テスト用FastAPIアプリケーション"""
     from fastapi import FastAPI
-    import sys
     
     app = FastAPI()
     
-    # ルーターモジュールを強制リロード
-    if 'app.rag.router' in sys.modules:
-        del sys.modules['app.rag.router']
-    
     with patch.dict('sys.modules', {'weasyprint': MagicMock()}):
-        # get_enhanced_rag_searchをモック
-        with patch('app.core.rag_manager.get_enhanced_rag_search', new_callable=AsyncMock) as mock_get_rag:
+        # 既にインポート済みのモジュールに直接パッチ（parent パッケージの属性キャッシュを回避）
+        import app.rag.router as _rag_router_module
+        
+        with patch.object(_rag_router_module, 'get_enhanced_rag_search', new_callable=AsyncMock) as mock_get_rag:
             mock_get_rag.return_value = mock_enhanced_rag_search
             
-            # Import router
-            from app.rag import router as rag_router_module
-            
-            # Get the router
-            rag_router = rag_router_module.router
-            
             # Mount router
-            app.include_router(rag_router)
+            app.include_router(_rag_router_module.router)
             
             yield app
 

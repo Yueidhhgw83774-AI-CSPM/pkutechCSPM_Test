@@ -1,22 +1,384 @@
 {
   "summary": {
-    "total": 0,
-    "passed": 0,
+    "total": 60,
+    "passed": 60,
     "failed": 0,
     "xfailed": 0,
-    "pass_rate": "0.0%",
-    "effective_pass_rate": "0.0%"
+    "pass_rate": "100.0%",
+    "effective_pass_rate": "100.0%"
   },
   "categories": {
     "normal": {
-      "results": []
+      "results": [
+        {
+          "id": "test_cloud_credentials_context_aws",
+          "name": "CloudCredentialsContext AWS構成",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_cloud_credentials_context_azure",
+          "name": "Azure構成",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_cloud_credentials_context_gcp",
+          "name": "GCP構成",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_cloud_credentials_context_minimal",
+          "name": "最小構成",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_mcp_tool_type_enum",
+          "name": "MCPToolType Enum",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_sse_event_type_enum",
+          "name": "SSEEventType Enum",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_mcp_tool_parameter",
+          "name": "MCPToolParameter",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_mcp_tool_basic",
+          "name": "MCPTool 基本構成",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_mcp_tool_with_parameters",
+          "name": "パラメータ付き",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_mcp_server_basic",
+          "name": "MCPServer 基本構成",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_mcp_server_full",
+          "name": "完全構成",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_mcp_chat_message_basic",
+          "name": "MCPChatMessage 基本",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_mcp_chat_message_with_tools",
+          "name": "ツール呼び出し付き",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_sub_task_result_completed",
+          "name": "SubTaskResult 完了",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_todo_item_pending",
+          "name": "TodoItem pending",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_todo_item_completed",
+          "name": "completed",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_thinking_log",
+          "name": "Test Thinking Log",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_mcp_chat_request",
+          "name": "MCPChatRequest",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_mcp_chat_stream_request",
+          "name": "MCPChatStreamRequest",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_mcp_chat_response_full",
+          "name": "完全構成",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_session_info",
+          "name": "SessionInfo",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_session_list_response",
+          "name": "SessionListResponse",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_model_dump_and_validate",
+          "name": "Test Model Dump And Validate",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_mcp_tool_call_defaults",
+          "name": "Test Mcp Tool Call Defaults",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_mcp_tool_result_success",
+          "name": "Test Mcp Tool Result Success",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_mcp_tool_result_failure",
+          "name": "Test Mcp Tool Result Failure",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_validation_result_defaults",
+          "name": "Test Validation Result Defaults",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_mcp_progress_defaults",
+          "name": "Test Mcp Progress Defaults",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_validation_result_failure_case",
+          "name": "Test Validation Result Failure Case",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_mcp_progress_with_data",
+          "name": "Test Mcp Progress With Data",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_mcp_server_list_response_empty",
+          "name": "Test Mcp Server List Response Empty",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_mcp_server_list_response_multiple",
+          "name": "Test Mcp Server List Response Multiple",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_mcp_tool_list_response",
+          "name": "Test Mcp Tool List Response",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_mcp_server_status_defaults",
+          "name": "Test Mcp Server Status Defaults",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_mcp_status_response",
+          "name": "Test Mcp Status Response",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_mcp_chat_response_minimal",
+          "name": "Test Mcp Chat Response Minimal",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_mcp_chat_stream_request_with_credentials",
+          "name": "Test Mcp Chat Stream Request With Credentials",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_sub_task_result_with_tool_result",
+          "name": "Test Sub Task Result With Tool Result",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_session_update_request_boundary",
+          "name": "Test Session Update Request Boundary",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_session_info_full",
+          "name": "Test Session Info Full",
+          "outcome": "passed",
+          "duration": "0.001s"
+        },
+        {
+          "id": "test_session_list_response_with_data",
+          "name": "Test Session List Response With Data",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_json_round_trip",
+          "name": "Test Json Round Trip",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_mutable_default_independence",
+          "name": "Test Mutable Default Independence",
+          "outcome": "passed",
+          "duration": "0.000s"
+        }
+      ]
     },
     "error": {
-      "results": []
+      "results": [
+        {
+          "id": "test_cloud_credentials_invalid_provider",
+          "name": "無効なクラウドプロバイダー",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_mcp_chat_request_missing_required",
+          "name": "必須フィールド欠落",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_mcp_chat_stream_request_invalid_type",
+          "name": "Test Mcp Chat Stream Request Invalid Type",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_validation_result_missing_required",
+          "name": "Test Validation Result Missing Required",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_session_update_request_name_too_long",
+          "name": "Test Session Update Request Name Too Long",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_cloud_credentials_missing_provider",
+          "name": "Test Cloud Credentials Missing Provider",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_mcp_chat_stream_request_missing_required",
+          "name": "Test Mcp Chat Stream Request Missing Required",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_mcp_chat_response_missing_response",
+          "name": "Test Mcp Chat Response Missing Response",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_mcp_chat_response_missing_session_id",
+          "name": "Test Mcp Chat Response Missing Session Id",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_sub_task_result_missing_required",
+          "name": "Test Sub Task Result Missing Required",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_todo_item_missing_required",
+          "name": "Test Todo Item Missing Required",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_thinking_log_missing_required",
+          "name": "Test Thinking Log Missing Required",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_mcp_tool_missing_required",
+          "name": "Test Mcp Tool Missing Required",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_mcp_tool_parameter_missing_required",
+          "name": "Test Mcp Tool Parameter Missing Required",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_mcp_server_status_missing_required",
+          "name": "Test Mcp Server Status Missing Required",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_mcp_status_response_missing_required",
+          "name": "Test Mcp Status Response Missing Required",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_session_list_response_missing_total",
+          "name": "Test Session List Response Missing Total",
+          "outcome": "passed",
+          "duration": "0.000s"
+        }
+      ]
     },
     "security": {
       "results": []
     }
   },
-  "execution_time": "2026-03-13 13:00:30"
+  "execution_time": "2026-03-13 16:39:22"
 }

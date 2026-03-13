@@ -1,25 +1,196 @@
 {
   "summary": {
-    "total": 0,
-    "passed": 0,
+    "total": 24,
+    "passed": 23,
     "failed": 0,
-    "xfailed": 0,
-    "pass_rate": "0.0%",
-    "effective_pass_rate": "0.0%"
+    "xfailed": 1,
+    "pass_rate": "95.8%",
+    "effective_pass_rate": "100.0%"
   },
   "categories": {
     "normal": {
-      "total": 0,
-      "results": []
+      "total": 14,
+      "results": [
+        {
+          "id": "RAG-001",
+          "name": "モジュールインポート成功",
+          "status": "✅ 成功",
+          "outcome": "passed",
+          "duration": "0.91ms"
+        },
+        {
+          "id": "RAG-002",
+          "name": "シングルトンインスタンス取得",
+          "status": "✅ 成功",
+          "outcome": "passed",
+          "duration": "0.88ms"
+        },
+        {
+          "id": "RAG-003",
+          "name": "シングルトン一貫性",
+          "status": "✅ 成功",
+          "outcome": "passed",
+          "duration": "0.96ms"
+        },
+        {
+          "id": "RAG-004",
+          "name": "初期化成功",
+          "status": "✅ 成功",
+          "outcome": "passed",
+          "duration": "182.69ms"
+        },
+        {
+          "id": "RAG-005",
+          "name": "初期化済みで再度initialize",
+          "status": "✅ 成功",
+          "outcome": "passed",
+          "duration": "1.24ms"
+        },
+        {
+          "id": "RAG-006",
+          "name": "double-checked locking動作確認",
+          "status": "✅ 成功",
+          "outcome": "passed",
+          "duration": "113.52ms"
+        },
+        {
+          "id": "RAG-007",
+          "name": "get_enhanced_rag_search成功",
+          "status": "✅ 成功",
+          "outcome": "passed",
+          "duration": "1.15ms"
+        },
+        {
+          "id": "RAG-008",
+          "name": "get_enhanced_rag_search自動初期化",
+          "status": "✅ 成功",
+          "outcome": "passed",
+          "duration": "9.93ms"
+        },
+        {
+          "id": "RAG-009",
+          "name": "is_initialized確認（未初期化）",
+          "status": "✅ 成功",
+          "outcome": "passed",
+          "duration": "0.74ms"
+        },
+        {
+          "id": "RAG-010",
+          "name": "is_initialized確認（初期化済み）",
+          "status": "✅ 成功",
+          "outcome": "passed",
+          "duration": "0.68ms"
+        },
+        {
+          "id": "RAG-011",
+          "name": "ヘルスチェック成功",
+          "status": "✅ 成功",
+          "outcome": "passed",
+          "duration": "1.53ms"
+        },
+        {
+          "id": "RAG-012",
+          "name": "グローバルマネージャー取得",
+          "status": "✅ 成功",
+          "outcome": "passed",
+          "duration": "0.87ms"
+        },
+        {
+          "id": "RAG-013",
+          "name": "グローバルシステム初期化成功",
+          "status": "✅ 成功",
+          "outcome": "passed",
+          "duration": "9.00ms"
+        },
+        {
+          "id": "RAG-014",
+          "name": "DI用get_enhanced_rag_search成功",
+          "status": "✅ 成功",
+          "outcome": "passed",
+          "duration": "13.98ms"
+        }
+      ]
     },
     "error": {
-      "total": 0,
-      "results": []
+      "total": 7,
+      "results": [
+        {
+          "id": "RAG-E01",
+          "name": "EnhancedRAGSearch初期化失敗",
+          "status": "✅ 成功",
+          "outcome": "passed",
+          "duration": "9.98ms"
+        },
+        {
+          "id": "RAG-E02",
+          "name": "初期化中の例外",
+          "status": "✅ 成功",
+          "outcome": "passed",
+          "duration": "10.06ms"
+        },
+        {
+          "id": "RAG-E03",
+          "name": "get_enhanced_rag_search初期化失敗",
+          "status": "✅ 成功",
+          "outcome": "passed",
+          "duration": "12.27ms"
+        },
+        {
+          "id": "RAG-E04",
+          "name": "ヘルスチェック未初期化",
+          "status": "✅ 成功",
+          "outcome": "passed",
+          "duration": "0.90ms"
+        },
+        {
+          "id": "RAG-E05",
+          "name": "ヘルスチェックRAG無し",
+          "status": "✅ 成功",
+          "outcome": "passed",
+          "duration": "0.83ms"
+        },
+        {
+          "id": "RAG-E06",
+          "name": "ヘルスチェック例外",
+          "status": "✅ 成功",
+          "outcome": "passed",
+          "duration": "1.89ms"
+        },
+        {
+          "id": "RAG-E07",
+          "name": "グローバル初期化例外",
+          "status": "✅ 成功",
+          "outcome": "passed",
+          "duration": "1.33ms"
+        }
+      ]
     },
     "security": {
-      "total": 0,
-      "results": []
+      "total": 3,
+      "results": [
+        {
+          "id": "RAG-SEC-01",
+          "name": "エラーログに機密情報が含まれない",
+          "status": "⚠️ 予期された失敗",
+          "outcome": "xfailed",
+          "duration": "10.72ms"
+        },
+        {
+          "id": "RAG-SEC-02",
+          "name": "ヘルスチェックに内部エラー詳細が漏洩しない",
+          "status": "✅ 成功",
+          "outcome": "passed",
+          "duration": "3.48ms"
+        },
+        {
+          "id": "RAG-SEC-03",
+          "name": "シングルトンのスレッドセーフ性",
+          "status": "✅ 成功",
+          "outcome": "passed",
+          "duration": "1.90ms"
+        }
+      ]
     }
   },
-  "execution_time": "2026-03-13 13:00:30"
+  "execution_time": "2026-03-13 16:39:10"
 }

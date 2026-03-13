@@ -1,38 +1,215 @@
 {
   "summary": {
-    "total": 0,
-    "passed": 0,
+    "total": 29,
+    "passed": 29,
     "failed": 0,
     "xfailed": 0,
     "skipped": 0,
-    "pass_rate": "0.0%",
-    "effective_pass_rate": "0.0%"
+    "pass_rate": "100.0%",
+    "effective_pass_rate": "100.0%"
   },
   "categories": {
     "normal": {
-      "total": 0,
-      "passed": 0,
+      "total": 15,
+      "passed": 15,
       "failed": 0,
       "xfailed": 0,
       "skipped": 0,
-      "results": []
+      "results": [
+        {
+          "name": "test_init_with_successful_decryption_test",
+          "class": "TestDecryptionMiddlewareInit",
+          "outcome": "passed",
+          "duration": 13.26
+        },
+        {
+          "name": "test_init_with_custom_paths",
+          "class": "TestDecryptionMiddlewareInit",
+          "outcome": "passed",
+          "duration": 2.01
+        },
+        {
+          "name": "test_non_http_scope_passthrough",
+          "class": "TestDecryptionMiddlewarePassthrough",
+          "outcome": "passed",
+          "duration": 0.64
+        },
+        {
+          "name": "test_non_target_path_passthrough",
+          "class": "TestDecryptionMiddlewarePassthrough",
+          "outcome": "passed",
+          "duration": 0.72
+        },
+        {
+          "name": "test_get_request_passthrough",
+          "class": "TestDecryptionMiddlewarePassthrough",
+          "outcome": "passed",
+          "duration": 0.63
+        },
+        {
+          "name": "test_empty_body_passthrough",
+          "class": "TestDecryptionMiddlewarePassthrough",
+          "outcome": "passed",
+          "duration": 0.7
+        },
+        {
+          "name": "test_non_json_body_passthrough",
+          "class": "TestDecryptionMiddlewarePassthrough",
+          "outcome": "passed",
+          "duration": 0.81
+        },
+        {
+          "name": "test_non_encrypted_json_passthrough",
+          "class": "TestDecryptionMiddlewarePassthrough",
+          "outcome": "passed",
+          "duration": 0.66
+        },
+        {
+          "name": "test_http_disconnect_message",
+          "class": "TestDecryptionMiddlewarePassthrough",
+          "outcome": "passed",
+          "duration": 2.41
+        },
+        {
+          "name": "test_decrypt_encrypted_request_success",
+          "class": "TestDecryptionMiddlewareDecrypt",
+          "outcome": "passed",
+          "duration": 2.16
+        },
+        {
+          "name": "test_content_length_header_update",
+          "class": "TestDecryptionMiddlewareDecrypt",
+          "outcome": "passed",
+          "duration": 2.32
+        },
+        {
+          "name": "test_content_length_header_addition",
+          "class": "TestDecryptionMiddlewareDecrypt",
+          "outcome": "passed",
+          "duration": 2.72
+        },
+        {
+          "name": "test_decrypt_with_valid_auth_hash",
+          "class": "TestDecryptionMiddlewareDecrypt",
+          "outcome": "passed",
+          "duration": 2.9
+        },
+        {
+          "name": "test_decrypt_without_auth_hash",
+          "class": "TestDecryptionMiddlewareDecrypt",
+          "outcome": "passed",
+          "duration": 2.27
+        },
+        {
+          "name": "test_create_decryption_middleware",
+          "class": "TestCreateDecryptionMiddleware",
+          "outcome": "passed",
+          "duration": 1.49
+        }
+      ]
     },
     "error": {
-      "total": 0,
-      "passed": 0,
+      "total": 9,
+      "passed": 9,
       "failed": 0,
       "xfailed": 0,
       "skipped": 0,
-      "results": []
+      "results": [
+        {
+          "name": "test_init_with_decryption_test_failure",
+          "class": "TestDecryptionMiddlewareInitErrors",
+          "outcome": "passed",
+          "duration": 1.8
+        },
+        {
+          "name": "test_init_with_decryption_test_exception",
+          "class": "TestDecryptionMiddlewareInitErrors",
+          "outcome": "passed",
+          "duration": 2.36
+        },
+        {
+          "name": "test_decrypt_with_invalid_auth_hash",
+          "class": "TestDecryptionMiddlewareDecryptErrors",
+          "outcome": "passed",
+          "duration": 5.49
+        },
+        {
+          "name": "test_decrypt_with_missing_iv",
+          "class": "TestDecryptionMiddlewareDecryptErrors",
+          "outcome": "passed",
+          "duration": 2.11
+        },
+        {
+          "name": "test_decrypt_with_invalid_ciphertext",
+          "class": "TestDecryptionMiddlewareDecryptErrors",
+          "outcome": "passed",
+          "duration": 3.63
+        },
+        {
+          "name": "test_decrypt_with_decryption_exception",
+          "class": "TestDecryptionMiddlewareDecryptErrors",
+          "outcome": "passed",
+          "duration": 3.53
+        },
+        {
+          "name": "test_send_error_response_for_decryption_failure",
+          "class": "TestDecryptionMiddlewareDecryptErrors",
+          "outcome": "passed",
+          "duration": 2.22
+        },
+        {
+          "name": "test_malformed_encrypted_data_structure",
+          "class": "TestDecryptionMiddlewareDecryptErrors",
+          "outcome": "passed",
+          "duration": 2.11
+        },
+        {
+          "name": "test_receive_exception_handling",
+          "class": "TestDecryptionMiddlewareDecryptErrors",
+          "outcome": "passed",
+          "duration": 1.83
+        }
+      ]
     },
     "security": {
-      "total": 0,
-      "passed": 0,
+      "total": 5,
+      "passed": 5,
       "failed": 0,
       "xfailed": 0,
       "skipped": 0,
-      "results": []
+      "results": [
+        {
+          "name": "test_sec_01_shared_secret_not_logged",
+          "class": "TestEncryptionMiddlewareSecurity",
+          "outcome": "passed",
+          "duration": 3.05
+        },
+        {
+          "name": "test_sec_02_decrypted_data_not_logged",
+          "class": "TestEncryptionMiddlewareSecurity",
+          "outcome": "passed",
+          "duration": 1.43
+        },
+        {
+          "name": "test_sec_03_auth_hash_not_logged",
+          "class": "TestEncryptionMiddlewareSecurity",
+          "outcome": "passed",
+          "duration": 0.63
+        },
+        {
+          "name": "test_sec_04_error_message_safe",
+          "class": "TestEncryptionMiddlewareSecurity",
+          "outcome": "passed",
+          "duration": 4.0
+        },
+        {
+          "name": "test_sec_05_timing_attack_resistance",
+          "class": "TestEncryptionMiddlewareSecurity",
+          "outcome": "passed",
+          "duration": 1.77
+        }
+      ]
     }
   },
-  "execution_time": "2026-03-13 13:00:30"
+  "execution_time": "2026-03-13 16:39:10"
 }

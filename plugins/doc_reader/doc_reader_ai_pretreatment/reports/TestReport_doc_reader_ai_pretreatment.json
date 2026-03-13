@@ -11,28 +11,28 @@
         "test_id": "N/A",
         "test_name": "test_sleeper_waits_when_elapsed_less_than_min",
         "outcome": "passed",
-        "duration_ms": 0.94,
+        "duration_ms": 1.05,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_sleeper_no_wait_when_elapsed_exceeds_min",
         "outcome": "passed",
-        "duration_ms": 1.2,
+        "duration_ms": 0.81,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_sleeper_custom_min_time",
         "outcome": "passed",
-        "duration_ms": 0.65,
+        "duration_ms": 0.67,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_get_random_elements_partial",
         "outcome": "passed",
-        "duration_ms": 0.23,
+        "duration_ms": 0.21,
         "status": "✅"
       },
       {
@@ -46,7 +46,7 @@
         "test_id": "N/A",
         "test_name": "test_get_random_elements_all_when_num_negative",
         "outcome": "passed",
-        "duration_ms": 0.21,
+        "duration_ms": 0.2,
         "status": "✅"
       },
       {
@@ -67,84 +67,84 @@
         "test_id": "N/A",
         "test_name": "test_get_elements_all_when_num_negative",
         "outcome": "passed",
-        "duration_ms": 0.22,
+        "duration_ms": 0.24,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_ai_pretreatment_random_mode",
         "outcome": "passed",
-        "duration_ms": 12020.07,
+        "duration_ms": 12025.99,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_ai_pretreatment_sequential_mode",
         "outcome": "passed",
-        "duration_ms": 6017.69,
+        "duration_ms": 6010.78,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_ai_pretreatment_max_output_limit",
         "outcome": "passed",
-        "duration_ms": 18036.02,
+        "duration_ms": 18041.0,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_ai_pretreatment_max_output_all",
         "outcome": "passed",
-        "duration_ms": 30021.82,
+        "duration_ms": 30027.15,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_ai_pretreatment_status_tracking_calls",
         "outcome": "passed",
-        "duration_ms": 12020.9,
+        "duration_ms": 12011.43,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_ai_pretreatment_target_clouds_added",
         "outcome": "passed",
-        "duration_ms": 6011.23,
+        "duration_ms": 6004.81,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_ai_pretreatment_related_controls_init",
         "outcome": "passed",
-        "duration_ms": 6003.97,
+        "duration_ms": 6012.55,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_ai_pretreatment_implemented_policies_init",
         "outcome": "passed",
-        "duration_ms": 6018.11,
+        "duration_ms": 6011.88,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_ai_pretreatment_max_output_zero",
         "outcome": "passed",
-        "duration_ms": 2.24,
+        "duration_ms": 2.19,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_ai_pretreatment_max_output_equals_list_length",
         "outcome": "passed",
-        "duration_ms": 18022.21,
+        "duration_ms": 18018.57,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_ai_pretreatment_max_output_negative_two",
         "outcome": "passed",
-        "duration_ms": 3.49,
+        "duration_ms": 1.97,
         "status": "✅"
       }
     ],
@@ -160,42 +160,42 @@
         "test_id": "N/A",
         "test_name": "test_ai_pretreatment_phase2_gemini_error",
         "outcome": "passed",
-        "duration_ms": 2.7,
+        "duration_ms": 2.78,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_ai_pretreatment_invalid_base64_pdf",
         "outcome": "passed",
-        "duration_ms": 0.36,
+        "duration_ms": 0.34,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_ai_pretreatment_phase1_json_parse_error",
         "outcome": "passed",
-        "duration_ms": 1.38,
+        "duration_ms": 2.02,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_ai_pretreatment_phase2_json_parse_error",
         "outcome": "passed",
-        "duration_ms": 1.68,
+        "duration_ms": 1.51,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_ai_pretreatment_empty_compliance_list",
         "outcome": "passed",
-        "duration_ms": 2.21,
+        "duration_ms": 2.69,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_get_random_elements_empty_list",
         "outcome": "passed",
-        "duration_ms": 0.23,
+        "duration_ms": 0.25,
         "status": "✅"
       },
       {
@@ -209,28 +209,28 @@
         "test_id": "N/A",
         "test_name": "test_ai_pretreatment_pikepdf_password_error",
         "outcome": "passed",
-        "duration_ms": 0.52,
+        "duration_ms": 0.73,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_ai_pretreatment_pdfplumber_corrupted_error",
         "outcome": "passed",
-        "duration_ms": 0.48,
+        "duration_ms": 1.1,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_ai_pretreatment_invalid_categories_json",
         "outcome": "passed",
-        "duration_ms": 6005.28,
+        "duration_ms": 6006.05,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_ai_pretreatment_resource_leak_prevention",
         "outcome": "skipped",
-        "duration_ms": 2.56,
+        "duration_ms": 3.1,
         "status": "⚠️"
       }
     ],
@@ -239,66 +239,66 @@
         "test_id": "N/A",
         "test_name": "test_pdf_binary_injection_resistance",
         "outcome": "passed",
-        "duration_ms": 0.84,
+        "duration_ms": 1.04,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_category_json_injection_resistance",
         "outcome": "passed",
-        "duration_ms": 6013.74,
+        "duration_ms": 6010.53,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_api_key_leakage_prevention",
         "outcome": "skipped",
-        "duration_ms": 2.43,
+        "duration_ms": 2.52,
         "status": "⚠️"
       },
       {
         "test_id": "N/A",
         "test_name": "test_pdf_content_log_prevention",
         "outcome": "passed",
-        "duration_ms": 3.34,
+        "duration_ms": 1.91,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_output_language_dos_resistance",
         "outcome": "passed",
-        "duration_ms": 6006.31,
+        "duration_ms": 6007.11,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_platform_parameter_injection_resistance",
         "outcome": "passed",
-        "duration_ms": 6024.05,
+        "duration_ms": 6013.72,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_large_pdf_dos_resistance",
         "outcome": "passed",
-        "duration_ms": 28.32,
+        "duration_ms": 26.04,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_page_range_path_traversal_resistance",
         "outcome": "passed",
-        "duration_ms": 6010.67,
+        "duration_ms": 6013.87,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_category_json_redos_resistance",
         "outcome": "passed",
-        "duration_ms": 1.57,
+        "duration_ms": 2.05,
         "status": "✅"
       }
     ]
   },
-  "execution_time": "2026-03-12 19:49:27"
+  "execution_time": "2026-03-13 16:59:47"
 }

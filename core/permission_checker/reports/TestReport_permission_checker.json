@@ -1,25 +1,268 @@
 {
   "summary": {
-    "total": 0,
-    "passed": 0,
+    "total": 40,
+    "passed": 40,
     "failed": 0,
     "xfailed": 0,
-    "pass_rate": "0.0%",
-    "effective_pass_rate": "0.0%"
+    "pass_rate": "100.0%",
+    "effective_pass_rate": "100.0%"
   },
   "categories": {
     "normal": {
-      "total": 0,
-      "results": []
+      "total": 22,
+      "results": [
+        {
+          "name": "管理者クライアント初期化",
+          "status": "✅ 成功",
+          "duration": "0.89ms",
+          "id": "PERM-INIT"
+        },
+        {
+          "name": "ユーザー情報取得成功",
+          "status": "✅ 成功",
+          "duration": "1.28ms",
+          "id": "PERM-001"
+        },
+        {
+          "name": "ユーザーロール取得成功",
+          "status": "✅ 成功",
+          "duration": "1.18ms",
+          "id": "PERM-002"
+        },
+        {
+          "name": "ロール統合（重複除去）",
+          "status": "✅ 成功",
+          "duration": "2.31ms",
+          "id": "PERM-012"
+        },
+        {
+          "name": "ロール権限取得成功",
+          "status": "✅ 成功",
+          "duration": "1.30ms",
+          "id": "PERM-003"
+        },
+        {
+          "name": "インデックスアクセス権限許可",
+          "status": "✅ 成功",
+          "duration": "2.01ms",
+          "id": "PERM-004"
+        },
+        {
+          "name": "インデックスアクセス権限拒否",
+          "status": "✅ 成功",
+          "duration": "1.11ms",
+          "id": "PERM-005"
+        },
+        {
+          "name": "ワイルドカードインデックスパターンマッチ",
+          "status": "✅ 成功",
+          "duration": "2.02ms",
+          "id": "PERM-013"
+        },
+        {
+          "name": "汎用アクション展開（read）",
+          "status": "✅ 成功",
+          "duration": "1.14ms",
+          "id": "PERM-006"
+        },
+        {
+          "name": "汎用アクション展開（write）",
+          "status": "✅ 成功",
+          "duration": "1.01ms",
+          "id": "PERM-007"
+        },
+        {
+          "name": "汎用アクション展開（ワイルドカード）",
+          "status": "✅ 成功",
+          "duration": "0.72ms",
+          "id": "PERM-008"
+        },
+        {
+          "name": "複数アクション許可（crud）",
+          "status": "✅ 成功",
+          "duration": "0.94ms",
+          "id": "PERM-014"
+        },
+        {
+          "name": "汎用アクション展開（manage）",
+          "status": "✅ 成功",
+          "duration": "0.74ms",
+          "id": "PERM-006-B"
+        },
+        {
+          "name": "汎用アクション展開（index）",
+          "status": "✅ 成功",
+          "duration": "0.98ms",
+          "id": "PERM-006-C"
+        },
+        {
+          "name": "汎用アクション展開（delete）",
+          "status": "✅ 成功",
+          "duration": "0.90ms",
+          "id": "PERM-006-D"
+        },
+        {
+          "name": "汎用アクション展開（indices_all）",
+          "status": "✅ 成功",
+          "duration": "1.12ms",
+          "id": "PERM-006-E"
+        },
+        {
+          "name": "汎用アクション展開（create_index）",
+          "status": "✅ 成功",
+          "duration": "0.72ms",
+          "id": "PERM-006-F"
+        },
+        {
+          "name": "fnmatchワイルドカードパターンマッチ",
+          "status": "✅ 成功",
+          "duration": "0.66ms",
+          "id": "PERM-006-G"
+        },
+        {
+          "name": "不一致アクション",
+          "status": "✅ 成功",
+          "duration": "0.94ms",
+          "id": "PERM-006-H"
+        },
+        {
+          "name": "複数インデックス一括チェック",
+          "status": "✅ 成功",
+          "duration": "3.77ms",
+          "id": "PERM-009"
+        },
+        {
+          "name": "アクセス可能インデックス取得",
+          "status": "✅ 成功",
+          "duration": "1.11ms",
+          "id": "PERM-010"
+        },
+        {
+          "name": "便利関数チェック",
+          "status": "✅ 成功",
+          "duration": "1.97ms",
+          "id": "PERM-011"
+        }
+      ]
     },
     "error": {
-      "total": 0,
-      "results": []
+      "total": 12,
+      "results": [
+        {
+          "name": "不存在ユーザー情報取得でNone返却",
+          "status": "✅ 成功",
+          "duration": "1.61ms",
+          "id": "PERM-E01"
+        },
+        {
+          "name": "ユーザー情報取得APIエラー",
+          "status": "✅ 成功",
+          "duration": "1.88ms",
+          "id": "PERM-E02"
+        },
+        {
+          "name": "不存在ユーザーのロール取得",
+          "status": "✅ 成功",
+          "duration": "1.68ms",
+          "id": "PERM-E03"
+        },
+        {
+          "name": "不存在ロールの権限取得",
+          "status": "✅ 成功",
+          "duration": "2.97ms",
+          "id": "PERM-E04"
+        },
+        {
+          "name": "ロール権限取得APIエラー",
+          "status": "✅ 成功",
+          "duration": "1.73ms",
+          "id": "PERM-E05"
+        },
+        {
+          "name": "ロールチェックエラー時スキップ継続",
+          "status": "✅ 成功",
+          "duration": "1.76ms",
+          "id": "PERM-E06"
+        },
+        {
+          "name": "全ロールチェック失敗",
+          "status": "✅ 成功",
+          "duration": "2.36ms",
+          "id": "PERM-E07"
+        },
+        {
+          "name": "ユーザーロール取得失敗",
+          "status": "✅ 成功",
+          "duration": "2.49ms",
+          "id": "PERM-E09"
+        },
+        {
+          "name": "バッチチェック中部分ロールエラー",
+          "status": "✅ 成功",
+          "duration": "1.69ms",
+          "id": "PERM-E08"
+        },
+        {
+          "name": "バッチチェック中ユーザー取得失敗",
+          "status": "✅ 成功",
+          "duration": "2.10ms",
+          "id": "PERM-E08-B"
+        },
+        {
+          "name": "アクセス可能インデックス取得ユーザーエラー",
+          "status": "✅ 成功",
+          "duration": "1.56ms",
+          "id": "PERM-E10"
+        },
+        {
+          "name": "部分ロールエラー時スキップ継続",
+          "status": "✅ 成功",
+          "duration": "1.90ms",
+          "id": "PERM-E10-B"
+        }
+      ]
     },
     "security": {
-      "total": 0,
-      "results": []
+      "total": 6,
+      "results": [
+        {
+          "name": "権限なしユーザーアクセス拒否",
+          "status": "✅ 成功",
+          "duration": "1.61ms",
+          "id": "PERM-SEC-01"
+        },
+        {
+          "name": "ワイルドカードパターン安全性",
+          "status": "✅ 成功",
+          "duration": "1.56ms",
+          "id": "PERM-SEC-02"
+        },
+        {
+          "name": "最小権限原則検証",
+          "status": "✅ 成功",
+          "duration": "1.98ms",
+          "id": "PERM-SEC-05"
+        },
+        {
+          "name": "インジェクション攻撃耐性",
+          "status": "✅ 成功",
+          "duration": "2.96ms",
+          "id": "PERM-SEC-04"
+        },
+        {
+          "name": "ロール昇格攻撃防止",
+          "status": "✅ 成功",
+          "duration": "1.18ms",
+          "id": "PERM-SEC-03"
+        },
+        {
+          "name": "タイミング攻撃耐性",
+          "status": "✅ 成功",
+          "duration": "2.51ms",
+          "id": "PERM-SEC-06"
+        }
+      ]
     }
   },
-  "execution_time": "2026-03-13 13:00:30"
+  "execution_time": "2026-03-13 16:39:10"
 }

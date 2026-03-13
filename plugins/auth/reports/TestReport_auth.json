@@ -1,28 +1,411 @@
 {
   "summary": {
-    "total": 0,
-    "passed": 0,
+    "total": 38,
+    "passed": 37,
     "failed": 0,
     "xfailed": 0,
-    "skipped": 0,
-    "pass_rate": "0.0%",
-    "effective_pass_rate": "0.0%"
+    "skipped": 1,
+    "pass_rate": "97.4%",
+    "effective_pass_rate": "100.0%"
   },
   "categories": {
     "normal": {
-      "count": 0,
-      "results": []
+      "count": 12,
+      "results": [
+        {
+          "nodeid": "plugins/auth/source/test_auth.py::TestAuthEndpoints::test_login_success",
+          "test_name": "test_login_success",
+          "readable_name": "AUTH-001: 有効な認証情報でToken取得",
+          "test_id": "AUTH-001",
+          "class_name": "TestAuthEndpoints",
+          "outcome": "passed",
+          "duration": 0.05511529999785125,
+          "duration_ms": 55.12
+        },
+        {
+          "nodeid": "plugins/auth/source/test_auth.py::TestAuthEndpoints::test_get_current_user",
+          "test_name": "test_get_current_user",
+          "readable_name": "AUTH-002: 認証後にユーザー情報取得",
+          "test_id": "AUTH-002",
+          "class_name": "TestAuthEndpoints",
+          "outcome": "passed",
+          "duration": 0.0016391999961342663,
+          "duration_ms": 1.64
+        },
+        {
+          "nodeid": "plugins/auth/source/test_auth.py::TestAuthEndpoints::test_protected_route",
+          "test_name": "test_protected_route",
+          "readable_name": "AUTH-003: 保護されたルートへのアクセス",
+          "test_id": "AUTH-003",
+          "class_name": "TestAuthEndpoints",
+          "outcome": "passed",
+          "duration": 0.0012900999863632023,
+          "duration_ms": 1.29
+        },
+        {
+          "nodeid": "plugins/auth/source/test_auth.py::TestAuthCoreLogic::test_verify_password_success",
+          "test_name": "test_verify_password_success",
+          "readable_name": "AUTH-004: パスワード検証成功",
+          "test_id": "AUTH-004",
+          "class_name": "TestAuthCoreLogic",
+          "outcome": "passed",
+          "duration": 0.00023970002075657248,
+          "duration_ms": 0.24
+        },
+        {
+          "nodeid": "plugins/auth/source/test_auth.py::TestAuthCoreLogic::test_get_password_hash",
+          "test_name": "test_get_password_hash",
+          "readable_name": "AUTH-005: パスワードハッシュ化",
+          "test_id": "AUTH-005",
+          "class_name": "TestAuthCoreLogic",
+          "outcome": "passed",
+          "duration": 0.00023520001559518278,
+          "duration_ms": 0.24
+        },
+        {
+          "nodeid": "plugins/auth/source/test_auth.py::TestAuthCoreLogic::test_get_user_found",
+          "test_name": "test_get_user_found",
+          "readable_name": "AUTH-006: ユーザークエリ成功",
+          "test_id": "AUTH-006",
+          "class_name": "TestAuthCoreLogic",
+          "outcome": "passed",
+          "duration": 0.00028769997879862785,
+          "duration_ms": 0.29
+        },
+        {
+          "nodeid": "plugins/auth/source/test_auth.py::TestAuthCoreLogic::test_get_user_with_roles_found",
+          "test_name": "test_get_user_with_roles_found",
+          "readable_name": "AUTH-007: ロール付きユーザークエリ成功",
+          "test_id": "AUTH-007",
+          "class_name": "TestAuthCoreLogic",
+          "outcome": "passed",
+          "duration": 0.00023269999655894935,
+          "duration_ms": 0.23
+        },
+        {
+          "nodeid": "plugins/auth/source/test_auth.py::TestAuthCoreLogic::test_authenticate_user_with_roles_success",
+          "test_name": "test_authenticate_user_with_roles_success",
+          "readable_name": "AUTH-008: ロール付き認証成功",
+          "test_id": "AUTH-008",
+          "class_name": "TestAuthCoreLogic",
+          "outcome": "passed",
+          "duration": 0.00024930000654421747,
+          "duration_ms": 0.25
+        },
+        {
+          "nodeid": "plugins/auth/source/test_auth.py::TestTokenCreation::test_create_access_token_with_expiry",
+          "test_name": "test_create_access_token_with_expiry",
+          "readable_name": "AUTH-009: 有効期限指定Token生成",
+          "test_id": "AUTH-009",
+          "class_name": "TestTokenCreation",
+          "outcome": "passed",
+          "duration": 0.00043039998854510486,
+          "duration_ms": 0.43
+        },
+        {
+          "nodeid": "plugins/auth/source/test_auth.py::TestTokenCreation::test_create_access_token_default_expiry",
+          "test_name": "test_create_access_token_default_expiry",
+          "readable_name": "AUTH-010: デフォルト有効期限Token生成",
+          "test_id": "AUTH-010",
+          "class_name": "TestTokenCreation",
+          "outcome": "passed",
+          "duration": 0.0008069999748840928,
+          "duration_ms": 0.81
+        },
+        {
+          "nodeid": "plugins/auth/source/test_auth.py::TestTokenCreation::test_create_access_token_with_roles_and_expiry",
+          "test_name": "test_create_access_token_with_roles_and_expiry",
+          "readable_name": "AUTH-011: ロール付きToken生成(期限指定)",
+          "test_id": "AUTH-011",
+          "class_name": "TestTokenCreation",
+          "outcome": "passed",
+          "duration": 0.0007774000114295632,
+          "duration_ms": 0.78
+        },
+        {
+          "nodeid": "plugins/auth/source/test_auth.py::TestTokenCreation::test_create_access_token_with_roles_default_expiry",
+          "test_name": "test_create_access_token_with_roles_default_expiry",
+          "readable_name": "AUTH-012: ロール付きToken生成(デフォルト期限)",
+          "test_id": "AUTH-012",
+          "class_name": "TestTokenCreation",
+          "outcome": "passed",
+          "duration": 0.008201400021789595,
+          "duration_ms": 8.2
+        }
+      ]
     },
     "error": {
-      "count": 0,
-      "results": []
+      "count": 18,
+      "results": [
+        {
+          "nodeid": "plugins/auth/source/test_auth.py::TestAuthEndpointErrors::test_login_invalid_password",
+          "test_name": "test_login_invalid_password",
+          "readable_name": "AUTH-E01: 無効なパスワードで401返す",
+          "test_id": "AUTH-E01",
+          "class_name": "TestAuthEndpointErrors",
+          "outcome": "passed",
+          "duration": 0.0024754999903962016,
+          "duration_ms": 2.48
+        },
+        {
+          "nodeid": "plugins/auth/source/test_auth.py::TestAuthEndpointErrors::test_login_unknown_user",
+          "test_name": "test_login_unknown_user",
+          "readable_name": "AUTH-E02: 存在しないユーザーで401返す",
+          "test_id": "AUTH-E02",
+          "class_name": "TestAuthEndpointErrors",
+          "outcome": "passed",
+          "duration": 0.0025136999902315438,
+          "duration_ms": 2.51
+        },
+        {
+          "nodeid": "plugins/auth/source/test_auth.py::TestAuthEndpointErrors::test_expired_token",
+          "test_name": "test_expired_token",
+          "readable_name": "AUTH-E03: 期限切れTokenで401返す",
+          "test_id": "AUTH-E03",
+          "class_name": "TestAuthEndpointErrors",
+          "outcome": "passed",
+          "duration": 0.0014097999955993146,
+          "duration_ms": 1.41
+        },
+        {
+          "nodeid": "plugins/auth/source/test_auth.py::TestAuthEndpointErrors::test_malformed_token",
+          "test_name": "test_malformed_token",
+          "readable_name": "AUTH-E04: 無効なToken形式で401返す",
+          "test_id": "AUTH-E04",
+          "class_name": "TestAuthEndpointErrors",
+          "outcome": "passed",
+          "duration": 0.0010126999986823648,
+          "duration_ms": 1.01
+        },
+        {
+          "nodeid": "plugins/auth/source/test_auth.py::TestAuthEndpointErrors::test_no_auth_header",
+          "test_name": "test_no_auth_header",
+          "readable_name": "AUTH-E05: 認証ヘッダーなしで401返す",
+          "test_id": "AUTH-E05",
+          "class_name": "TestAuthEndpointErrors",
+          "outcome": "passed",
+          "duration": 0.0009084000193979591,
+          "duration_ms": 0.91
+        },
+        {
+          "nodeid": "plugins/auth/source/test_auth.py::TestAuthEndpointErrors::test_disabled_user",
+          "test_name": "test_disabled_user",
+          "readable_name": "AUTH-E06: 無効化されたユーザーで400返す",
+          "test_id": "AUTH-E06",
+          "class_name": "TestAuthEndpointErrors",
+          "outcome": "passed",
+          "duration": 0.0010192000190727413,
+          "duration_ms": 1.02
+        },
+        {
+          "nodeid": "plugins/auth/source/test_auth.py::TestAuthEndpointErrors::test_insufficient_roles",
+          "test_name": "test_insufficient_roles",
+          "readable_name": "AUTH-E07: 権限不足で403返す",
+          "test_id": "AUTH-E07",
+          "class_name": "TestAuthEndpointErrors",
+          "outcome": "passed",
+          "duration": 0.001820300007238984,
+          "duration_ms": 1.82
+        },
+        {
+          "nodeid": "plugins/auth/source/test_auth.py::TestAuthCoreLogicErrors::test_verify_password_failure",
+          "test_name": "test_verify_password_failure",
+          "readable_name": "AUTH-E08: パスワード検証失敗",
+          "test_id": "AUTH-E08",
+          "class_name": "TestAuthCoreLogicErrors",
+          "outcome": "passed",
+          "duration": 0.00024989998200908303,
+          "duration_ms": 0.25
+        },
+        {
+          "nodeid": "plugins/auth/source/test_auth.py::TestAuthCoreLogicErrors::test_get_user_not_found",
+          "test_name": "test_get_user_not_found",
+          "readable_name": "AUTH-E09: 存在しないユーザーでNone返す",
+          "test_id": "AUTH-E09",
+          "class_name": "TestAuthCoreLogicErrors",
+          "outcome": "passed",
+          "duration": 0.00018140001338906586,
+          "duration_ms": 0.18
+        },
+        {
+          "nodeid": "plugins/auth/source/test_auth.py::TestAuthCoreLogicErrors::test_authenticate_user_with_roles_unknown",
+          "test_name": "test_authenticate_user_with_roles_unknown",
+          "readable_name": "AUTH-E10: ロール付き認証-ユーザー不存在",
+          "test_id": "AUTH-E10",
+          "class_name": "TestAuthCoreLogicErrors",
+          "outcome": "passed",
+          "duration": 0.00017860002117231488,
+          "duration_ms": 0.18
+        },
+        {
+          "nodeid": "plugins/auth/source/test_auth.py::TestAuthCoreLogicErrors::test_authenticate_user_with_roles_wrong_password",
+          "test_name": "test_authenticate_user_with_roles_wrong_password",
+          "readable_name": "AUTH-E11: ロール付き認証-パスワード誤り",
+          "test_id": "AUTH-E11",
+          "class_name": "TestAuthCoreLogicErrors",
+          "outcome": "passed",
+          "duration": 0.00023330000112764537,
+          "duration_ms": 0.23
+        },
+        {
+          "nodeid": "plugins/auth/source/test_auth.py::TestAuthCoreLogicErrors::test_get_current_user_no_sub",
+          "test_name": "test_get_current_user_no_sub",
+          "readable_name": "AUTH-E12: subフィールドなしTokenで401返す",
+          "test_id": "AUTH-E12",
+          "class_name": "TestAuthCoreLogicErrors",
+          "outcome": "passed",
+          "duration": 0.0005868000152986497,
+          "duration_ms": 0.59
+        },
+        {
+          "nodeid": "plugins/auth/source/test_auth.py::TestAuthCoreLogicErrors::test_get_current_user_unknown_sub",
+          "test_name": "test_get_current_user_unknown_sub",
+          "readable_name": "AUTH-E13: subがDBに存在せず401返す",
+          "test_id": "AUTH-E13",
+          "class_name": "TestAuthCoreLogicErrors",
+          "outcome": "passed",
+          "duration": 0.0006323999841697514,
+          "duration_ms": 0.63
+        },
+        {
+          "nodeid": "plugins/auth/source/test_auth.py::TestGetCurrentUserWithRolesErrors::test_get_current_user_with_roles_no_sub",
+          "test_name": "test_get_current_user_with_roles_no_sub",
+          "readable_name": "AUTH-E15: ロール付きユーザー取得-subなしで401返す",
+          "test_id": "AUTH-E15",
+          "class_name": "TestGetCurrentUserWithRolesErrors",
+          "outcome": "passed",
+          "duration": 0.0007335999980568886,
+          "duration_ms": 0.73
+        },
+        {
+          "nodeid": "plugins/auth/source/test_auth.py::TestGetCurrentUserWithRolesErrors::test_get_current_user_with_roles_jwt_error",
+          "test_name": "test_get_current_user_with_roles_jwt_error",
+          "readable_name": "AUTH-E16: ロール付きユーザー取得-無効Token",
+          "test_id": "AUTH-E16",
+          "class_name": "TestGetCurrentUserWithRolesErrors",
+          "outcome": "passed",
+          "duration": 0.00035960000241175294,
+          "duration_ms": 0.36
+        },
+        {
+          "nodeid": "plugins/auth/source/test_auth.py::TestGetCurrentUserWithRolesErrors::test_get_current_user_with_roles_unknown_user",
+          "test_name": "test_get_current_user_with_roles_unknown_user",
+          "readable_name": "AUTH-E17: ロール付きユーザー取得-ユーザー不存在",
+          "test_id": "AUTH-E17",
+          "class_name": "TestGetCurrentUserWithRolesErrors",
+          "outcome": "passed",
+          "duration": 0.0005708000098820776,
+          "duration_ms": 0.57
+        },
+        {
+          "nodeid": "plugins/auth/source/test_auth.py::TestGetCurrentUserWithRolesErrors::test_disabled_user_with_roles",
+          "test_name": "test_disabled_user_with_roles",
+          "readable_name": "AUTH-E18: ロール付き無効化ユーザーで400返す",
+          "test_id": "AUTH-E18",
+          "class_name": "TestGetCurrentUserWithRolesErrors",
+          "outcome": "passed",
+          "duration": 0.0014415000041481107,
+          "duration_ms": 1.44
+        },
+        {
+          "nodeid": "plugins/auth/source/test_auth.py::TestRBACErrors::test_require_all_roles_partial_match",
+          "test_name": "test_require_all_roles_partial_match",
+          "readable_name": "AUTH-E14: require_all_roles部分一致で403返す",
+          "test_id": "AUTH-E14",
+          "class_name": "TestRBACErrors",
+          "outcome": "passed",
+          "duration": 0.0009459000139031559,
+          "duration_ms": 0.95
+        }
+      ]
     },
     "security": {
-      "count": 0,
-      "results": []
+      "count": 8,
+      "results": [
+        {
+          "nodeid": "plugins/auth/source/test_auth.py::TestAuthSecurity::test_password_is_hashed",
+          "test_name": "test_password_is_hashed",
+          "readable_name": "AUTH-SEC-01: パスワードbcryptハッシュ検証",
+          "test_id": "AUTH-SEC-01",
+          "class_name": "TestAuthSecurity",
+          "outcome": "passed",
+          "duration": 0.0001900999923236668,
+          "duration_ms": 0.19
+        },
+        {
+          "nodeid": "plugins/auth/source/test_auth.py::TestAuthSecurity::test_token_modified_rejected",
+          "test_name": "test_token_modified_rejected",
+          "readable_name": "AUTH-SEC-02: 改ざんされたTokenは拒否される",
+          "test_id": "AUTH-SEC-02",
+          "class_name": "TestAuthSecurity",
+          "outcome": "passed",
+          "duration": 0.0008620000153314322,
+          "duration_ms": 0.86
+        },
+        {
+          "nodeid": "plugins/auth/source/test_auth.py::TestAuthSecurity::test_password_not_in_response",
+          "test_name": "test_password_not_in_response",
+          "readable_name": "AUTH-SEC-03: レスポンスにパスワード情報を含まない",
+          "test_id": "AUTH-SEC-03",
+          "class_name": "TestAuthSecurity",
+          "outcome": "passed",
+          "duration": 0.0008832000021357089,
+          "duration_ms": 0.88
+        },
+        {
+          "nodeid": "plugins/auth/source/test_auth.py::TestAuthSecurity::test_token_expiry_enforced",
+          "test_name": "test_token_expiry_enforced",
+          "readable_name": "AUTH-SEC-04: Token有効期限が強制される",
+          "test_id": "AUTH-SEC-04",
+          "class_name": "TestAuthSecurity",
+          "outcome": "passed",
+          "duration": 0.0008993999799713492,
+          "duration_ms": 0.9
+        },
+        {
+          "nodeid": "plugins/auth/source/test_auth.py::TestAuthSecurity::test_default_secret_key_warning",
+          "test_name": "test_default_secret_key_warning",
+          "readable_name": "AUTH-SEC-05: デフォルトSECRET_KEYで警告",
+          "test_id": "AUTH-SEC-05",
+          "class_name": "TestAuthSecurity",
+          "outcome": "passed",
+          "duration": 0.0003130999975837767,
+          "duration_ms": 0.31
+        },
+        {
+          "nodeid": "plugins/auth/source/test_auth.py::TestAuthSecurity::test_jwt_alg_none_attack_rejected",
+          "test_name": "test_jwt_alg_none_attack_rejected",
+          "readable_name": "AUTH-SEC-06: JWT alg=none攻撃を防御",
+          "test_id": "AUTH-SEC-06",
+          "class_name": "TestAuthSecurity",
+          "outcome": "passed",
+          "duration": 0.0004217000096105039,
+          "duration_ms": 0.42
+        },
+        {
+          "nodeid": "plugins/auth/source/test_auth.py::TestAuthSecurity::test_jwt_role_tampering_rejected",
+          "test_name": "test_jwt_role_tampering_rejected",
+          "readable_name": "AUTH-SEC-07: JWTロール改ざんを検出",
+          "test_id": "AUTH-SEC-07",
+          "class_name": "TestAuthSecurity",
+          "outcome": "passed",
+          "duration": 0.00047870000707916915,
+          "duration_ms": 0.48
+        },
+        {
+          "nodeid": "plugins/auth/source/test_auth.py::TestAuthSecurity::test_role_escalation_prevented",
+          "test_name": "test_role_escalation_prevented",
+          "readable_name": "AUTH-SEC-08: ロール昇格を防止",
+          "test_id": "AUTH-SEC-08",
+          "class_name": "TestAuthSecurity",
+          "outcome": "skipped",
+          "duration": 0.0007072000007610768,
+          "duration_ms": 0.71
+        }
+      ]
     }
   },
-  "execution_time": "2026-03-13 13:00:30",
+  "execution_time": "2026-03-13 17:02:27",
   "test_target": {
     "files": [
       "app/core/auth.py",

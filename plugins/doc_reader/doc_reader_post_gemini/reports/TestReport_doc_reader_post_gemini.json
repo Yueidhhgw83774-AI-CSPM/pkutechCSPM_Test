@@ -11,84 +11,84 @@
         "test_id": "N/A",
         "test_name": "test_parse_compliance_normal",
         "outcome": "passed",
-        "duration_ms": 0.73,
+        "duration_ms": 0.8,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_parse_compliance_with_output_lang",
         "outcome": "passed",
-        "duration_ms": 0.84,
+        "duration_ms": 0.64,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_get_detail_normal",
         "outcome": "passed",
-        "duration_ms": 0.7,
+        "duration_ms": 0.85,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_get_detail_multiple_platforms",
         "outcome": "passed",
-        "duration_ms": 0.68,
+        "duration_ms": 0.54,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_extract_error_message_with_details",
         "outcome": "passed",
-        "duration_ms": 0.44,
+        "duration_ms": 0.58,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_extract_error_message_without_details",
         "outcome": "passed",
-        "duration_ms": 0.35,
+        "duration_ms": 0.29,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_delay_client_error_429_retry_allowed",
         "outcome": "passed",
-        "duration_ms": 1.38,
+        "duration_ms": 1.54,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_delay_client_error_429_with_retry_delay",
         "outcome": "passed",
-        "duration_ms": 2.5,
+        "duration_ms": 2.95,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_delay_client_error_429_without_retry_delay",
         "outcome": "passed",
-        "duration_ms": 1.67,
+        "duration_ms": 2.21,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_delay_server_error_500",
         "outcome": "passed",
-        "duration_ms": 1.11,
+        "duration_ms": 1.88,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_delay_server_error_503",
         "outcome": "passed",
-        "duration_ms": 1.19,
+        "duration_ms": 1.88,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_delay_server_error_other",
         "outcome": "passed",
-        "duration_ms": 1.07,
+        "duration_ms": 1.3,
         "status": "✅"
       }
     ],
@@ -97,28 +97,28 @@
         "test_id": "N/A",
         "test_name": "test_delay_client_error_non_429",
         "outcome": "passed",
-        "duration_ms": 1.92,
+        "duration_ms": 1.41,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_delay_client_error_delay_too_long",
         "outcome": "passed",
-        "duration_ms": 1.21,
+        "duration_ms": 1.01,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_extract_error_message_exception",
         "outcome": "passed",
-        "duration_ms": 0.72,
+        "duration_ms": 0.64,
         "status": "✅"
       },
       {
         "test_id": "N/A",
         "test_name": "test_gemini_api_error_with_original_error",
         "outcome": "passed",
-        "duration_ms": 0.2,
+        "duration_ms": 0.24,
         "status": "✅"
       }
     ],
@@ -127,7 +127,7 @@
         "test_id": "N/A",
         "test_name": "test_prompt_injection_output_lang",
         "outcome": "passed",
-        "duration_ms": 0.7,
+        "duration_ms": 0.67,
         "status": "✅"
       },
       {
@@ -139,5 +139,5 @@
       }
     ]
   },
-  "execution_time": "2026-03-12 19:49:29"
+  "execution_time": "2026-03-13 16:59:50"
 }

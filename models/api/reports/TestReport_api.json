@@ -1,22 +1,271 @@
 {
   "summary": {
-    "total": 0,
-    "passed": 0,
+    "total": 41,
+    "passed": 41,
     "failed": 0,
     "xfailed": 0,
-    "pass_rate": "0.0%",
-    "effective_pass_rate": "0.0%"
+    "pass_rate": "100.0%",
+    "effective_pass_rate": "100.0%"
   },
   "categories": {
     "normal": {
-      "results": []
+      "results": [
+        {
+          "id": "test_process_text_file_response_minimal",
+          "name": "ProcessTextFileResponse 最小構成",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_process_text_file_response_single_item",
+          "name": "単一ComplianceItem",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_process_text_file_response_multiple_items",
+          "name": "複数ComplianceItem",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_process_text_file_response_full_compliance_item",
+          "name": "完全構成ComplianceItem",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_process_text_file_response_japanese_message",
+          "name": "日本語メッセージ",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_process_text_file_response_nested_compliance",
+          "name": "ネストしたComplianceItem",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_base64_text_request_minimal",
+          "name": "Base64TextRequest 最小構成",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_base64_text_request_with_session_id",
+          "name": "session_id付き",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_base64_text_request_empty_session_id",
+          "name": "空session_id",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_base64_text_request_large_content",
+          "name": "大きなBase64コンテンツ",
+          "outcome": "passed",
+          "duration": "0.006s"
+        },
+        {
+          "id": "test_base64_text_request_japanese_filename",
+          "name": "日本語ファイル名",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_model_dump_dict_conversion",
+          "name": "model_dump 辞書変換",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_model_validate_from_dict",
+          "name": "model_validate 辞書から生成",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_json_round_trip",
+          "name": "JSON往復変換",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_model_dump_by_alias",
+          "name": "by_aliasパラメータ検証",
+          "outcome": "passed",
+          "duration": "0.000s"
+        }
+      ]
     },
     "error": {
-      "results": []
+      "results": [
+        {
+          "id": "test_process_text_file_response_missing_required",
+          "name": "必須フィールド欠落",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_process_text_file_response_invalid_type",
+          "name": "無効な型",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_base64_text_request_missing_filename",
+          "name": "filename欠落",
+          "outcome": "passed",
+          "duration": "0.001s"
+        },
+        {
+          "id": "test_base64_text_request_missing_content",
+          "name": "file_content欠落",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_base64_text_request_invalid_type",
+          "name": "無効な型",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_response_all_fields_missing",
+          "name": "Test Response All Fields Missing",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_request_all_fields_missing",
+          "name": "Test Request All Fields Missing",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_response_message_wrong_type",
+          "name": "Test Response Message Wrong Type",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_response_source_filename_wrong_type",
+          "name": "Test Response Source Filename Wrong Type",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_request_file_content_base64_wrong_type",
+          "name": "Test Request File Content Base64 Wrong Type",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_request_session_id_wrong_type",
+          "name": "Test Request Session Id Wrong Type",
+          "outcome": "passed",
+          "duration": "0.000s"
+        }
+      ]
     },
     "security": {
-      "results": []
+      "results": [
+        {
+          "id": "test_base64_request_path_traversal_warning",
+          "name": "Path Traversal警告",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_base64_request_command_injection_warning",
+          "name": "Command Injection警告",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_base64_request_crlf_injection_warning",
+          "name": "CRLF Injection警告",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_null_byte_injection_filename",
+          "name": "Test Null Byte Injection Filename",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_xss_payload_in_message",
+          "name": "Test Xss Payload In Message",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_invalid_base64_content",
+          "name": "Test Invalid Base64 Content",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_sql_injection_session_id",
+          "name": "Test Sql Injection Session Id",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_large_string_dos",
+          "name": "Test Large String Dos",
+          "outcome": "passed",
+          "duration": "0.003s"
+        },
+        {
+          "id": "test_session_id_jwt_signature_tampering",
+          "name": "Test Session Id Jwt Signature Tampering",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_opensearch_injection_in_filename",
+          "name": "Test Opensearch Injection In Filename",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_ssrf_url_in_filename",
+          "name": "Test Ssrf Url In Filename",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_session_id_jwt_alg_none_attack",
+          "name": "Test Session Id Jwt Alg None Attack",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_unicode_normalization_attack",
+          "name": "Test Unicode Normalization Attack",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_extra_fields_ignored",
+          "name": "Test Extra Fields Ignored",
+          "outcome": "passed",
+          "duration": "0.000s"
+        },
+        {
+          "id": "test_business_logic_inconsistency",
+          "name": "Test Business Logic Inconsistency",
+          "outcome": "passed",
+          "duration": "0.000s"
+        }
+      ]
     }
   },
-  "execution_time": "2026-03-13 13:00:30"
+  "execution_time": "2026-03-13 16:39:22"
 }
