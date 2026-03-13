@@ -1,14 +1,507 @@
 {
   "summary": {
-    "total": 0,
-    "passed": 0,
+    "total": 70,
+    "passed": 70,
     "failed": 0,
-    "pass_rate": "N/A"
+    "pass_rate": "100.0%"
   },
   "categories": {
-    "normal": [],
-    "error": [],
-    "security": []
+    "normal": [
+      {
+        "test_id": "N/A",
+        "test_name": "AssumeRoleでリージョン一覧取得成功",
+        "outcome": "passed",
+        "duration_ms": 12.11,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "リージョンマッピング（us-east-1）",
+        "outcome": "passed",
+        "duration_ms": 0.58,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "リージョンマッピング（Tokyo）",
+        "outcome": "passed",
+        "duration_ms": 0.37,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Region Name Mapping Unknown",
+        "outcome": "passed",
+        "duration_ms": 0.36,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Opt In Status Available",
+        "outcome": "passed",
+        "duration_ms": 2.64,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Opt In Status Opt In Required",
+        "outcome": "passed",
+        "duration_ms": 2.22,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "AWS操作実行成功",
+        "outcome": "passed",
+        "duration_ms": 2.41,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Response Metadata Removal",
+        "outcome": "passed",
+        "duration_ms": 2.03,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Datetime To Iso Datetime",
+        "outcome": "passed",
+        "duration_ms": 0.64,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Datetime To Iso Date",
+        "outcome": "passed",
+        "duration_ms": 0.41,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Datetime To Iso Nested Dict",
+        "outcome": "passed",
+        "duration_ms": 0.37,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Datetime To Iso List",
+        "outcome": "passed",
+        "duration_ms": 0.37,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Datetime To Iso Non Datetime",
+        "outcome": "passed",
+        "duration_ms": 0.37,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "アクション一覧取得成功",
+        "outcome": "passed",
+        "duration_ms": 1.25,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test To Snake Case",
+        "outcome": "passed",
+        "duration_ms": 0.23,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Get Help Service Only",
+        "outcome": "passed",
+        "duration_ms": 1.08,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Get Help With Action",
+        "outcome": "passed",
+        "duration_ms": 0.92,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Handle Aws Execute Success",
+        "outcome": "passed",
+        "duration_ms": 1.29,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Handle Aws Execute With Context",
+        "outcome": "passed",
+        "duration_ms": 1.55,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Handle Aws List Actions Success",
+        "outcome": "passed",
+        "duration_ms": 0.81,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Handle Aws Get Help Success",
+        "outcome": "passed",
+        "duration_ms": 0.77,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Register Aws Internal Tools Success",
+        "outcome": "passed",
+        "duration_ms": 1.11,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Aws Internal Tools Count",
+        "outcome": "passed",
+        "duration_ms": 0.35,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Aws Tool Handlers Count",
+        "outcome": "passed",
+        "duration_ms": 0.43,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Aws Internal Server Name",
+        "outcome": "passed",
+        "duration_ms": 0.33,
+        "status": "✅"
+      }
+    ],
+    "error": [
+      {
+        "test_id": "N/A",
+        "test_name": "AccessDenied（ロール不存在）",
+        "outcome": "passed",
+        "duration_ms": 2.21,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Access Denied No Assume Role Permission",
+        "outcome": "passed",
+        "duration_ms": 2.03,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Access Denied Invalid External Id",
+        "outcome": "passed",
+        "duration_ms": 1.89,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Access Denied Ip Restriction",
+        "outcome": "passed",
+        "duration_ms": 2.66,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Access Denied Time Restriction",
+        "outcome": "passed",
+        "duration_ms": 2.47,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Access Denied Mfa Required",
+        "outcome": "passed",
+        "duration_ms": 1.98,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Access Denied Other",
+        "outcome": "passed",
+        "duration_ms": 1.94,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Invalid User Id Not Found",
+        "outcome": "passed",
+        "duration_ms": 2.32,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Validation Exception Role Arn",
+        "outcome": "passed",
+        "duration_ms": 1.98,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Validation Exception External Id",
+        "outcome": "passed",
+        "duration_ms": 1.47,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Validation Exception Other",
+        "outcome": "passed",
+        "duration_ms": 1.98,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Malformed Policy Document",
+        "outcome": "passed",
+        "duration_ms": 2.43,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Token Refresh Required",
+        "outcome": "passed",
+        "duration_ms": 1.46,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Other Client Error",
+        "outcome": "passed",
+        "duration_ms": 2.01,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "NoCredentialsError",
+        "outcome": "passed",
+        "duration_ms": 1.6,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Botocore Error Role Arn",
+        "outcome": "passed",
+        "duration_ms": 1.19,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Botocore Error External Id",
+        "outcome": "passed",
+        "duration_ms": 1.15,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Botocore Error Other",
+        "outcome": "passed",
+        "duration_ms": 1.45,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Unexpected Exception",
+        "outcome": "passed",
+        "duration_ms": 1.17,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Execute Invalid Action",
+        "outcome": "passed",
+        "duration_ms": 2.2,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Execute Client Error",
+        "outcome": "passed",
+        "duration_ms": 3.05,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Execute No Credentials",
+        "outcome": "passed",
+        "duration_ms": 2.79,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test List Actions Invalid Service",
+        "outcome": "passed",
+        "duration_ms": 1.46,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Get Help Timeout",
+        "outcome": "passed",
+        "duration_ms": 0.71,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Get Help Exception",
+        "outcome": "passed",
+        "duration_ms": 1.29,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Handle Aws Execute No Role Arn",
+        "outcome": "passed",
+        "duration_ms": 0.69,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Handle Aws Execute No Service",
+        "outcome": "passed",
+        "duration_ms": 0.72,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Handle Aws Execute No Action",
+        "outcome": "passed",
+        "duration_ms": 0.62,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Handle Aws Execute Non Aws Provider",
+        "outcome": "passed",
+        "duration_ms": 0.57,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Handle Aws List Actions No Service",
+        "outcome": "passed",
+        "duration_ms": 0.23,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Handle Aws List Actions Empty List",
+        "outcome": "passed",
+        "duration_ms": 0.79,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Handle Aws Get Help No Service",
+        "outcome": "passed",
+        "duration_ms": 0.33,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Register Aws Internal Tools Failure",
+        "outcome": "passed",
+        "duration_ms": 1.97,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Register Aws Internal Tools Exception",
+        "outcome": "passed",
+        "duration_ms": 1.78,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Handle Aws Execute Empty Regions List",
+        "outcome": "passed",
+        "duration_ms": 1.09,
+        "status": "✅"
+      }
+    ],
+    "security": [
+      {
+        "test_id": "N/A",
+        "test_name": "Test Role Arn Format Validation",
+        "outcome": "passed",
+        "duration_ms": 1.28,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test External Id Required",
+        "outcome": "passed",
+        "duration_ms": 1.28,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Credentials Not Logged",
+        "outcome": "passed",
+        "duration_ms": 2.19,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Sql Injection In Role Arn",
+        "outcome": "passed",
+        "duration_ms": 1.21,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Xss In Error Message",
+        "outcome": "passed",
+        "duration_ms": 1.75,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Rate Limiting Protection",
+        "outcome": "passed",
+        "duration_ms": 4.12,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Sensitive Data Not In Exception Message",
+        "outcome": "passed",
+        "duration_ms": 0.33,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Command Injection In Get Help",
+        "outcome": "passed",
+        "duration_ms": 0.83,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Session Token Expiry",
+        "outcome": "passed",
+        "duration_ms": 1.79,
+        "status": "✅"
+      },
+      {
+        "test_id": "N/A",
+        "test_name": "Test Cross Account Isolation",
+        "outcome": "passed",
+        "duration_ms": 2.4,
+        "status": "✅"
+      }
+    ]
   },
-  "execution_time": "2026-03-13 13:00:29"
+  "execution_time": "2026-03-13 14:49:28"
 }
